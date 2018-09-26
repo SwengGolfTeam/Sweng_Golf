@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainMenuActivity"
+            android:theme= "@style/AppTheme.NoActionBar"><!--"@style/Theme.AppCompat.NoActionBar"><!-"@style/AppThemeNoActionBar">-->
+        </activity>
     </application>
 
 </manifest>
