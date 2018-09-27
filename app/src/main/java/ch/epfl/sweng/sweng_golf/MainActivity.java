@@ -20,9 +20,14 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 public class MainActivity extends AppCompatActivity {
-
-    private TextView nameTextView;
-    private TextView emailTextView;
+    /* Personnal Id of the google account
+    *   We will use him to know who is connected
+    * */
+    private TextView googleId;
+    /* User name of the google account*/
+    private TextView googleName;
+    /* mail of the google account*/
+    private TextView gogleMail;
 
     private GoogleApiClient googleApiClient;
 
@@ -31,13 +36,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUp();
-        nameTextView =  findViewById(R.id.nameTextView);
-        emailTextView =  findViewById(R.id.emailTextView);
+        googleId = findViewById(R.id.id);
+        googleName =  findViewById(R.id.name);
+        gogleMail =  findViewById(R.id.email);
         Button logout = findViewById(R.id.log_out);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logOut(v);
+                SignOut(v);
             }
         });
     }
@@ -56,19 +62,21 @@ public class MainActivity extends AppCompatActivity {
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         //TODO Manage this case
                     }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+                }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
     }
 
-
+    /*At the launching of the apllication*/
     @Override
     protected void onStart() {
         super.onStart();
+        /*Check for an immediate result with isDone(); or set a callback to handle asynchronous results.*/
         OptionalPendingResult<GoogleSignInResult> optionalPendingResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        /*if it is already done */
         if (optionalPendingResult.isDone()) {
             GoogleSignInResult result = optionalPendingResult.get();
             resultHandler(result);
         } else {
+            /* If we have to wait*/
             optionalPendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
@@ -78,27 +86,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle the result by display google account's information on screen
+     * @param result the result of the signin attempt
+     */
     private void resultHandler(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             assert account != null;
-            nameTextView.setText(account.getDisplayName());
-            emailTextView.setText(account.getEmail());
+            googleId.setText(account.getId());
+            googleName.setText(account.getDisplayName());
+            gogleMail.setText(account.getEmail());
         } else {
-            logOut();
+            goToLogin();
         }
     }
 
-    private void logOut() {
+    /**
+     * Go to the login page
+     * */
+    private void goToLogin() {
         startActivity(new Intent(this, SignIn.class));
     }
 
-    public void logOut(View view) {
+    /**
+     * Signout of the google account
+     * @param view actual view
+     */
+    public void SignOut(View view) {
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
                 if (status.isSuccess()) {
-                    logOut();
+                    goToLogin();
                 }
                 //TODO
             }
