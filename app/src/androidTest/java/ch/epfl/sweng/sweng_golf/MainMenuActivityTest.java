@@ -12,10 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.swipeLeft;
-import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static java.lang.Thread.sleep;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuActivityTest {
@@ -23,9 +20,6 @@ public class MainMenuActivityTest {
 
     @Test
     public void testCanOpenDrawer() {
-        onView(withId(R.id.side_menu)).perform(swipeRight());
-        onView(withId(R.id.side_menu)).perform(swipeLeft());
         onView(withId(R.id.main_menu_frame)).perform(new GeneralSwipeAction(Swipe.FAST,GeneralLocation.CENTER_LEFT, GeneralLocation.CENTER, Press.FINGER));
-        onView(withId(R.id.side_menu)).perform(new GeneralSwipeAction(Swipe.FAST,GeneralLocation.CENTER_LEFT, GeneralLocation.CENTER, Press.FINGER));
     }
 }
