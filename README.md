@@ -1,19 +1,19 @@
-# PolyTroc (temporary name)
+# PolyTroc *(temporary name)*
 ## team Sweng_Golf
 
-Development of an Android app in the context of the Software Engineering course taught at EPFL in Fall 2018. 
+*Development of an Android app in the context of the Software Engineering course taught at EPFL in Fall 2018.*
 
-The idea is to offer a trading system that would allow users to exchange goods or services.
+## App specification
+The idea is to offer a trading system that would allow users to exchange goods or services, without the need of money.
 
-[![Build Status](https://travis-ci.org/your-id/your-repo.svg?branch=master)](https://travis-ci.org/your-id/your-repo)
+[![Build Status](https://travis-ci.org/udamiano/Sweng_Golf.svg?branch=master)](https://travis-ci.org/udamiano/Sweng_Golf)
 [![Maintainability](https://api.codeclimate.com/v1/badges/443d71fb588eeced1819/maintainability)](https://codeclimate.com/github/udamiano/Sweng_Golf/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/443d71fb588eeced1819/test_coverage)](https://codeclimate.com/github/udamiano/Sweng_Golf/test_coverage)
 
 
 ## Reminders
-The master branch is protected, you must first create a new branch to add a feature or make changes, and then do a pull-request that will be reviewed by at least one other member of the team. 
+The master branch is protected, you must first create a new branch to add a feature or make changes, and then do a pull-request that will be reviewed by at least one other member of the team. It must in addition build successfully on TravisCI and pass the requirements of Code Climate before being allowed to merge.
 
-This week's scrum master is: @ElsaWeb (officially)
 
 ### App requirements
 - Split app model: must use cloud-based services (e.g., Google maps, Firebase).
