@@ -20,6 +20,12 @@
         <activity android:name=".MainMenuActivity"
             android:theme= "@style/AppTheme.NoActionBar"><!--"@style/Theme.AppCompat.NoActionBar"><!-"@style/AppThemeNoActionBar">-->
         </activity>
+
+        <activity
+            android:name=".SignIn"
+            android:label="@string/title_activity_sign_in"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

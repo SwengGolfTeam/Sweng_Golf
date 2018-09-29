@@ -6,6 +6,7 @@ import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Swipe;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.widget.DrawerLayout;
 
 import org.junit.Rule;
 import org.junit.Test;

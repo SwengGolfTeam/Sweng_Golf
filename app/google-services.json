@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "355362488586",
+    "firebase_url": "https://swengolf.firebaseio.com",
+    "project_id": "swengolf",
+    "storage_bucket": "swengolf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355362488586:android:09bdd40601fc5433",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.sweng_golf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355362488586-r55l7ba1em70kq3c13tava90g2vn734d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.sweng_golf",
+            "certificate_hash": "f61264688402ffee8c90ab854226a928f8bcebbc"
+          }
+        },
+        {
+          "client_id": "355362488586-omb0vbslqfhsrbkcikd01gtikm5np2lj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZpvgJATHrFpckSgmkK_2yKka6BLqR-4U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355362488586-omb0vbslqfhsrbkcikd01gtikm5np2lj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
