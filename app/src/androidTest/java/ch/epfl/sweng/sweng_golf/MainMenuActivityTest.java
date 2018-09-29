@@ -6,6 +6,7 @@ import android.support.test.espresso.action.Press;
 import android.support.test.espresso.action.Swipe;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import org.junit.Rule;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuActivityTest {
@@ -22,5 +24,7 @@ public class MainMenuActivityTest {
     @Test
     public void testCanOpenDrawer() {
         onView(withId(R.id.main_menu_frame)).perform(new GeneralSwipeAction(Swipe.FAST,GeneralLocation.CENTER_LEFT, GeneralLocation.CENTER, Press.FINGER));
+        DrawerLayout drawer = (DrawerLayout) mMenuRule.getActivity().findViewById(R.id.side_menu);
+        assertTrue(drawer.isDrawerOpen(GravityCompat.START));
     }
 }
