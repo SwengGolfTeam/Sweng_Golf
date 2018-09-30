@@ -1,13 +1,26 @@
 package ch.epfl.sweng.sweng_golf;
 
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 public class MainMenuActivity extends AppCompatActivity {
+    private GoogleSignInAccount account;
+
     @Override
     protected void onCreate(Bundle savedInstances){
         super.onCreate(savedInstances);
@@ -15,6 +28,26 @@ public class MainMenuActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
+        TextView username = findViewById(R.id.username);
+        TextView usermail = findViewById(R.id.usermail);
+        ImageView userpic = findViewById(R.id.userpic);
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account != null){
+            String name = account.getDisplayName();
+            String mail = account.getEmail();
+            if(name != null){username.setText(name);}
+            if(mail != null){usermail.setText(mail);}
+            Uri userpicuri = account.getPhotoUrl();
+            Drawable d = userpic.getDrawable();
+            Drawable dup = null;
+            try {
+                FileInputStream up = new FileInputStream(new File(userpicuri.toString()));
+                dup = Drawable.createFromStream(up,"userpicsrc");
+            } catch (IOException ioe) {
+                dup = null;
+            }
+            userpic.setImageDrawable(dup == null ? d : dup);
+        }
     }
 
     @Override

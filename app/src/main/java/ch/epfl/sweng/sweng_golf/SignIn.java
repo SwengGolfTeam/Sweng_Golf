@@ -66,7 +66,7 @@ public class SignIn extends AppCompatActivity {
             GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (googleSignInResult.isSuccess()) {
                 // Go to main screen
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, MainMenuActivity.class));
             }
             //TODO Manage else case
 
