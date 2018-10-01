@@ -7,7 +7,7 @@
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="60dp"
-    android:background="@style/AppTheme">
+    android:background="?colorPrimaryDark">
 
     <FrameLayout
         android:layout_width="40dp"
@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@color/colorPrimaryDark"
             android:src="@android:drawable/btn_dialog"
             android:contentDescription="user picture" />
     </FrameLayout>
