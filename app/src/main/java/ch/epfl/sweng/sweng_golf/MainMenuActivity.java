@@ -3,7 +3,6 @@ package ch.epfl.sweng.sweng_golf;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -15,8 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 
 public class MainMenuActivity extends AppCompatActivity {
     private GoogleSignInAccount account;
@@ -27,7 +24,6 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        ActionBar ab = getSupportActionBar();
         TextView username = findViewById(R.id.username);
         TextView usermail = findViewById(R.id.usermail);
         ImageView userpic = findViewById(R.id.userpic);
@@ -38,15 +34,15 @@ public class MainMenuActivity extends AppCompatActivity {
             if(name != null){username.setText(name);}
             if(mail != null){usermail.setText(mail);}
             Uri userpicuri = account.getPhotoUrl();
-            Drawable d = userpic.getDrawable();
-            Drawable dup = null;
-            try {
-                FileInputStream up = new FileInputStream(new File(userpicuri.toString()));
-                dup = Drawable.createFromStream(up,"userpicsrc");
-            } catch (IOException ioe) {
-                dup = null;
+            if(userpicuri != null){
+                Drawable d = userpic.getDrawable();
+                Drawable dup = null;
+                try {
+                    FileInputStream up = new FileInputStream(new File(userpicuri.toString()));
+                    dup = Drawable.createFromStream(up,"userpicsrc");
+                } catch (IOException ignored) {}
+                userpic.setImageDrawable(dup == null ? d : dup);
             }
-            userpic.setImageDrawable(dup == null ? d : dup);
         }
     }
 

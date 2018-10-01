@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignOut(v);
+                SignOut();
             }
         });
     }
@@ -111,9 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Signout of the google account
-     * @param view actual view
      */
-    public void SignOut(View view) {
+    public void SignOut() {
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
