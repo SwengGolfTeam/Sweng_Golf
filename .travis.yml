@@ -9,8 +9,6 @@ android:
     - android-22
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-22
-addons:
-  firefox: "49.0"
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
@@ -18,6 +16,7 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82
   # Set up Code Climate test reporter
+  - curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: z6ag7-D2jPv7zLrSQqfH8w" -d "{\"quiet\": true}" https://api.travis-ci.com/job/${id}/debug
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
@@ -28,5 +27,3 @@ after_script:
   - export JACOCO_SOURCE_PATH=app/src/main/java/
   - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
-after_failure:
-  - firefox /home/travis/build/udamiano/Sweng_Golf/app/build/reports/androidTests/connected/index.html
