@@ -26,4 +26,5 @@ after_script:
   - export JACOCO_SOURCE_PATH=app/src/main/java/
   - ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
-after_failure: "cat log/test.log"
+after_failure:
+  - firefox /home/travis/build/udamiano/Sweng_Golf/app/build/reports/androidTests/connected/index.html
