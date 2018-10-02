@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@android:drawable/btn_dialog"
-            android:contentDescription="user picture" />
+            android:contentDescription="userpicture" />
     </FrameLayout>
 
     <TextView
