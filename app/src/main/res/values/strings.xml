@@ -4,4 +4,5 @@
     <string name="offer_description">Description :</string>
     <string name="create_new_offer">Create new offer</string>
     <string name="button_create_offer">Create offer</string>
+    <string name="error_create_offer">The name and the description can\'t be empty.</string>
 </resources>
