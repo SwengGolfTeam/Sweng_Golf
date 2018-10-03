@@ -25,6 +25,6 @@ public class MainMenuActivityTest {
     public void testCanOpenDrawer() {
         onView(withId(R.id.main_menu_frame)).perform(new GeneralSwipeAction(Swipe.FAST,GeneralLocation.CENTER_LEFT, GeneralLocation.CENTER, Press.FINGER));
         DrawerLayout drawer = mMenuRule.getActivity().findViewById(R.id.side_menu);
-        assertTrue(drawer.isDrawerOpen(GravityCompat.START));
+        assertTrue("drawer was closed",drawer.isDrawerOpen(GravityCompat.START));
     }
 }
