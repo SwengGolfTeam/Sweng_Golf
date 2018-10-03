@@ -10,7 +10,7 @@ android:
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-22
 Authorization:
-- "curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: z6ag7-D2jPv7zLrSQqfH8w" -d "{\"quiet\": true}" https://api.travis-ci.org/job/${id}/debug"
+- curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token z6ag7-D2jPv7zLrSQqfH8w" -d "{\"quiet\": true}" https://api.travis-ci.org/job/${id}/debug
 before_script:
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
