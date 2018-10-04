@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Sweng_Golf</string>
+    <string name="my_account">My account</string>
+    <string name="friends">Friends</string>
+    <string name="nearby_services">Nearby services</string>
+
+    <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_sign_in">SignIn</string>
+    <string name="log_out">log_out</string>
 </resources>

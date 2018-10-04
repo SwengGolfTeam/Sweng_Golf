@@ -65,5 +65,5 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-#Mac bullshit
+# Mac bullshit
 *.DS_Store
