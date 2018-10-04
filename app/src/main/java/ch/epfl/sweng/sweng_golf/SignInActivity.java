@@ -41,18 +41,14 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         mAuth = FirebaseAuth.getInstance();
-
         button = findViewById(R.id.sign_in_button);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
             }
         });
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -62,6 +58,13 @@ public class SignInActivity extends AppCompatActivity {
             }
         };
 
+        setGoogleSignInClient();
+    }
+
+    /**
+     * Initialize the Google Sign in Client
+     */
+    private void setGoogleSignInClient(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("563213920188-tnrrbrgjl38p5ss3ou90k3kt7960mkat.apps.googleusercontent.com")
                 .requestEmail()
@@ -69,7 +72,6 @@ public class SignInActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
-
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
