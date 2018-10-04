@@ -19,6 +19,8 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import static ch.epfl.sweng.sweng_golf.GoogleToolBox.setUp;
+
 public class MainActivity extends AppCompatActivity {
     /* Personnal Id of the google account
     *   We will use him to know who is connected
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     /* User name of the google account*/
     private TextView googleName;
     /* mail of the google account*/
-    private TextView gogleMail;
+    private TextView googleMail;
 
     private GoogleApiClient googleApiClient;
 
@@ -35,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUp();
+        googleApiClient = setUp(this);
         googleId = findViewById(R.id.id);
         googleName =  findViewById(R.id.name);
-        gogleMail =  findViewById(R.id.email);
+        googleMail =  findViewById(R.id.email);
         Button logout = findViewById(R.id.log_out);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,19 +53,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method to set up the Google API client
      */
-    private void setUp(){
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        //TODO Manage this case
-                    }
-                }).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
-    }
 
     /*At the launching of the apllication*/
     @Override
@@ -96,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             assert account != null;
             googleId.setText(account.getId());
             googleName.setText(account.getDisplayName());
-            gogleMail.setText(account.getEmail());
+            googleMail.setText(account.getEmail());
         } else {
             goToLogin();
         }

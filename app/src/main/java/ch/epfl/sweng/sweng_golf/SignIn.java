@@ -14,6 +14,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import static ch.epfl.sweng.sweng_golf.GoogleToolBox.setUp;
+
 public class SignIn extends AppCompatActivity {
 
     /*Client who interacts with google API*/
@@ -27,7 +29,7 @@ public class SignIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        setUp();
+        googleApiClient  = setUp(this);
         /*Button used to sign in*/
         SignInButton signInButton = findViewById(R.id.signInButton);
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -38,24 +40,6 @@ public class SignIn extends AppCompatActivity {
                 startActivityForResult(intent, SIGN_IN_CODE);
             }
         });
-    }
-
-    /**
-     * Method to set up the Google API client
-     */
-    private void setUp(){
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        //TODO Manage this case
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
     }
 
     @Override
