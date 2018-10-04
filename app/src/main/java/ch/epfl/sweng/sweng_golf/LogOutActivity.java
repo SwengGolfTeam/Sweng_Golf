@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 
 public class LogOutActivity extends AppCompatActivity {
@@ -43,8 +45,8 @@ public class LogOutActivity extends AppCompatActivity {
         TextView uid = findViewById(R.id.uid);
         uid.setText(user.getUid());
 
-        //ImageView photo = findViewById(R.id.photo);
-        //photo.setImageURI(user.getPhotoUrl());
+        ImageView photo = findViewById(R.id.photo);
+        Picasso.with(this).load(user.getPhotoUrl()).into(photo);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

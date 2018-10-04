@@ -3,9 +3,7 @@ package ch.epfl.sweng.sweng_golf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,9 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 2;
-    private static final String TAG = "Sign in";
-
+    private static final int RC_SIGN_IN = 9001;
     SignInButton button;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -37,6 +33,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -44,8 +41,10 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        button = findViewById(R.id.sign_in_button);
+
         mAuth = FirebaseAuth.getInstance();
+
+        button = findViewById(R.id.sign_in_button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,10 +62,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         };
 
-
-        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("537333646720-haqkii408k6bb3lf7ai1kr2ualpe4fkq.apps.googleusercontent.com")
+                .requestIdToken("563213920188-tnrrbrgjl38p5ss3ou90k3kt7960mkat.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -83,20 +80,14 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 assert null != account;
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(SignInActivity.this, "Auth went wrong", Toast.LENGTH_SHORT).show();
-                // ...
+                Toast.makeText(SignInActivity.this, "Authentification went wrong", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -111,16 +102,11 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            Toast.makeText(SignInActivity.this, "Welcome back", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
                     }
                 });
 
