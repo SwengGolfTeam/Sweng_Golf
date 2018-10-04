@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Sweng_Golf</string>
+    <string name="title_activity_log_in">LogInActivity</string>
+    <string name="title_activity_sign_in">SignIn</string>
+    <string name="log_out">log_out</string>
+    <string name="go_to_login">Go To Login</string>
+    <string name="profile_image">Profile Image</string>
 </resources>
