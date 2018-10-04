@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -23,8 +24,8 @@ public class MainMenuActivityTest {
 
     @Test
     public void testCanOpenDrawer() {
-        onView(withId(R.id.main_menu_frame)).perform(new GeneralSwipeAction(Swipe.FAST,GeneralLocation.CENTER_LEFT, GeneralLocation.CENTER, Press.FINGER));
         DrawerLayout drawer = mMenuRule.getActivity().findViewById(R.id.side_menu);
+        openDrawer(R.id.side_menu);
         assertTrue("drawer was closed",drawer.isDrawerOpen(GravityCompat.START));
     }
 }
