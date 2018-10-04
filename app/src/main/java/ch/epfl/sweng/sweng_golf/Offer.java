@@ -5,12 +5,21 @@ public class Offer {
 
     /**
      * Contains the data of an offer
-     * @param username the creator of the offer
-     * @param name the name of the offer
-     * @param description the description of the offer
+     * @param username the creator of the offer. Should not be empty
+     * @param name the name of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
      *
      */
     public Offer(String username, String name, String description){
+        if(username.isEmpty()){
+            throw new IllegalArgumentException("Username can't be empty.");
+        }
+        else if(name.isEmpty()){
+            throw new IllegalArgumentException("Name of the offer can't be empty.");
+        }
+        else if(description.isEmpty()){
+            throw new IllegalArgumentException("Decription of the offer can't be empty.");
+        }
         this.username = username;
         this.name = name;
         this.description = description;
