@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +53,7 @@ public class LogOutActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() == null){
+                    Toast.makeText(LogOutActivity.this, "Goodbye", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LogOutActivity.this, SignInActivity.class));
                 }
             }
