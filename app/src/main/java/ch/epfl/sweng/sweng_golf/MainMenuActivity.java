@@ -39,24 +39,21 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    private boolean setUserName(){
-        TextView username = findViewById(R.id.username);
-        String name = account.getDisplayName();
-        if(name != null){
-            username.setText(name);
+    private boolean setValue(String textValue, TextView textField){
+        if(textValue != null && textField != null){
+            textField.setText(textValue);
             return true;
+        }else{
+            return false;
         }
-        return false;
+    }
+
+    private boolean setUserName(){
+        return setValue(account.getDisplayName(), (TextView) findViewById(R.id.username));
     }
 
     private boolean setUserMail(){
-        TextView usermail = findViewById(R.id.usermail);
-        String mail = account.getEmail();
-        if(mail != null){
-            usermail.setText(mail);
-            return true;
-        }
-        return false;
+        return setValue(account.getEmail(), (TextView) findViewById(R.id.usermail));
     }
 
     private boolean setUserPic() {
@@ -79,7 +76,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Uri userpicuri = account.getPhotoUrl();
         if(userpicuri == null){return null;}
         FileInputStream up = null;
-        Drawable d = null;
+        Drawable d;
         try {
             up = new FileInputStream(new File(userpicuri.toString()));
             d = Drawable.createFromStream(up,"userpicsrc");
