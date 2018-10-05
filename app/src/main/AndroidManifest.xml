@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateOfferActivity"></activity>
+        <activity android:name=".CreateOfferActivity" />
+        <activity android:name=".ShowOffersActivity"></activity>
     </application>
 
 </manifest>

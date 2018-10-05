@@ -1,27 +1,27 @@
 package ch.epfl.sweng.sweng_golf;
 
 public class Offer {
-    private final String username, name, description;
+    private final String author, title, description;
 
     /**
      * Contains the data of an offer
-     * @param username the creator of the offer. Should not be empty
-     * @param name the name of the offer. Should not be empty
+     * @param author the creator of the offer. Should not be empty
+     * @param title the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
      *
      */
-    public Offer(String username, String name, String description){
-        if(username.isEmpty()){
-            throw new IllegalArgumentException("Username can't be empty.");
+    public Offer(String author, String title, String description){
+        if(author.isEmpty()){
+            throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
-        else if(name.isEmpty()){
+        else if(title.isEmpty()){
             throw new IllegalArgumentException("Name of the offer can't be empty.");
         }
         else if(description.isEmpty()){
-            throw new IllegalArgumentException("Decription of the offer can't be empty.");
+            throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
-        this.username = username;
-        this.name = name;
+        this.author = author;
+        this.title = title;
         this.description = description;
     }
 
@@ -29,16 +29,16 @@ public class Offer {
      *
      * @return the creator of the offer
      */
-    public String getUsername() {
-        return username;
+    public String getAuthor() {
+        return author;
     }
 
     /**
      *
      * @return the name of the offer
      */
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     /**

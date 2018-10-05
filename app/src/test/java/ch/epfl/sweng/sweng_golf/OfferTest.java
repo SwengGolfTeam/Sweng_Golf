@@ -5,34 +5,34 @@ import static org.junit.Assert.assertEquals;
 
 public class OfferTest {
 
-    private final String username = "Patrick", name = "Echange un panda",
+    private final String author = "Patrick", title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyUsername(){
-        Offer offer = new Offer("",name,description);
+    public void testEmptyAuthor(){
+        Offer offer = new Offer("", title, description);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyName(){
-        Offer offer = new Offer(username,"",description);
+    public void testEmptyTitle(){
+        Offer offer = new Offer(author, "", description);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyDescription(){
-        Offer offer = new Offer(username,name,"");
+        Offer offer = new Offer(author, title, "");
 
     }
 
 
     @Test
     public void testGetter(){
-        Offer offer = new Offer(username, name, description);
-        assertEquals("Usernames are not equals", username, offer.getUsername());
-        assertEquals("Names are not equals", name, offer.getName());
-        assertEquals("Descriptions are not equals", description, offer.getDescription());
+        Offer offer = new Offer(author, title, description);
+        assertEquals("Authors are not equal", author, offer.getAuthor());
+        assertEquals("Title are not equal", title, offer.getTitle());
+        assertEquals("Descriptions are not equal", description, offer.getDescription());
 
     }
 }
