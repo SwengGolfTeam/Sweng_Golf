@@ -4,14 +4,29 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class OfferTest {
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidParameters(){
-        Offer offer = new Offer("","","");
-
-    }
 
     private final String username = "Patrick", name = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyUsername(){
+        Offer offer = new Offer("",name,description);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyName(){
+        Offer offer = new Offer(username,"",description);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyDescription(){
+        Offer offer = new Offer(username,name,"");
+
+    }
+
+
     @Test
     public void testGetter(){
         Offer offer = new Offer(username, name, description);

@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadOfferActivity(View view){
         Intent intent = new Intent(this, CreateOfferActivity.class);
+        // TODO implement username when login effective
         intent.putExtra("username","God");
         startActivity(intent);
     }
