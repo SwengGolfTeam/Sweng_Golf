@@ -16,7 +16,7 @@ public class ListOfferActivity extends Activity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<Offer> offerList = new ArrayList<>();;
+    protected static List<Offer> offerList = new ArrayList<>();;
     private String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
             "Nam ut quam ornare, fringilla nunc eget, facilisis lectus." +
             "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo." +

@@ -31,7 +31,7 @@ public class OfferTest {
     public void testGetter(){
         Offer offer = new Offer(author, title, description);
         assertEquals("Authors are not equal", author, offer.getAuthor());
-        assertEquals("Title are not equal", title, offer.getTitle());
+        assertEquals("Titles are not equal", title, offer.getTitle());
         assertEquals("Descriptions are not equal", description, offer.getDescription());
 
     }

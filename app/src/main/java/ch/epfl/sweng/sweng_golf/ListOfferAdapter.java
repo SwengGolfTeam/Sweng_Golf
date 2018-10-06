@@ -46,6 +46,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Offer offer = offerList.get(position);
+
         holder.title.setText(offer.getTitle());
 
         // Cut description
