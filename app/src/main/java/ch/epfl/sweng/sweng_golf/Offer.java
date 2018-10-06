@@ -1,6 +1,9 @@
 package ch.epfl.sweng.sweng_golf;
 
-public class Offer {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Offer implements Parcelable {
     private final String author, title, description;
 
     /**
@@ -10,14 +13,14 @@ public class Offer {
      * @param description the description of the offer. Should not be empty
      *
      */
-    public Offer(String author, String title, String description){
-        if(author.isEmpty()){
+    public Offer(String author, String title, String description) {
+        if (author.isEmpty()) {
             throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
-        else if(title.isEmpty()){
+        if (title.isEmpty()) {
             throw new IllegalArgumentException("Name of the offer can't be empty.");
         }
-        else if(description.isEmpty()){
+        if (description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
         this.author = author;
@@ -45,9 +48,37 @@ public class Offer {
      *
      * @return the description of the offer
      */
-    public String getDescription() {
-        return description;
+    public String getDescription() { return description; }
+
+
+    /* Implements Parcelable */
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[] {this.author, this.title, this.description});
+    }
 
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
+        public Offer createFromParcel(Parcel in) {
+            return new Offer(in);
+        }
+
+        public Offer[] newArray(int size) {
+            return new Offer[size];
+        }
+    };
+
+    private Offer(Parcel in) {
+        String[] data = new String[3];
+
+        in.readStringArray(data);
+        this.author = data[0];
+        this.title = data[1];
+        this.description = data[2];
+    }
 }
