@@ -10,14 +10,15 @@ import java.util.List;
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
+    @SuppressWarnings("WeakerAccess") // could be useful for other classes to know
     public static final int DESCRIPTION_LIMIT = 140;
     private List<Offer> offerList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView title, author, description;
 
-        public MyViewHolder(View v) {
+        protected final TextView title, author, description;
+
+        protected MyViewHolder(View v) {
             super(v);
             title = v.findViewById(R.id.show_offer_title);
             author = v.findViewById(R.id.offer_author);
@@ -35,11 +36,9 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     @Override
     public ListOfferAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_list_row, parent, false);
-
-        MyViewHolder vh = new MyViewHolder(v);
-
-        return vh;
+        View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_list_row
+                , parent, false);
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

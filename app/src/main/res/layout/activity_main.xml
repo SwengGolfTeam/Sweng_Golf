@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:onClick="loadOfferActivity"
-        android:text="Create offer"
+        android:text="@string/button_create_offer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +26,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="12dp"
         android:onClick="loadShowOffersActivity"
-        android:text="Show offers"
+        android:text="@string/button_show_offers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create_offer_button" />
 

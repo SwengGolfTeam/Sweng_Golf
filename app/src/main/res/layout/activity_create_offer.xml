@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -27,18 +26,20 @@
 
         <TextView
             android:id="@+id/textView"
+            android:labelFor="@string/offer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@string/offer_name"
-            android:textSize="18dp"
+            android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/offer_name"
 
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/offer_name"
+            android:labelFor="@string/offer_description"
             android:layout_width="282dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -59,7 +60,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="@string/offer_description"
-            android:textSize="18dp"
+            android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/offer_description"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -102,7 +103,7 @@
             app:layout_constraintEnd_toStartOf="@+id/button"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="gone"
             />

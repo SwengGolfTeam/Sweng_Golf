@@ -21,6 +21,10 @@ public class CreateOfferActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         username = getIntent().getExtras().getString("username");
+
+        if (username == null) {
+            throw new NullPointerException("No username given to CreateOfferActivity");
+        }
     }
 
     public void createOffer(View view){

@@ -8,7 +8,7 @@ import android.view.View;
 
 public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener {
 
-    private OnItemClickListener mListener;
+    private final OnItemClickListener mListener;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -16,7 +16,7 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
         void onLongItemClick(View view, int position);
     }
 
-    GestureDetector mGestureDetector;
+    private final GestureDetector mGestureDetector;
 
     public ListOfferTouchListener(Context context,
                                   final RecyclerView recyclerView,

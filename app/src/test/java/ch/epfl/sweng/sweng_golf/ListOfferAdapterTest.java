@@ -9,12 +9,13 @@ import static org.junit.Assert.assertEquals;
 
 public class ListOfferAdapterTest {
 
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     private final List<Offer> offerList =
             Arrays.asList(new Offer("Jim", "Beer", "A lot of beer"));
 
     @Test(expected = NullPointerException.class)
     public void testEmptyList() {
-        ListOfferAdapter a = new ListOfferAdapter(null);
+        new ListOfferAdapter(null);
     }
 
 
