@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
+    public static final int DESCRIPTION_LIMIT = 140;
     private List<Offer> offerList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -18,7 +19,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
         public MyViewHolder(View v) {
             super(v);
-            title = v.findViewById(R.id.offer_title);
+            title = v.findViewById(R.id.show_offer_title);
             author = v.findViewById(R.id.offer_author);
             description = v.findViewById(R.id.offer_description);
         }
@@ -46,7 +47,12 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Offer offer = offerList.get(position);
         holder.title.setText(offer.getTitle());
-        holder.description.setText(offer.getDescription());
+
+        // Cut description
+        String description = offer.getDescription();
+        description = description.substring(0, DESCRIPTION_LIMIT) + "...";
+        holder.description.setText(description);
+
         holder.author.setText(offer.getAuthor());
     }
 

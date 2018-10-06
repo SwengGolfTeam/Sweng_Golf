@@ -31,22 +31,9 @@ public class ListOfferActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_offers);
+        setContentView(R.layout.activity_list_offer);
 
         mRecyclerView = findViewById(R.id.offers_recycler_view);
-        mRecyclerView.addOnItemTouchListener(
-                new ListOfferTouchListener(this, mRecyclerView ,new ListOfferTouchListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
-                        // TODO communicate Offer
-                        startActivity(intent);
-                    }
-
-                    @Override public void onLongItemClick(View view, int position) {
-                        onItemClick(view, position);
-                    }
-                })
-        );
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -60,6 +47,21 @@ public class ListOfferActivity extends Activity {
         mRecyclerView.setAdapter(mAdapter);
 
         prepareOfferData();
+
+        mRecyclerView.addOnItemTouchListener(
+                new ListOfferTouchListener(this, mRecyclerView ,new ListOfferTouchListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
+                        Offer offer = offerList.get(position);
+                        intent.putExtra("offer", offer);
+                        startActivity(intent);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        onItemClick(view, position);
+                    }
+                })
+        );
 
     }
 
@@ -75,7 +77,7 @@ public class ListOfferActivity extends Activity {
         offerList.add(offer);
         offer = new Offer("Elsa", "Pizzas for beer", lorem);
         offerList.add(offer);
-        offer = new Offer("Seb", "Everything for a canton that doesn't suck", lorem);
+        offer = new Offer("Seb", "Everything for a canton that doesn't suck and some more text to overflow the box", lorem);
         offerList.add(offer);
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
         offerList.add(offer);
