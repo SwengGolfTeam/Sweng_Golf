@@ -1,11 +1,13 @@
 package ch.epfl.sweng.sweng_golf;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,19 @@ public class ListOfferActivity extends Activity {
         setContentView(R.layout.activity_show_offers);
 
         mRecyclerView = findViewById(R.id.offers_recycler_view);
+        mRecyclerView.addOnItemTouchListener(
+                new ListOfferTouchListener(this, mRecyclerView ,new ListOfferTouchListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
+                        // TODO communicate Offer
+                        startActivity(intent);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        onItemClick(view, position);
+                    }
+                })
+        );
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
