@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ShowOffersAdapter extends RecyclerView.Adapter<ShowOffersAdapter.MyViewHolder> {
+public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
     private List<Offer> offerList;
 
@@ -24,7 +24,7 @@ public class ShowOffersAdapter extends RecyclerView.Adapter<ShowOffersAdapter.My
         }
     }
 
-    public ShowOffersAdapter(List<Offer> offerList) {
+    public ListOfferAdapter(List<Offer> offerList) {
         if (offerList == null) {
             throw new NullPointerException();
         }
@@ -33,7 +33,7 @@ public class ShowOffersAdapter extends RecyclerView.Adapter<ShowOffersAdapter.My
 
 
     @Override
-    public ShowOffersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ListOfferAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_list_row, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);

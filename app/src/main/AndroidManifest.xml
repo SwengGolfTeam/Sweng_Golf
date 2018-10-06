@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateOfferActivity" />
-        <activity android:name=".ShowOffersActivity"></activity>
+        <activity android:name=".ListOfferActivity"></activity>
     </application>
 
 </manifest>

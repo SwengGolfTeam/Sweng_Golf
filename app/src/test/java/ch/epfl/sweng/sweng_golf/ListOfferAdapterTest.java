@@ -2,26 +2,25 @@ package ch.epfl.sweng.sweng_golf;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ShowOffersAdapterTest {
+public class ListOfferAdapterTest {
 
     private final List<Offer> offerList =
             Arrays.asList(new Offer("Jim", "Beer", "A lot of beer"));
 
     @Test(expected = NullPointerException.class)
     public void testEmptyList() {
-        ShowOffersAdapter a = new ShowOffersAdapter(null);
+        ListOfferAdapter a = new ListOfferAdapter(null);
     }
 
 
     @Test
     public void testSizeList() {
-        ShowOffersAdapter a = new ShowOffersAdapter(offerList);
+        ListOfferAdapter a = new ListOfferAdapter(offerList);
         assertEquals("Adapter doesn't show the right list size",
                 offerList.size(), a.getItemCount());
     }
