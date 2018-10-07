@@ -13,7 +13,7 @@ public class ListOfferAdapterTest {
     private final List<Offer> offerList =
             Arrays.asList(new Offer("Jim", "Beer", "A lot of beer"));
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testEmptyList() {
         new ListOfferAdapter(null);
     }
