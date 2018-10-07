@@ -14,9 +14,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the CreateOfferActivity
+     * Launches the CreateOfferActivity.
      *
-     * @param view
+     * @param view the current view
      */
     public void loadCreateOfferActivity(View view) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Launches the ShowOffersActivity.
+     *
+     * @param view the current view
+     */
     public void loadShowOffersActivity(View view) {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);

@@ -26,7 +26,7 @@ public class ListOfferActivityTest {
 
     /**
      * Checks if the offer is correctly displayed after a short or long click
-     * on the list
+     * on the list.
      *
      * @param longClick if the click should be long
      */

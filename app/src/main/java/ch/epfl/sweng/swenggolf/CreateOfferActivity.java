@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 /**
  * The activity used to create offers. Note that the intent extras
- * must contain a string with key "username"
+ * must contain a string with key "username".
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     }
 
     /**
-     * Creates an Offer by parsing the contents given by the user
+     * Creates an Offer by parsing the contents given by the user.
      *
      * @param view the view
      */
@@ -42,7 +42,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String description = descriptionText.getText().toString();
 
         if (!name.isEmpty() && !description.isEmpty()) {
-            // final Offer newOffer = new Offer(username, name, description);
             // TODO: add code to add the offer in the database
             finish();
         } else {

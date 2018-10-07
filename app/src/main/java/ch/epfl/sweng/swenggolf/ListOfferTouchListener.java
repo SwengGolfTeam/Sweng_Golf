@@ -20,7 +20,7 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
 
     /**
      * Constructs a ListOfferTouchListener, used to handle touch actions on the
-     * RecyclerView of the Offers
+     * RecyclerView of the Offers.
      *
      * @param context      the context
      * @param recyclerView the RecyclerView used

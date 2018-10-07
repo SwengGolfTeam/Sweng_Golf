@@ -9,7 +9,7 @@ public class Offer implements Parcelable {
     private final String description;
 
     /**
-     * Contains the data of an offer
+     * Contains the data of an offer.
      *
      * @param author      the creator of the offer. Should not be empty
      * @param title       the title of the offer. Should not be empty

@@ -29,7 +29,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     }
 
     /**
-     * Constructs a ListOfferAdapter for the RecyclerView
+     * Constructs a ListOfferAdapter for the RecyclerView.
      *
      * @param offerList the list of offers to be displayed
      */
