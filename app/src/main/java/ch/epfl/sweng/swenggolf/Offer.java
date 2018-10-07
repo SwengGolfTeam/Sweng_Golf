@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.os.Parcel;
 import android.os.Parcelable;

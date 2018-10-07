@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

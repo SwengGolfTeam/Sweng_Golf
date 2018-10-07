@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;

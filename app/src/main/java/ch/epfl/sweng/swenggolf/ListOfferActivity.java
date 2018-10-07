@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,6 +22,10 @@ public class ListOfferActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_offer);
 
+        setRecyclerView();
+    }
+
+    private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -35,25 +39,27 @@ public class ListOfferActivity extends Activity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
+        offerList.clear();
         prepareOfferData();
 
-        mRecyclerView.addOnItemTouchListener(
-                new ListOfferTouchListener(this, mRecyclerView, new ListOfferTouchListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
-                        Offer offer = offerList.get(position);
-                        intent.putExtra("offer", offer);
-                        startActivity(intent);
-                    }
+        mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
+    }
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        onItemClick(view, position);
-                    }
-                })
-        );
+    private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
+        return new ListOfferTouchListener(this, mRecyclerView, new ListOfferTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
+                Offer offer = offerList.get(position);
+                intent.putExtra("offer", offer);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onLongItemClick(View view, int position) {
+                onItemClick(view, position);
+            }
+        });
     }
 
     /**
