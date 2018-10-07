@@ -38,15 +38,17 @@ public class ListOfferActivity extends Activity {
         prepareOfferData();
 
         mRecyclerView.addOnItemTouchListener(
-                new ListOfferTouchListener(this, mRecyclerView ,new ListOfferTouchListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
+                new ListOfferTouchListener(this, mRecyclerView, new ListOfferTouchListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
                         Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
                         Offer offer = offerList.get(position);
                         intent.putExtra("offer", offer);
                         startActivity(intent);
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
+                    @Override
+                    public void onLongItemClick(View view, int position) {
                         onItemClick(view, position);
                     }
                 })

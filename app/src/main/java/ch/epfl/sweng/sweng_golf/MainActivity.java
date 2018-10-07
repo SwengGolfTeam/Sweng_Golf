@@ -13,14 +13,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void loadOfferActivity(View view){
+    public void loadOfferActivity(View view) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
         // TODO implement username when login effective
-        intent.putExtra("username","God");
+        intent.putExtra("username", "God");
         startActivity(intent);
     }
 
-    public void loadShowOffersActivity(View view){
+    public void loadShowOffersActivity(View view) {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);
     }

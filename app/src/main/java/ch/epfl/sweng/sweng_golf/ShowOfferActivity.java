@@ -15,8 +15,10 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         TextView offer_title = findViewById(R.id.show_offer_title);
         offer_title.setText(offer.getTitle());
+
         TextView offer_author = findViewById(R.id.show_offer_author);
         offer_author.setText(offer.getAuthor());
+
         TextView offer_description = findViewById(R.id.show_offer_description);
         offer_description.setText(offer.getDescription());
     }

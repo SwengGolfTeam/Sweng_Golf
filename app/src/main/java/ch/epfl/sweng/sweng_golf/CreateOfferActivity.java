@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class CreateOfferActivity extends AppCompatActivity {
 
     private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         }
     }
 
-    public void createOffer(View view){
+    public void createOffer(View view) {
 
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
@@ -35,16 +36,14 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if(!name.isEmpty() && !description.isEmpty()){
+        if (!name.isEmpty() && !description.isEmpty()) {
             final Offer newOffer = new Offer(username, name, description);
             //TODO: add code to add the offer in the database
             finish();
-        }
-        else{
+        } else {
             TextView errorMessage = findViewById(R.id.error_message);
             errorMessage.setVisibility(View.VISIBLE);
         }
-
 
 
     }

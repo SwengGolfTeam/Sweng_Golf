@@ -8,10 +8,10 @@ public class Offer implements Parcelable {
 
     /**
      * Contains the data of an offer
-     * @param author the creator of the offer. Should not be empty
-     * @param title the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
      *
+     * @param author      the creator of the offer. Should not be empty
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
      */
     public Offer(String author, String title, String description) {
         if (author.isEmpty()) {
@@ -29,7 +29,6 @@ public class Offer implements Parcelable {
     }
 
     /**
-     *
      * @return the creator of the offer
      */
     public String getAuthor() {
@@ -37,7 +36,6 @@ public class Offer implements Parcelable {
     }
 
     /**
-     *
      * @return the name of the offer
      */
     public String getTitle() {
@@ -45,10 +43,11 @@ public class Offer implements Parcelable {
     }
 
     /**
-     *
      * @return the description of the offer
      */
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
 
     /* Implements Parcelable */
@@ -59,7 +58,7 @@ public class Offer implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {this.author, this.title, this.description});
+        dest.writeStringArray(new String[]{this.author, this.title, this.description});
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

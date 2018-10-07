@@ -52,7 +52,8 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
         return false;
     }
 
-    @Override public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+    @Override
+    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
 
     }
 

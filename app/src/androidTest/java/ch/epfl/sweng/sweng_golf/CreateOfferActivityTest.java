@@ -24,6 +24,7 @@ public class CreateOfferActivityTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
+
     @Test
     public void errorMessageDisplayed() {
         onView(withId(R.id.create_offer_button)).perform(click());

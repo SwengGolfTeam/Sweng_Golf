@@ -36,7 +36,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     @Override
     public ListOfferAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_list_row
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_list_row
                 , parent, false);
         return new MyViewHolder(v);
     }
