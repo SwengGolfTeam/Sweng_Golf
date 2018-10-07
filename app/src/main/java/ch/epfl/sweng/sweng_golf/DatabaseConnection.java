@@ -34,7 +34,8 @@ public class DatabaseConnection {
      *
      */
     public void readOffers(){
-        //TODO: see https://www.captechconsulting.com/blogs/firebase-realtime-database-android-tutorial
+        //TODO: for loop to recover all of recover them all
+        // see https://www.captechconsulting.com/blogs/firebase-realtime-database-android-tutorial
     }
 
     /**
@@ -60,4 +61,8 @@ public class DatabaseConnection {
             }
         });
     }
+
+    //TODO: add functions for users/logins/profiles
+
+    //TODO: add empty constructors for classes to recover from Database
 }
