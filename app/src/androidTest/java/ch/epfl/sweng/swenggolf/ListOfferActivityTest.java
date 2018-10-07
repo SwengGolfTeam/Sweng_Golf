@@ -24,25 +24,24 @@ public class ListOfferActivityTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void offerCorrectlyDisplayedAfterClickOnList() {
+    public void offerCorrectlyDisplayedAfterAClickOnList(boolean longClick) {
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(ListOfferActivity.offerList.get(0).getAuthor())), click()
+                hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())),
+                longClick ? longClick() : click()
         ));
         onView(withId(R.id.show_offer_title)).
                 check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
     }
 
     @Test
-    public void offerCorrectlyDisplayedAfterLongPressOnList() {
-        onView(withId(R.id.show_offers_button)).perform(click());
+    public void offerCorrectlyDisplayedAfterClickOnList() {
+        offerCorrectlyDisplayedAfterAClickOnList(false);
+    }
 
-        onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(ListOfferActivity.offerList.get(0).getAuthor())), longClick()
-        ));
-        onView(withId(R.id.show_offer_title)).
-                check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
+    @Test
+    public void offerCorrectlyDisplayedAfterLongPressOnList() {
+        offerCorrectlyDisplayedAfterAClickOnList(true);
     }
 }
