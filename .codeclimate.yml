@@ -38,7 +38,7 @@ plugins:
       file: "checkstyle.xml"
     checks:
       com.puppycrawl.tools.checkstyle.checks.import.CustomImportOrederCheck:
-      enabled: false
+        enabled: false
   sonar-java:
     enabled: true
     config:
