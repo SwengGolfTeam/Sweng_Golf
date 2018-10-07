@@ -24,6 +24,12 @@ public class ListOfferActivityTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Checks if the offer is correctly displayed after a short or long click
+     * on the list
+     *
+     * @param longClick if the click should be long
+     */
     public void offerCorrectlyDisplayedAfterAClickOnList(boolean longClick) {
         onView(withId(R.id.show_offers_button)).perform(click());
 
@@ -31,8 +37,8 @@ public class ListOfferActivityTest {
                 hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())),
                 longClick ? longClick() : click()
         ));
-        onView(withId(R.id.show_offer_title)).
-                check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
+        onView(withId(R.id.show_offer_title))
+                .check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
     }
 
     @Test

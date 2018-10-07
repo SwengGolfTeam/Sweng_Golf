@@ -13,13 +13,13 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         Offer offer = getIntent().getParcelableExtra("offer");
 
-        TextView offer_title = findViewById(R.id.show_offer_title);
-        offer_title.setText(offer.getTitle());
+        TextView offerTitle = findViewById(R.id.show_offer_title);
+        offerTitle.setText(offer.getTitle());
 
-        TextView offer_author = findViewById(R.id.show_offer_author);
-        offer_author.setText(offer.getAuthor());
+        TextView offerAuthor = findViewById(R.id.show_offer_author);
+        offerAuthor.setText(offer.getAuthor());
 
-        TextView offer_description = findViewById(R.id.show_offer_description);
-        offer_description.setText(offer.getDescription());
+        TextView offerDescription = findViewById(R.id.show_offer_description);
+        offerDescription.setText(offer.getDescription());
     }
 }

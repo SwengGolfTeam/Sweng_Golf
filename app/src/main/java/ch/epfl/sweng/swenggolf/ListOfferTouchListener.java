@@ -18,6 +18,14 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
 
     private final GestureDetector mGestureDetector;
 
+    /**
+     * Constructs a ListOfferTouchListener, used to handle touch actions on the
+     * RecyclerView of the Offers
+     *
+     * @param context      the context
+     * @param recyclerView the RecyclerView used
+     * @param listener     the click listener
+     */
     public ListOfferTouchListener(Context context,
                                   final RecyclerView recyclerView,
                                   OnItemClickListener listener) {
@@ -25,27 +33,29 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
 
         mGestureDetector =
                 new GestureDetector(context,
-                new GestureDetector.SimpleOnGestureListener() {
+                        new GestureDetector.SimpleOnGestureListener() {
 
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
+                            @Override
+                            public boolean onSingleTapUp(MotionEvent event) {
+                                return true;
+                            }
 
-            @Override
-            public void onLongPress(MotionEvent e) {
-                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && mListener != null) {
-                    mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
-                }
-            }
-        });
+                            @Override
+                            public void onLongPress(MotionEvent event) {
+                                View child = recyclerView
+                                        .findChildViewUnder(event.getX(), event.getY());
+                                if (child != null && mListener != null) {
+                                    mListener.onLongItemClick(child, recyclerView
+                                            .getChildAdapterPosition(child));
+                                }
+                            }
+                        });
     }
 
     @Override
-    public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
-        View childView = view.findChildViewUnder(e.getX(), e.getY());
-        if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
+    public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent event) {
+        View childView = view.findChildViewUnder(event.getX(), event.getY());
+        if (childView != null && mListener != null && mGestureDetector.onTouchEvent(event)) {
             mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
             return true;
         }
@@ -54,11 +64,11 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
 
     @Override
     public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
-
+        // No specific gestures to be handled except for the click
     }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept) {
-
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        // No gestures to be intercepted before click
     }
 }

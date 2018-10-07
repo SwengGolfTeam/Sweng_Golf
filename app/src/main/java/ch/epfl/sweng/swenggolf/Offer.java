@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Offer implements Parcelable {
-    private final String author, title, description;
+    private final String author;
+    private final String title;
+    private final String description;
 
     /**
      * Contains the data of an offer
@@ -29,6 +31,8 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Returns the offer's author's name.
+     *
      * @return the creator of the offer
      */
     public String getAuthor() {
@@ -36,6 +40,8 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Returns the offer's title.
+     *
      * @return the name of the offer
      */
     public String getTitle() {
@@ -43,6 +49,8 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Returns the offer's description.
+     *
      * @return the description of the offer
      */
     public String getDescription() {
@@ -61,7 +69,6 @@ public class Offer implements Parcelable {
         dest.writeStringArray(new String[]{this.author, this.title, this.description});
     }
 
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
         public Offer createFromParcel(Parcel in) {
             return new Offer(in);

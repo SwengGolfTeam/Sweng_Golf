@@ -36,7 +36,8 @@ public class ListOfferActivity extends Activity {
 
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
@@ -46,35 +47,39 @@ public class ListOfferActivity extends Activity {
     }
 
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(this, mRecyclerView, new ListOfferTouchListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(ListOfferActivity.this, ShowOfferActivity.class);
-                Offer offer = offerList.get(position);
-                intent.putExtra("offer", offer);
-                startActivity(intent);
-            }
+        return new ListOfferTouchListener(this, mRecyclerView,
+                new ListOfferTouchListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent =
+                                new Intent(ListOfferActivity.this,
+                                        ShowOfferActivity.class);
+                        Offer offer = offerList.get(position);
+                        intent.putExtra("offer", offer);
+                        startActivity(intent);
+                    }
 
-            @Override
-            public void onLongItemClick(View view, int position) {
-                onItemClick(view, position);
-            }
-        });
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        onItemClick(view, position);
+                    }
+                });
     }
 
     /**
      * Creates dummy data to list.
      */
     private void prepareOfferData() {
-        String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
-                "Nam ut quam ornare, fringilla nunc eget, facilisis lectus." +
-                "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo." +
-                "Suspendisse potenti. Morbi vehicula ante nibh, at tristique tortor dignissim non." +
-                "In sit amet ligula tempus, mattis massa dictum, mollis sem." +
-                "Mauris convallis sed mauris ut sodales." +
-                "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat." +
-                "Fusce in nibh pharetra nunc pellentesque tempor id interdum est." +
-                "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+        String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
+                + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
+                + "Suspendisse potenti. Morbi vehicula ante nibh,"
+                + " at tristique tortor dignissim non."
+                + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+                + "Mauris convallis sed mauris ut sodales."
+                + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
+                + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
+                + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
         Offer offer = new Offer("Robin", "6-pack beers for ModStoch homework", lorem);
         offerList.add(offer);
@@ -84,7 +89,8 @@ public class ListOfferActivity extends Activity {
         offerList.add(offer);
         offer = new Offer("Elsa", "Pizzas for beer", lorem);
         offerList.add(offer);
-        offer = new Offer("Seb", "Everything for a canton that doesn't suck and some more text to overflow the box", lorem);
+        offer = new Offer("Seb", "Everything for a canton that doesn't suck and some "
+                + "more text to overflow the box", lorem);
         offerList.add(offer);
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
         offerList.add(offer);
