@@ -35,7 +35,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
      */
     public ListOfferAdapter(List<Offer> offerList) {
         if (offerList == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         this.offerList = offerList;
     }

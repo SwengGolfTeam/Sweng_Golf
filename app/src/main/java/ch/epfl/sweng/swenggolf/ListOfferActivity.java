@@ -32,7 +32,6 @@ public class ListOfferActivity extends Activity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
