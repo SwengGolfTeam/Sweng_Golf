@@ -21,6 +21,10 @@ public class LogOutActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
+    TextView mail;
+    TextView name;
+    TextView uid;
+    ImageView photo;
 
     @Override
     protected void onStart() {
@@ -32,23 +36,14 @@ public class LogOutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_out);
+
         Button button = findViewById(R.id.logout);
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        assert user != null;
-        TextView name = findViewById(R.id.name);
-
-        name.setText(user.getDisplayName());
-
-        TextView mail = findViewById(R.id.mail);
-        mail.setText(user.getEmail());
-
-        TextView uid = findViewById(R.id.uid);
-        uid.setText(user.getUid());
-
-        ImageView photo = findViewById(R.id.photo);
-        Picasso.with(this).load(user.getPhotoUrl()).into(photo);
-
+        name = findViewById(R.id.name);
+        mail = findViewById(R.id.mail);
+        uid = findViewById(R.id.uid);
+        photo = findViewById(R.id.photo);
+        displayInformation(mAuth.getCurrentUser());
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -66,5 +61,15 @@ public class LogOutActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Display all the informations of a user
+     * @param user The user
+     */
+    private void displayInformation(FirebaseUser user){
+        name.setText(user.getDisplayName());
+        mail.setText(user.getEmail());
+        uid.setText(user.getUid());
+        Picasso.with(this).load(user.getPhotoUrl()).into(photo);
+    }
 }
 

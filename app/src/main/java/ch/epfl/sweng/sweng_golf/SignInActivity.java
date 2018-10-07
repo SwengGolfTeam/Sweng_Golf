@@ -23,17 +23,17 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInActivity extends AppCompatActivity {
 
+    /*(Random) Number linked with the Sign in process*/
     private static final int RC_SIGN_IN = 9001;
-    SignInButton button;
-    FirebaseAuth mAuth;
-    GoogleSignInClient mGoogleSignInClient;
-    FirebaseAuth.AuthStateListener mAuthListener;
+
+    private FirebaseAuth mAuth;
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
     protected void onStart() {
         super.onStart();
-
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -41,14 +41,24 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
         mAuth = FirebaseAuth.getInstance();
-        button = findViewById(R.id.sign_in_button);
+        /*Button used to sign in*/
+        SignInButton button = findViewById(R.id.sign_in_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
             }
         });
+        initializeMAuthListener();
+    }
+
+
+    /**
+     * initialize mAuthListener
+     */
+    private void initializeMAuthListener(){
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -57,24 +67,25 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         };
-
-        setGoogleSignInClient();
     }
 
     /**
-     * Initialize the Google Sign in Client
+     * Create and initialize a Google Sign in Client
      */
-    private void setGoogleSignInClient(){
+    private GoogleSignInClient setGoogleSignInClient(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("563213920188-tnrrbrgjl38p5ss3ou90k3kt7960mkat.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        return GoogleSignIn.getClient(this, gso);
     }
 
+    /**
+     * Launch the google signing in display
+     */
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = setGoogleSignInClient().getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -92,11 +103,12 @@ public class SignInActivity extends AppCompatActivity {
                 Toast.makeText(SignInActivity.this, "Authentification went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-
-
-
-
     }
+
+    /**
+     * Make an authentification in firebase with google account
+     * @param acct The google account
+     */
     private void firebaseAuthWithGoogle (GoogleSignInAccount acct){
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -108,10 +120,8 @@ public class SignInActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(SignInActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
-
     }
 }
 
