@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "410725862947",
+    "firebase_url": "https://sweng-golf.firebaseio.com",
+    "project_id": "sweng-golf",
+    "storage_bucket": "sweng-golf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410725862947:android:09bdd40601fc5433",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.sweng_golf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410725862947-r37hdct139vog9o4p5bod4pe9bpo3deb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.sweng_golf",
+            "certificate_hash": "419f6f933619f0e4de511c46cf42d36792aec39c"
+          }
+        },
+        {
+          "client_id": "410725862947-vaeplttng1sil13aatris11p9gooajdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0WxpCKQpidKrDkRuieIz52Lxzph6-xaU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410725862947-vaeplttng1sil13aatris11p9gooajdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
