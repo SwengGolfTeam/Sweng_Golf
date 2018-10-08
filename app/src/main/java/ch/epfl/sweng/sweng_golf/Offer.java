@@ -25,6 +25,13 @@ public class Offer {
         this.description = description;
     }
 
+    // Empty constructor for the listeners of Firebase
+    public Offer(){
+        this.username = "";
+        this.name = "";
+        this.description = "";
+    }
+
     /**
      *
      * @return the creator of the offer

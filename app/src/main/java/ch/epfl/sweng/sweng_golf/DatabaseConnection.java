@@ -22,7 +22,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Write a new offer in the database
+     * Writes a new offer in the database
      * @param offerID an ID unique to this offer
      * @param newOffer the new Offer that needs to be added
      *
@@ -30,6 +30,7 @@ public class DatabaseConnection {
     public void writeOffer(String offerID, Offer newOffer){
         ref = db.getReference();
         ref.child("offers").child(offerID).setValue(newOffer);
+        Log.d("DB_WRITE", "offerID="+offerID);
     }
 
     /**
@@ -83,7 +84,44 @@ public class DatabaseConnection {
         });
     }
 
-    //TODO: add write/read functions for users
+    /**
+     * Writes a user in the database
+     * @param userID an ID unique to this user
+     * @param newUser the new User that needs to be added
+     *
+     */
+    public void writeUser(String userID, User newUser){
+        ref = db.getReference();
+        ref.child("users").child(userID).setValue(newUser);
+        Log.d("DB_WRITE", "userID="+userID);
 
-    //TODO: add empty constructors for classes to recover from Database (eg Offer, etc...)
+    }
+
+    /**
+     * Reads a specific user from the database
+     * @param userID the ID of the user
+     *
+     */
+    public void readUser(final String userID){
+        ref = db.getReference("/users/"+userID);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.d("DB_READ", "user read: "+user.getUsername());
+
+                //TODO: call to display/handle function for user
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("DB_READ", "failed userID="+userID);
+            }
+        });
+    }
+
+    //TODO: maybe readAllUsers()?
+
+    //TODO: add feedback loops for writes to see if successful or not
 }
