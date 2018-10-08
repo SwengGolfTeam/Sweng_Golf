@@ -9,6 +9,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseConnection {
     private final FirebaseDatabase db;
     private DatabaseReference ref;
@@ -34,8 +37,26 @@ public class DatabaseConnection {
      *
      */
     public void readOffers(){
-        //TODO: for loop to recover all of recover them all
-        // see https://www.captechconsulting.com/blogs/firebase-realtime-database-android-tutorial
+        ref = db.getReference("/offers");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List offers = new ArrayList<>();
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Offer offer = noteDataSnapshot.getValue(Offer.class);
+                    offers.add(offer);
+                    Log.d("DB_READ", "offer read: "+offer.getName());
+                }
+
+                //TODO: call to display/handle function for offers list
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("DB_READ", "failed all offers");
+            }
+        });
     }
 
     /**
@@ -52,7 +73,7 @@ public class DatabaseConnection {
                 Offer offer = dataSnapshot.getValue(Offer.class);
                 Log.d("DB_READ", "offer read: "+offer.getName());
 
-                //TODO: interface.displayOffer(offer)
+                //TODO: call to display/handle function for offer
             }
 
             @Override
@@ -62,7 +83,7 @@ public class DatabaseConnection {
         });
     }
 
-    //TODO: add functions for users/logins/profiles
+    //TODO: add write/read functions for users
 
-    //TODO: add empty constructors for classes to recover from Database
+    //TODO: add empty constructors for classes to recover from Database (eg Offer, etc...)
 }
