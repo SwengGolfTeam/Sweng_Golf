@@ -30,7 +30,7 @@ public class User {
      * Geter function for the identifier.
      * @return the unique identifier
      */
-    public String getUserID(){
+    public String getUserId(){
         return this.userId;
     }
 
