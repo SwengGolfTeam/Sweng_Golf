@@ -18,9 +18,13 @@ public class User {
     /**
      * Constructor for a user -> will change only placeholder.
      * @param username the usrename
-     * @param userId a unique login method
+     * @param userId a unique identifier
+     * @param login the login method
      */
     public User(String username, String userId, String login){
+        if (username.isEmpty() || userId.isEmpty() || login.isEmpty()) {
+            throw new IllegalArgumentException("Invalid arguments for User");
+        }
         this.username = username;
         this.userId = userId;
         this.login = login;
