@@ -8,28 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DummyUser { // has all the useful methods of FirebaseUser
-    private String name;
-    private String uid;
+public class FakeUserDatabase {
 
-    // in an attempt to mimic a database
+    // in an attempt to mimic a database (which might be not at all like this)
     private static Map<String, Map<String, String>> table;
 
-    public DummyUser(String name, String uid) {
-        this.name = name;
-        this.uid = uid;
+    public FakeUserDatabase() {
         table = new HashMap<>();
+    }
+
+    public void addNewUser(String name, String uid) {
         table.put(uid, new HashMap<String, String>());
+        table.get(uid).put("name", name);
         table.get(uid).put("offers_posted", "0");
         table.get(uid).put("offers_answered", "0");
-    }
-
-    public String getDisplayName() {
-        return name;
-    }
-
-    public String getUid() {
-        return uid;
     }
 
     public static String accessTable(String uid, String key) {

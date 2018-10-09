@@ -16,20 +16,19 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         userID = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
-        DummyUser user = MainActivity.userDatabase.get(userID);
 
-        final TextView name = findViewById(R.id.name); // is the final useful? (found on an example on Android website)
-        name.setText(user.getDisplayName());
-        final TextView tvUsername = findViewById(R.id.username);
-        String username = DummyUser.accessTable(user.getUid(), "username");
+        TextView name = findViewById(R.id.name);
+        name.setText(FakeUserDatabase.accessTable(userID, "name"));
+        TextView textView = findViewById(R.id.username);
+        String username = FakeUserDatabase.accessTable(userID, "username");
         if (username != null && !username.isEmpty()) {
             String usernameString = "@" + username;
-            tvUsername.setText(usernameString);
+            textView.setText(usernameString);
         }
-        final TextView offers_posted = findViewById(R.id.offers1);
-        offers_posted.setText(DummyUser.accessTable(user.getUid(), "offers_posted"));
-        final TextView offers_answered = findViewById(R.id.offers2);
-        offers_answered.setText(DummyUser.accessTable(user.getUid(), "offers_answered"));
+        TextView offersPosted = findViewById(R.id.offers1);
+        offersPosted.setText(FakeUserDatabase.accessTable(userID, "offers_posted"));
+        TextView offersAnswered = findViewById(R.id.offers2);
+        offersAnswered.setText(FakeUserDatabase.accessTable(userID, "offers_answered"));
     }
 
     public void editProfile(View view) {
