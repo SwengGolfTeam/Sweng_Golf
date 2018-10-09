@@ -6,11 +6,15 @@
     android:orientation="vertical"
     tools:context=".LogOutActivity">
 
-    <Button
-        android:id="@+id/logout"
+
+
+    <ImageView
+        android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/log_out" />
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/profile_image" />
 
     <TextView
         android:id="@+id/name"
@@ -27,11 +31,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/photo"
+    <Button
+        android:id="@+id/go_to_main_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/profile_image" />
+        android:layout_height="wrap_content"
+        android:text="@string/go_to_main_menu" />
 
 
 </LinearLayout>

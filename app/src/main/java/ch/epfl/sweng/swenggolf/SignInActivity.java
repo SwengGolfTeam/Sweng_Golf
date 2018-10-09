@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,11 +40,11 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
         /*Button used to sign in*/
-        SignInButton button = findViewById(R.id.sign_in_button);
+        SignInButton button = findViewById(ch.epfl.sweng.swenggolf.R.id.sign_in_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
