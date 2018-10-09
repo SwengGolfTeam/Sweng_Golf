@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,7 +17,7 @@ public class DatabaseConnection {
     private DatabaseReference ref;
 
     public DatabaseConnection(){
-        db = FirebaseDatabase.getInstance("https://sweng-golf.firebaseio.com/");
+        db = FirebaseDatabase.getInstance("https://sweng-golf-18.firebaseio.com/");
         ref = db.getReference();
     }
 

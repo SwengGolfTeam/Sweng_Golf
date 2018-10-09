@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -27,9 +27,9 @@ public class CreateOfferActivityTest {
             new ActivityTestRule<>(MainActivity.class);
     @Test
     public void errorMessageDisplayed() {
-        onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(click());
-        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
+        onView(withId(ch.epfl.sweng.swenggolf.R.id.create_offer_button)).perform(click());
+        onView(withId(ch.epfl.sweng.swenggolf.R.id.button)).perform(click());
+        onView(withId(ch.epfl.sweng.swenggolf.R.id.error_message)).check(matches(isDisplayed()));
 
     }
 }

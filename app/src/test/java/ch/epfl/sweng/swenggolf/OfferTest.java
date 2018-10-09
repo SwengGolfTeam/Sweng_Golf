@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

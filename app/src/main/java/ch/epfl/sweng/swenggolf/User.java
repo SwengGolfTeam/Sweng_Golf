@@ -1,4 +1,4 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User {
