@@ -1,35 +1,43 @@
 {
   "project_info": {
-    "project_number": "563213920188",
-    "firebase_url": "https://swenglogin.firebaseio.com",
-    "project_id": "swenglogin",
-    "storage_bucket": "swenglogin.appspot.com"
+    "project_number": "515318437233",
+    "firebase_url": "https://sweng-golf-18.firebaseio.com",
+    "project_id": "sweng-golf-18",
+    "storage_bucket": "sweng-golf-18.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:563213920188:android:09bdd40601fc5433",
+        "mobilesdk_app_id": "1:515318437233:android:0a9b46901a2857d5",
         "android_client_info": {
-          "package_name": "ch.epfl.sweng.sweng_golf"
+          "package_name": "ch.epfl.sweng.swenggolf"
         }
       },
       "oauth_client": [
         {
-          "client_id": "563213920188-13tmnpscacbg803jjjg1bdj988fo436p.apps.googleusercontent.com",
+          "client_id": "515318437233-e9e94fbusbd20jo9vtri09mv4lcvdsda.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ch.epfl.sweng.sweng_golf",
-            "certificate_hash": "27c485f852e99f3d6245ca67f7289ff060253caa"
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "419f6f933619f0e4de511c46cf42d36792aec39c"
           }
         },
         {
-          "client_id": "563213920188-tnrrbrgjl38p5ss3ou90k3kt7960mkat.apps.googleusercontent.com",
+          "client_id": "515318437233-q73hru52j8uf98apf5bfopjuoc1nb2f4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "f61264688402ffee8c90ab854226a928f8bcebbc"
+          }
+        },
+        {
+          "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBche6R5troyACRs0FJsoXceZ07nQbdauE"
+          "current_key": "AIzaSyBcbMrvTVPBmevKrUoSKCV1b41F1FpNnQQ"
         }
       ],
       "services": {
@@ -40,7 +48,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "563213920188-tnrrbrgjl38p5ss3ou90k3kt7960mkat.apps.googleusercontent.com",
+              "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
