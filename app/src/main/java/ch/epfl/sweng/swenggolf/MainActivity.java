@@ -1,8 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,10 +13,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void loadOfferActivity(View view){
+    /**
+     * Launches the CreateOfferActivity.
+     *
+     * @param view the current view
+     */
+    public void loadCreateOfferActivity(View view) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
         // TODO implement username when login effective
-        intent.putExtra("username","God");
+        intent.putExtra("username", "God");
+        startActivity(intent);
+    }
+
+    /**
+     * Launches the ShowOffersActivity.
+     *
+     * @param view the current view
+     */
+    public void loadShowOffersActivity(View view) {
+        Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);
     }
 

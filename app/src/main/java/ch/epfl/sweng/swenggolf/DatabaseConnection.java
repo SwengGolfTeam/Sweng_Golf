@@ -43,14 +43,16 @@ public class DatabaseConnection {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List offers = new ArrayList<>();
+                List<Offer> offers = new ArrayList<>();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Offer offer = noteDataSnapshot.getValue(Offer.class);
                     offers.add(offer);
-                    Log.d("DB_READ", "offer read: "+offer.getName());
+                    Log.d("DB_READ", "offer read: "+offer.getTitle());
                 }
 
                 //TODO: call to display/handle function for offers list
+                //ListOfferAdapter loa = new ListOfferAdapter(offers);
+                //loa.notifyDataSetChanged();
             }
 
             @Override
@@ -72,7 +74,7 @@ public class DatabaseConnection {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Offer offer = dataSnapshot.getValue(Offer.class);
-                Log.d("DB_READ", "offer read: "+offer.getName());
+                Log.d("DB_READ", "offer read: "+offer.getTitle());
 
                 //TODO: call to display/handle function for offer
             }
@@ -120,8 +122,4 @@ public class DatabaseConnection {
             }
         });
     }
-
-    //TODO: maybe readAllUsers()?
-
-    //TODO: add feedback loops for writes to see if successful or not
 }

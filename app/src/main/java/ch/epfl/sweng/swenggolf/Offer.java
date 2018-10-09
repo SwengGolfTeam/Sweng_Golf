@@ -1,54 +1,64 @@
 package ch.epfl.sweng.swenggolf;
 
-public class Offer {
-    private final String username, name, description;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Offer implements Parcelable {
+    private final String author;
+    private final String title;
+    private final String description;
 
     /**
-     * Contains the data of an offer
-     * @param username the creator of the offer. Should not be empty
-     * @param name the name of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
+     * Contains the data of an offer.
      *
+     * @param author      the creator of the offer. Should not be empty
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
      */
-    public Offer(String username, String name, String description){
-        if(username.isEmpty()){
-            throw new IllegalArgumentException("Username can't be empty.");
+    public Offer(String author, String title, String description) {
+        if (author.isEmpty()) {
+            throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
-        else if(name.isEmpty()){
+        if (title.isEmpty()) {
             throw new IllegalArgumentException("Name of the offer can't be empty.");
         }
-        else if(description.isEmpty()){
-            throw new IllegalArgumentException("Decription of the offer can't be empty.");
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
-        this.username = username;
-        this.name = name;
+        this.author = author;
+        this.title = title;
         this.description = description;
     }
 
-    // Empty constructor for the listeners of Firebase
+    /**
+     * Empty builder for the listener of Firebase
+     */
     public Offer(){
-        this.username = "";
-        this.name = "";
+        this.author = "";
+        this.title = "";
         this.description = "";
     }
 
     /**
+     * Returns the offer's author's name.
      *
      * @return the creator of the offer
      */
-    public String getUsername() {
-        return username;
+    public String getAuthor() {
+        return author;
     }
 
     /**
+     * Returns the offer's title.
      *
      * @return the name of the offer
      */
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     /**
+     * Returns the offer's description.
      *
      * @return the description of the offer
      */
@@ -57,4 +67,33 @@ public class Offer {
     }
 
 
+    /* Implements Parcelable */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{this.author, this.title, this.description});
+    }
+
+    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
+        public Offer createFromParcel(Parcel in) {
+            return new Offer(in);
+        }
+
+        public Offer[] newArray(int size) {
+            return new Offer[size];
+        }
+    };
+
+    private Offer(Parcel in) {
+        String[] data = new String[3];
+
+        in.readStringArray(data);
+        this.author = data[0];
+        this.title = data[1];
+        this.description = data[2];
+    }
 }

@@ -10,7 +10,24 @@
         android:id="@+id/create_offer_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="loadOfferActivity"
-        android:text="Create offer"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="loadCreateOfferActivity"
+        android:text="@string/button_create_offer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/show_offers_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:onClick="loadShowOffersActivity"
+        android:text="@string/button_show_offers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_offer_button" />
 
 </android.support.constraint.ConstraintLayout>
