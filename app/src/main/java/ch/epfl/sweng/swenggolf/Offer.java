@@ -31,7 +31,7 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Empty builder for the listener of Firebase
+     * Empty builder for the listener of Firebase.
      */
     public Offer(){
         this.author = "";

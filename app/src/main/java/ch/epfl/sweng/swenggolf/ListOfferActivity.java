@@ -69,8 +69,6 @@ public class ListOfferActivity extends Activity {
      * Creates dummy data to list.
      */
     private void prepareOfferData() {
-        DatabaseConnection db = new DatabaseConnection();
-
         String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
                 + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
@@ -84,30 +82,27 @@ public class ListOfferActivity extends Activity {
 
         Offer offer = new Offer("Robin", "6-pack beers for ModStoch homework", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
         offer = new Offer("Eric", "Chocolate for tractor", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
         offer = new Offer("Ugo", "ModStoch help for food", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
         offer = new Offer("Elsa", "Pizzas for beer", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
         offer = new Offer("Seb", "Everything for a canton that doesn't suck and some "
                 + "more text to overflow the box", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
         offerList.add(offer);
-        db.writeOffer("id_"+offer.getTitle(),offer);
 
-        //TODO: db.readOffers() ?
         mAdapter.notifyDataSetChanged();
+
+        /* TODO: Read from database and display it
+        DatabaseConnection db = new DatabaseConnection();
+        db.readOffers();*/
     }
 }
