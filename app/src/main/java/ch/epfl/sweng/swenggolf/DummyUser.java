@@ -1,6 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,4 +39,5 @@ public class DummyUser { // has all the useful methods of FirebaseUser
     public static void setUsername(String uid, String username) {
         table.get(uid).put("username", username);
     }
+
 }

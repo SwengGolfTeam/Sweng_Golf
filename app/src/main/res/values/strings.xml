@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Sweng_Golf</string>
     <string name="profile_activity_name">Profile</string>
+    <string name="edit_profile_activity_name">Edit Profile</string>
     <string name="user_preferences">Preferences</string>
     <string name="offers_posted">offers posted</string>
     <string name="offers_answered">offers answered</string>
+    <string name="username">username</string>
 </resources>
