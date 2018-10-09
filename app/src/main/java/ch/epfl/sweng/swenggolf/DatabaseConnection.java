@@ -86,20 +86,4 @@ public class DatabaseConnection {
             }
         });
     }
-
-    /**
-     * Getter function for the database
-     * @return the database
-     */
-    public FirebaseDatabase getDb(){
-        return this.db;
-    }
-
-    /**
-     * Getter function for the reference
-     * @return the reference
-     */
-    public DatabaseReference getRef(){
-        return this.ref;
-    }
 }
