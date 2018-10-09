@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ch.epfl.sweng.sweng_golf", appContext.getPackageName());
+        assertEquals("ch.epfl.sweng.swenggolf", appContext.getPackageName());
     }
 }

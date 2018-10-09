@@ -7,7 +7,7 @@
     tools:context="ch.epfl.sweng.swenggolf.EditProfileActivity">
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -15,7 +15,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        Intent intent = getIntent();
+        Intent intent = getIntent(); // doesn't work if we just get back from edit profile
         userID = intent.getStringExtra(MainActivity.EXTRA_USERID);
 
         EditText editText = findViewById(R.id.edit_username);
