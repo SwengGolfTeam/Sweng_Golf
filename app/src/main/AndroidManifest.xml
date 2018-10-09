@@ -7,15 +7,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme">
+=======
+        <activity android:name="ch.epfl.sweng.swenggolf.MainActivity">
+>>>>>>> origin/master
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity
             android:name=".ProfileActivity"
             android:label="@string/profile_activity_name"
@@ -26,6 +31,11 @@
             android:name=".EditProfileActivity"
             android:label="@string/edit_profile_activity_name"
             android:parentActivityName=".ProfileActivity" />
+=======
+        <activity android:name="ch.epfl.sweng.swenggolf.CreateOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.ListOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.ShowOfferActivity"></activity>
+>>>>>>> origin/master
     </application>
 
 </manifest>

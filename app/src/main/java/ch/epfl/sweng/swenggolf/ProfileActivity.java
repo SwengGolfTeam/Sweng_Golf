@@ -15,8 +15,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Intent intent = getIntent();
-        userID = intent.getStringExtra(MainActivity.EXTRA_USERID);
+        userID = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
         DummyUser user = MainActivity.userDatabase.get(userID);
 
         final TextView name = findViewById(R.id.name); // is the final useful? (found on an example on Android website)
