@@ -17,7 +17,7 @@ public class DatabaseConnection {
     private DatabaseReference ref;
 
     public DatabaseConnection(){
-        db = FirebaseDatabase.getInstance("https://sweng-golf-18.firebaseio.com/");
+        db = FirebaseDatabase.getInstance();
         ref = db.getReference();
     }
 
