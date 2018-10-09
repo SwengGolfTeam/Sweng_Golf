@@ -15,8 +15,8 @@ import java.util.List;
 public class DatabaseConnection {
     private final FirebaseDatabase db;
     private DatabaseReference ref;
-    private final String DB_R = "FIREBASE_READ";
-    private final String DB_W = "FIREBASE_WRITE";
+    private final String DBREAD = "FIREBASE_READ";
+    private final String DBWRITE = "FIREBASE_WRITE";
 
     public DatabaseConnection(){
         db = FirebaseDatabase.getInstance();
@@ -33,7 +33,7 @@ public class DatabaseConnection {
     public void writeObject(String type, String id, Object newObject){
         ref = db.getReference();
         ref.child(type).child(id).setValue(newObject);
-        Log.d(DB_W, type+"id="+id);
+        Log.d(DBWRITE, type+"id="+id);
     }
 
     /**
@@ -49,17 +49,15 @@ public class DatabaseConnection {
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Offer offer = noteDataSnapshot.getValue(Offer.class);
                     offers.add(offer);
-                    Log.d(DB_R, "offer read: "+offer.getTitle());
+                    Log.d(DBREAD, "offer read: "+offer.getTitle());
                 }
 
-                //TODO: call to display/handle function for offers list
-                //ListOfferAdapter loa = new ListOfferAdapter(offers);
-                //loa.notifyDataSetChanged();
+                //TODO: call the display function for the list of offers
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(DB_R, "failed all offers");
+                Log.d(DBREAD, "failed all offers");
             }
         });
     }
@@ -77,14 +75,14 @@ public class DatabaseConnection {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Object obj = dataSnapshot.getValue(Object.class);
-                Log.d(DB_R, type+" read: "+obj.toString());
+                Log.d(DBREAD, type+" read: "+obj.toString());
 
                 //TODO: call to display/handle function for offer
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(DB_R, "failed "+type+"/"+id);
+                Log.d(DBREAD, "failed "+type+"/"+id);
             }
         });
     }

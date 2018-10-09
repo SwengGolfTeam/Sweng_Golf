@@ -101,8 +101,6 @@ public class ListOfferActivity extends Activity {
 
         mAdapter.notifyDataSetChanged();
 
-        /* TODO: Read from database and display it
-        DatabaseConnection db = new DatabaseConnection();
-        db.readOffers();*/
+        // TODO: Read from database and display it (with DatabaseConnection and readOffers() function)
     }
 }
