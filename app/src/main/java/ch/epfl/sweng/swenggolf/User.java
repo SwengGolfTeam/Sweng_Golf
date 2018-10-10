@@ -45,7 +45,7 @@ public class User {
         this.username = username;
         this.userId = userId;
         this.email = email;
-        this.photo = Uri.parse("");
+        this.photo = null;
 
     }
 
