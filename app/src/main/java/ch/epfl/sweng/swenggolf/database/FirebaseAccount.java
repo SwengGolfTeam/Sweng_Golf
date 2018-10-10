@@ -9,9 +9,9 @@ public class FirebaseAccount {
     public static boolean test = false;
 
     /**
-     * Creates a new account representing a user data
-     * If test is set to true returns a user with initialized attributes
-     * Otherwise returns a user with empty attributes
+     * Creates a new account representing a user data.
+     * If test is set to true returns a user with initialized attributes.
+     * Otherwise returns a user with empty attributes.
      */
     public FirebaseAccount(){
         if(test){
