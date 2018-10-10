@@ -6,7 +6,9 @@ import java.util.Map;
 public abstract class FakeUserDatabase {
 
     // in an attempt to mimic a database (which might be not at all like this)
-    private final static Map<String, Map<String, String>> table = new HashMap<>();
+    private static final Map<String, Map<String, String>> table = new HashMap<>();
+
+    private FakeUserDatabase() {}
 
 
     /**
