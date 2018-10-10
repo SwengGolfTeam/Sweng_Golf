@@ -1,10 +1,18 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.net.Uri;
+
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import com.google.firebase.auth.FirebaseUser;
+
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User {
     private final String username;
     private final String userId;
-    private final String login;
+    private final String email;
+    private final Uri photo;
 
     /**
      * Empty constructor for the listeners of Firebase.
@@ -12,22 +20,33 @@ public class User {
     public User(){
         this.username = "";
         this.userId = "";
-        this.login = "";
+        this.email = "";
+        this.photo = Uri.parse("");
+    }
+
+    User(FirebaseUser fu){
+        username = fu.getDisplayName();
+        email = fu.getEmail();
+        userId = fu.getUid();
+        photo = fu.getPhotoUrl();
     }
 
     /**
      * Constructor for a user -> will change only placeholder.
      * @param username the usrename
      * @param userId a unique identifier
-     * @param login the login method
+     * @param email the login method
      */
-    public User(String username, String userId, String login){
-        if (username.isEmpty() || userId.isEmpty() || login.isEmpty()) {
+    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+    public User(String username, String userId, String email){
+        if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
         this.username = username;
         this.userId = userId;
-        this.login = login;
+        this.email = email;
+        this.photo = null;
+
     }
 
     /**
@@ -50,7 +69,12 @@ public class User {
      * Getter function for the login method.
      * @return the login method of the user
      */
-    public String getLogin(){
-        return this.login;
+    public String getEmail(){
+        return this.email;
     }
+
+    public Uri getPhoto() {
+        return photo;
+    }
+
 }

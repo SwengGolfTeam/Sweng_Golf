@@ -30,6 +30,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
+
+    /**
+     * Launches the SigninActivity.
+     *
+     * @param view the current view
+     */
+    public void loadSigninActivity(View view) {
+        startActivity(new Intent(this, SignInActivity.class));
+    }
+
+
     /**
      * Launches the CreateOfferActivity.
      *
@@ -52,4 +65,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
 }
+

@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "515318437233-q73hru52j8uf98apf5bfopjuoc1nb2f4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "f61264688402ffee8c90ab854226a928f8bcebbc"
+          }
+        },
+        {
           "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
           "client_type": 3
         }
