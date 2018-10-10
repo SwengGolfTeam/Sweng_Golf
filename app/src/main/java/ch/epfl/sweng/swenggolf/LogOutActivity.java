@@ -26,12 +26,11 @@ public class LogOutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_log_out);
-        FirebaseUser fu = (FirebaseAuth.getInstance()).getCurrentUser();
-
         name = findViewById(ch.epfl.sweng.swenggolf.R.id.name);
         mail = findViewById(ch.epfl.sweng.swenggolf.R.id.mail);
         uid = findViewById(ch.epfl.sweng.swenggolf.R.id.uid);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
+        FirebaseUser fu = (FirebaseAuth.getInstance()).getCurrentUser();
         if(null == fu){ quitLogOut();}
         else{ displayInformation(new User(fu));}
     }
