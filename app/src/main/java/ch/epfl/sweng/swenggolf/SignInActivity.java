@@ -56,7 +56,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     /**
-     * initialize mAuthListener
+     * initialize mAuthListener.
      **/
     private void initializeMAuthListener(){
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -70,15 +70,15 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     /**
-     * Create and initialize a Google Sign in Client
+     * Create and initialize a Google Sign in Client.
      *
      * @return The corresponding google client
      */
     private GoogleSignInClient setGoogleSignInClient(){
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("515318437233-vsola1ge0locvd4ft2jsc9i5" +
-                        "esma30ro.apps.googleusercontent.com")
+                .requestIdToken("515318437233-vsola1ge0locvd4ft2jsc9i5"
+                        + "esma30ro.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -86,8 +86,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     /**
-     * Launch the google signing in display
-     *
+     * Launch the google signing in display.
      */
     private void signIn() {
         Intent signInIntent = setGoogleSignInClient().getSignInIntent();
@@ -112,7 +111,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     /**
-     * Make an authentification in firebase with google account
+     * Make an authentification in firebase with google account.
      *
      * @param acct The google account
      */

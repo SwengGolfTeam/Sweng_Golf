@@ -53,7 +53,7 @@ public class LogOutActivity extends AppCompatActivity {
     }
 
     /**
-     * Display all the informations of a user
+     * Display all the informations of a user.
      * @param user The user
      */
     private void displayInformation(User user){

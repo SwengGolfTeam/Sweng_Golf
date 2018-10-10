@@ -17,6 +17,7 @@ public final class User {
         uid = fu.getUid();
         photo = fu.getPhotoUrl();
     }
+    
     public String getName() {
         return name;
     }
