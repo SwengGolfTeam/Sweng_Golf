@@ -18,6 +18,7 @@ public class LogOutActivity extends AppCompatActivity {
     private TextView name;
     private TextView uid;
     private ImageView photo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class LogOutActivity extends AppCompatActivity {
         uid = findViewById(ch.epfl.sweng.swenggolf.R.id.uid);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         User user;
-        if(TestMode.isTEST()){
+        if(TestMode.isTest()){
             user = TestMode.getUser();
         }
         else {
@@ -63,7 +64,7 @@ public class LogOutActivity extends AppCompatActivity {
         name.setText(user.getUserName());
         mail.setText(user.getEmail());
         uid.setText(user.getUserId());
-        if(!TestMode.isTEST()) {
+        if(!TestMode.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
     }

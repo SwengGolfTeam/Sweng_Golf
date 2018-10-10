@@ -42,7 +42,7 @@ public class UserLocal implements User{
 
     UserLocal(String username, String userId, String email, Uri photo){
         Boolean pho;
-        if(!TestMode.isTEST()) {
+        if(!TestMode.isTest()) {
             pho = false;
         }
         else {

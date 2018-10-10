@@ -6,6 +6,9 @@ import com.google.firebase.auth.FirebaseUser;
  * Class Used to know if we are running a test or not.
  */
 public class TestMode {
+
+    private TestMode(){};
+
     /*
     *   TEST_MODE must be true for tests and false otherwise.
     */
@@ -20,7 +23,7 @@ public class TestMode {
      * Method to know if we are in test or not.
      * @return the corresponding boolean
      */
-    protected static boolean isTEST(){
+    protected static boolean isTest(){
         return TEST_MODE;
     }
 
