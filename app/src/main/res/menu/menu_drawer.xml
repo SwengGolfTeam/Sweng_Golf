@@ -4,14 +4,17 @@
         <item
             android:id="@+id/my_account"
             android:icon="@android:drawable/ic_dialog_info"
-            android:title="@string/my_account"/>
+            android:title="@string/my_account"
+            android:onClick="loadProfileActivity"/>
         <item
             android:id="@+id/friends"
             android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="@string/friends"/>
+            android:title="@string/friends"
+            android:onClick="loadShowOffersActivity"/>
         <item
             android:id="@+id/nearby_services"
             android:icon="@android:drawable/ic_menu_directions"
-            android:title="@string/nearby_services"/>
+            android:title="@string/nearby_services"
+            android:onClick="loadCreateOfferActivity"/>
     </group>
 </menu>

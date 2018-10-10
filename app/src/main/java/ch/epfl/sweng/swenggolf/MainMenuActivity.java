@@ -1,10 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,5 +64,27 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_toolbar_main,menu);
         return true;
+    }
+
+    public static final String EXTRA_USERID = "ch.epfl.sweng.swenggolf.USERID";
+    private final String uid = "1234";
+
+    public void loadProfileActivity(MenuItem item) {
+        FakeUserDatabase.addNewUser("Hervé Bogoss", uid);
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(EXTRA_USERID, uid);
+        startActivity(intent);
+    }
+
+    public void loadCreateOfferActivity(MenuItem item) {
+        Intent intent = new Intent(this, CreateOfferActivity.class);
+        // TODO implement username when login effective
+        intent.putExtra("username", "God");
+        startActivity(intent);
+    }
+
+    public void loadShowOffersActivity(MenuItem item) {
+        Intent intent = new Intent(this, ListOfferActivity.class);
+        startActivity(intent);
     }
 }

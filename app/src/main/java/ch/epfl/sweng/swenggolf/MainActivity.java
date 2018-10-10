@@ -3,6 +3,8 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 
@@ -24,18 +26,28 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param view the current view
      */
-    public void loadProfileActivity(View view) {
+    public void loadProfileActivity(MenuItem item) {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(EXTRA_USERID, uid);
         startActivity(intent);
     }
 
     /**
+     * Launches the SigninActivity.
+     *
+     * @param view the current view
+     */
+    public void loadSigninActivity(MenuItem item) {
+        startActivity(new Intent(this, SignInActivity.class));
+    }
+
+
+    /**
      * Launches the CreateOfferActivity.
      *
      * @param view the current view
      */
-    public void loadCreateOfferActivity(View view) {
+    public void loadCreateOfferActivity(MenuItem item) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
         // TODO implement username when login effective
         intent.putExtra("username", "God");
@@ -47,9 +59,10 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param view the current view
      */
-    public void loadShowOffersActivity(View view) {
+    public void loadShowOffersActivity(MenuItem item) {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);
     }
 
 }
+

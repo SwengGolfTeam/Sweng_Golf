@@ -17,9 +17,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Window currentWindow = getWindow();
-        currentWindow.requestFeature(FEATURE_ACTION_BAR); //doesn't seem to work
-
         setContentView(R.layout.activity_profile);
 
         uid = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
