@@ -28,6 +28,6 @@ public class UserTest {
         User user = new User(username, id, login);
         assertEquals("Usernames not equal", username, user.getUsername());
         assertEquals("userIds not equal", id, user.getUserId());
-        assertEquals("Logins not equal", login, user.getLogin());
+        assertEquals("Logins not equal", login, user.getEmail());
     }
 }
