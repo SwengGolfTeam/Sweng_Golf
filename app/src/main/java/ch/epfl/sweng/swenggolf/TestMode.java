@@ -1,13 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
-import com.google.firebase.auth.FirebaseUser;
-
 /**
  * Class Used to know if we are running a test or not.
  */
 public class TestMode {
 
-    private TestMode(){};
+    private TestMode(){}
 
     /*
     *   TEST_MODE must be true for tests and false otherwise.
