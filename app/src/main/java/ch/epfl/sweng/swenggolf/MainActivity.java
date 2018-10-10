@@ -16,8 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FakeUserDatabase fud = new FakeUserDatabase(); // doesn't provide memory
-        fud.addNewUser("Hervé Bogoss", uid);
+        FakeUserDatabase.addNewUser("Hervé Bogoss", uid);
     }
 
     /**

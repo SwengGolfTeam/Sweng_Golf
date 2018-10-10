@@ -3,21 +3,18 @@ package ch.epfl.sweng.swenggolf;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FakeUserDatabase {
+public abstract class FakeUserDatabase {
 
     // in an attempt to mimic a database (which might be not at all like this)
-    private static Map<String, Map<String, String>> table;
+    private final static Map<String, Map<String, String>> table = new HashMap<>();
 
-    public FakeUserDatabase() {
-        this.table = new HashMap<>();
-    }
 
     /**
-     * Adds a new user to the fake database
+     * Adds a new user to the fake database.
      * @param name name of the user
      * @param uid a unique identifier
      */
-    public void addNewUser(String name, String uid) {
+    public static void addNewUser(String name, String uid) {
         table.put(uid, new HashMap<String, String>());
         table.get(uid).put("name", name);
         table.get(uid).put("offers_posted", "0");

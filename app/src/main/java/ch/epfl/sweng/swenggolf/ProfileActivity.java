@@ -8,11 +8,10 @@ import android.view.Window;
 import android.widget.TextView;
 
 import static android.view.Window.FEATURE_ACTION_BAR;
-import static android.view.Window.FEATURE_CUSTOM_TITLE;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private String userID;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,29 +22,29 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        userID = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
+        uid = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
 
         TextView name = findViewById(R.id.name);
-        name.setText(FakeUserDatabase.accessTable(userID, "name"));
+        name.setText(FakeUserDatabase.accessTable(uid, "name"));
         TextView textView = findViewById(R.id.username);
-        String username = FakeUserDatabase.accessTable(userID, "username");
+        String username = FakeUserDatabase.accessTable(uid, "username");
         if (username != null && !username.isEmpty()) {
             String usernameString = "@" + username;
             textView.setText(usernameString);
         }
         TextView offersPosted = findViewById(R.id.offers1);
-        offersPosted.setText(FakeUserDatabase.accessTable(userID, "offers_posted"));
+        offersPosted.setText(FakeUserDatabase.accessTable(uid, "offers_posted"));
         TextView offersAnswered = findViewById(R.id.offers2);
-        offersAnswered.setText(FakeUserDatabase.accessTable(userID, "offers_answered"));
+        offersAnswered.setText(FakeUserDatabase.accessTable(uid, "offers_answered"));
     }
 
     /**
-     * Lauches the EditProfileActivity.
+     * Launches the EditProfileActivity.
      * @param view the current view
      */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
-        intent.putExtra(MainActivity.EXTRA_USERID, userID);
+        intent.putExtra(MainActivity.EXTRA_USERID, uid);
         startActivity(intent);
     }
 }
