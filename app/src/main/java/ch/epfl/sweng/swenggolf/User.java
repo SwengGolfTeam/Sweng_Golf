@@ -11,7 +11,7 @@ public final class User {
     private final String uid;
     private final Uri photo;
 
-    User (FirebaseUser fu){
+    User(FirebaseUser fu){
         name = fu.getDisplayName();
         mail = fu.getEmail();
         uid = fu.getUid();

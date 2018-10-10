@@ -35,6 +35,7 @@
         android:id="@+id/go_to_main_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="clickToQuit"
         android:text="@string/go_to_main_menu" />
 
 
