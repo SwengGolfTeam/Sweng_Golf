@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Database;
 
 import android.net.Uri;
 

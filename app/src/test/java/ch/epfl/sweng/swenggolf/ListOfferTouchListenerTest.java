@@ -2,8 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import ch.epfl.sweng.swenggolf.Offer.ListOfferTouchListener;
 
 import static org.junit.Assert.assertEquals;
 

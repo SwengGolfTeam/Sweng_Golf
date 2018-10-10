@@ -8,30 +8,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="ch.epfl.sweng.swenggolf.SignInActivity">
+        <activity android:name="ch.epfl.sweng.swenggolf.Database.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name="ch.epfl.sweng.swenggolf.MainMenuActivity"/>
+        <activity android:name=".Main.MainActivity"/>
 
-        <activity android:name="ch.epfl.sweng.swenggolf.LogOutActivity"/>
+        <activity android:name="ch.epfl.sweng.swenggolf.Main.MainMenuActivity"/>
+
+        <activity android:name="ch.epfl.sweng.swenggolf.Database.LogOutActivity"/>
 
         <activity
-            android:name="ch.epfl.sweng.swenggolf.ProfileActivity"
+            android:name="ch.epfl.sweng.swenggolf.Profile.ProfileActivity"
             android:label="@string/profile_activity_name"
-            android:parentActivityName="ch.epfl.sweng.swenggolf.MainActivity"/>
+            android:parentActivityName="ch.epfl.sweng.swenggolf.Main.MainActivity"/>
         <activity
-            android:name="ch.epfl.sweng.swenggolf.EditProfileActivity"
+            android:name="ch.epfl.sweng.swenggolf.Profile.EditProfileActivity"
             android:label="@string/edit_profile_activity_name"
-            android:parentActivityName=".ProfileActivity" />
+            android:parentActivityName=".Profile.ProfileActivity" />
             
 
-        <activity android:name="ch.epfl.sweng.swenggolf.CreateOfferActivity" />
-        <activity android:name="ch.epfl.sweng.swenggolf.ListOfferActivity" />
-        <activity android:name="ch.epfl.sweng.swenggolf.ShowOfferActivity"/>
+        <activity android:name="ch.epfl.sweng.swenggolf.Offer.CreateOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.Offer.ListOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.Offer.ShowOfferActivity"/>
     </application>
 
 </manifest>

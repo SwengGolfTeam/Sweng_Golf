@@ -1,8 +1,7 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,6 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import ch.epfl.sweng.swenggolf.Database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.Database.FirebaseAccount;
+import ch.epfl.sweng.swenggolf.Offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.Offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.Profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.R;
 
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;

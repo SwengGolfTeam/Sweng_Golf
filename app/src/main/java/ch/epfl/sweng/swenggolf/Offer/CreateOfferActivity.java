@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Offer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import ch.epfl.sweng.swenggolf.Database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.R;
 
 /**
  * The activity used to create offers. Note that the intent extras

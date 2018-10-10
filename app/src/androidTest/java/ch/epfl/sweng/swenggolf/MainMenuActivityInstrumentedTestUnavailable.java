@@ -10,6 +10,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.Database.FirebaseAccount;
+import ch.epfl.sweng.swenggolf.Main.MainMenuActivity;
+
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -3,14 +3,15 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.widget.TextView;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.epfl.sweng.swenggolf.Database.FirebaseAccount;
+import ch.epfl.sweng.swenggolf.Main.MainMenuActivity;
 
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static org.hamcrest.CoreMatchers.is;

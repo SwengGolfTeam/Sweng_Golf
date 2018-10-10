@@ -1,10 +1,14 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Profile;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import ch.epfl.sweng.swenggolf.Database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.Main.MainActivity;
+import ch.epfl.sweng.swenggolf.R;
 
 public class EditProfileActivity extends AppCompatActivity {
     private String uid;

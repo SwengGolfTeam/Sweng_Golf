@@ -4,10 +4,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import com.google.firebase.auth.FirebaseUser;
+
+import ch.epfl.sweng.swenggolf.Database.User;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

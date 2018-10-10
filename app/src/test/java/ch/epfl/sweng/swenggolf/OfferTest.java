@@ -2,6 +2,8 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.Offer.Offer;
+
 import static org.junit.Assert.assertEquals;
 
 public class OfferTest {

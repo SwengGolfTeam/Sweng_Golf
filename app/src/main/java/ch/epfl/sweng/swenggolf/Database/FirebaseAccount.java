@@ -1,10 +1,6 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Database;
 
 import android.net.Uri;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseAccount {
     private final String login;

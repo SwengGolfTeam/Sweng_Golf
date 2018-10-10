@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.Offer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.swenggolf.R;
 
 public class ListOfferActivity extends Activity {
     private RecyclerView.Adapter mAdapter;
