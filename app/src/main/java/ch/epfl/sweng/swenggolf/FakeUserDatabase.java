@@ -1,10 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
