@@ -24,7 +24,7 @@ public class User {
         this.photo = Uri.parse("");
     }
 
-    User(FirebaseUser fu){
+    public User(FirebaseUser fu){
         username = fu.getDisplayName();
         email = fu.getEmail();
         userId = fu.getUid();
