@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,9 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
         // Cut description
         String description = offer.getDescription();
-        description = description.substring(0, DESCRIPTION_LIMIT) + "...";
+        if(description.length() > 140) {
+            description = description.substring(0, DESCRIPTION_LIMIT) + "...";
+        }
         holder.description.setText(description);
 
         holder.author.setText(offer.getAuthor());
@@ -67,5 +70,17 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     @Override
     public int getItemCount() {
         return offerList.size();
+    }
+
+    /**
+     * Add a list of offers to the recycler view.
+     * @param offers a list of offers
+     */
+    public void add(@NonNull  List<Offer> offers){
+        if(offers == null){
+            throw new IllegalArgumentException("offers should not be null");
+        }
+        offerList.addAll(offers);
+        notifyDataSetChanged();
     }
 }

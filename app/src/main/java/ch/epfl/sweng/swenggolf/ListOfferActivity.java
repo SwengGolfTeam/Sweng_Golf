@@ -3,17 +3,23 @@ package ch.epfl.sweng.swenggolf;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListOfferActivity extends Activity {
-    private RecyclerView.Adapter mAdapter;
+    private ListOfferAdapter mAdapter;
     protected static final List<Offer> offerList = new ArrayList<>();
 
 
@@ -69,7 +75,7 @@ public class ListOfferActivity extends Activity {
      * Creates dummy data to list.
      */
     private void prepareOfferData() {
-        String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      /*  String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
                 + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
                 + "Suspendisse potenti. Morbi vehicula ante nibh,"
@@ -97,10 +103,29 @@ public class ListOfferActivity extends Activity {
         offerList.add(offer);
 
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
-        offerList.add(offer);
+        offerList.add(offer); */
+      DatabaseConnection db = new DatabaseConnection();
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("DB", "got some data");
+                List<Offer> offers = new ArrayList<>();
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    Offer offer = noteDataSnapshot.getValue(Offer.class);
+                    offers.add(offer);
+                    //offerList.add(offer);
+                    Log.d("DBREAD", "offer read: "+offer.getTitle());
+                }
+                mAdapter.add(offers);
 
-        mAdapter.notifyDataSetChanged();
+            }
 
-        // TODO: Read from database and display it (with DatabaseConnection & readOffers() function)
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("DBREAD", "failed all offers");
+            }
+        };
+        Log.d("DB", "created listener");
+        db.readOffers(listener);
     }
 }

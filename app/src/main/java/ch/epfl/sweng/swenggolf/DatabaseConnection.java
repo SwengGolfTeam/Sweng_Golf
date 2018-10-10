@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DatabaseReference.CompletionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,54 +37,38 @@ public class DatabaseConnection {
         Log.d(dbWrite, type+"id="+id);
     }
 
+    public void writeObject(String type, String id, Object newObject, CompletionListener listener){
+        DatabaseReference ref = db.getReference();
+        ref.child(type).child(id).setValue(newObject, listener);
+    }
+
     /**
      * Reads all the offers that are in the database.
      */
-    public void readOffers(){
+    public void readOffers(ValueEventListener listener){
         ref = db.getReference("/offers");
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Offer> offers = new ArrayList<>();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Offer offer = noteDataSnapshot.getValue(Offer.class);
-                    offers.add(offer);
-                    Log.d(dbRead, "offer read: "+offer.getTitle());
-                }
-
-                //TODO: call the display function for the list of offers
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(dbRead, "failed all offers");
-            }
-        });
+        ref.addListenerForSingleValueEvent(listener);
     }
 
     /**
      * Reads a specific offer from the database.
      * @param type the type of element eg "offers" or "users"
      * @param id the identifier of the object
-     *
+     * @param listener
      */
-    public void readObject(final String type, final String id){
+    public void readObject(@NonNull  final String type, @NonNull final String id,
+                           @NonNull  ValueEventListener listener){
+        if(type == null || type.isEmpty()){
+            throw new IllegalArgumentException("type should have a value");
+        }
+        else if(id == null || id.isEmpty()){
+            throw new IllegalArgumentException("id should have a value");
+        }
+        else if(listener == null){
+            throw new IllegalArgumentException("listener should not be null");
+        }
+
         ref = db.getReference(type+"/"+id);
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Object obj = dataSnapshot.getValue(Object.class);
-                Log.d(dbRead, type+" read: "+obj.toString());
-
-                //TODO: call to display/handle function for offer
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(dbRead, "failed "+type+"/"+id);
-            }
-        });
+        ref.addListenerForSingleValueEvent(listener);
     }
 }
