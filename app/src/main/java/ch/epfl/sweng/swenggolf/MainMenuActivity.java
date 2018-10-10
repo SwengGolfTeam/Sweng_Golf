@@ -1,22 +1,14 @@
-package ch.epfl.sweng.sweng_golf;
+package ch.epfl.sweng.swenggolf;
 
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import ch.epfl.sweng.sweng_golf.R;
 
 public class MainMenuActivity extends AppCompatActivity {
-    private GoogleSignInAccount account;
+    private FirebaseAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -28,12 +20,12 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private boolean setUserDisplay() {
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        account = FirebaseAccount.getCurrentUserAccount();
         if(account != null){
             boolean name = setUserName();
             boolean mail = setUserMail();
-            boolean pic = setUserPic();
-            return name & mail & pic;
+            setUserPic();
+            return name & mail;
         }else{
             return false;
         }
@@ -49,20 +41,24 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private boolean setUserName(){
-        return setValue(account.getDisplayName(), (TextView) findViewById(R.id.username));
+        return setValue(account.getName(), (TextView) findViewById(R.id.username));
     }
 
     private boolean setUserMail(){
-        return setValue(account.getEmail(), (TextView) findViewById(R.id.usermail));
+        return setValue(account.getId(), (TextView) findViewById(R.id.usermail));
     }
 
-    private boolean setUserPic() {
+    private void setUserPic(){
+        //Picasso.with(this).load(account.getPhotoUrl()).error(android.R.drawable.btn_dialog).into((ImageView) findViewById(R.id.userpic));
+    }
+
+    /*private boolean setUserPic() {
         ImageView userpic = findViewById(R.id.userpic);
         Drawable pic = null;
         try {
             pic = getUserPic();
         } catch (IOException e){
-            throw new RuntimeException(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
         }
         if(pic != null){
             userpic.setImageDrawable(pic);
@@ -86,7 +82,7 @@ public class MainMenuActivity extends AppCompatActivity {
             if(up != null){up.close();}
         }
         return d;
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
