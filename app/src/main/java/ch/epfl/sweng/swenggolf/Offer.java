@@ -31,6 +31,15 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Empty builder for the listener of Firebase.
+     */
+    public Offer(){
+        this.author = "";
+        this.title = "";
+        this.description = "";
+    }
+
+    /**
      * Returns the offer's author's name.
      *
      * @return the creator of the offer

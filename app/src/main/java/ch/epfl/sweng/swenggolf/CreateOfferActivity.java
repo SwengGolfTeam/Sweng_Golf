@@ -41,8 +41,10 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if (!name.isEmpty() && !description.isEmpty()) {
-            // TODO: add code to add the offer in the database
+        if(!name.isEmpty() && !description.isEmpty()){
+            final Offer newOffer = new Offer(username, name, description);
+            DatabaseConnection db = new DatabaseConnection();
+            db.writeObject("offers", "id_"+newOffer.getTitle(), newOffer);
             finish();
         } else {
             TextView errorMessage = findViewById(R.id.error_message);
