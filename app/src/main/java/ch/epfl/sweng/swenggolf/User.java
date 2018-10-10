@@ -1,7 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
-
 import android.net.Uri;
+
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
