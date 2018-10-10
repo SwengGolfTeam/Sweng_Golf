@@ -39,7 +39,7 @@ public class MainMenuActivity extends AppCompatActivity {
             boolean name = setUserName();
             boolean mail = setUserMail();
             setUserPic();
-            return name & mail;
+            return name && mail;
         }else{
             return false;
         }
@@ -63,7 +63,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void setUserPic(){
-        Picasso.with(this).load(account.getPhotoUrl()).error(android.R.drawable.btn_dialog).into((ImageView) nav.findViewById(R.id.userpic));
+        int errorDrawable = android.R.drawable.btn_dialog;
+        ImageView userpicView = nav.findViewById(R.id.userpic);
+        Picasso.with(this).load(account.getPhotoUrl()).error(errorDrawable).into(userpicView);
     }
 
     @Override
@@ -75,6 +77,11 @@ public class MainMenuActivity extends AppCompatActivity {
     public static final String EXTRA_USERID = "ch.epfl.sweng.swenggolf.USERID";
     private final String uid = "1234";
 
+    /**
+     * Launches the ProfileActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
     public void loadProfileActivity(MenuItem item) {
         FakeUserDatabase.addNewUser("Hervé Bogoss", uid);
         Intent intent = new Intent(this, ProfileActivity.class);
@@ -82,6 +89,11 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Launches the CreateOfferActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
     public void loadCreateOfferActivity(MenuItem item) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
         // TODO implement username when login effective
@@ -89,6 +101,11 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Launches the ShowOffersActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
     public void loadShowOffersActivity(MenuItem item) {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);

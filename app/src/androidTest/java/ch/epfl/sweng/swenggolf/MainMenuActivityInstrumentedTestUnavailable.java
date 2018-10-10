@@ -24,7 +24,8 @@ import static org.junit.Assert.assertTrue;
 public class MainMenuActivityInstrumentedTestUnavailable {
 
     @Rule
-    public final ActivityTestRule<MainMenuActivity> mMenuRule = new ActivityTestRule<>(MainMenuActivity.class,false,false);
+    public final ActivityTestRule<MainMenuActivity> mMenuRule =
+            new ActivityTestRule<>(MainMenuActivity.class,false,false);
 
     @Before
     public void setUp(){

@@ -21,7 +21,9 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class MainMenuActivityInstrumentedTestAvailable {
 
-    @Rule public final ActivityTestRule<MainMenuActivity> mMenuRule = new ActivityTestRule<>(MainMenuActivity.class,false,false);
+    @Rule
+    public final ActivityTestRule<MainMenuActivity> mMenuRule =
+            new ActivityTestRule<>(MainMenuActivity.class,false,false);
 
     @Before
     public void setUp(){

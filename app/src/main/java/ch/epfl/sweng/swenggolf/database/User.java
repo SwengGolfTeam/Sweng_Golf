@@ -24,6 +24,10 @@ public class User {
         this.photo = Uri.parse("");
     }
 
+    /**
+     * Creates a user with initial values based on a FirebaseUser
+     * @param fu user from which the information are retrieved
+     */
     public User(FirebaseUser fu){
         username = fu.getDisplayName();
         email = fu.getEmail();
