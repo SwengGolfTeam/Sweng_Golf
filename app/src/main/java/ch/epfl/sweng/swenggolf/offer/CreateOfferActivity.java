@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Offer;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import ch.epfl.sweng.swenggolf.Database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.R;
 
 /**

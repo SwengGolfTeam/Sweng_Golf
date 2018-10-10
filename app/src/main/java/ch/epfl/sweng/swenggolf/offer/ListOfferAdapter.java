@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Offer;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

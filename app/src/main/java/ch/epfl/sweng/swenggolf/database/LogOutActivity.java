@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Database;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
 
@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import ch.epfl.sweng.swenggolf.Main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class LogOutActivity extends AppCompatActivity {

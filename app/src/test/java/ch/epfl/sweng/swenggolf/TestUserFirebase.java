@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-import ch.epfl.sweng.swenggolf.Database.User;
+import ch.epfl.sweng.swenggolf.database.User;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

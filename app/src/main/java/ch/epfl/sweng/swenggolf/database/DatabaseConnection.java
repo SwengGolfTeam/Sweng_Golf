@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Database;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.Offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public class DatabaseConnection {
     private final FirebaseDatabase db;

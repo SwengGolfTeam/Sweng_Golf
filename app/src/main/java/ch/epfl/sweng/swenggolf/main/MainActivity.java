@@ -1,14 +1,15 @@
-package ch.epfl.sweng.swenggolf.Main;
+package ch.epfl.sweng.swenggolf.main;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import ch.epfl.sweng.swenggolf.Database.FakeUserDatabase;
-import ch.epfl.sweng.swenggolf.Database.SignInActivity;
-import ch.epfl.sweng.swenggolf.Offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.Profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.database.SignInActivity;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.R;
 
 

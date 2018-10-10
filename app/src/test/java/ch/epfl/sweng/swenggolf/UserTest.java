@@ -2,7 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.Database.User;
+import ch.epfl.sweng.swenggolf.database.User;
 
 import static org.junit.Assert.assertEquals;
 

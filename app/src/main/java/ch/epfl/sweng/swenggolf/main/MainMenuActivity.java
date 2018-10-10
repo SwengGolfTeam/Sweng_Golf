@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Main;
+package ch.epfl.sweng.swenggolf.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import ch.epfl.sweng.swenggolf.Database.FakeUserDatabase;
-import ch.epfl.sweng.swenggolf.Database.FirebaseAccount;
-import ch.epfl.sweng.swenggolf.Offer.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.Offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.Profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.R;
 
 public class MainMenuActivity extends AppCompatActivity {

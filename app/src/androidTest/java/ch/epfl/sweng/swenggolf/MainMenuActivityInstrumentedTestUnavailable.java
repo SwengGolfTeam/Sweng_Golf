@@ -1,17 +1,19 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.Database.FirebaseAccount;
-import ch.epfl.sweng.swenggolf.Main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static org.hamcrest.CoreMatchers.is;
@@ -22,7 +24,13 @@ import static org.junit.Assert.assertTrue;
 public class MainMenuActivityInstrumentedTestUnavailable {
 
     @Rule
-    public final ActivityTestRule<MainMenuActivity> mMenuRule = new ActivityTestRule<>(MainMenuActivity.class);
+    public final ActivityTestRule<MainMenuActivity> mMenuRule = new ActivityTestRule<>(MainMenuActivity.class,false,false);
+
+    @Before
+    public void setUp(){
+        FirebaseAccount.test = false;
+        mMenuRule.launchActivity(new Intent());
+    }
 
     @Test
     public void testCanOpenDrawer() {
@@ -33,14 +41,12 @@ public class MainMenuActivityInstrumentedTestUnavailable {
 
     @Test
     public void usernameFieldIsDefault(){
-        FirebaseAccount.test = false;
         TextView t = mMenuRule.getActivity().findViewById(R.id.username);
         assertThat(t.getText().toString(),is("username"));
     }
 
     @Test
     public void userIdFieldIsDefault() {
-        FirebaseAccount.test = false;
         TextView t = mMenuRule.getActivity().findViewById(R.id.usermail);
         assertThat(t.getText().toString(),is("userid"));
     }

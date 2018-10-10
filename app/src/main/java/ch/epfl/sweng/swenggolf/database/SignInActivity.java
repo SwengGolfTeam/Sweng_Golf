@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.Database;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import ch.epfl.sweng.swenggolf.Main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class SignInActivity extends AppCompatActivity {
