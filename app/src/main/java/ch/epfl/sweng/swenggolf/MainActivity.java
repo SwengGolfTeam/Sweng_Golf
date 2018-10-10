@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the ProfileActivity
+     * Launches the ProfileActivity.
      *
      * @param view the current view
      */

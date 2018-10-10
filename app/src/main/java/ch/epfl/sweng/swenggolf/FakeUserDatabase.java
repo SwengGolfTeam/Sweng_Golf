@@ -14,9 +14,14 @@ public class FakeUserDatabase {
     private static Map<String, Map<String, String>> table;
 
     public FakeUserDatabase() {
-        table = new HashMap<>();
+        this.table = new HashMap<>();
     }
 
+    /**
+     * Adds a new user to the fake database
+     * @param name name of the user
+     * @param uid a unique identifier
+     */
     public void addNewUser(String name, String uid) {
         table.put(uid, new HashMap<String, String>());
         table.get(uid).put("name", name);

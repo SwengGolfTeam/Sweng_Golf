@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
+
     <ImageView
         android:id="@+id/ivProfile"
         android:layout_width="120dp"

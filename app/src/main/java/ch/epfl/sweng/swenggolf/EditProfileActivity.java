@@ -26,6 +26,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * saves the changes and returns to the profile activity
+     * @param view the current view
+     */
     public void saveChangesAndReturn(View view) {
         EditText editText = findViewById(R.id.edit_username);
         String username = editText.getText().toString();

@@ -39,6 +39,10 @@ public class ProfileActivity extends AppCompatActivity {
         offersAnswered.setText(FakeUserDatabase.accessTable(userID, "offers_answered"));
     }
 
+    /**
+     * Lauches the EditProfileActivity.
+     * @param view the current view
+     */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
         intent.putExtra(MainActivity.EXTRA_USERID, userID);
