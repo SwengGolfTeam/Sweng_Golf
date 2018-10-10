@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class TestUserFirebase {
 
     private FirebaseUser user;
 
@@ -26,10 +26,10 @@ public class ExampleUnitTest {
     @Test
     public void testUser() {
         User u = new User(user);
-        assertEquals(TestHelper.getMail() , u.getMail());
-        assertEquals(TestHelper.getName() , u.getName());
+        assertEquals(TestHelper.getMail() , u.getEmail());
+        assertEquals(TestHelper.getName() , u.getUsername());
         assertEquals(TestHelper.getPhoto() , u.getPhoto());
-        assertEquals(TestHelper.getUid() , u.getUid());
+        assertEquals(TestHelper.getUid() , u.getUserId());
 
     }
 }
