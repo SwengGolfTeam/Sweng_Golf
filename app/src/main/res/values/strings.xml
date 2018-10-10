@@ -4,7 +4,7 @@
     <string name="friends">Friends</string>
     <string name="nearby_services">Nearby services</string>
     <string name="userpicture">userpicture</string>
-    <string name="usermail">usermail</string>
+    <string name="userId">userid</string>
     <string name="add">add</string>
     <string name="profile_activity_name">Profile</string>
     <string name="edit_profile_activity_name">Edit Profile</string>
