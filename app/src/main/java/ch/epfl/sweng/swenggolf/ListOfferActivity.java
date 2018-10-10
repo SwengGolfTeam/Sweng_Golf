@@ -104,7 +104,7 @@ public class ListOfferActivity extends Activity {
 
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
         offerList.add(offer); */
-      DatabaseConnection db = new DatabaseConnection();
+      DatabaseConnection db = DatabaseConnection.getInstance();
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

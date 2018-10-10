@@ -15,15 +15,43 @@ import java.util.List;
 
 public class DatabaseConnection {
     private final FirebaseDatabase db;
-    private DatabaseReference ref;
-    private final String dbRead = "FIREBASE_READ";
+    final String dbRead = "FIREBASE_READ";
     private final String dbWrite = "FIREBASE_WRITE";
+    private static DatabaseConnection databaseConnection = null;
 
-    public DatabaseConnection(){
-        db = FirebaseDatabase.getInstance();
-        ref = db.getReference();
+    private static FirebaseDatabase debugDatabase = null;
+
+    /**
+     * Create a DatabaseConnection using a database
+     * @param firebaseDatabase the database
+     */
+    private DatabaseConnection(FirebaseDatabase firebaseDatabase){
+        db = firebaseDatabase;
     }
 
+    /**
+     * Return the instance of DatabaseConnection.
+     * @return the DatabaseConnection
+     */
+    public static DatabaseConnection getInstance(){
+        if(databaseConnection == null) {
+            if (debugDatabase == null) {
+                databaseConnection = new DatabaseConnection(FirebaseDatabase.getInstance());
+            } else { //Debug mode
+                databaseConnection = new DatabaseConnection(debugDatabase);
+            }
+        }
+        return databaseConnection;
+
+    }
+
+    /**
+     * Configure DatabaseConnection to use a fake database.
+     * @param firebaseDatabase the fake database
+     */
+    public static void setDebugDatabase(FirebaseDatabase firebaseDatabase){
+        debugDatabase = firebaseDatabase;
+    }
     /**
      * Writes a new offer in the database.
      * @param type what we want to write "offers" or "users"
@@ -32,7 +60,7 @@ public class DatabaseConnection {
      *
      */
     public void writeObject(String type, String id, Object newObject){
-        ref = db.getReference();
+        DatabaseReference ref = db.getReference();
         ref.child(type).child(id).setValue(newObject);
         Log.d(dbWrite, type+"id="+id);
     }
@@ -46,7 +74,7 @@ public class DatabaseConnection {
      * Reads all the offers that are in the database.
      */
     public void readOffers(ValueEventListener listener){
-        ref = db.getReference("/offers");
+        DatabaseReference ref = db.getReference("/offers");
         ref.addListenerForSingleValueEvent(listener);
     }
 
@@ -68,7 +96,7 @@ public class DatabaseConnection {
             throw new IllegalArgumentException("listener should not be null");
         }
 
-        ref = db.getReference(type+"/"+id);
+        DatabaseReference ref = db.getReference(type+"/"+id);
         ref.addListenerForSingleValueEvent(listener);
     }
 }

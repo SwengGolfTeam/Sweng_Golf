@@ -67,3 +67,6 @@ fastlane/readme.md
 
 #Mac bullshit
 *.DS_Store
+
+#other
+app/google-services.json

@@ -51,7 +51,7 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         if(!name.isEmpty() && !description.isEmpty()){
             final Offer newOffer = new Offer(username, name, description);
-            DatabaseConnection db = new DatabaseConnection();
+            DatabaseConnection db = DatabaseConnection.getInstance();
             writeOffer(newOffer,db);
             //finish();
         } else {
