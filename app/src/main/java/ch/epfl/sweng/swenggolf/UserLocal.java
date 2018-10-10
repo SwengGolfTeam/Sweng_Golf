@@ -41,12 +41,9 @@ public class UserLocal implements User{
      */
 
     UserLocal(String username, String userId, String email, Uri photo){
-        Boolean pho;
-        if(!TestMode.isTest()) {
+        Boolean pho = (photo==null);
+        if(TestMode.isTest()) {
             pho = false;
-        }
-        else {
-            pho = (photo==null);
         }
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || pho) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");

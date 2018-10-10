@@ -33,6 +33,13 @@ public class TestMode {
     }
 
     /**
+     * Method used to quit a Test.
+     */
+    protected  static void quitTest(){
+        TEST_MODE = false;
+    }
+
+    /**
      * Method to get the UserFirebase.
      * @return the corresponding UserFirebase
      */
