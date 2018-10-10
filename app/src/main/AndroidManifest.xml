@@ -18,6 +18,9 @@
         </activity>
         <activity android:name="ch.epfl.sweng.swenggolf.SignInActivity" />
         <activity android:name="ch.epfl.sweng.swenggolf.LogOutActivity"></activity>
+        <activity android:name="ch.epfl.sweng.swenggolf.CreateOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.ListOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.ShowOfferActivity"></activity>
     </application>
 
 </manifest>
