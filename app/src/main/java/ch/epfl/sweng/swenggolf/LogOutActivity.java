@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,9 +54,9 @@ public class LogOutActivity extends AppCompatActivity {
      * @param user The user
      */
     private void displayInformation(User user){
-        name.setText(user.getName());
-        mail.setText(user.getMail());
-        uid.setText(user.getUid());
+        name.setText(user.getUsername());
+        mail.setText(user.getEmail());
+        uid.setText(user.getUserId());
         Picasso.with(this).load(user.getPhoto()).into(photo);
     }
 }

@@ -82,18 +82,25 @@ public class ListOfferActivity extends Activity {
 
         Offer offer = new Offer("Robin", "6-pack beers for ModStoch homework", lorem);
         offerList.add(offer);
+
         offer = new Offer("Eric", "Chocolate for tractor", lorem);
         offerList.add(offer);
+
         offer = new Offer("Ugo", "ModStoch help for food", lorem);
         offerList.add(offer);
+
         offer = new Offer("Elsa", "Pizzas for beer", lorem);
         offerList.add(offer);
+
         offer = new Offer("Seb", "Everything for a canton that doesn't suck and some "
                 + "more text to overflow the box", lorem);
         offerList.add(offer);
+
         offer = new Offer("Markus", "My kingdom for a working DB", lorem);
         offerList.add(offer);
 
         mAdapter.notifyDataSetChanged();
+
+        // TODO: Read from database and display it (with DatabaseConnection & readOffers() function)
     }
 }
