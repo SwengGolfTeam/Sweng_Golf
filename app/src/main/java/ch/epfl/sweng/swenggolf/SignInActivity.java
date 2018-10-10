@@ -41,7 +41,9 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
-
+        if(TestMode.isTEST()){
+            goToLogOut();
+        }
         mAuth = FirebaseAuth.getInstance();
         /*Button used to sign in*/
         SignInButton button = findViewById(ch.epfl.sweng.swenggolf.R.id.sign_in_button);
@@ -63,10 +65,17 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
+                    goToLogOut();
                 }
             }
         };
+    }
+
+    /**
+     * Start the logoutActivity.
+     */
+    private void goToLogOut(){
+        startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
     }
 
     /**

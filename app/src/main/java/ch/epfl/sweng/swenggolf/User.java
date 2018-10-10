@@ -2,79 +2,32 @@ package ch.epfl.sweng.swenggolf;
 
 import android.net.Uri;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-
-import com.google.firebase.auth.FirebaseUser;
-
-// Just a temporary placeholder class in order to complete the Firebase Implementation
-public class User {
-    private final String username;
-    private final String userId;
-    private final String email;
-    private final Uri photo;
+/**
+ * Class which represents an User.
+ */
+public interface User {
 
     /**
-     * Empty constructor for the listeners of Firebase.
+     * Get the User mail.
+     * @return the corresponding mail
      */
-    public User(){
-        this.username = "";
-        this.userId = "";
-        this.email = "";
-        this.photo = Uri.parse("");
-    }
-
-    User(FirebaseUser fu){
-        username = fu.getDisplayName();
-        email = fu.getEmail();
-        userId = fu.getUid();
-        photo = fu.getPhotoUrl();
-    }
+    public String getEmail();
 
     /**
-     * Constructor for a user -> will change only placeholder.
-     * @param username the usrename
-     * @param userId a unique identifier
-     * @param email the login method
+     * Get the User name.
+     * @return the corresponding name
      */
-    @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-    public User(String username, String userId, String email){
-        if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
-            throw new IllegalArgumentException("Invalid arguments for User");
-        }
-        this.username = username;
-        this.userId = userId;
-        this.email = email;
-        this.photo = null;
-
-    }
+    public String getUserName();
 
     /**
-     * Geter function for the identifier.
-     * @return the unique identifier
+     * Get the User id.
+     * @return the corresponding id
      */
-    public String getUserId(){
-        return this.userId;
-    }
+    public String getUserId();
 
     /**
-     * Getter function for the username.
-     * @return the username of the user
+     * Get the User photo.
+     * @return the corresponding photo URI
      */
-    public String getUsername(){
-        return this.username;
-    }
-
-    /**
-     * Getter function for the login method.
-     * @return the login method of the user
-     */
-    public String getEmail(){
-        return this.email;
-    }
-
-    public Uri getPhoto() {
-        return photo;
-    }
-
+    public Uri getPhoto();
 }
