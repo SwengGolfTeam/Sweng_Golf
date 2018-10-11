@@ -14,7 +14,7 @@ public class UserLocal implements User{
     /**
      * Empty constructor for the listeners of Firebase.
      */
-    UserLocal(){
+    public UserLocal(){
         this.userName = "";
         this.userId = "";
         this.email = "";
@@ -25,7 +25,7 @@ public class UserLocal implements User{
      * Construct a local user from FirebaseUser.
      * @param fu the FirebaseUser
      */
-    UserLocal(FirebaseUser fu){
+    public UserLocal(FirebaseUser fu){
         userName = fu.getDisplayName();
         email = fu.getEmail();
         userId = fu.getUid();
@@ -40,7 +40,7 @@ public class UserLocal implements User{
      * @param photo user photo
      */
 
-    UserLocal(String username, String userId, String email, Uri photo){
+    public UserLocal(String username, String userId, String email, Uri photo){
         Boolean pho = (photo==null);
         if(TestMode.isTest()) {
             pho = false;
@@ -62,7 +62,7 @@ public class UserLocal implements User{
      * @param email the login method
      */
 
-    UserLocal(String username, String userId, String email){
+    public UserLocal(String username, String userId, String email){
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");
         }

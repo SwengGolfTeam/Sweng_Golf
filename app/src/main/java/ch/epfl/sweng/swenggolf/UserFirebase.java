@@ -11,7 +11,7 @@ public class UserFirebase implements User {
 
     private final FirebaseUser fu;
 
-    UserFirebase(FirebaseUser fu){
+    public UserFirebase(FirebaseUser fu){
         this.fu = fu;
     }
 
