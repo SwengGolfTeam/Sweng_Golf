@@ -5,8 +5,9 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
+
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+
 
 /**
  * Example local unit test, which will execute on the development machine (host).

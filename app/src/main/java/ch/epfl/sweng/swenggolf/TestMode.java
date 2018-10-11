@@ -21,21 +21,21 @@ public class TestMode {
      * Method to know if we are in test or not.
      * @return the corresponding boolean
      */
-    protected static boolean isTest(){
+    public static boolean isTest(){
         return onTest;
     }
 
     /**
      * Method used to begin a Test.
      */
-    protected static void goToTest(){
+    public static void goToTest(){
         onTest = true;
     }
 
     /**
      * Method used to quit a Test.
      */
-    protected  static void quitTest(){
+    public   static void quitTest(){
         onTest = false;
     }
 
@@ -43,14 +43,14 @@ public class TestMode {
      * Method to get the UserFirebase.
      * @return the corresponding UserFirebase
      */
-    protected static User getUser(){
+    public static User getUser(){
         return user;
     }
 
     /**
      * Method used to set a mocked firebaseUser.
      */
-    protected static void setUser(User user){
+    public static void setUser(User user){
         TestMode.user = user;
     }
 

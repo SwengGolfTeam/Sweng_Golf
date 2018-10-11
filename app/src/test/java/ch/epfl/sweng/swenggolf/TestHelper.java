@@ -26,7 +26,6 @@ public class TestHelper {
         return user;
     }
 
-
     public static String getName() {
         return name;
     }

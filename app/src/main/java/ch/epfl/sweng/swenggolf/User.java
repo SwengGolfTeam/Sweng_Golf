@@ -13,6 +13,7 @@ public interface User {
      */
     public String getEmail();
 
+
     /**
      * Get the User name.
      * @return the corresponding name
