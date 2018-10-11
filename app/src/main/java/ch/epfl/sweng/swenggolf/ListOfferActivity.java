@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,6 @@ public class ListOfferActivity extends Activity {
 
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -48,6 +48,9 @@ public class ListOfferActivity extends Activity {
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
         return new ListOfferTouchListener(this, mRecyclerView,
                 new ListOfferTouchListener.OnItemClickListener() {
+                    private TextView offerOpenedView = null;
+                    private Offer offerOpened = null;
+
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent =
@@ -60,7 +63,38 @@ public class ListOfferActivity extends Activity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-                        onItemClick(view, position);
+                        // Expands or retract the description
+                        TextView descriptionView = view.findViewById(R.id.offer_description);
+                        Offer currentOffer = offerList.get(position);
+                        expandOrRetractOffer(descriptionView, currentOffer);
+                    }
+
+                    /**
+                     * Expands or retract the offer after a long touch. Closes all other opened
+                     * offers in the list.
+                     *
+                     * @param element the TextView containing the information about the offer
+                     * @param offer the offer
+                     */
+                    private void expandOrRetractOffer(TextView element, Offer offer) {
+                        // Fetch all necessary strings to compare and set
+                        String actualDescription = element.getText().toString();
+                        String originalDescription = offer.getDescription();
+
+                        if (actualDescription.equals(originalDescription)) {
+                            element.setText(offer.getShortDescription());
+                            offerOpenedView = null;
+                            offerOpened = null;
+
+                        } else {
+                            element.setText(originalDescription);
+                            if (offerOpened != null) {
+                                expandOrRetractOffer(offerOpenedView, offerOpened);
+                            }
+                            offerOpenedView = element;
+                            offerOpened = offer;
+
+                        }
                     }
                 });
     }

@@ -10,8 +10,6 @@ import java.util.List;
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
-    @SuppressWarnings("WeakerAccess") // could be useful for other classes to know
-    public static final int DESCRIPTION_LIMIT = 140;
     private List<Offer> offerList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -55,9 +53,8 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
         holder.title.setText(offer.getTitle());
 
-        // Cut description
-        String description = offer.getDescription();
-        description = description.substring(0, DESCRIPTION_LIMIT) + "...";
+        // Get short description
+        String description = offer.getShortDescription();
         holder.description.setText(description);
 
         holder.author.setText(offer.getAuthor());

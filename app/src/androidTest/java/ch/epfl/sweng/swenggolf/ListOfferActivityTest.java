@@ -25,29 +25,31 @@ public class ListOfferActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     /**
-     * Checks if the offer is correctly displayed after a short or long click
-     * on the list.
-     *
-     * @param longClick if the click should be long
+     * Opens the list activity.
      */
-    public void offerCorrectlyDisplayedAfterAClickOnList(boolean longClick) {
+    public void openListActivity() {
         onView(withId(R.id.show_offers_button)).perform(click());
+    }
+
+    @Test
+    public void offerCorrectlyDisplayedAfterClickOnList() {
+        openListActivity();
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())),
-                longClick ? longClick() : click()
-        ));
+                hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
+
         onView(withId(R.id.show_offer_title))
                 .check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
     }
 
     @Test
-    public void offerCorrectlyDisplayedAfterClickOnList() {
-        offerCorrectlyDisplayedAfterAClickOnList(false);
-    }
+    public void offerCorrectlyExpandedAfterLongPressOnList() {
+        openListActivity();
 
-    @Test
-    public void offerCorrectlyDisplayedAfterLongPressOnList() {
-        offerCorrectlyDisplayedAfterAClickOnList(true);
+        onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
+                hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())),
+                longClick()));
+
+
     }
 }
