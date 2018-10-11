@@ -15,7 +15,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".main.MainActivity"/>
+        <activity android:name="ch.epfl.sweng.swenggolf.main.MainActivity"/>
 
         <activity android:name="ch.epfl.sweng.swenggolf.main.MainMenuActivity"/>
 
