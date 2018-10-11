@@ -1,8 +1,10 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+
+import ch.epfl.sweng.swenggolf.R;
 
 public class ShowOfferActivity extends AppCompatActivity {
 

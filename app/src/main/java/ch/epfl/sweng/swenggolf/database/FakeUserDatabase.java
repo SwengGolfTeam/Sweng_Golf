@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database;
 
 import java.util.HashMap;
 import java.util.Map;
