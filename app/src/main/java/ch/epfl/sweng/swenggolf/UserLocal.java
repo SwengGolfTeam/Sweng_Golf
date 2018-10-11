@@ -33,8 +33,8 @@ public class UserLocal implements User{
     }
 
     /**
-     * Constructor for a user -> will change only placeholder.
-     * @param username the usrename
+     * Constructor for a user.
+     * @param username the username
      * @param userId a unique identifier
      * @param email the login method
      * @param photo user photo
@@ -57,7 +57,7 @@ public class UserLocal implements User{
 
     /**
      * Constructor for a user with a null photo-> will change only placeholder.
-     * @param username the usrename
+     * @param username the username
      * @param userId a unique identifier
      * @param email the login method
      */
