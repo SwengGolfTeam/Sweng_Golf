@@ -62,30 +62,5 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Write an offer into the database.
-     * @param offer offer to be written
-     * @param db the database
-     */
-    private void writeOffer(final Offer offer, DatabaseConnection db){
-        CompletionListener listener = new CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if(databaseError == null){
 
-                    Intent intent =
-                            new Intent(CreateOfferActivity.this,
-                                    ShowOfferActivity.class);
-                    intent.putExtra("offer", offer);
-                    startActivity(intent);
-
-                }
-                else{
-                    errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText(R.string.error_create_offer_database);
-                }
-            }
-        };
-        db.writeObject("offers", offer.getTitle(), offer, listener);
-    }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class ListOfferActivity extends Activity {
     private ListOfferAdapter mAdapter;
+    private  TextView errorMessage;
     protected static final List<Offer> offerList = new ArrayList<>();
 
 
@@ -27,6 +29,7 @@ public class ListOfferActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_offer);
+        errorMessage = findViewById(R.id.error_message);
 
         setRecyclerView();
     }
@@ -72,49 +75,17 @@ public class ListOfferActivity extends Activity {
     }
 
     /**
-     * Creates dummy data to list.
+     * Get the offers from the database
      */
     private void prepareOfferData() {
-      /*  String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
-                + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
-                + "Suspendisse potenti. Morbi vehicula ante nibh,"
-                + " at tristique tortor dignissim non."
-                + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
-                + "Mauris convallis sed mauris ut sodales."
-                + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
-                + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
-                + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
-
-        Offer offer = new Offer("Robin", "6-pack beers for ModStoch homework", lorem);
-        offerList.add(offer);
-
-        offer = new Offer("Eric", "Chocolate for tractor", lorem);
-        offerList.add(offer);
-
-        offer = new Offer("Ugo", "ModStoch help for food", lorem);
-        offerList.add(offer);
-
-        offer = new Offer("Elsa", "Pizzas for beer", lorem);
-        offerList.add(offer);
-
-        offer = new Offer("Seb", "Everything for a canton that doesn't suck and some "
-                + "more text to overflow the box", lorem);
-        offerList.add(offer);
-
-        offer = new Offer("Markus", "My kingdom for a working DB", lorem);
-        offerList.add(offer); */
       DatabaseConnection db = DatabaseConnection.getInstance();
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("DB", "got some data");
                 List<Offer> offers = new ArrayList<>();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     Offer offer = noteDataSnapshot.getValue(Offer.class);
                     offers.add(offer);
-                    //offerList.add(offer);
-                    Log.d("DBREAD", "offer read: "+offer.getTitle());
                 }
                 mAdapter.add(offers);
 
@@ -122,10 +93,11 @@ public class ListOfferActivity extends Activity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("DBREAD", "failed all offers");
+                Log.d("DBERR", "Could not do things (aka load offers from database");
+                errorMessage.setVisibility(View.VISIBLE);
+
             }
         };
-        Log.d("DB", "created listener");
         db.readOffers(listener);
     }
 }

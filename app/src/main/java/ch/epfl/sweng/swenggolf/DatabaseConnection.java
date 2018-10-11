@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseConnection {
-    private final FirebaseDatabase db;
+    private static FirebaseDatabase db;
     final String dbRead = "FIREBASE_READ";
     private final String dbWrite = "FIREBASE_WRITE";
     private static DatabaseConnection databaseConnection = null;
-
-    private static FirebaseDatabase debugDatabase = null;
 
     /**
      * Create a DatabaseConnection using a database
      * @param firebaseDatabase the database
      */
     private DatabaseConnection(FirebaseDatabase firebaseDatabase){
-        db = firebaseDatabase;
+        if(db == null){
+            db = firebaseDatabase;
+        }
     }
 
     /**
@@ -35,14 +35,9 @@ public class DatabaseConnection {
      */
     public static DatabaseConnection getInstance(){
         if(databaseConnection == null) {
-            if (debugDatabase == null) {
-                databaseConnection = new DatabaseConnection(FirebaseDatabase.getInstance());
-            } else { //Debug mode
-                databaseConnection = new DatabaseConnection(debugDatabase);
-            }
+            databaseConnection = new DatabaseConnection(FirebaseDatabase.getInstance());
         }
         return databaseConnection;
-
     }
 
     /**
@@ -50,7 +45,7 @@ public class DatabaseConnection {
      * @param firebaseDatabase the fake database
      */
     public static void setDebugDatabase(FirebaseDatabase firebaseDatabase){
-        debugDatabase = firebaseDatabase;
+        db = firebaseDatabase;
     }
     /**
      * Writes a new offer in the database.
@@ -65,6 +60,13 @@ public class DatabaseConnection {
         Log.d(dbWrite, type+"id="+id);
     }
 
+    /**
+     * Writes a new offer in the database.
+     * @param type what we want to write "offers" or "users"
+     * @param id the unique identifier for this element
+     * @param newObject the element we want to add to the database
+     * @param listener the listener
+     */
     public void writeObject(String type, String id, Object newObject, CompletionListener listener){
         DatabaseReference ref = db.getReference();
         ref.child(type).child(id).setValue(newObject, listener);
