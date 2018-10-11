@@ -6,6 +6,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -13,11 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 
 public final class FakeFirebaseDatabase {
 
@@ -57,11 +56,11 @@ public final class FakeFirebaseDatabase {
      * @return a fake FirebaseDatabase
      */
     public static FirebaseDatabase firebaseDatabaseOffers(final boolean working){
-        FirebaseDatabase d = mock(FirebaseDatabase.class);
-        DatabaseReference root = mock(DatabaseReference.class);
-        DatabaseReference values = mock(DatabaseReference.class);
-        final DataSnapshot offerSnapshot = mock(DataSnapshot.class);
-        when(d.getReference()).thenReturn(root);
+        FirebaseDatabase d = Mockito.mock(FirebaseDatabase.class);
+        DatabaseReference root = Mockito.mock(DatabaseReference.class);
+        DatabaseReference values = Mockito.mock(DatabaseReference.class);
+        final DataSnapshot offerSnapshot = Mockito.mock(DataSnapshot.class);
+        Mockito.when(d.getReference()).thenReturn(root);
         
         //Set up the offer list for read
         setUpOfferRead(working, d, values, offerSnapshot);
@@ -81,18 +80,18 @@ public final class FakeFirebaseDatabase {
                     listener.onComplete(null, null);
                 }
                 else{
-                    listener.onComplete(mock(DatabaseError.class),null);
+                    listener.onComplete(Mockito.mock(DatabaseError.class),null);
                 }
 
                 return null;
             }
         };
-        when(root.child("offers")).thenReturn(values);
-        DatabaseReference writeRef = mock(DatabaseReference.class);
-        when(values.child(anyString())).thenReturn(writeRef);
+        Mockito.when(root.child("offers")).thenReturn(values);
+        DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
+        Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
-        doAnswer(answerWrite).when(writeRef)
-                .setValue(any(Object.class), any(DatabaseReference.CompletionListener.class));
+        Mockito.doAnswer(answerWrite).when(writeRef)
+                .setValue(ArgumentMatchers.any(Object.class), ArgumentMatchers.any(DatabaseReference.CompletionListener.class));
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
@@ -100,13 +99,13 @@ public final class FakeFirebaseDatabase {
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for(Offer offer : offerList) {
-            DataSnapshot data = mock(DataSnapshot.class);
-            when(data.getValue(Offer.class)).thenReturn(offer);
+            DataSnapshot data = Mockito.mock(DataSnapshot.class);
+            Mockito.when(data.getValue(Offer.class)).thenReturn(offer);
             dataList.add(data);
         }
-        when(offerSnapshot.getChildren()).thenReturn(dataList);
+        Mockito.when(offerSnapshot.getChildren()).thenReturn(dataList);
 
-        when(d.getReference("/offers")).thenReturn(values);
+        Mockito.when(d.getReference("/offers")).thenReturn(values);
         Answer readAnswer = new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
@@ -114,12 +113,12 @@ public final class FakeFirebaseDatabase {
                     listener.onDataChange(offerSnapshot);
                 }
                 else{
-                    listener.onCancelled(mock(DatabaseError.class));
+                    listener.onCancelled(Mockito.mock(DatabaseError.class));
                 }
                 return null;
             }
         };
-        doAnswer(readAnswer).when(values)
-                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+        Mockito.doAnswer(readAnswer).when(values)
+                .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
     }
 }

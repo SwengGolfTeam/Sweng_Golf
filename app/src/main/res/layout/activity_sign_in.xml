@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="4"
-    tools:context=".SignInActivity">
+    tools:context=".database.SignInActivity">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"

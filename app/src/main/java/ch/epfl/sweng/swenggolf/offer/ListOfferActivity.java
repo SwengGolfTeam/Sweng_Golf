@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,10 +19,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+
 public class ListOfferActivity extends Activity {
     private ListOfferAdapter mAdapter;
     private  TextView errorMessage;
-    protected static final List<Offer> offerList = new ArrayList<>();
+    public static final List<Offer> offerList = new ArrayList<>();
+
 
 
     @Override

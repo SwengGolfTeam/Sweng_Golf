@@ -8,6 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -36,6 +40,7 @@ public class ListOfferActivityTest {
      * @param longClick if the click should be long
      */
     public void offerCorrectlyDisplayedAfterAClickOnList(boolean longClick) {
+        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
 
@@ -9,8 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
+
+import ch.epfl.sweng.swenggolf.TestMode;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.UserFirebase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class LogOutActivity extends AppCompatActivity {
@@ -28,9 +32,17 @@ public class LogOutActivity extends AppCompatActivity {
         mail = findViewById(ch.epfl.sweng.swenggolf.R.id.mail);
         uid = findViewById(ch.epfl.sweng.swenggolf.R.id.uid);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
-        FirebaseUser fu = (FirebaseAuth.getInstance()).getCurrentUser();
-        if(null == fu){ quitLogOut();}
-        else{ displayInformation(new User(fu));}
+        User user;
+        if(TestMode.isTest()){
+            user = TestMode.getUser();
+        }
+        else {
+            user = new UserFirebase(FirebaseAuth.getInstance().getCurrentUser());
+        }
+        if(null == user){ quitLogOut();}
+        else{
+            displayInformation(user);
+        }
     }
 
     /**
@@ -46,18 +58,20 @@ public class LogOutActivity extends AppCompatActivity {
      * Launches the MainMenuActivity.
      */
     private void quitLogOut(){
-        startActivity(new Intent(LogOutActivity.this, MainActivity.class));
+        startActivity(new Intent(LogOutActivity.this, MainMenuActivity.class));
     }
 
     /**
-     * Display all the informations of a user.
-     * @param user The user
+     * Display all the informations of a localUser.
+     * @param user The localUser
      */
     private void displayInformation(User user){
-        name.setText(user.getUsername());
+        name.setText(user.getUserName());
         mail.setText(user.getEmail());
         uid.setText(user.getUserId());
-        Picasso.with(this).load(user.getPhoto()).into(photo);
+        if(!TestMode.isTest()) {
+            Picasso.with(this).load(user.getPhoto()).into(photo);
+        }
     }
 }
 

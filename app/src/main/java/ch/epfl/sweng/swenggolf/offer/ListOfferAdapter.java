@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ch.epfl.sweng.swenggolf.R;
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 

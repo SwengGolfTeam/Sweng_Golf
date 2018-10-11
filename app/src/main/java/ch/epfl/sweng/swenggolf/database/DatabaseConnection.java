@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference.CompletionListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public class DatabaseConnection {
     private static FirebaseDatabase db;

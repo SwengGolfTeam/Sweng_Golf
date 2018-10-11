@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.DatabaseReference.CompletionListener;
+
+import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 
 /**
  * The activity used to create offers. Note that the intent extras
@@ -67,7 +69,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param db the database
      */
     private void writeOffer(final Offer offer, DatabaseConnection db){
-        CompletionListener listener = new CompletionListener() {
+        DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError,
                                    @NonNull DatabaseReference databaseReference) {
