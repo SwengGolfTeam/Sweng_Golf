@@ -10,7 +10,7 @@ public class TestMode {
     /*
     *   TEST_MODE must be true for tests and false otherwise.
     */
-    private static boolean testMode = false;
+    private static boolean onTest = false;
 
     /*
      *   user is used to mock a UserFirebase during a test.
@@ -22,21 +22,21 @@ public class TestMode {
      * @return the corresponding boolean
      */
     protected static boolean isTest(){
-        return testMode;
+        return onTest;
     }
 
     /**
      * Method used to begin a Test.
      */
     protected static void goToTest(){
-        testMode = true;
+        onTest = true;
     }
 
     /**
      * Method used to quit a Test.
      */
     protected  static void quitTest(){
-        testMode = false;
+        onTest = false;
     }
 
     /**
