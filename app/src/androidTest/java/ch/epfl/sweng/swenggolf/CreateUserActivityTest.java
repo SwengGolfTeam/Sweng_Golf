@@ -17,7 +17,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class LogOutActivityTest {
+public class CreateUserActivityTest {
 
     private static final String name = "Hello";
     private static final String mail = "Hello@World.ok";
@@ -37,7 +37,6 @@ public class LogOutActivityTest {
     public void canDisplay() {
         onView(withId(R.id.go_to_login_button)).perform(click());
         onView(withId(R.id.mail)).check(matches(withText(mail)));
-        onView(withId(R.id.uid)).check(matches(withText(uid)));
         onView(withId(R.id.name)).check(matches(withText(name)));
     }
 

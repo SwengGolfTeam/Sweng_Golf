@@ -24,5 +24,8 @@
     <string name="button_create_offer">Create offer</string>
     <string name="button_show_offers">Show offer</string>
     <string name="error_create_offer">The name and the description can\'t be empty.</string>
+    <string name="name">Name:</string>
+    <string name="mail">Mail:</string>
+    <string name="create_account">Create Account</string>
 
 </resources>

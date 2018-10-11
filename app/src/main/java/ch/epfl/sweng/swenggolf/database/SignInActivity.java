@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.TestMode;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -80,7 +79,7 @@ public class SignInActivity extends AppCompatActivity {
      * Start the logoutActivity.
      */
     private void goToLogOut(){
-        startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
+        startActivity(new Intent(SignInActivity.this, WaitingActivity.class));
     }
 
     /**

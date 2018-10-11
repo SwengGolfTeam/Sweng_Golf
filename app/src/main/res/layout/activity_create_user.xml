@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".database.LogOutActivity">
-
+    tools:context=".database.CreateUserActivity">
 
 
     <ImageView
@@ -17,17 +16,22 @@
         android:contentDescription="@string/profile_image" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"/>
+
+    <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/mail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mail"/>
 
-    <TextView
-        android:id="@+id/uid"
+    <EditText
+        android:id="@+id/mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -35,8 +39,8 @@
         android:id="@+id/go_to_main_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="clickToQuit"
-        android:text="@string/go_to_main_menu" />
+        android:onClick="onClick"
+        android:text="@string/create_account" />
 
 
 </LinearLayout>
