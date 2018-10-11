@@ -42,8 +42,8 @@ public final class FakeFirebaseDatabase {
                 new Offer("Markus", "My kingdom for a working DB", lorem)};
 
     /**
-     * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number of
-     * operations.
+     * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
+     * of operations.
      * @return a fake FirebaseDatabase
      */
     public static FirebaseDatabase firebaseDatabaseOffers(){
@@ -51,8 +51,8 @@ public final class FakeFirebaseDatabase {
     }
 
     /**
-     * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number of
-     * operations.
+     * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
+     * of operations.
      * @param working if false the database will return error when trying to access it.
      * @return a fake FirebaseDatabase
      */
@@ -71,7 +71,8 @@ public final class FakeFirebaseDatabase {
         return d;
     }
 
-    private static void setUpOfferWrite(final boolean working, DatabaseReference root, DatabaseReference values) {
+    private static void setUpOfferWrite(final boolean working, DatabaseReference root,
+                                        DatabaseReference values) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation){
@@ -94,7 +95,8 @@ public final class FakeFirebaseDatabase {
                 .setValue(any(Object.class), any(DatabaseReference.CompletionListener.class));
     }
 
-    private static void setUpOfferRead(final boolean working, FirebaseDatabase d, DatabaseReference values, final DataSnapshot offerSnapshot) {
+    private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
+                                       DatabaseReference values, final DataSnapshot offerSnapshot){
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for(Offer offer : offerList) {
@@ -117,6 +119,7 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        doAnswer(readAnswer).when(values).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        doAnswer(readAnswer).when(values)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 }

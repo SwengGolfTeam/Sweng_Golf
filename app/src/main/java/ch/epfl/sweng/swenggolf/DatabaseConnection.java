@@ -32,6 +32,7 @@ public class DatabaseConnection {
             db = firebaseDatabase;
         }
     }
+    
     /**
      * Return the instance of DatabaseConnection.
      * @return the DatabaseConnection
