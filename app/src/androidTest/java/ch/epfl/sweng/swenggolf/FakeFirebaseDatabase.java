@@ -64,31 +64,14 @@ public final class FakeFirebaseDatabase {
         when(d.getReference()).thenReturn(root);
         
         //Set up the offer list for read
-        List<Offer> offerList = Arrays.asList(offers);
-        List<DataSnapshot> dataList = new ArrayList<>();
-        for(Offer offer : offerList) {
-            DataSnapshot data = mock(DataSnapshot.class);
-            when(data.getValue(Offer.class)).thenReturn(offer);
-            dataList.add(data);
-        }
-        when(offerSnapshot.getChildren()).thenReturn(dataList);
-        
-        when(d.getReference("/offers")).thenReturn(values);
-        Answer readAnswer = new Answer() {
-            public Object answer(InvocationOnMock invocation) {
-                ValueEventListener listener = invocation.getArgument(0);
-                if(working) {
-                    listener.onDataChange(offerSnapshot);
-                }
-                else{
-                    listener.onCancelled(mock(DatabaseError.class));
-                }
-                return null;
-            }
-        };
-        doAnswer(readAnswer).when(values).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        setUpOfferRead(working, d, values, offerSnapshot);
         
         //Handle the write on the database
+        setUpOfferWrite(working, root, values);
+        return d;
+    }
+
+    private static void setUpOfferWrite(final boolean working, DatabaseReference root, DatabaseReference values) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation){
@@ -109,6 +92,31 @@ public final class FakeFirebaseDatabase {
 
         doAnswer(answerWrite).when(writeRef)
                 .setValue(any(Object.class), any(DatabaseReference.CompletionListener.class));
-        return d;
+    }
+
+    private static void setUpOfferRead(final boolean working, FirebaseDatabase d, DatabaseReference values, final DataSnapshot offerSnapshot) {
+        List<Offer> offerList = Arrays.asList(offers);
+        List<DataSnapshot> dataList = new ArrayList<>();
+        for(Offer offer : offerList) {
+            DataSnapshot data = mock(DataSnapshot.class);
+            when(data.getValue(Offer.class)).thenReturn(offer);
+            dataList.add(data);
+        }
+        when(offerSnapshot.getChildren()).thenReturn(dataList);
+
+        when(d.getReference("/offers")).thenReturn(values);
+        Answer readAnswer = new Answer() {
+            public Object answer(InvocationOnMock invocation) {
+                ValueEventListener listener = invocation.getArgument(0);
+                if(working) {
+                    listener.onDataChange(offerSnapshot);
+                }
+                else{
+                    listener.onCancelled(mock(DatabaseError.class));
+                }
+                return null;
+            }
+        };
+        doAnswer(readAnswer).when(values).addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 }

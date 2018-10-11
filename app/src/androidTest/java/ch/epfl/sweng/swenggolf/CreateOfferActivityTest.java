@@ -38,7 +38,8 @@ public class CreateOfferActivityTest {
     public void errorMessageDisplayed() {
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.button)).perform(click());
-        onView(withId(R.id.error_message)).check(matches(withText(R.string.error_create_offer_invalid)));
+        onView(withId(R.id.error_message))
+                .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
     private void fillOffer(){
@@ -58,10 +59,12 @@ public class CreateOfferActivityTest {
         intended(hasComponent(ShowOfferActivity.class.getName()));
 
     }
+
     @Test
     public void showMessageErrorWhenCantCreateOffer(){
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers(false));
         fillOffer();
-        onView(withId(R.id.error_message)).check(matches(withText(R.string.error_create_offer_database)));
+        onView(withId(R.id.error_message))
+                .check(matches(withText(R.string.error_create_offer_database)));
     }
 }

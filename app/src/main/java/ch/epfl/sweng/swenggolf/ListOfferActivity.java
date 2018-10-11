@@ -75,7 +75,7 @@ public class ListOfferActivity extends Activity {
     }
 
     /**
-     * Get the offers from the database
+     * Get the offers from the database.
      */
     private void prepareOfferData() {
       DatabaseConnection db = DatabaseConnection.getInstance();

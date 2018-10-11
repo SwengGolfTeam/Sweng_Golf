@@ -53,7 +53,6 @@ public class CreateOfferActivity extends AppCompatActivity {
             final Offer newOffer = new Offer(username, name, description);
             DatabaseConnection db = DatabaseConnection.getInstance();
             writeOffer(newOffer,db);
-            //finish();
         } else {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
@@ -70,7 +69,8 @@ public class CreateOfferActivity extends AppCompatActivity {
     private void writeOffer(final Offer offer, DatabaseConnection db){
         CompletionListener listener = new CompletionListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+            public void onComplete(@Nullable DatabaseError databaseError,
+                                   @NonNull DatabaseReference databaseReference) {
                 if(databaseError == null){
 
                     Intent intent =

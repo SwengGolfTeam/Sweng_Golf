@@ -20,15 +20,18 @@ public class DatabaseConnection {
     private static DatabaseConnection databaseConnection = null;
 
     /**
-     * Create a DatabaseConnection using a database
+     * Create a DatabaseConnection using a database.
      * @param firebaseDatabase the database
      */
     private DatabaseConnection(FirebaseDatabase firebaseDatabase){
+        setUpDatabase(firebaseDatabase);
+    }
+
+    private static void setUpDatabase(FirebaseDatabase firebaseDatabase){
         if(db == null){
             db = firebaseDatabase;
         }
     }
-
     /**
      * Return the instance of DatabaseConnection.
      * @return the DatabaseConnection
@@ -47,6 +50,7 @@ public class DatabaseConnection {
     public static void setDebugDatabase(FirebaseDatabase firebaseDatabase){
         db = firebaseDatabase;
     }
+
     /**
      * Writes a new offer in the database.
      * @param type what we want to write "offers" or "users"
@@ -84,7 +88,7 @@ public class DatabaseConnection {
      * Reads a specific offer from the database.
      * @param type the type of element eg "offers" or "users"
      * @param id the identifier of the object
-     * @param listener
+     * @param listener the listener
      */
     public void readObject(@NonNull  final String type, @NonNull final String id,
                            @NonNull  ValueEventListener listener){
