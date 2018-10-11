@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -63,7 +65,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
+                    startActivity(new Intent(SignInActivity.this, MainMenuActivity.class));
                 }
             }
         };

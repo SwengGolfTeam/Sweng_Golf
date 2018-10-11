@@ -1,9 +1,16 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.main;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.database.SignInActivity;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_USERID, uid);
         startActivity(intent);
     }
-
-
-
 
     /**
      * Launches the SigninActivity.
@@ -64,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);
     }
-
 
 }
 
