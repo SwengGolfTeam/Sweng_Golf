@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:515318437233:android:09bdd40601fc5433",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.sweng_golf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515318437233-rgqtqh4b741vl7iia5q618p849kjot8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.sweng_golf",
+            "certificate_hash": "3a10ce5682f34829175de0c2f485a3ebd65301df"
+          }
+        },
+        {
+          "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcbMrvTVPBmevKrUoSKCV1b41F1FpNnQQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:515318437233:android:0a9b46901a2857d5",
         "android_client_info": {
           "package_name": "ch.epfl.sweng.swenggolf"
@@ -28,6 +72,46 @@
           "android_info": {
             "package_name": "ch.epfl.sweng.swenggolf",
             "certificate_hash": "f61264688402ffee8c90ab854226a928f8bcebbc"
+          }
+        },
+        {
+          "client_id": "515318437233-pqocp9odkqhqq3lpvb9j4uosqdoauttu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "27c485f852e99f3d6245ca67f7289ff060253caa"
+          }
+        },
+        {
+          "client_id": "515318437233-toil01pa1id24utd5i9v2qdaj00c2dbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "3a10ce5682f34829175de0c2f485a3ebd65301df"
+          }
+        },
+        {
+          "client_id": "515318437233-plqree4td6mniqqphun4ddditrhpn1v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "c242c0901ef9160b0a476d9d9fb70948657b8218"
+          }
+        },
+        {
+          "client_id": "515318437233-jbhr8casccag7rr0rh7vlhl9anrt0qm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "bab4ca08bf7e93670d274cc276c56c7e0b19dcbc"
+          }
+        },
+        {
+          "client_id": "515318437233-1on465mpv88mbe15251ebvp8kvmeo20q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "99cdbd7e9971cea109ca7a5b5c974f7e951d072b"
           }
         },
         {
