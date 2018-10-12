@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Offer implements Parcelable {
+
+    private static final int DESCRIPTION_LIMIT = 140;
+
     private final String author;
     private final String title;
     private final String description;
@@ -33,7 +36,7 @@ public class Offer implements Parcelable {
     /**
      * Empty builder for the listener of Firebase.
      */
-    public Offer(){
+    public Offer() {
         this.author = "";
         this.title = "";
         this.description = "";
@@ -66,6 +69,17 @@ public class Offer implements Parcelable {
         return description;
     }
 
+    /**
+     * Returns the shortened offer's description.
+     *
+     * @return the shortened description of the offer
+     */
+    public String getShortDescription() {
+        return description.length() > DESCRIPTION_LIMIT
+                ? description.substring(0, DESCRIPTION_LIMIT) + "..."
+                : description;
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -75,7 +89,10 @@ public class Offer implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.author, this.title, this.description});
+        dest.writeStringArray(new String[]{
+                this.author,
+                this.title,
+                this.description});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
