@@ -69,9 +69,9 @@ public class ListOfferActivityTest {
         // Check if short description is displayed, then expand.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(shortDescription))));
+        
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(offerToTest.getTitle())),
-                longClick()));
+                hasDescendant(withText(offerToTest.getTitle())), longClick()));
 
         // Check that the long description is displayed, and the sort to another offer, then expand
         // other offer.
@@ -81,8 +81,7 @@ public class ListOfferActivityTest {
                 .check(matches(hasDescendant(withText(otherOffer.getShortDescription()))));
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(otherOffer.getTitle())),
-                longClick()));
+                hasDescendant(withText(otherOffer.getTitle())), longClick()));
 
         // Check that the first offer is retracted and that the second is expanded.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
@@ -92,8 +91,7 @@ public class ListOfferActivityTest {
 
         // Close second offer and check if closed.
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(otherOffer.getTitle())),
-                longClick()));
+                hasDescendant(withText(otherOffer.getTitle())), longClick()));
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getShortDescription()))));
