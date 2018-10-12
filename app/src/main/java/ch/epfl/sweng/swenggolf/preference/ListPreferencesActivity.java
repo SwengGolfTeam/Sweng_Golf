@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.R;
 
-public class ListPreferencesActivty extends Activity {
+public class ListPreferencesActivity extends Activity {
     private static final int spanCount = 4;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override

@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -16,14 +21,17 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.User;
 
 public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
 
+    private DatabaseConnection connection;
     private ArrayList<User> mDataset;
 
     public ListPreferenceAdapter(){
-        //TODO
+        //TODO getInitial number of user
+        //connection.
         mDataset = new ArrayList<>();
     }
 
@@ -55,8 +63,11 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
         User current = mDataset.get(position);
         Picasso.with(holder.context).load(current.getPhoto()).error(android.R.drawable.btn_dialog).into(holder.userpic);
         holder.username.setText(current.getUsername());
-        holder.preference.setText(current.getPreference());
+        //holder.preference.setText(current.getPreference());
+        //TODO add preference getter
     }
+
+    //public void loadMore(){}
 
     @Override
     public int getItemCount() {
