@@ -13,8 +13,6 @@ import ch.epfl.sweng.swenggolf.R;
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
-    @SuppressWarnings("WeakerAccess") // could be useful for other classes to know
-    public static final int DESCRIPTION_LIMIT = 140;
     private List<Offer> offerList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -58,11 +56,9 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
         holder.title.setText(offer.getTitle());
 
-        // Cut description
-        String description = offer.getDescription();
-        if(description.length() > 140) {
-            description = description.substring(0, DESCRIPTION_LIMIT) + "...";
-        }
+        // Get short description
+        String description = offer.getShortDescription();
+
         holder.description.setText(description);
 
         holder.author.setText(offer.getAuthor());
@@ -76,10 +72,11 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     /**
      * Add a list of offers to the recycler view.
+     *
      * @param offers a list of offers
      */
-    public void add(@NonNull  List<Offer> offers){
-        if(offers == null){
+    public void add(@NonNull List<Offer> offers) {
+        if (offers == null) {
             throw new IllegalArgumentException("offers should not be null");
         }
         offerList.addAll(offers);
