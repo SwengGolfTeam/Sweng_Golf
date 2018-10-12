@@ -46,7 +46,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private boolean setValue(String textValue, TextView textField){
-        if(textValue != null && !textValue.equals("") && textField != null){
+        if(textValue != null && !textValue.isEmpty() && textField != null){
             textField.setText(textValue);
             return true;
         }else{

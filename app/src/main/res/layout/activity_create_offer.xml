@@ -97,7 +97,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="@string/error_create_offer"
             android:textColor="@android:color/holo_red_dark"
             app:layout_constraintBaseline_toBaselineOf="@+id/button"
             app:layout_constraintEnd_toStartOf="@+id/button"

@@ -20,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import ch.epfl.sweng.swenggolf.TestMode;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
@@ -43,7 +44,9 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
-
+        if(TestMode.isTest()){
+            goToLogOut();
+        }
         mAuth = FirebaseAuth.getInstance();
         /*Button used to sign in*/
         SignInButton button = findViewById(ch.epfl.sweng.swenggolf.R.id.sign_in_button);
@@ -65,10 +68,19 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(SignInActivity.this, MainMenuActivity.class));
+
+                    goToLogOut();
+
                 }
             }
         };
+    }
+
+    /**
+     * Start the logoutActivity.
+     */
+    private void goToLogOut(){
+        startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
     }
 
     /**

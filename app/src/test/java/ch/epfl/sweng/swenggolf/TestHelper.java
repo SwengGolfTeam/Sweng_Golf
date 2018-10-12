@@ -4,8 +4,9 @@ import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.mockito.Mockito;
+
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class TestHelper {
 
@@ -17,11 +18,11 @@ public class TestHelper {
     private static final Uri photo = null;
 
     public static FirebaseUser getUser() {
-        FirebaseUser user = mock(FirebaseUser.class);
-        when(user.getUid()).thenReturn(uid);
-        when(user.getEmail()).thenReturn(mail);
-        when(user.getDisplayName()).thenReturn(name);
-        when(user.getPhotoUrl()).thenReturn(photo);
+        FirebaseUser user = Mockito.mock(FirebaseUser.class);
+        Mockito.when(user.getUid()).thenReturn(uid);
+        Mockito.when(user.getEmail()).thenReturn(mail);
+        Mockito.when(user.getDisplayName()).thenReturn(name);
+        Mockito.when(user.getPhotoUrl()).thenReturn(photo);
         return user;
     }
 
