@@ -40,7 +40,6 @@ public class ListOfferActivityTest {
      * @param longClick if the click should be long
      */
     public void offerCorrectlyDisplayedAfterAClickOnList(boolean longClick) {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
