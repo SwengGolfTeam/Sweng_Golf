@@ -25,6 +25,7 @@ import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 public class ListOfferActivity extends Activity {
 
     private ListOfferAdapter mAdapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     public static final List<Offer> offerList = new ArrayList<>();
 
@@ -41,7 +42,7 @@ public class ListOfferActivity extends Activity {
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -75,14 +76,12 @@ public class ListOfferActivity extends Activity {
                     offers.add(offer);
                 }
                 mAdapter.add(offers);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("DBERR", "Could not do things (aka load offers from database");
                 errorMessage.setVisibility(View.VISIBLE);
-
             }
         };
         db.readOffers(listener);

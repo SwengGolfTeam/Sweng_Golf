@@ -31,40 +31,42 @@ public final class FakeFirebaseDatabase {
             + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
-    private static final Offer[] offers =  {
-        new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
-                new Offer("Eric", "Chocolate for tractor", lorem),
-                new Offer("Ugo", "ModStoch help for food", lorem),
-                new Offer("Elsa", "Pizzas for beer", lorem),
-                new Offer("Seb", "Everything for a canton that doesn't suck and some "
-                        + "more text to overflow the box", lorem),
-                new Offer("Markus", "My kingdom for a working DB", lorem)};
+    private static final Offer[] offers = {
+            new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
+            new Offer("Eric", "Chocolate for tractor", lorem),
+            new Offer("Ugo", "ModStoch help for food", lorem),
+            new Offer("Elsa", "Pizzas for beer", lorem),
+            new Offer("Seb", "Everything for a canton that doesn't suck and some "
+                    + "more text to overflow the box", lorem),
+            new Offer("Markus", "My kingdom for a working DB", lorem)};
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
      * of operations.
+     *
      * @return a fake FirebaseDatabase
      */
-    public static FirebaseDatabase firebaseDatabaseOffers(){
+    public static FirebaseDatabase firebaseDatabaseOffers() {
         return firebaseDatabaseOffers(true);
     }
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
      * of operations.
+     *
      * @param working if false the database will return error when trying to access it.
      * @return a fake FirebaseDatabase
      */
-    public static FirebaseDatabase firebaseDatabaseOffers(final boolean working){
+    public static FirebaseDatabase firebaseDatabaseOffers(final boolean working) {
         FirebaseDatabase d = Mockito.mock(FirebaseDatabase.class);
         DatabaseReference root = Mockito.mock(DatabaseReference.class);
         DatabaseReference values = Mockito.mock(DatabaseReference.class);
         final DataSnapshot offerSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(d.getReference()).thenReturn(root);
-        
+
         //Set up the offer list for read
         setUpOfferRead(working, d, values, offerSnapshot);
-        
+
         //Handle the write on the database
         setUpOfferWrite(working, root, values);
         return d;
@@ -74,13 +76,12 @@ public final class FakeFirebaseDatabase {
                                         DatabaseReference values) {
         Answer answerWrite = new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation){
+            public Object answer(InvocationOnMock invocation) {
                 DatabaseReference.CompletionListener listener = invocation.getArgument(1);
-                if(working){
+                if (working) {
                     listener.onComplete(null, null);
-                }
-                else{
-                    listener.onComplete(Mockito.mock(DatabaseError.class),null);
+                } else {
+                    listener.onComplete(Mockito.mock(DatabaseError.class), null);
                 }
 
                 return null;
@@ -96,10 +97,10 @@ public final class FakeFirebaseDatabase {
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
-                                       DatabaseReference values, final DataSnapshot offerSnapshot){
+                                       DatabaseReference values, final DataSnapshot offerSnapshot) {
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
-        for(Offer offer : offerList) {
+        for (Offer offer : offerList) {
             DataSnapshot data = Mockito.mock(DataSnapshot.class);
             Mockito.when(data.getValue(Offer.class)).thenReturn(offer);
             dataList.add(data);
@@ -110,10 +111,9 @@ public final class FakeFirebaseDatabase {
         Answer readAnswer = new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
-                if(working) {
+                if (working) {
                     listener.onDataChange(offerSnapshot);
-                }
-                else{
+                } else {
                     listener.onCancelled(Mockito.mock(DatabaseError.class));
                 }
                 return null;
