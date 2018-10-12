@@ -58,8 +58,6 @@ public class ListOfferActivityTest {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())),
                 longClick()));
-
-
     }
 
     @Test

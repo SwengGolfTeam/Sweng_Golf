@@ -93,18 +93,22 @@ public class ListOfferActivity extends Activity {
                         String originalDescription = offer.getDescription();
 
                         if (actualDescription.equals(originalDescription)) {
-                            element.setText(offer.getShortDescription());
-                            offerOpenedView = null;
+                            // Need to close the offer because the current offer is expanded
+                            changeDescription(element, offer);
+                            changeDescription(offerOpenedView, offerOpened);
                             offerOpened = null;
-
+                            offerOpened = null;
                         } else {
                             element.setText(originalDescription);
-                            if (offerOpened != null) {
-                                expandOrRetractOffer(offerOpenedView, offerOpened);
-                            }
+                            changeDescription(offerOpenedView, offerOpened);
                             offerOpenedView = element;
                             offerOpened = offer;
+                        }
+                    }
 
+                    private void changeDescription(TextView element, Offer offer) {
+                        if (element != null && offer != null) {
+                            element.setText(offer.getShortDescription());
                         }
                     }
                 });
