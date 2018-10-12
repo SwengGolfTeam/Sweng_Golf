@@ -91,7 +91,8 @@ public final class FakeFirebaseDatabase {
         Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
         Mockito.doAnswer(answerWrite).when(writeRef)
-                .setValue(ArgumentMatchers.any(Object.class), ArgumentMatchers.any(DatabaseReference.CompletionListener.class));
+                .setValue(ArgumentMatchers.any(Object.class),
+                        ArgumentMatchers.any(DatabaseReference.CompletionListener.class));
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
