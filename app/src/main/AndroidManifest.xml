@@ -34,7 +34,6 @@
         <activity android:name=".offer.CreateOfferActivity" />
         <activity android:name=".offer.ListOfferActivity" />
         <activity android:name=".offer.ShowOfferActivity" />
-        <activity android:name=".database.LoginActivity" />
         <activity android:name=".database.WaitingActivity"></activity>
     </application>
 

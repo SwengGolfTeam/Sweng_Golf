@@ -12,16 +12,6 @@ public class UserLocal implements User{
     private final Uri photo;
 
     /**
-     * Empty constructor for the listeners of Firebase.
-     */
-    public UserLocal(){
-        this.userName = "";
-        this.userId = "";
-        this.email = "";
-        this.photo = Uri.parse("");
-    }
-
-    /**
      * Construct a local user from FirebaseUser.
      * @param fu the FirebaseUser
      */
