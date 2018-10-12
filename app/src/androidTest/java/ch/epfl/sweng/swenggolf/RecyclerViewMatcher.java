@@ -26,6 +26,7 @@ public class RecyclerViewMatcher {
 
     /**
      * Enables the selection of an item on a RecyclerList.
+     *
      * @param position the position of the item
      * @return the view matcher of the item, used by espresso
      */
@@ -35,7 +36,8 @@ public class RecyclerViewMatcher {
 
     /**
      * Enables the selection of an item on a RecyclerList.
-     * @param position the position of the item
+     *
+     * @param position     the position of the item
      * @param targetViewId the view on which the item is
      * @return the view matcher of the item, used by espresso
      */
@@ -65,25 +67,27 @@ public class RecyclerViewMatcher {
                 }
 
                 public boolean matchesSafely(View view) {
-
                     this.resources = view.getResources();
+                    return checkChildView(view) && checkTargetView(view);
+                }
 
+                private boolean checkChildView(View view) {
                     if (childView == null) {
                         RecyclerView recyclerView = view.getRootView().findViewById(recyclerViewId);
-                        if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-                            childView = getChildView(recyclerView);
-                        } else {
+                        if (recyclerView == null || recyclerView.getId() != recyclerViewId) {
                             return false;
                         }
+                        childView = getChildView(recyclerView);
                     }
+                    return true;
+                }
 
+                private boolean checkTargetView(View view) {
                     if (targetViewId == -1) {
                         return view == childView;
-                    } else {
-                        View targetView = childView.findViewById(targetViewId);
-                        return view == targetView;
                     }
-
+                    View targetView = childView.findViewById(targetViewId);
+                    return view == targetView;
                 }
 
                 private View getChildView(RecyclerView recyclerView) {
