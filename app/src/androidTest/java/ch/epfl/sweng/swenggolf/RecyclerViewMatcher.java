@@ -10,10 +10,10 @@ import org.hamcrest.TypeSafeMatcher;
 
 /**
  * Created by dannyroa on 5/10/15.
- * <p>
- * Source code: https://github.com/dannyroa/espresso-samples
- * <p>
- * Allows a simple selection on RecylerView for testing purposes.
+ *
+ * <p>Source code: https://github.com/dannyroa/espresso-samples.
+ *
+ * <p>Allows a simple selection on RecylerView for testing purposes.
  */
 public class RecyclerViewMatcher {
     private final int recyclerViewId;
@@ -69,11 +69,9 @@ public class RecyclerViewMatcher {
                     this.resources = view.getResources();
 
                     if (childView == null) {
-                        RecyclerView recyclerView =
-                                (RecyclerView) view.getRootView().findViewById(recyclerViewId);
+                        RecyclerView recyclerView = view.getRootView().findViewById(recyclerViewId);
                         if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-                            childView = recyclerView
-                                    .findViewHolderForAdapterPosition(position).itemView;
+                            childView = getChildView(recyclerView);
                         } else {
                             return false;
                         }
@@ -86,6 +84,10 @@ public class RecyclerViewMatcher {
                         return view == targetView;
                     }
 
+                }
+
+                private View getChildView(RecyclerView recyclerView) {
+                    return recyclerView.findViewHolderForAdapterPosition(position).itemView;
                 }
             };
 }
