@@ -75,8 +75,9 @@ public class Offer implements Parcelable {
      * @return the shortened description of the offer
      */
     public String getShortDescription() {
-        return description.length() > DESCRIPTION_LIMIT ?
-                description.substring(0, DESCRIPTION_LIMIT) + "..." : description;
+        return description.length() > DESCRIPTION_LIMIT
+                ? description.substring(0, DESCRIPTION_LIMIT) + "..."
+                : description;
     }
 
 
