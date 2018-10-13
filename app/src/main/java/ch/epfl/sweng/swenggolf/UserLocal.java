@@ -29,7 +29,6 @@ public class UserLocal implements User{
      * @param email the login method
      * @param photo user photo
      */
-
     public UserLocal(String username, String userId, String email, Uri photo){
         Boolean pho = (photo==null);
         if(TestMode.isTest()) {
@@ -60,6 +59,17 @@ public class UserLocal implements User{
         this.userId = userId;
         this.email = email;
         this.photo = null;
+    }
+
+    /**
+     * Create an user with an existed user but with different name and different mail.
+     * @param user the original user
+     * @param username the to be changed name
+     * @param email the to be changed email
+     * @return the changed user
+     */
+    public static UserLocal userChanged(User user, String username, String email){
+        return new UserLocal(username, user.getUserId(),email, user.getPhoto());
     }
 
     @Override

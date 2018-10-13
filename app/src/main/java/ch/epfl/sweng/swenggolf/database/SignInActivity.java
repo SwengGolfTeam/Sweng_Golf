@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.TestMode;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -68,17 +69,25 @@ public class SignInActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
 
-                    goToLogOut();
+                    goToWait();
 
                 }
             }
         };
     }
 
+
     /**
      * Start the logoutActivity.
      */
     private void goToLogOut(){
+        startActivity(new Intent(SignInActivity.this, CreateUserActivity.class));
+    }
+
+    /**
+     * Start the logoutActivity.
+     */
+    private void goToWait(){
         startActivity(new Intent(SignInActivity.this, WaitingActivity.class));
     }
 

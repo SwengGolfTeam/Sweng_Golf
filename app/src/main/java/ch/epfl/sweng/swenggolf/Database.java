@@ -4,6 +4,6 @@ public abstract class Database {
 
     public abstract void addUser(User user);
 
-    public abstract boolean containsUser(User user);
+    public abstract void containsUser(final ExistsOnData listener, User user);
 
 }

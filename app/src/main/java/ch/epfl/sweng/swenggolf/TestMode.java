@@ -4,6 +4,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class Used to know if we are running a test or not.
  */
@@ -21,6 +24,7 @@ public class TestMode {
      */
     private static User user = null;
 
+    private static Database db = new DatabaseLocal(new ArrayList<User>());
     /**
      * Method to know if we are in test or not.
      * @return the corresponding boolean
@@ -62,14 +66,27 @@ public class TestMode {
     public static DatabaseReference getRef(){
         DatabaseReference myRef;
         if (TestMode.isTest()) {
-
-            myRef = null;
+            myRef = FirebaseDatabase.getInstance().getReference();
         } else {
             myRef = FirebaseDatabase.getInstance().getReference();
         }
         return myRef;
     }
 
+
+    /**
+     * Method to get the DatabaseReference.
+     * @return the corresponding DatabaseReference
+     */
+    public static Database getDatabase(){
+        Database dat;
+        if (TestMode.isTest()) {
+            dat = db;
+        } else {
+            dat = new DatabaseFirebase(FirebaseDatabase.getInstance().getReference());
+        }
+        return dat;
+    }
 
 
     /**
@@ -79,6 +96,12 @@ public class TestMode {
         TestMode.user = user;
     }
 
+    /**
+     * Method used to add an user to a mocked database list of users.
+     */
+    public static void addUser(User user){
+        db.addUser(user);
+    }
 
 
 }

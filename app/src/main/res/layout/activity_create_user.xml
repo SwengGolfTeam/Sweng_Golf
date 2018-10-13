@@ -23,7 +23,9 @@
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:inputType="" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,10 +35,11 @@
     <EditText
         android:id="@+id/mail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:singleLine="true" />
 
     <Button
-        android:id="@+id/go_to_main_menu"
+        android:id="@+id/create_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"

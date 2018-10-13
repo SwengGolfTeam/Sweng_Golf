@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view the current view
      */
     public void loadSigninActivity(View view) {
-        startActivity(new Intent(this, SignInActivity.class));
+        startActivity(new Intent(this, CreateUserActivity.class));
     }
 
 

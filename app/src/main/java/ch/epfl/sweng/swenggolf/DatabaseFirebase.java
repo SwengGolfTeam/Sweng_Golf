@@ -1,6 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseFirebase extends Database {
 
@@ -24,8 +29,21 @@ public class DatabaseFirebase extends Database {
     }
 
     @Override
-    public boolean containsUser(User user) {
-        return true;
+    public void containsUser(final ExistsOnData listener, User user) {
+        listener.onStart();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.onSuccess(dataSnapshot.exists());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onFailure();
+            }
+        });
+
     }
 
 }
