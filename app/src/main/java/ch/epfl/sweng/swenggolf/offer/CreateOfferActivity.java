@@ -1,17 +1,35 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
+import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
@@ -25,6 +43,12 @@ public class CreateOfferActivity extends AppCompatActivity {
     private String username;
     private TextView errorMessage;
 
+    private ImageView imageView;
+
+    private Uri filePath;
+
+    private static final int PICK_IMAGE_REQUEST = 71;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +56,39 @@ public class CreateOfferActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         username = getIntent().getExtras().getString("username");
-            if (username == null) {
+        if (username == null) {
             throw new NullPointerException("No username given to CreateOfferActivity");
         }
         errorMessage = findViewById(R.id.error_message);
+    }
+
+    /**
+     * Allows the user to choose a picture from his gallery.
+     *
+     * @param view the view
+     */
+    public void choosePicture(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            filePath = data.getData();
+            imageView = findViewById(R.id.offer_picture);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -51,10 +104,13 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if(!name.isEmpty() && !description.isEmpty()){
+        if (!name.isEmpty() && !description.isEmpty()) {
             final Offer newOffer = new Offer(username, name, description);
             DatabaseConnection db = DatabaseConnection.getInstance();
-            writeOffer(newOffer,db);
+            writeOffer(newOffer, db);
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            uploadImage(storageReference);
+            //Log.d(storageReference.getDownloadUrl());
         } else {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
@@ -63,17 +119,53 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     }
 
+    private void uploadImage(StorageReference storageReference) {
+
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreateOfferActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreateOfferActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
+
     /**
      * Write an offer into the database.
+     *
      * @param offer offer to be written
-     * @param db the database
+     * @param db    the database
      */
-    private void writeOffer(final Offer offer, DatabaseConnection db){
+    private void writeOffer(final Offer offer, DatabaseConnection db) {
         DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError,
                                    @NonNull DatabaseReference databaseReference) {
-                if(databaseError == null){
+                if (databaseError == null) {
 
                     Intent intent =
                             new Intent(CreateOfferActivity.this,
@@ -81,8 +173,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                     intent.putExtra("offer", offer);
                     startActivity(intent);
 
-                }
-                else{
+                } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }
