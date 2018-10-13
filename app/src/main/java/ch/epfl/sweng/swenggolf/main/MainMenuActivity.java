@@ -75,7 +75,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public static final String EXTRA_USERID = "ch.epfl.sweng.swenggolf.USERID";
-    private final String uid = "1234";
+    private final String uid = "pzQt6qAC7cP0lwIOSvbQoN1iEg52";
 
     /**
      * Launches the ProfileActivity.

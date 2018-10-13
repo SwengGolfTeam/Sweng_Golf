@@ -87,6 +87,7 @@ public class DatabaseConnection {
         ref.addListenerForSingleValueEvent(listener);
     }
 
+
     /**
      * Reads a specific offer from the database.
      * @param type the type of element eg "offers" or "users"
@@ -101,11 +102,11 @@ public class DatabaseConnection {
         else if(id == null || id.isEmpty()){
             throw new IllegalArgumentException("id should have a value");
         }
-        else if(listener == null){
+        else if(listener == null){ // TODO why check if nonNull?
             throw new IllegalArgumentException("listener should not be null");
         }
 
         DatabaseReference ref = db.getReference(type+"/"+id);
-        ref.addListenerForSingleValueEvent(listener);
+        ref.addListenerForSingleValueEvent(listener); // TODO why single value event?
     }
 }

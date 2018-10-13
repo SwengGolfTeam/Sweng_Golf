@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".profile.ProfileActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/profileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/profile_activity_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <ImageView
         android:id="@+id/ivProfile"
@@ -21,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintVertical_bias="0.125" />
 
     <ImageButton
         android:id="@+id/edit"
@@ -29,7 +40,7 @@
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="#71c9ae"
         android:onClick="editProfile"
         android:src="@android:drawable/ic_menu_edit"

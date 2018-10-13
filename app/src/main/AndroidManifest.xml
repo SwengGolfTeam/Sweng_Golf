@@ -22,13 +22,9 @@
         <activity android:name="ch.epfl.sweng.swenggolf.database.LogOutActivity"/>
 
         <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.ProfileActivity"
-            android:label="@string/profile_activity_name"
-            android:parentActivityName="ch.epfl.sweng.swenggolf.main.MainActivity"/>
+            android:name="ch.epfl.sweng.swenggolf.profile.ProfileActivity"/>
         <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.EditProfileActivity"
-            android:label="@string/edit_profile_activity_name"
-            android:parentActivityName=".profile.ProfileActivity" />
+            android:name="ch.epfl.sweng.swenggolf.profile.EditProfileActivity"/>
             
 
         <activity android:name="ch.epfl.sweng.swenggolf.offer.CreateOfferActivity" />
