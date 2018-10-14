@@ -1,18 +1,21 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private String uid;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,6 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         prepareProfileData();
-        displayUserData(null);
     }
 
     private void prepareProfileData() {
@@ -59,13 +62,20 @@ public class ProfileActivity extends AppCompatActivity {
             }
         };
         db.readObject("users", uid, listener);
-        
+
     }
 
     private void displayUserData(Map<String, String> userData) {
         if (userData != null) {
             TextView name = findViewById(R.id.name);
-            name.setText(userData.get("username"));
+            name.setText(userData.get("userName"));
+            ImageView imageView = findViewById(R.id.ivProfile);
+            try {
+                Uri photoUri = Uri.parse(userData.get("photo"));
+                Picasso.with(this).load(photoUri).into(imageView);
+            } catch (NullPointerException e) {
+                // nothing and leaves the default option?
+            }
             // TODO add a username ?
         /*TextView textView = findViewById(R.id.username);
         String username = FakeUserDatabase.accessTable(uid, "username");

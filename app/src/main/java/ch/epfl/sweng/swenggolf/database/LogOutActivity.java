@@ -38,6 +38,7 @@ public class LogOutActivity extends AppCompatActivity {
         }
         else {
             user = new UserFirebase(FirebaseAuth.getInstance().getCurrentUser());
+            //CurrentUser.getInstance().setCurrentUser(user.getUserId());
         }
         if(null == user){ quitLogOut();}
         else{
