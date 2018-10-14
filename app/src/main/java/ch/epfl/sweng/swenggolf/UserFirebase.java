@@ -31,7 +31,7 @@ public class UserFirebase implements User {
     }
 
     @Override
-    public Uri getPhoto() {
-        return fu.getPhotoUrl();
+    public String getPhoto() {
+        return fu.getPhotoUrl().toString();
     }
 }

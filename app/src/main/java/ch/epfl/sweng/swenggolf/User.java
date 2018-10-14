@@ -30,5 +30,5 @@ public interface User {
      * Get the User photo.
      * @return the corresponding photo URI
      */
-    public Uri getPhoto();
+    public String getPhoto();
 }

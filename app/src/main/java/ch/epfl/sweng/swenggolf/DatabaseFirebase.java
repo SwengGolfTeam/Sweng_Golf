@@ -1,11 +1,14 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class DatabaseFirebase extends Database {
 
@@ -21,21 +24,22 @@ public class DatabaseFirebase extends Database {
     @Override
     public void addUser(User user) {
         DatabaseReference tmpRef = myRef.child("users").child(user.getUserId());
-        tmpRef.child("email").setValue(user.getEmail());
-        tmpRef.child("login").setValue("Google");
-        tmpRef.child("photoUrl").setValue(user.getPhoto().toString());
-        tmpRef.child("userId").setValue(user.getUserId());
-        tmpRef.child("username").setValue(user.getUserName());
+        tmpRef.setValue(user);
+       // tmpRef.child("login").setValue("Google");
     }
 
     @Override
-    public void containsUser(final ExistsOnData listener, User user) {
+    public void containsUser(final DataUser listener, User user) {
         listener.onStart();
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                listener.onSuccess(dataSnapshot.exists());
+                User user = Config.getUser();
+                if (dataSnapshot.exists()) {
+                    user = dataSnapshot.getValue(UserLocal.class);
+                }
+                listener.onSuccess(dataSnapshot.exists(),user);
             }
 
             @Override
@@ -44,6 +48,12 @@ public class DatabaseFirebase extends Database {
             }
         });
 
+    }
+
+    private UserLocal userFromDatasnapshot(DataSnapshot dataSnapshot){
+      String name = (String) dataSnapshot.child("name").getValue();
+      String email = (String) dataSnapshot.child("email").getValue();
+      return UserLocal.userChanged(Config.getUser(), name, email);
     }
 
 }

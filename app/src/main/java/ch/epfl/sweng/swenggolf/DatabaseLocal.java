@@ -18,8 +18,8 @@ public class DatabaseLocal extends Database {
     }
 
     @Override
-    public void containsUser(final ExistsOnData listener, User user) {
-        listener.onSuccess(users.contains(user));
+    public void containsUser(final DataUser listener, User user) {
+        listener.onSuccess(users.contains(user), user);
     }
 
 }

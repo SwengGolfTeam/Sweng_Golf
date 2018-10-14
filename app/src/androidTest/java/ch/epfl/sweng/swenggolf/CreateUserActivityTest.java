@@ -12,7 +12,6 @@ import ch.epfl.sweng.swenggolf.main.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -35,8 +34,8 @@ public class CreateUserActivityTest {
 
     @BeforeClass
     public static void setUp(){
-        TestMode.goToTest();
-        TestMode.setUser(new UserLocal(name, uid, mail));
+        Config.goToTest();
+        Config.setUser(new UserLocal(name, uid, mail,"Hello"));
     }
 
     @Test
@@ -47,9 +46,9 @@ public class CreateUserActivityTest {
         onView(withId(R.id.name)).check(matches(withText(name)));
         onView(withId(R.id.name)).perform(typeText("api"));
         onView(withId(R.id.create_account)).perform(click());
-        TestMode.getDatabase().containsUser(new ExistsOnData() {
+        Config.getDatabase().containsUser(new DataUser() {
             @Override
-            public void onSuccess(Boolean exists) {
+            public void onSuccess(Boolean exists, User user) {
                 assertTrue(true);
             }
 
@@ -62,7 +61,7 @@ public class CreateUserActivityTest {
             public void onFailure() {
                 assertTrue(false);
             }
-        }, TestMode.getUser());
+        }, Config.getUser());
 
     }
 

@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import com.google.firebase.database.DatabaseReference;
+import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Database;
-import ch.epfl.sweng.swenggolf.TestMode;
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.UserLocal;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -32,11 +33,9 @@ public class CreateUserActivity extends AppCompatActivity {
         name = findViewById(ch.epfl.sweng.swenggolf.R.id.name);
         mail = findViewById(ch.epfl.sweng.swenggolf.R.id.mail);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
-        user = TestMode.getUser();
-        if(null == user){ quit();}
-        else{
-            displayInformation(user);
-        }
+        user = Config.getUser();
+        displayInformation(user);
+
     }
 
 
@@ -54,26 +53,31 @@ public class CreateUserActivity extends AppCompatActivity {
     private void displayInformation(User user){
         name.setText(user.getUserName());
         mail.setText(user.getEmail());
-        if(!TestMode.isTest()) {
+        if(!Config.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
     }
 
 
-
-
+    /**
+     * Launches the MainMenuActivity.
+     *
+     * @param view the current view
+     */
     public void onClick(View view) {
         String userName = name.getText().toString();
         String userMail = mail.getText().toString();
 
         //handle the exception if the EditText fields are null
         if(!userName.isEmpty() && !userMail.isEmpty()){
-            Database d = TestMode.getDatabase();
-            d.addUser(UserLocal.userChanged(user, userName, userMail));
+            Database d = Config.getDatabase();
+            User u = UserLocal.userChanged(user, userName, userMail);
+            d.addUser(u);
+            Config.setUser(u);
             quit();
         }
         else{
-            //TODO Handle this case
+            Toast.makeText(this, "Please, enter correct info", Toast.LENGTH_SHORT).show();
             onClick(view);
         }
     }

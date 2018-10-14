@@ -20,8 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import ch.epfl.sweng.swenggolf.TestMode;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.Config;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
-        if(TestMode.isTest()){
+        if(Config.isTest()){
             goToLogOut();
         }
         mAuth = FirebaseAuth.getInstance();

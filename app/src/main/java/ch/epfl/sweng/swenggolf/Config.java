@@ -5,14 +5,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class Used to know if we are running a test or not.
  */
-public class TestMode {
+public class Config {
 
-    private TestMode(){}
+    private Config(){}
 
     /*
     *   TEST_MODE must be true for tests and false otherwise.
@@ -52,12 +51,16 @@ public class TestMode {
      * @return the corresponding UserFirebase
      */
     public static User getUser(){
-        if (!TestMode.isTest()) {
-            user = new UserFirebase(FirebaseAuth.getInstance().getCurrentUser());
-        }
-        return user;
+        return user == null ? new UserFirebase(FirebaseAuth.getInstance().getCurrentUser()) : user;
     }
 
+    /**
+     * Set the actual user.
+     * @param newUser user to copy in the static one
+     */
+    public static void setUser(User newUser){
+        user = newUser;
+    }
 
     /**
      * Method to get the DatabaseReference.
@@ -65,7 +68,7 @@ public class TestMode {
      */
     public static DatabaseReference getRef(){
         DatabaseReference myRef;
-        if (TestMode.isTest()) {
+        if (Config.isTest()) {
             myRef = FirebaseDatabase.getInstance().getReference();
         } else {
             myRef = FirebaseDatabase.getInstance().getReference();
@@ -80,20 +83,12 @@ public class TestMode {
      */
     public static Database getDatabase(){
         Database dat;
-        if (TestMode.isTest()) {
+        if (Config.isTest()) {
             dat = db;
         } else {
             dat = new DatabaseFirebase(FirebaseDatabase.getInstance().getReference());
         }
         return dat;
-    }
-
-
-    /**
-     * Method used to set a mocked firebaseUser.
-     */
-    public static void setUser(User user){
-        TestMode.user = user;
     }
 
     /**
