@@ -20,7 +20,7 @@ public class ListPreferencesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_preference);
-        mRecyclerView = (RecyclerView) findViewById(R.id.preference_list);
+        mRecyclerView = findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new GridLayoutManager(this,SPAN_COUNT);

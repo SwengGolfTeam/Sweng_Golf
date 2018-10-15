@@ -74,7 +74,8 @@ public final class FakeFirebaseDatabase {
         return d;
     }
 
-    private static void setUpWrite(final boolean working, DatabaseReference root, DatabaseReference values){
+    private static void setUpWrite
+            (final boolean working, DatabaseReference root, DatabaseReference values){
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
@@ -88,13 +89,7 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        setUpUserWrite(working,root,values,answerWrite);
         setUpOfferWrite(working,root,values,answerWrite);
-    }
-
-    private static void setUpUserWrite(final boolean working, DatabaseReference root, DatabaseReference values, Answer answerWrite){
-        Mockito.when(root.child("users")).thenReturn(values);
-        Mockito.when(root.child("offers")).thenReturn(values);
     }
 
     private static void setUpOfferWrite(final boolean working, DatabaseReference root,
@@ -109,7 +104,7 @@ public final class FakeFirebaseDatabase {
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
                                        DatabaseReference values, final DataSnapshot offerSnapshot) {
-        List<Offer> offerList = Arrays.asList(offers);
+        Offer[] offerList = offers;
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
             DataSnapshot data = Mockito.mock(DataSnapshot.class);

@@ -33,30 +33,31 @@ import static junit.framework.TestCase.assertTrue;
 public class PreferenceAtivityTest {
     @Rule
     public ActivityTestRule preferenceRule =
-            new ActivityTestRule<ListPreferencesActivity>(ListPreferencesActivity.class,false,false);
+            new ActivityTestRule<>(ListPreferencesActivity.class,false,false);
 
     /**
-     * Enters adapter debug mode
+     * Enters adapter debug mode.
      */
     @Before
-    public void setUp() throws InterruptedException{
+    public void setUp() {
         ListPreferenceAdapter.debug = true;
         preferenceRule.launchActivity(new Intent());
     }
 
     /**
-     * Scrolls to last element and check that it is displayed
+     * Scrolls to last element and check that it is displayed.
      */
     @Test
     public void scrollingWorks(){
         int userLength = ListPreferenceAdapter.usersInitial.length-1;
-        ViewAction scrollToLast = RecyclerViewActions.<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
+        ViewAction scrollToLast =
+                RecyclerViewActions.<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
         onView(withId(R.id.preference_list)).perform(scrollToLast);
         onView(withText(ListPreferenceAdapter.usersInitial[userLength].getUserName())).check(matches(isDisplayed()));
     }
 
     /**
-     * Checks that element with username of the first user is in the list
+     * Checks that element with username of the first user is in the list.
      */
     @Test
     public void firstElementIsDiplayed(){

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.preference;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,10 +24,11 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.UserFirebase;
 import ch.epfl.sweng.swenggolf.UserLocal;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 
-public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
+public class ListPreferenceAdapter
+        extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
 
+    private static final int DEFAULT_PICTURE = R.drawable.common_google_signin_btn_icon_dark;
     public static boolean debug = false;
     private ArrayList<User> mDataset;
 
@@ -39,18 +38,23 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
             new UserLocal("Geany","2","geany@mail.com","Comics"),
             new UserLocal("Greg","3","greg@gmail.com","Ropes"),
             new UserLocal("Fred","4","fred@gmail.com","Beverages"),
-            new UserLocal("AAnna","0","anna@mail.com","Friends"),
-            new UserLocal("ABob","1","bob@mail.com","Washing machine"),
-            new UserLocal("AGeany","2","geany@mail.com","Hammer"),
-            new UserLocal("AGreg","3","greg@gmail.com","Lunch"),
-            new UserLocal("AFred","4","fred@gmail.com","Cheeseburgers"),
-            new UserLocal("BAnna","0","anna@mail.com","Champaign"),
-            new UserLocal("BBob","1","bob@mail.com","Mushrooms"),
-            new UserLocal("BGeany","2","geany@mail.com","Nothing"),
-            new UserLocal("BGreg","3","greg@gmail.com","Fries"),
-            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd","4","fred@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
+            new UserLocal("AAnna","0","aanna@mail.com","Friends"),
+            new UserLocal("ABob","1","abob@mail.com","Washing machine"),
+            new UserLocal("AGeany","2","ageany@mail.com","Hammer"),
+            new UserLocal("AGreg","3","agreg@gmail.com","Lunch"),
+            new UserLocal("AFred","4","afred@gmail.com","Cheeseburgers"),
+            new UserLocal("BAnna","0","banna@mail.com","Champaign"),
+            new UserLocal("BBob","1","bbob@mail.com","Mushrooms"),
+            new UserLocal("BGeany","2","bgeany@mail.com","Nothing"),
+            new UserLocal("BGreg","3","bgreg@gmail.com","Fries"),
+            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd"
+                    ,"4","fr@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
     };
 
+    /**
+     * Create a new adapter for the list that fetches information about users.
+     * If debug is set to true, a default list of users is used.
+     */
     public ListPreferenceAdapter(){
         if(!debug){
             ValueEventListener getUserList = new ValueEventListener() {
@@ -78,11 +82,15 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
         }
     }
 
+    /**
+     * Create a container for displaying a cell of the view.
+     * Container contains user picture, username and preference.
+     */
     public class PreferenceViewHolder extends RecyclerView.ViewHolder{
-        public ImageView userpic;
-        public TextView username;
-        public TextView preference;
-        public Context context;
+        private ImageView userpic;
+        private TextView username;
+        private TextView preference;
+        private Context context;
 
         public PreferenceViewHolder(View view){
             super(view);
@@ -96,7 +104,9 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
     @NonNull
     @Override
     public PreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.preferences_list_quad,parent,false);
+        View v = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.preferences_list_quad,parent,false);
         PreferenceViewHolder p = new PreferenceViewHolder(v);
         return p;
     }
@@ -104,9 +114,12 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         User current = mDataset.get(position);
-        Picasso.with(holder.context).load(current.getPhoto()).placeholder(R.drawable.common_google_signin_btn_icon_dark_normal).fit().into(holder.userpic);
+        Picasso.with(holder.context)
+                .load(current.getPhoto())
+                .placeholder(DEFAULT_PICTURE)
+                .fit().into(holder.userpic);
         holder.username.setText(current.getUserName());
-        holder.preference.setText(current.getPreference());//TODO  preference in User
+        holder.preference.setText(current.getPreference());
     }
 
     @Override
