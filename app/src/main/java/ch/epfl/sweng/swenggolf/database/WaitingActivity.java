@@ -9,7 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import ch.epfl.sweng.swenggolf.Database;
 import ch.epfl.sweng.swenggolf.DatabaseFirebase;
-import ch.epfl.sweng.swenggolf.DataUser;
+import ch.epfl.sweng.swenggolf.UserListener;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -47,7 +47,7 @@ public class WaitingActivity extends AppCompatActivity {
      */
     public void changeActivity(){
         Database d = new DatabaseFirebase(myRef.child("users").child(user.getUserId()));
-        d.containsUser(new DataUser() {
+        d.containsUser(new UserListener() {
             @Override
             public void onSuccess(Boolean exists, User user) {
                 if(exists) {

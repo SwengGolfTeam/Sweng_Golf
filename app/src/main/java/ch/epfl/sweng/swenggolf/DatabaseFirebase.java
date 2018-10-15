@@ -1,14 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 public class DatabaseFirebase extends Database {
 
@@ -29,7 +26,7 @@ public class DatabaseFirebase extends Database {
     }
 
     @Override
-    public void containsUser(final DataUser listener, User user) {
+    public void containsUser(final UserListener listener, User user) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

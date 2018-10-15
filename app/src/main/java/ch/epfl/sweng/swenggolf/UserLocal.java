@@ -19,7 +19,7 @@ public class UserLocal implements User{
      * Construct an empty local user.
      * It is actually used for json read user.
      */
-    private UserLocal(){
+    public UserLocal(){
         userName = "";
         email = "";
         userId = "";
@@ -88,12 +88,11 @@ public class UserLocal implements User{
         return photo;
     }
 
-
     /**
      * Set the userName.
      * @param userName the corresponding username
      */
-    private void setUserName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -101,7 +100,7 @@ public class UserLocal implements User{
      * Set the user ID.
      * @param userId the corresponding user ID
      */
-    private void setUserId(String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -109,7 +108,7 @@ public class UserLocal implements User{
      * Set the user email.
      * @param email the corresponding user email
      */
-    private void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -117,7 +116,7 @@ public class UserLocal implements User{
      * Set the user photo.
      * @param photo the corresponding photo
      */
-    private void setPhoto(String photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
