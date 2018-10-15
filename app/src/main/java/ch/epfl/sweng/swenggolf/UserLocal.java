@@ -19,7 +19,7 @@ public class UserLocal implements User{
         this.userName = "";
         this.userId = "";
         this.email = "";
-        this.photo = Uri.parse("");
+        this.photo = null;
         this.preference = "";
     }
 
@@ -32,7 +32,7 @@ public class UserLocal implements User{
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl();
-        preference = "Bananas";
+        preference = "";
     }
 
     /**
@@ -78,13 +78,13 @@ public class UserLocal implements User{
     }
 
     /**
-     * Create a user with default photo and preference.
+     * Create a user with null photo and empty preference.
      * @param username the username
      * @param userId a unique identifier
      * @param email the login method
      */
     public UserLocal(String username, String userId, String email){
-        this(username,userId,email,"Banana");
+        this(username,userId,email,"");
     }
 
     @Override
