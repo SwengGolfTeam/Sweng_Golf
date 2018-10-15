@@ -10,6 +10,7 @@ import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.R;
 
+
 public class ProfileActivity extends AppCompatActivity {
 
     private String uid;
@@ -38,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     /**
      * Launches the EditProfileActivity.
+     *
      * @param view the current view
      */
     public void editProfile(View view) {

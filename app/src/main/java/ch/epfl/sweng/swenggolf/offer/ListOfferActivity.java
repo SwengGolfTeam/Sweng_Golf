@@ -22,6 +22,7 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 
+
 public class ListOfferActivity extends Activity {
 
     private ListOfferAdapter mAdapter;

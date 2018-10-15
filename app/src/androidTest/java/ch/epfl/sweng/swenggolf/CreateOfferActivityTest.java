@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.offer.FakeFirebaseStorage;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 

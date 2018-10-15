@@ -1,8 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 
 public class Offer implements Parcelable {
 

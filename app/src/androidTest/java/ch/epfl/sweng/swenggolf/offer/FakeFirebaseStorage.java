@@ -1,38 +1,18 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import net.bytebuddy.asm.Advice;
 
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import ch.epfl.sweng.swenggolf.offer.Offer;
 
 
 public final class FakeFirebaseStorage {
@@ -68,16 +48,29 @@ public final class FakeFirebaseStorage {
     private static void setUpImageWrite(final boolean working, StorageReference root,
                                         StorageReference values) {
 
+        UploadTask uploadTask = Mockito.mock(UploadTask.class);
+        final Task<Uri> taskUri = Mockito.mock(Task.class);
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
+                OnCompleteListener<Uri> listener = invocation.getArgument(0);
+                if (working) {
+                    listener.onComplete(taskUri);
+                } else {
+
+                }
                 return null;
             }
         };
 
         Mockito.when(root.child(ArgumentMatchers.anyString())).thenReturn(values);
+        Mockito.when(values.putFile(ArgumentMatchers.any(Uri.class)))
+                .thenReturn(uploadTask);
+        Mockito.when(uploadTask
+                .continueWithTask(ArgumentMatchers.any(Continuation.class)))
+                .thenReturn(taskUri);
 
-        Mockito.doAnswer(answerWrite).when(values)
-                .putFile(ArgumentMatchers.any(Uri.class));
+        Mockito.doAnswer(answerWrite).when(taskUri).addOnCompleteListener(
+                ArgumentMatchers.any(OnCompleteListener.class));
     }
 }

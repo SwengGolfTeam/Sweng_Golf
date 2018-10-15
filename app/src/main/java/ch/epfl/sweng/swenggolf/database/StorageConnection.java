@@ -1,24 +1,16 @@
 package ch.epfl.sweng.swenggolf.database;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
-import java.util.concurrent.Executor;
 
-import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.TestMode;
 
 public class StorageConnection {
     private static FirebaseStorage st;

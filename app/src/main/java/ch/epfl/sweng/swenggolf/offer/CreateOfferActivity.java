@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -120,7 +119,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
-        } else if (filePath != null && !TestMode.isTest()) {
+        } else if (filePath != null) {
             uploadImage(name, description);
         } else {
             createOfferObject(name, description, "");
@@ -134,19 +133,27 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         storage.writeFile(filePath)
                 .addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    String link = task.getResult().toString();
-                    createOfferObject(name, description, link);
-                } else {
-                    // TODO Handle failures
-                }
-            }
-        });
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            String link = task.getResult().toString();
+                            createOfferObject(name, description, link);
+                        } else {
+                            // TODO Handle failures
+                        }
+                    }
+                });
+        createOfferObject(name, description, "");
     }
 
-    private void createOfferObject(String name, String description, String link) {
+    /**
+     * Creates the offer and pushes it to the database.
+     *
+     * @param name        the title of the offer
+     * @param description the description of the offer
+     * @param link        the link of the offer's picture
+     */
+    protected void createOfferObject(String name, String description, String link) {
         String uuid = UUID.randomUUID().toString();
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
