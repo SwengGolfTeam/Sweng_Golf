@@ -77,6 +77,9 @@ public class UserLocal implements User{
         this.preference = preference;
     }
 
+    public UserLocal(String username, String userId, String email){
+        this(username,userId,email,"Banana");
+    }
     @Override
     public String getUserId(){
         return this.userId;

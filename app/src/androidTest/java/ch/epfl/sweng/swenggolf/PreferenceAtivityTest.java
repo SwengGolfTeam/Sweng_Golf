@@ -32,7 +32,8 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class PreferenceAtivityTest {
     @Rule
-    public ActivityTestRule preferenceRule = new ActivityTestRule<ListPreferencesActivity>(ListPreferencesActivity.class,false,false);
+    public ActivityTestRule preferenceRule =
+            new ActivityTestRule<ListPreferencesActivity>(ListPreferencesActivity.class,false,false);
 
     /**
      * Enters adapter debug mode
@@ -41,7 +42,6 @@ public class PreferenceAtivityTest {
     public void setUp() throws InterruptedException{
         ListPreferenceAdapter.debug = true;
         preferenceRule.launchActivity(new Intent());
-        Thread.sleep(4000);
     }
 
     /**

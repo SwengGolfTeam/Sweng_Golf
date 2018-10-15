@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.swenggolf.R;
 
 public class ListPreferencesActivity extends Activity {
-    private static final int spanCount = 3;
+    private static final int SPAN_COUNT = 3;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -23,7 +23,7 @@ public class ListPreferencesActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new GridLayoutManager(this,spanCount);
+        mLayoutManager = new GridLayoutManager(this,SPAN_COUNT);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new ListPreferenceAdapter();
