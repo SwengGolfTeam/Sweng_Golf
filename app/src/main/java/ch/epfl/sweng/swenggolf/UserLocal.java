@@ -10,6 +10,7 @@ public class UserLocal implements User{
     private final String userId;
     private final String email;
     private final Uri photo;
+    private final String preference;
 
     /**
      * Empty constructor for the listeners of Firebase.
@@ -19,6 +20,7 @@ public class UserLocal implements User{
         this.userId = "";
         this.email = "";
         this.photo = Uri.parse("");
+        this.preference = "";
     }
 
     /**
@@ -30,6 +32,7 @@ public class UserLocal implements User{
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl();
+        preference = "Bananas";
     }
 
     /**
@@ -40,7 +43,7 @@ public class UserLocal implements User{
      * @param photo user photo
      */
 
-    public UserLocal(String username, String userId, String email, Uri photo){
+    public UserLocal(String username, String userId, String email, Uri photo, String preference){
         Boolean pho = (photo==null);
         if(TestMode.isTest()) {
             pho = false;
@@ -52,6 +55,7 @@ public class UserLocal implements User{
         this.userId = userId;
         this.email = email;
         this.photo = photo;
+        this.preference = preference;
     }
 
 
@@ -62,7 +66,7 @@ public class UserLocal implements User{
      * @param email the login method
      */
 
-    public UserLocal(String username, String userId, String email){
+    public UserLocal(String username, String userId, String email, String preference){
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");
         }
@@ -70,6 +74,7 @@ public class UserLocal implements User{
         this.userId = userId;
         this.email = email;
         this.photo = null;
+        this.preference = preference;
     }
 
     @Override
@@ -92,4 +97,8 @@ public class UserLocal implements User{
         return photo;
     }
 
+    @Override
+    public String getPreference() {
+        return preference;
+    }
 }

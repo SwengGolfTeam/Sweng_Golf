@@ -31,4 +31,10 @@ public interface User {
      * @return the corresponding photo URI
      */
     public Uri getPhoto();
+
+    /**
+     * Get the user preference
+     * @return the user preference
+     */
+    public String getPreference();
 }

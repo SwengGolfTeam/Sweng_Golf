@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 
@@ -66,12 +68,11 @@ public final class FakeFirebaseDatabase {
         setUpOfferRead(working, d, values, offerSnapshot);
         
         //Handle the write on the database
-        setUpOfferWrite(working, root, values);
+        setUpWrite(working, root, values);
         return d;
     }
 
-    private static void setUpOfferWrite(final boolean working, DatabaseReference root,
-                                        DatabaseReference values) {
+    private static void setUpWrite(final boolean working, DatabaseReference root, DatabaseReference values){
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation){
@@ -86,7 +87,17 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
+        setUpUserWrite(working,root,values,answerWrite);
+        setUpOfferWrite(working,root,values,answerWrite);
+    }
+
+    private static void setUpUserWrite(final boolean working, DatabaseReference root, DatabaseReference values, Answer answerWrite){
+        Mockito.when(root.child("users")).thenReturn(values);
         Mockito.when(root.child("offers")).thenReturn(values);
+    }
+
+    private static void setUpOfferWrite(final boolean working, DatabaseReference root,
+                                        DatabaseReference values, Answer answerWrite) {
         DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
         Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
@@ -119,6 +130,7 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
+
         Mockito.doAnswer(readAnswer).when(values)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
     }

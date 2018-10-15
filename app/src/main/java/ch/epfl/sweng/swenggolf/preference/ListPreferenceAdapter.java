@@ -1,14 +1,17 @@
 package ch.epfl.sweng.swenggolf.preference;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,23 +19,63 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.UserFirebase;
+import ch.epfl.sweng.swenggolf.UserLocal;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
-import ch.epfl.sweng.swenggolf.database.User;
 
 public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
 
-    private DatabaseConnection connection;
+    public static boolean debug = false;
     private ArrayList<User> mDataset;
 
+    public static final User[] usersInitial = {
+            new UserLocal("Anna","0","anna@mail.com","Tomatoes"),
+            new UserLocal("Bob","1","bob@mail.com","Screwdriver"),
+            new UserLocal("Geany","2","geany@mail.com","Comics"),
+            new UserLocal("Greg","3","greg@gmail.com","Ropes"),
+            new UserLocal("Fred","4","fred@gmail.com","Beverages"),
+            new UserLocal("AAnna","0","anna@mail.com","Friends"),
+            new UserLocal("ABob","1","bob@mail.com","Washing machine"),
+            new UserLocal("AGeany","2","geany@mail.com","Hammer"),
+            new UserLocal("AGreg","3","greg@gmail.com","Lunch"),
+            new UserLocal("AFred","4","fred@gmail.com","Cheeseburgers"),
+            new UserLocal("BAnna","0","anna@mail.com","Champaign"),
+            new UserLocal("BBob","1","bob@mail.com","Mushrooms"),
+            new UserLocal("BGeany","2","geany@mail.com","Nothing"),
+            new UserLocal("BGreg","3","greg@gmail.com","Fries"),
+            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd","4","fred@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
+    };
+
     public ListPreferenceAdapter(){
-        //TODO getInitial number of user
-        //connection.
-        mDataset = new ArrayList<>();
+        if(!debug){
+            ValueEventListener getUserList = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> usersData = dataSnapshot.getChildren();
+                    ArrayList<User> users = new ArrayList<>();
+                    for (DataSnapshot user : usersData){
+                        UserFirebase concreteUser = user.getValue(UserFirebase.class);
+                        users.add(concreteUser);
+                    }
+                    mDataset = users;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d("Loading users error","failed to retrieve users list for preferences");
+                }
+            };
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+            ref.addValueEventListener(getUserList);
+        }
+        else{
+            mDataset = new ArrayList<User>(Arrays.asList(usersInitial));
+        }
     }
 
     public class PreferenceViewHolder extends RecyclerView.ViewHolder{
@@ -61,13 +104,10 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         User current = mDataset.get(position);
-        Picasso.with(holder.context).load(current.getPhoto()).error(android.R.drawable.btn_dialog).into(holder.userpic);
-        holder.username.setText(current.getUsername());
-        //holder.preference.setText(current.getPreference());
-        //TODO add preference getter
+        Picasso.with(holder.context).load(current.getPhoto()).placeholder(R.drawable.common_google_signin_btn_icon_dark_normal).fit().into(holder.userpic);
+        holder.username.setText(current.getUserName());
+        holder.preference.setText(current.getPreference());//TODO  preference in User
     }
-
-    //public void loadMore(){}
 
     @Override
     public int getItemCount() {

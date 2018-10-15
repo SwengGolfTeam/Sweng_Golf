@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import ch.epfl.sweng.swenggolf.R;
 
 public class ListPreferencesActivity extends Activity {
-    private static final int spanCount = 4;
+    private static final int spanCount = 3;
     private RecyclerView mRecyclerView;
-    public RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override

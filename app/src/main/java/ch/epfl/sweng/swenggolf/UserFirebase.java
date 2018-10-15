@@ -34,4 +34,9 @@ public class UserFirebase implements User {
     public Uri getPhoto() {
         return fu.getPhotoUrl();
     }
+
+    @Override
+    public String getPreference(){
+        return "Bananas";
+    }
 }
