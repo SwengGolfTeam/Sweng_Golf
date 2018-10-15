@@ -30,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -45,6 +46,7 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     private String username;
     private TextView errorMessage;
+    private Offer offerToModify;
 
     private ImageView imageView;
 
@@ -63,6 +65,20 @@ public class CreateOfferActivity extends AppCompatActivity {
             throw new NullPointerException("No username given to CreateOfferActivity");
         }
         errorMessage = findViewById(R.id.error_message);
+
+        offerToModify = getIntent().getParcelableExtra("offer");
+        preFillFields();
+    }
+
+    private void preFillFields() {
+        if (offerToModify != null) {
+            EditText title = findViewById(R.id.offer_name);
+            title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
+            EditText description = findViewById(R.id.offer_description);
+            description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
+            ImageView picture = findViewById(R.id.offer_picture);
+            Picasso.with(this).load(Uri.parse(offerToModify.getLinkPicture())).into(picture);
+        }
     }
 
     /**
@@ -136,11 +152,15 @@ public class CreateOfferActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     String link = task.getResult().toString();
-                    final Offer newOffer = new Offer(username, name, description, link);
+                    String uuid = UUID.randomUUID().toString();
+                    if (offerToModify != null) {
+                        uuid = offerToModify.getUuid();
+                    }
+                    final Offer newOffer = new Offer(username, name, description, link, uuid);
                     DatabaseConnection db = DatabaseConnection.getInstance();
                     writeOffer(newOffer, db);
                 } else {
-                    // Handle failures
+                    // TODO Handle failures
                 }
             }
         });
@@ -171,6 +191,6 @@ public class CreateOfferActivity extends AppCompatActivity {
                 }
             }
         };
-        db.writeObject("offers", offer.getTitle(), offer, listener);
+        db.writeObject("offers", offer.getUuid(), offer, listener);
     }
 }
