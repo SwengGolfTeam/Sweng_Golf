@@ -3,13 +3,10 @@ package ch.epfl.sweng.swenggolf.database;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
-import ch.epfl.sweng.swenggolf.Database;
 import ch.epfl.sweng.swenggolf.DatabaseFirebase;
-import ch.epfl.sweng.swenggolf.UserListener;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -46,20 +43,20 @@ public class WaitingActivity extends AppCompatActivity {
      * Choose which activity to launch next.
      */
     public void changeActivity(){
-        Database d = new DatabaseFirebase(myRef.child("users").child(user.getUserId()));
-        d.containsUser(new UserListener() {
+        DatabaseFirebase.getUser(new ValueListener() {
             @Override
-            public void onSuccess(Boolean exists, User user) {
-                if(exists) {
-                    Config.setUser(user);
+            public void onDataChange(Object value) {
+                if (value != null) {
+                    Config.setUser((User) value);
                     goToMainMenu();
-                } else {
+                }
+                else{
                     goToCreate();
                 }
             }
             @Override
-            public void onFailure() {
-                Toast.makeText(WaitingActivity.this, "Cannot reach database", Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError error) {
+
             }
         }, user);
     }

@@ -22,7 +22,7 @@ public final class FakeFirebaseDatabase {
 
 
     private static final User[] users = {
-            new UserLocal("Eric", "uid", "email", "photo")
+            new User("Eric", "uid", "email", "photo")
     };
 
     private static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."

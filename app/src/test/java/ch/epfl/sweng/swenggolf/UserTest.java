@@ -20,27 +20,27 @@ public class UserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyusername(){
-        new UserLocal("", id, email, photo);
+        new User("", id, email, photo);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyId(){
-        new UserLocal(username, "", email, photo);
+        new User(username, "", email, photo);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyLogin(){
-        new UserLocal(username, id, "", photo);
+        new User(username, id, "", photo);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyPhoto() {
-        new UserLocal(username, id, email, null);
+        new User(username, id, email, null);
     }
 
     @Test
     public void testGettersFull(){
-        UserLocal localUser = new UserLocal(username, id, email, photo);
+        User localUser = new User(username, id, email, photo);
         assertEquals("Usernames not equal", username, localUser.getUserName());
         assertEquals("userIds not equal", id, localUser.getUserId());
         assertEquals("Logins not equal", email, localUser.getEmail());
@@ -51,7 +51,7 @@ public class UserTest {
     @Test
     public void testMockFirebaseUser(){
         FirebaseUser fu = TestHelper.getUser();
-        User localUser = new UserLocal(fu);
+        User localUser = new User(fu);
         assertEquals("Usernames not equal", TestHelper.getName(), localUser.getUserName());
         assertEquals("userIds not equal", TestHelper.getUid(), localUser.getUserId());
         assertEquals("Logins not equal", TestHelper.getMail(), localUser.getEmail());
@@ -60,8 +60,8 @@ public class UserTest {
 
     @Test
     public void testSetters() {
-        UserLocal user1 = new UserLocal(username, id, email, photo);
-        UserLocal user2 = new UserLocal();
+        User user1 = new User(username, id, email, photo);
+        User user2 = new User();
         user2.setEmail(email);
         user2.setUserName(username);
         user2.setPhoto(photo);
@@ -74,8 +74,8 @@ public class UserTest {
 
     @Test
     public void testUserChanged(){
-        UserLocal user1 = new UserLocal(username, id, email, photo);
-        user1 = UserLocal.userChanged(user1, "username", "email");
+        User user1 = new User(username, id, email, photo);
+        user1 = User.userChanged(user1, "username", "email");
         assertEquals(user1.getUserName(), "username");
         assertEquals(user1.getEmail(), "email");
     }
