@@ -20,7 +20,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FakeFirebaseDatabase {
 
-    private static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    private static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
             + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
             + "Suspendisse potenti. Morbi vehicula ante nibh,"
@@ -30,15 +30,16 @@ public final class FakeFirebaseDatabase {
             + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
             + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+    private static final String IMAGE = "img.jpg";
 
     private static final Offer[] offers = {
-            new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
-            new Offer("Eric", "Chocolate for tractor", lorem),
-            new Offer("Ugo", "ModStoch help for food", lorem),
-            new Offer("Elsa", "Pizzas for beer", lorem),
+            new Offer("Robin", "6-pack beers for ModStoch homework", LOREM, IMAGE, "1"),
+            new Offer("Eric", "Chocolate for tractor", LOREM, IMAGE, "2"),
+            new Offer("Ugo", "ModStoch help for food", LOREM, IMAGE, "3"),
+            new Offer("Elsa", "Pizzas for beer", LOREM, IMAGE, "4"),
             new Offer("Seb", "Everything for a canton that doesn't suck and some "
-                    + "more text to overflow the box", lorem),
-            new Offer("Markus", "My kingdom for a working DB", lorem)};
+                    + "more text to overflow the box", LOREM, IMAGE, "5"),
+            new Offer("Markus", "My kingdom for a working DB", LOREM, IMAGE, "6")};
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number

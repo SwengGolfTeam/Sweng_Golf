@@ -57,6 +57,12 @@ public class ShowOfferActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Launches the CreateOfferActivity using the current offer, which will trigger
+     * subsequent parameters that will be used to modify it.
+     *
+     * @param view the view
+     */
     public void modifyOffer(View view) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
         // TODO implement username when login effective

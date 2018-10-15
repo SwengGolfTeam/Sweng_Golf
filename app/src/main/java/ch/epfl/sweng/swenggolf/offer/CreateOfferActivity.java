@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.TestMode;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 
 /**
@@ -78,7 +79,7 @@ public class CreateOfferActivity extends AppCompatActivity {
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
             ImageView picture = findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
-            if (!link.isEmpty()) {
+            if (!link.isEmpty() && !TestMode.isTest()) {
                 Picasso.with(this).load(Uri.parse(link)).into(picture);
             }
         }
@@ -93,8 +94,12 @@ public class CreateOfferActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                PICK_IMAGE_REQUEST);
+        if (TestMode.isTest()) {
+            filePath = Uri.parse("img.jpg");
+        } else {
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                    PICK_IMAGE_REQUEST);
+        }
     }
 
     @Override
@@ -126,32 +131,30 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if (!name.isEmpty() && !description.isEmpty()) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-            if (filePath != null) {
-                uploadImage(storageReference, name, description);
-            } else {
-                createOfferObject(name, description, "");
-            }
-        } else {
+        if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
+        } else if (filePath != null && !TestMode.isTest()) {
+            uploadImage(name, description);
+        } else {
+            createOfferObject(name, description, "");
         }
 
 
     }
 
-    private void uploadImage(StorageReference storageReference,
-                             final String name, final String description) {
+    private void uploadImage(final String name, final String description) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         final StorageReference ref =
                 storageReference.child("images/" + UUID.randomUUID().toString());
-        ref.putFile(filePath).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+
+        ref.putFile(filePath)
+                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }
-
                 return ref.getDownloadUrl();
             }
         }).addOnCompleteListener(new OnCompleteListener<Uri>() {

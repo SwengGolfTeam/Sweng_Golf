@@ -36,6 +36,7 @@ public class ListOfferActivityTest {
     @Before
     public void init() {
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
+        TestMode.goToTest();
     }
 
     /**
