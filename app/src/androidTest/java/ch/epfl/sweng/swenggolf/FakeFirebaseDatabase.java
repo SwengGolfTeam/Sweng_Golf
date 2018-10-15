@@ -7,7 +7,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 
@@ -70,12 +68,12 @@ public final class FakeFirebaseDatabase {
         setUpOfferRead(working, d, values, offerSnapshot);
 
         //Handle the write on the database
-        setUpWrite(working, root, values);
+        setUpOfferWrite(working, root, values);
         return d;
     }
 
-    private static void setUpWrite
-            (final boolean working, DatabaseReference root, DatabaseReference values){
+    private static void setUpOfferWrite(final boolean working, DatabaseReference root,
+                                        DatabaseReference values) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
@@ -89,11 +87,7 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        setUpOfferWrite(working,root,values,answerWrite);
-    }
-
-    private static void setUpOfferWrite(final boolean working, DatabaseReference root,
-                                        DatabaseReference values, Answer answerWrite) {
+        Mockito.when(root.child("offers")).thenReturn(values);
         DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
         Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
@@ -104,7 +98,7 @@ public final class FakeFirebaseDatabase {
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
                                        DatabaseReference values, final DataSnapshot offerSnapshot) {
-        Offer[] offerList = offers;
+        List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
             DataSnapshot data = Mockito.mock(DataSnapshot.class);
@@ -125,7 +119,6 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-
         Mockito.doAnswer(readAnswer).when(values)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
     }

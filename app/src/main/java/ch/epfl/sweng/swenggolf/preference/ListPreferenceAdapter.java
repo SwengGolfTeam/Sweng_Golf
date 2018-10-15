@@ -47,8 +47,8 @@ public class ListPreferenceAdapter
             new UserLocal("BBob","1","bbob@mail.com","Mushrooms"),
             new UserLocal("BGeany","2","bgeany@mail.com","Nothing"),
             new UserLocal("BGreg","3","bgreg@gmail.com","Fries"),
-            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd"
-                    ,"4","fr@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
+            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd",
+                    "4","fr@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
     };
 
     /**
@@ -82,16 +82,16 @@ public class ListPreferenceAdapter
         }
     }
 
-    /**
-     * Create a container for displaying a cell of the view.
-     * Container contains user picture, username and preference.
-     */
     public class PreferenceViewHolder extends RecyclerView.ViewHolder{
         private ImageView userpic;
         private TextView username;
         private TextView preference;
         private Context context;
 
+        /**
+         * Create a container for displaying a cell of the view.
+         * Container contains user picture, username and preference.
+         */
         public PreferenceViewHolder(View view){
             super(view);
             context = view.getContext();

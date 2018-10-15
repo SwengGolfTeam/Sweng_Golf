@@ -77,9 +77,16 @@ public class UserLocal implements User{
         this.preference = preference;
     }
 
+    /**
+     * Create a user with default photo and preference.
+     * @param username the username
+     * @param userId a unique identifier
+     * @param email the login method
+     */
     public UserLocal(String username, String userId, String email){
         this(username,userId,email,"Banana");
     }
+
     @Override
     public String getUserId(){
         return this.userId;
