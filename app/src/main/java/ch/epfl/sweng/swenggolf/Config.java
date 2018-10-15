@@ -51,7 +51,7 @@ public class Config {
      * @return the corresponding UserFirebase
      */
     public static User getUser(){
-        return user == null ? new UserFirebase(FirebaseAuth.getInstance().getCurrentUser()) : user;
+        return user == null ? new User(FirebaseAuth.getInstance().getCurrentUser()) : user;
     }
 
     /**
@@ -74,21 +74,6 @@ public class Config {
             myRef = FirebaseDatabase.getInstance().getReference();
         }
         return myRef;
-    }
-
-
-    /**
-     * Method to get the DatabaseReference.
-     * @return the corresponding DatabaseReference
-     */
-    public static Database getDatabase(){
-        Database dat;
-        if (Config.isTest()) {
-            dat = db;
-        } else {
-            dat = new DatabaseFirebase(FirebaseDatabase.getInstance().getReference());
-        }
-        return dat;
     }
 
     /**

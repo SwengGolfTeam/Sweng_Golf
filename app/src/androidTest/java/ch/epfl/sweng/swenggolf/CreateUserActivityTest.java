@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -35,7 +37,7 @@ public class CreateUserActivityTest {
     @BeforeClass
     public static void setUp(){
         Config.goToTest();
-        Config.setUser(new UserLocal(name, uid, mail,"Hello"));
+        Config.setUser(new User(name, uid, mail,"Hello"));
     }
 
     @Test
@@ -46,16 +48,19 @@ public class CreateUserActivityTest {
         onView(withId(R.id.name)).check(matches(withText(name)));
         onView(withId(R.id.name)).perform(typeText("api"));
         onView(withId(R.id.create_account)).perform(click());
-        Config.getDatabase().containsUser(new UserListener() {
+        DatabaseFirebase.getUser(new ValueListener() {
             @Override
-            public void onSuccess(Boolean exists, User user) {
-                assertTrue(true);
+            public void onDataChange(Object value) {
+                assertEquals(((User)(value)).getEmail(), mailchanged);
+                assertEquals(((User)(value)).getUserName(), namechanged);
             }
+
             @Override
-            public void onFailure() {
-                assertTrue(false);
+            public void onCancelled(DatabaseError error) {
+
             }
         }, Config.getUser());
+
 
     }
 
