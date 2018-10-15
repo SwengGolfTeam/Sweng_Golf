@@ -43,7 +43,7 @@ public class FakeDatabase extends Database {
                 listener.onDataChange((T) database.get(key));
             }
             else{
-                listener.onCancelled(DatabaseError.OPERATION_FAILED);
+                listener.onDataChange(null);
             }
         }
         else{
@@ -65,7 +65,7 @@ public class FakeDatabase extends Database {
                 listener.onDataChange(list);
             }
             else{
-                listener.onCancelled(DatabaseError.OPERATION_FAILED);
+                listener.onDataChange(null);
             }
         }
         else{
