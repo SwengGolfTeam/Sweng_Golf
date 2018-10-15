@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ListOfferActivity extends Activity {
 
@@ -66,21 +68,17 @@ public class ListOfferActivity extends Activity {
      * Get the offers from the database.
      */
     private void prepareOfferData() {
-        DatabaseConnection db = DatabaseConnection.getInstance();
-        ValueEventListener listener = new ValueEventListener() {
+
+        Database db = Database.getInstance();
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Offer> offers = new ArrayList<>();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Offer offer = noteDataSnapshot.getValue(Offer.class);
-                    offers.add(offer);
-                }
-                mAdapter.add(offers);
+            public void onDataChange(List<Offer> value) {
+                mAdapter.add(value);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("DBERR", "Could not do things (aka load offers from database");
+            public void onCancelled(ch.epfl.sweng.swenggolf.database.DatabaseError error) {
+                Log.d("DBERR", "Could not load offers from database.");
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
