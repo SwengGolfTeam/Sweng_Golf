@@ -54,11 +54,7 @@ public final class FakeFirebaseStorage {
             @Override
             public Object answer(InvocationOnMock invocation) {
                 OnCompleteListener<Uri> listener = invocation.getArgument(0);
-                if (working) {
-                    listener.onComplete(taskUri);
-                } else {
-
-                }
+                listener.onComplete(taskUri);
                 return null;
             }
         };
