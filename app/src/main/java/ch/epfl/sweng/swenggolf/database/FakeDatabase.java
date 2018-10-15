@@ -56,17 +56,15 @@ public class FakeDatabase extends Database {
                              @NonNull Class<T> c) {
         if(working) {
             List<T> list = new ArrayList<>();
-            for (String key : database.keySet()) {
-                if (key.startsWith(path)) {
-                    list.add((T) database.get(key));
+            for (Map.Entry<String, Object> entry : database.entrySet()) {
+                if (entry.getKey().startsWith(path)) {
+                    list.add((T) entry.getValue());
                 }
             }
-            if(!list.isEmpty()){
+            if(list.isEmpty()){
+                list = null;
+            }
                 listener.onDataChange(list);
-            }
-            else{
-                listener.onDataChange(null);
-            }
         }
         else{
             listener.onCancelled(DatabaseError.UNKNOWN_ERROR);

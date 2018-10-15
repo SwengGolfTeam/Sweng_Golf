@@ -109,7 +109,7 @@ public class FakeDatabaseTest {
                 assertThat(error, is(error));
             }
         };
-        d.write(path, id, content);
+        d.write(path, id, content, listener);
     }
 
     @Test

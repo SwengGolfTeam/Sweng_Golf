@@ -10,7 +10,7 @@ public interface ValueListener<T>{
 
     /**
      * If there was an error, this method will be called by the database
-     * @param error
+     * @param error the error
      */
     void onCancelled(DatabaseError error);
 }

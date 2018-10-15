@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.database;
 
-
 import android.support.annotation.NonNull;
 
 import java.util.List;

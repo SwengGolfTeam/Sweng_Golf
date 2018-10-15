@@ -31,7 +31,7 @@ public class ListOfferActivityTest {
         return new RecyclerViewMatcher(recyclerViewId);
     }
 
-    private static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+     public static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
             + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
             + "Suspendisse potenti. Morbi vehicula ante nibh,"
