@@ -1,16 +1,24 @@
 package ch.epfl.sweng.swenggolf.database;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
+import java.util.concurrent.Executor;
+
+import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.TestMode;
 
 public class StorageConnection {
     private static FirebaseStorage st;
@@ -54,18 +62,21 @@ public class StorageConnection {
 
     /**
      * Writes a new offer in the storage.
-     * @param uri  the element we want to add to the storage
+     *
+     * @param uri the element we want to add to the storage
      */
     public Task<Uri> writeFile(Uri uri) {
-        final StorageReference ref = st.getReference().child("images/" + UUID.randomUUID().toString());
-        return ref.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return ref.getDownloadUrl();
-            }
-        });
+        final StorageReference ref =
+                st.getReference().child("images/" + UUID.randomUUID().toString());
+        return ref.putFile(uri)
+                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return ref.getDownloadUrl();
+                    }
+                });
     }
 }

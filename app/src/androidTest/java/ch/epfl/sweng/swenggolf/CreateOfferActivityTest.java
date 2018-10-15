@@ -46,6 +46,9 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
+    /**
+     * Sets up a fake database and a fake storage, and enables TestMode.
+     */
     @Before
     public void init() {
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
