@@ -5,7 +5,7 @@ public enum DatabaseError {
     OPERATION_FAILED, OVERRIDDEN_BY_SET, PERMISSION_DENIED, UNAVAILABLE, UNKNOWN_ERROR,
     USER_CODE_EXCEPTION, WRITE_CANCELED;
 
-    protected static DatabaseError getError(com.google.firebase.database.DatabaseError error) {
+    public static DatabaseError getError(com.google.firebase.database.DatabaseError error) {
         switch(error.getCode()){
             case com.google.firebase.database.DatabaseError.DATA_STALE :
                 return DATA_STALE;
