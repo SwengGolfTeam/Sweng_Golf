@@ -15,7 +15,7 @@ public class TestMode {
     /*
      *   user is used to mock a UserFirebase during a test.
      */
-    private static User user = null;
+    private static UserFirebase user = null;
 
     /**
      * Method to know if we are in test or not.
@@ -43,14 +43,14 @@ public class TestMode {
      * Method to get the UserFirebase.
      * @return the corresponding UserFirebase
      */
-    public static User getUser(){
+    public static UserFirebase getUser(){
         return user;
     }
 
     /**
      * Method used to set a mocked firebaseUser.
      */
-    public static void setUser(User user){
+    public static void setUser(UserFirebase user){
         TestMode.user = user;
     }
 

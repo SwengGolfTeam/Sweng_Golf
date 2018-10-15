@@ -18,6 +18,9 @@
     <string name="offers_posted">offers posted</string>
     <string name="offers_answered">offers answered</string>
     <string name="username">username</string>
+    <string name="name">Name</string>
+    <string name="change_pic">Change profile picture</string>
+    <string name="save">Save</string>
     <string name="offer_name">Offer name :</string>
     <string name="offer_description">Description :</string>
     <string name="create_new_offer">Create new offer</string>

@@ -11,24 +11,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private String uid;
-
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +36,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        uid = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
+        user = getIntent().getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
 
-        prepareProfileData();
     }
 
     private void prepareProfileData() {
@@ -61,35 +60,29 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d("DBERR", "databaseError:" + databaseError.getMessage());
             }
         };
-        db.readObject("users", uid, listener);
+        db.readObject("users", user.getUserId(), listener);
 
     }
 
     private void displayUserData(Map<String, String> userData) {
         if (userData != null) {
             TextView name = findViewById(R.id.name);
-            name.setText(userData.get("userName"));
-            ImageView imageView = findViewById(R.id.ivProfile);
-            try {
-                Uri photoUri = Uri.parse(userData.get("photo"));
-                Picasso.with(this).load(photoUri).into(imageView);
-            } catch (NullPointerException e) {
-                // nothing and leaves the default option?
-            }
-            // TODO add a username ?
-        /*TextView textView = findViewById(R.id.username);
-        String username = FakeUserDatabase.accessTable(uid, "username");
-        if (username != null && !username.isEmpty()) {
-            String usernameString = "@" + username;
-            textView.setText(usernameString);
-        }*/
-            // TODO count the number of offers posted+answered
-        /*TextView offersPosted = findViewById(R.id.offers1);
-        offersPosted.setText(FakeUserDatabase.accessTable(uid, "offers_posted"));
-        TextView offersAnswered = findViewById(R.id.offers2);
-        offersAnswered.setText(FakeUserDatabase.accessTable(uid, "offers_answered"));*/
+            name.setText(user.getUserName());
+            displayCustomPicture(user.getPhoto());
+
+            // TODO count the number of offers posted+answered and display them
         }
 
+    }
+
+    private void displayCustomPicture(String uriString) {
+        ImageView imageView = findViewById(R.id.ivProfile);
+        try {
+            Uri photoUri = Uri.parse(uriString);
+            Picasso.with(this).load(photoUri).into(imageView);
+        } catch (NullPointerException e) {
+            // TODO display error message and leaves the default option?
+        }
     }
 
     /**
@@ -98,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
      */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
-        intent.putExtra(MainActivity.EXTRA_USERID, uid);
+        intent.putExtra(MainMenuActivity.EXTRA_USER, user);
         startActivity(intent);
     }
 }

@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * Class which represents a FirebaseUser.
  */
-public class UserFirebase implements User {
+public class UserFirebase {
 
     private final FirebaseUser fu;
 
@@ -15,22 +15,18 @@ public class UserFirebase implements User {
         this.fu = fu;
     }
 
-    @Override
     public String getEmail() {
         return fu.getEmail();
     }
 
-    @Override
     public String getUserName() {
         return fu.getDisplayName();
     }
 
-    @Override
     public String getUserId() {
         return fu.getUid();
     }
 
-    @Override
     public Uri getPhoto() {
         return fu.getPhotoUrl();
     }
