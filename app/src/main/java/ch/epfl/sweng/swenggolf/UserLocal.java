@@ -7,8 +7,18 @@ import com.google.firebase.auth.FirebaseUser;
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class UserLocal implements User{
 
+    private  String userName;
+    private  String userId;
+    private  String email;
+    private  String photo;
 
 
+
+
+    /**
+     * Construct an empty local user.
+     * It is actually used for json read user.
+     */
     private UserLocal(){
         userName = "";
         email = "";
@@ -16,12 +26,6 @@ public class UserLocal implements User{
         photo = "";
     }
 
-
-
-    private  String userName;
-    private  String userId;
-    private  String email;
-    private  String photo;
 
     /**
      * Construct a local user from FirebaseUser.
@@ -84,18 +88,35 @@ public class UserLocal implements User{
         return photo;
     }
 
+
+    /**
+     * Set the userName.
+     * @param userName the corresponding username
+     */
     private void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * Set the user ID.
+     * @param userId the corresponding user ID
+     */
     private void setUserId(String userId) {
         this.userId = userId;
     }
 
+    /**
+     * Set the user email.
+     * @param email the corresponding user email
+     */
     private void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Set the user photo.
+     * @param photo the corresponding photo
+     */
     private void setPhoto(String photo) {
         this.photo = photo;
     }

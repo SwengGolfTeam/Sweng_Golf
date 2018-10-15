@@ -30,7 +30,6 @@ public class DatabaseFirebase extends Database {
 
     @Override
     public void containsUser(final DataUser listener, User user) {
-        listener.onStart();
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -47,13 +46,5 @@ public class DatabaseFirebase extends Database {
                 listener.onFailure();
             }
         });
-
     }
-
-    private UserLocal userFromDatasnapshot(DataSnapshot dataSnapshot){
-      String name = (String) dataSnapshot.child("name").getValue();
-      String email = (String) dataSnapshot.child("email").getValue();
-      return UserLocal.userChanged(Config.getUser(), name, email);
-    }
-
 }

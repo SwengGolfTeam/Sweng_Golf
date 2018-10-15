@@ -3,7 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -58,14 +58,8 @@ public class WaitingActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onStart() {
-                //when starting
-                Log.d("ONSTART", "Started");
-            }
-
-            @Override
             public void onFailure() {
-                Log.d("onFailure", "Failed");
+                Toast.makeText(WaitingActivity.this, "Cannot reach database", Toast.LENGTH_SHORT).show();
             }
         }, user);
     }

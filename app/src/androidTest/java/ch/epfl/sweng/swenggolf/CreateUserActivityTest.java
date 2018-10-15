@@ -51,12 +51,6 @@ public class CreateUserActivityTest {
             public void onSuccess(Boolean exists, User user) {
                 assertTrue(true);
             }
-
-            @Override
-            public void onStart() {
-
-            }
-
             @Override
             public void onFailure() {
                 assertTrue(false);
