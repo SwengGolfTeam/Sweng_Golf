@@ -51,7 +51,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         TextView offerDescription = findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());
 
-        if (offer.getLinkPicture() != null && !offer.getLinkPicture().isEmpty()) {
+        if (!offer.getLinkPicture().isEmpty()) {
             ImageView offerPicture = findViewById(R.id.show_offer_picture);
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }

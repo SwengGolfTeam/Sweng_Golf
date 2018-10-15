@@ -77,7 +77,10 @@ public class CreateOfferActivity extends AppCompatActivity {
             EditText description = findViewById(R.id.offer_description);
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
             ImageView picture = findViewById(R.id.offer_picture);
-            Picasso.with(this).load(Uri.parse(offerToModify.getLinkPicture())).into(picture);
+            String link = offerToModify.getLinkPicture();
+            if (!link.isEmpty()) {
+                Picasso.with(this).load(Uri.parse(link)).into(picture);
+            }
         }
     }
 
@@ -123,9 +126,13 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if (!name.isEmpty() && !description.isEmpty() && filePath != null) {
+        if (!name.isEmpty() && !description.isEmpty()) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-            uploadImage(storageReference, name, description);
+            if (filePath != null) {
+                uploadImage(storageReference, name, description);
+            } else {
+                createOfferObject(name, description, "");
+            }
         } else {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
@@ -152,18 +159,25 @@ public class CreateOfferActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     String link = task.getResult().toString();
-                    String uuid = UUID.randomUUID().toString();
-                    if (offerToModify != null) {
-                        uuid = offerToModify.getUuid();
-                    }
-                    final Offer newOffer = new Offer(username, name, description, link, uuid);
-                    DatabaseConnection db = DatabaseConnection.getInstance();
-                    writeOffer(newOffer, db);
+                    createOfferObject(name, description, link);
                 } else {
                     // TODO Handle failures
                 }
             }
         });
+    }
+
+    private void createOfferObject(String name, String description, String link) {
+        String uuid = UUID.randomUUID().toString();
+        if (offerToModify != null) {
+            uuid = offerToModify.getUuid();
+            if (link.isEmpty()) {
+                link = offerToModify.getLinkPicture();
+            }
+        }
+        final Offer newOffer = new Offer(username, name, description, link, uuid);
+        DatabaseConnection db = DatabaseConnection.getInstance();
+        writeOffer(newOffer, db);
     }
 
     /**
