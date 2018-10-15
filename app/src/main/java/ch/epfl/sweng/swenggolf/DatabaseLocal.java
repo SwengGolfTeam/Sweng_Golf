@@ -18,7 +18,7 @@ public class DatabaseLocal extends Database {
     }
 
     @Override
-    public void containsUser(final DataUser listener, User user) {
+    public void containsUser(final UserListener listener, User user) {
         listener.onSuccess(users.contains(user), user);
     }
 

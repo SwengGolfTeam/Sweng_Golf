@@ -46,7 +46,7 @@ public class CreateUserActivityTest {
         onView(withId(R.id.name)).check(matches(withText(name)));
         onView(withId(R.id.name)).perform(typeText("api"));
         onView(withId(R.id.create_account)).perform(click());
-        Config.getDatabase().containsUser(new DataUser() {
+        Config.getDatabase().containsUser(new UserListener() {
             @Override
             public void onSuccess(Boolean exists, User user) {
                 assertTrue(true);
