@@ -19,8 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -104,13 +107,9 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if (!name.isEmpty() && !description.isEmpty()) {
-            final Offer newOffer = new Offer(username, name, description);
-            DatabaseConnection db = DatabaseConnection.getInstance();
-            writeOffer(newOffer, db);
+        if (!name.isEmpty() && !description.isEmpty() && filePath != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-            uploadImage(storageReference);
-            //Log.d(storageReference.getDownloadUrl());
+            uploadImage(storageReference, name, description);
         } else {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
@@ -119,39 +118,32 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     }
 
-    private void uploadImage(StorageReference storageReference) {
+    private void uploadImage(StorageReference storageReference,
+                             final String name, final String description) {
+        final StorageReference ref =
+                storageReference.child("images/" + UUID.randomUUID().toString());
+        ref.putFile(filePath).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
 
-        if(filePath != null)
-        {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(CreateOfferActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(CreateOfferActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
-                    });
-        }
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    final Offer newOffer = new Offer(username, name, description, link);
+                    DatabaseConnection db = DatabaseConnection.getInstance();
+                    writeOffer(newOffer, db);
+                } else {
+                    // Handle failures
+                }
+            }
+        });
     }
 
     /**
@@ -166,13 +158,13 @@ public class CreateOfferActivity extends AppCompatActivity {
             public void onComplete(@Nullable DatabaseError databaseError,
                                    @NonNull DatabaseReference databaseReference) {
                 if (databaseError == null) {
-
+                    Toast.makeText(CreateOfferActivity.this, "Offer created",
+                            Toast.LENGTH_SHORT).show();
                     Intent intent =
                             new Intent(CreateOfferActivity.this,
                                     ShowOfferActivity.class);
                     intent.putExtra("offer", offer);
                     startActivity(intent);
-
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);

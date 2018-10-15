@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +11,7 @@ public class Offer implements Parcelable {
     private final String author;
     private final String title;
     private final String description;
+    private final String linkPicture;
 
     /**
      * Contains the data of an offer.
@@ -17,8 +19,9 @@ public class Offer implements Parcelable {
      * @param author      the creator of the offer. Should not be empty
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture.
      */
-    public Offer(String author, String title, String description) {
+    public Offer(String author, String title, String description, String linkPicture) {
         if (author.isEmpty()) {
             throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
@@ -31,6 +34,7 @@ public class Offer implements Parcelable {
         this.author = author;
         this.title = title;
         this.description = description;
+        this.linkPicture = linkPicture;
     }
 
     /**
@@ -40,6 +44,7 @@ public class Offer implements Parcelable {
         this.author = "";
         this.title = "";
         this.description = "";
+        this.linkPicture = "";
     }
 
     /**
@@ -80,6 +85,10 @@ public class Offer implements Parcelable {
                 : description;
     }
 
+    public String getLinkPicture() {
+        return linkPicture.toString();
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -92,7 +101,8 @@ public class Offer implements Parcelable {
         dest.writeStringArray(new String[]{
                 this.author,
                 this.title,
-                this.description});
+                this.description,
+                this.linkPicture});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -106,11 +116,12 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[3];
+        String[] data = new String[4];
 
         in.readStringArray(data);
         this.author = data[0];
         this.title = data[1];
         this.description = data[2];
+        this.linkPicture = data[3];
     }
 }

@@ -1,8 +1,24 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import ch.epfl.sweng.swenggolf.R;
 
@@ -23,5 +39,10 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         TextView offerDescription = findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());
+
+        if (offer.getLinkPicture() != null && !offer.getLinkPicture().isEmpty()) {
+            ImageView offerPicture = findViewById(R.id.show_offer_picture);
+            Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
+        }
     }
 }
