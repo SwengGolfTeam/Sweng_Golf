@@ -1,9 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,25 +10,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -38,6 +28,7 @@ import java.util.UUID;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.TestMode;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.StorageConnection;
 
 /**
  * The activity used to create offers. Note that the intent extras
@@ -94,12 +85,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        if (TestMode.isTest()) {
-            filePath = Uri.parse("img.jpg");
-        } else {
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                    PICK_IMAGE_REQUEST);
-        }
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
@@ -144,20 +130,10 @@ public class CreateOfferActivity extends AppCompatActivity {
     }
 
     private void uploadImage(final String name, final String description) {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        final StorageReference ref =
-                storageReference.child("images/" + UUID.randomUUID().toString());
+        StorageConnection storage = StorageConnection.getInstance();
 
-        ref.putFile(filePath)
-                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return ref.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+        storage.writeFile(filePath)
+                .addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {

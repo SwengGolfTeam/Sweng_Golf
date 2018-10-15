@@ -1,5 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
@@ -19,12 +24,15 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.VerificationModes.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -41,6 +49,7 @@ public class CreateOfferActivityTest {
     @Before
     public void init() {
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
+        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
         TestMode.goToTest();
     }
 
@@ -58,6 +67,14 @@ public class CreateOfferActivityTest {
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
                 .perform(closeSoftKeyboard());
+
+        // Answer to gallery intent
+        Intent resultData = new Intent();
+        resultData.setData(Uri.parse("drawable://" + R.drawable.img));
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(not(isInternal())).respondWith(result);
+
         onView(withId(R.id.offer_picture)).perform(click());
         onView(withId(R.id.button)).perform(click());
     }
