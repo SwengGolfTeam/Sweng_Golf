@@ -93,7 +93,8 @@ public final class FakeFirebaseDatabase {
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
-                                       DatabaseReference valuesOffers, final DataSnapshot offerSnapshot) {
+                                       DatabaseReference valuesOffers,
+                                       final DataSnapshot offerSnapshot) {
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
