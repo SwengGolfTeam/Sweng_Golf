@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
@@ -16,11 +15,12 @@ public class TestHelper {
     private static final String name = "Hello";
     private static final String mail = "Hello@World.ok";
     private static final String uid = "123456789009876543211234567890";
-    private static final String photo = null;
+    private static final String photoFirebase = null;
+    private static final String photo = "photo";
 
-    public static FirebaseUser getUser() {
+    public static FirebaseUser getFirebaseUser() {
         Uri uriphoto = Mockito.mock(Uri.class);
-        Mockito.when(uriphoto.toString()).thenReturn(photo);
+        Mockito.when(uriphoto.toString()).thenReturn(photoFirebase);
         FirebaseUser user = Mockito.mock(FirebaseUser.class);
         Mockito.when(user.getUid()).thenReturn(uid);
         Mockito.when(user.getEmail()).thenReturn(mail);
@@ -28,6 +28,13 @@ public class TestHelper {
         Mockito.when(user.getPhotoUrl()).thenReturn(uriphoto);
         return user;
     }
+
+    public static User getUser(){
+        User user = new User(name, uid, mail, photo);
+        return user;
+    }
+
+    public static String getPhoto() { return photo; }
 
     public static String getName() {
         return name;
@@ -41,7 +48,7 @@ public class TestHelper {
         return uid;
     }
 
-    public static String getPhoto() {
-        return photo;
+    public static String getPhotoFirebase() {
+        return photoFirebase;
     }
 }

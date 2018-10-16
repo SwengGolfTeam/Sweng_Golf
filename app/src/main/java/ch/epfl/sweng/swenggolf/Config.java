@@ -23,7 +23,6 @@ public class Config {
      */
     private static User user = null;
 
-    private static Database db = new DatabaseLocal(new ArrayList<User>());
     /**
      * Method to know if we are in test or not.
      * @return the corresponding boolean
@@ -61,27 +60,5 @@ public class Config {
     public static void setUser(User newUser){
         user = newUser;
     }
-
-    /**
-     * Method to get the DatabaseReference.
-     * @return the corresponding DatabaseReference
-     */
-    public static DatabaseReference getRef(){
-        DatabaseReference myRef;
-        if (Config.isTest()) {
-            myRef = FirebaseDatabase.getInstance().getReference();
-        } else {
-            myRef = FirebaseDatabase.getInstance().getReference();
-        }
-        return myRef;
-    }
-
-    /**
-     * Method used to add an user to a mocked database list of users.
-     */
-    public static void addUser(User user){
-        db.addUser(user);
-    }
-
 
 }

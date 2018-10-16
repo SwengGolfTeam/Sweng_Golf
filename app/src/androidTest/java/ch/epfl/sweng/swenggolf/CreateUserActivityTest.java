@@ -8,7 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
+import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 
@@ -31,28 +34,28 @@ public class CreateUserActivityTest {
     private static final String uid = "123456789009876543211234567890";
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<CreateUserActivity> mActivityRule =
+            new ActivityTestRule<>(CreateUserActivity.class);
 
     @BeforeClass
     public static void setUp(){
         Config.goToTest();
         Config.setUser(new User(name, uid, mail,"Hello"));
+        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
     }
 
     @Test
     public void canDisplay() {
-        onView(withId(R.id.go_to_login_button)).perform(click());
         onView(withId(R.id.mail)).check(matches(withText(mail)));
-        onView(withId(R.id.mail)).perform(typeText(" World"));
+        onView(withId(R.id.mail)).perform(typeText("api"));
         onView(withId(R.id.name)).check(matches(withText(name)));
-        onView(withId(R.id.name)).perform(typeText("api"));
+        onView(withId(R.id.name)).perform(typeText(" World"));
         onView(withId(R.id.create_account)).perform(click());
-        DatabaseFirebase.getUser(new ValueListener() {
+        DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals(((User)(value)).getEmail(), mailchanged);
-                assertEquals(((User)(value)).getUserName(), namechanged);
+                assertEquals("mail test", ((User)(value)).getEmail(), mailchanged);
+                assertEquals("name test", ((User)(value)).getUserName(), namechanged);
             }
 
             @Override
@@ -60,8 +63,6 @@ public class CreateUserActivityTest {
 
             }
         }, Config.getUser());
-
-
     }
 
 }

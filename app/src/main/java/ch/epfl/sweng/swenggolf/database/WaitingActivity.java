@@ -6,22 +6,19 @@ import android.os.Bundle;
 
 import com.google.firebase.database.DatabaseReference;
 
-import ch.epfl.sweng.swenggolf.DatabaseFirebase;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 public class WaitingActivity extends AppCompatActivity {
 
-    User user;
-    DatabaseReference myRef;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_waiting);
         user = Config.getUser();
-        myRef = Config.getRef();
         changeActivity();
     }
 
@@ -43,7 +40,8 @@ public class WaitingActivity extends AppCompatActivity {
      * Choose which activity to launch next.
      */
     public void changeActivity(){
-        DatabaseFirebase.getUser(new ValueListener() {
+        DatabaseUser.getUser(new ValueListener() {
+
             @Override
             public void onDataChange(Object value) {
                 if (value != null) {
@@ -54,6 +52,7 @@ public class WaitingActivity extends AppCompatActivity {
                     goToCreate();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
 

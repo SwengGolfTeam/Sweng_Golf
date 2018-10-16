@@ -26,7 +26,7 @@ public class User {
 
 
     /**
-     * Construct a local user from FirebaseUser.
+     * Construct a user from FirebaseUser.
      * @param fu the FirebaseUser
      */
     public User(FirebaseUser fu){
@@ -34,6 +34,14 @@ public class User {
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl().toString();
+    }
+
+    /**
+     * Construct a user from another user.
+     * @param u the other user
+     */
+    public User(User u){
+        this(u.userName, u.userId, u.email, u.photo);
     }
 
     /**
@@ -130,4 +138,21 @@ public class User {
         this.photo = photo;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !User.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        else {
+            final User other = (User) obj;
+            if (this.userName.equals(other.userName) &&
+                    this.email.equals(other.email) &&
+                    this.userId.equals(other.userId)
+                    && this.photo.equals(other.photo)
+                    ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

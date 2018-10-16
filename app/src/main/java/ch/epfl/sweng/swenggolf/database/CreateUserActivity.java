@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.DatabaseFirebase;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
@@ -70,7 +69,7 @@ public class CreateUserActivity extends AppCompatActivity {
         //handle the exception if the EditText fields are null
         if(!userName.isEmpty() && !userMail.isEmpty()){
             User u = User.userChanged(user, userName, userMail);
-            DatabaseFirebase.addUser(u);
+            DatabaseUser.addUser(u);
             Config.setUser(u);
             quit();
         }

@@ -5,7 +5,9 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 public class UserTest {
@@ -50,7 +52,7 @@ public class UserTest {
 
     @Test
     public void testMockFirebaseUser(){
-        FirebaseUser fu = TestHelper.getUser();
+        FirebaseUser fu = TestHelper.getFirebaseUser();
         User localUser = new User(fu);
         assertEquals("Usernames not equal", TestHelper.getName(), localUser.getUserName());
         assertEquals("userIds not equal", TestHelper.getUid(), localUser.getUserId());
@@ -75,9 +77,20 @@ public class UserTest {
     @Test
     public void testUserChanged(){
         User user1 = new User(username, id, email, photo);
-        user1 = User.userChanged(user1, "username", "email");
-        assertEquals(user1.getUserName(), "username");
-        assertEquals(user1.getEmail(), "email");
+        User user2 = User.userChanged(user1, "username", "email");
+        assertFalse(user1.equals(user2));
+        user1.setUserName("username");
+        user1.setEmail("email");
+        assertTrue(user1.equals(user2));
+    }
+
+    @Test
+    public void testEquals(){
+        User user1 = new User(username, id, email, photo);
+        User user2 = new User(user1);
+        assertTrue(user1.equals(user2));
+        assertFalse(user1.equals(null));
+        assertFalse(user1.equals("Hello"));
     }
 
 }
