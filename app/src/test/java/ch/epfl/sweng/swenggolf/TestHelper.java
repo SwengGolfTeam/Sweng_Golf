@@ -6,10 +6,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
 
 public class TestHelper {
-
 
 
     private static final String name = "Hello";

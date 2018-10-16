@@ -32,9 +32,7 @@ public class CreateUserActivity extends AppCompatActivity {
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         user = Config.getUser();
         displayInformation(user);
-
     }
-
 
     /**
      * Launches the MainMenuActivity.

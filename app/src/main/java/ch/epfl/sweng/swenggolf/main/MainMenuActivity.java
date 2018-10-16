@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
+
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;
     private View nav;

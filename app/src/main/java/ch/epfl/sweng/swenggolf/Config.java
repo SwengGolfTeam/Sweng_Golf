@@ -15,8 +15,8 @@ public class Config {
      */
     private static boolean onTest = false;
 
-    /*
-     *   user is used to mock a UserFirebase during a test.
+    /**
+     * user is used to mock a Firebase user during a test.
      */
     private static User user = null;
 
@@ -44,9 +44,9 @@ public class Config {
     }
 
     /**
-     * Method to get the UserFirebase.
+     * Method to get the Firebase user.
      *
-     * @return the corresponding UserFirebase
+     * @return the corresponding User
      */
     public static User getUser() {
         return user == null ? new User(FirebaseAuth.getInstance().getCurrentUser()) : user;
@@ -60,5 +60,4 @@ public class Config {
     public static void setUser(User newUser) {
         user = newUser;
     }
-
 }

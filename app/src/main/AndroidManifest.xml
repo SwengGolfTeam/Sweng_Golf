@@ -14,14 +14,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name="ch.epfl.sweng.swenggolf.main.MainActivity"/>
-
-        <activity android:name="ch.epfl.sweng.swenggolf.main.MainMenuActivity"/>
-
-        <activity android:name="ch.epfl.sweng.swenggolf.database.CreateUserActivity"/>
-
+        <activity android:name=".main.MainActivity"/>
+        <activity android:name=".main.MainMenuActivity"/>
+        <activity android:name=".database.CreateUserActivity"/>
 
         <activity
             android:name=".profile.ProfileActivity"

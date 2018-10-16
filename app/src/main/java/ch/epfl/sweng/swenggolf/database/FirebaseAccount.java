@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.net.Uri;
 
 public class FirebaseAccount {
+
     private final Uri photoUrl;
     private final String userId;
     private final String username;

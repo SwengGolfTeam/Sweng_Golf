@@ -22,7 +22,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.Config;
 
-
 public class SignInActivity extends AppCompatActivity {
 
     /*(Random) Number linked with the Sign in process*/
@@ -66,11 +65,9 @@ public class SignInActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
-
-                    goToWait();
-
-                }
+            if (firebaseAuth.getCurrentUser() != null) {
+                goToWait();
+            }
             }
         };
     }

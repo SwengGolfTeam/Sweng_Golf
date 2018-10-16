@@ -10,10 +10,8 @@ public class User {
     private String email;
     private String photo;
 
-
     /**
-     * Construct an empty local user.
-     * It is actually used for json read user.
+     * Construct an empty local user (used for json).
      */
     public User() {
         userName = "";

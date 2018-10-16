@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public abstract class FakeUserDatabase {
 
     // in an attempt to mimic a database (which might be not at all like this)

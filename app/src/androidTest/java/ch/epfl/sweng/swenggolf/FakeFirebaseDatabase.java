@@ -20,16 +20,26 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FakeFirebaseDatabase {
 
-    private static final String lorem = ListOfferActivityTest.lorem;
+    private static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
+            + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
+            + "Suspendisse potenti. Morbi vehicula ante nibh,"
+            + " at tristique tortor dignissim non."
+            + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+            + "Mauris convallis sed mauris ut sodales."
+            + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
+            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
+            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+    private static final String IMAGE = "img.jpg";
 
     private static final Offer[] offers = {
-            new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
-            new Offer("Eric", "Chocolate for tractor", lorem),
-            new Offer("Ugo", "ModStoch help for food", lorem),
-            new Offer("Elsa", "Pizzas for beer", lorem),
-            new Offer("Seb", "Everything for a canton that doesn't suck and some "
-                    + "more text to overflow the box", lorem),
-            new Offer("Markus", "My kingdom for a working DB", lorem)};
+            new Offer("Robin", "id_robin", "6-pack beers for ModStoch homework", LOREM, IMAGE, "1"),
+            new Offer("Eric", "id_eric","Chocolate for tractor", LOREM, IMAGE, "2"),
+            new Offer("Ugo", "id_ugo","ModStoch help for food", LOREM, IMAGE, "3"),
+            new Offer("Elsa", "id_elsa", "Pizzas for beer", LOREM, IMAGE, "4"),
+            new Offer("Seb", "id_seb", "Everything for a canton that doesn't suck and some "
+                    + "more text to overflow the box", LOREM, IMAGE, "5"),
+            new Offer("Markus", "id_markus", "My kingdom for a working DB", LOREM, IMAGE, "6")};
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
@@ -41,11 +51,6 @@ public final class FakeFirebaseDatabase {
         return firebaseDatabaseOffers(true);
     }
 
-
-
-
-
-
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
      * of operations.
@@ -56,20 +61,20 @@ public final class FakeFirebaseDatabase {
     public static FirebaseDatabase firebaseDatabaseOffers(final boolean working) {
         FirebaseDatabase d = Mockito.mock(FirebaseDatabase.class);
         DatabaseReference root = Mockito.mock(DatabaseReference.class);
-        DatabaseReference valuesOffers = Mockito.mock(DatabaseReference.class);
+        DatabaseReference values = Mockito.mock(DatabaseReference.class);
         final DataSnapshot offerSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(d.getReference()).thenReturn(root);
 
         //Set up the offer list for read
-        setUpOfferRead(working, d, valuesOffers, offerSnapshot);
+        setUpOfferRead(working, d, values, offerSnapshot);
 
         //Handle the write on the database
-        setUpOfferWrite(working, root,valuesOffers);
+        setUpOfferWrite(working, root, values);
         return d;
     }
 
     private static void setUpOfferWrite(final boolean working, DatabaseReference root,
-                                        DatabaseReference valuesOffers) {
+                                        DatabaseReference values) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
@@ -83,9 +88,9 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        Mockito.when(root.child("offers")).thenReturn(valuesOffers);
+        Mockito.when(root.child("offers")).thenReturn(values);
         DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
-        Mockito.when(valuesOffers.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
+        Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
         Mockito.doAnswer(answerWrite).when(writeRef)
                 .setValue(ArgumentMatchers.any(Object.class),
@@ -93,8 +98,7 @@ public final class FakeFirebaseDatabase {
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
-                                       DatabaseReference valuesOffers,
-                                       final DataSnapshot offerSnapshot) {
+                                       DatabaseReference values, final DataSnapshot offerSnapshot) {
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
@@ -103,8 +107,9 @@ public final class FakeFirebaseDatabase {
             dataList.add(data);
         }
         Mockito.when(offerSnapshot.getChildren()).thenReturn(dataList);
-        Mockito.when(d.getReference("/offers")).thenReturn(valuesOffers);
-        Answer readAnswerOffers = new Answer() {
+
+        Mockito.when(d.getReference("/offers")).thenReturn(values);
+        Answer readAnswer = new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
                 if (working) {
@@ -115,8 +120,7 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        Mockito.doAnswer(readAnswerOffers).when(valuesOffers)
+        Mockito.doAnswer(readAnswer).when(values)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
     }
-
 }

@@ -10,6 +10,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 
+
 public class ProfileActivity extends AppCompatActivity {
 
     private String uid;
