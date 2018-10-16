@@ -52,6 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.edit_name);
         String name = editText.getText().toString();
         user.setUserName(name);
+        //TODO écrire aussi dans la database
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(MainMenuActivity.EXTRA_USER, user);
