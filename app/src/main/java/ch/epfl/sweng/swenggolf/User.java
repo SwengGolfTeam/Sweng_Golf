@@ -147,23 +147,33 @@ public class User {
         this.photo = photo;
     }
 
+
+    /**
+     * Methat which checks if two users have the same login account.
+     * @param user the user to compare
+     * @return true if they have the same uid, false otherwise
+     */
     public boolean sameAccount(User user){
         return this.userId == user.getUserId();
     }
 
+    /**
+     * Methat which checks if two users have the same informations.
+     * @param user the user to compare
+     * @return true if they have the same info, false otherwise
+     */
+    public boolean sameInformations(User user){
+        return this.userName.equals(user.userName)
+                && this.email.equals(user.email)
+                && this.photo.equals(user.photo);
+    }
+
     @Override
     public boolean equals(Object obj) {
-
-        final User other = (User) obj;
-
-        boolean isTheSame = obj != null
-                && obj instanceof User 
-                && this.userName.equals(other.userName)
-                && this.email.equals(other.email)
-                && this.userId.equals(other.userId)
-                && this.photo.equals(other.photo);
-
-        return isTheSame;
-
+        if(obj instanceof User){
+            User user = (User) obj;
+            return sameAccount(user) && sameInformations(user);
+        }
+        return false;
     }
 }

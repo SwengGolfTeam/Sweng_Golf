@@ -100,4 +100,11 @@ public class UserTest {
         assertTrue(user1.sameAccount(user2));
     }
 
+    @Test
+    public void sameInformations(){
+        User user1 = new User(username, "67890", email, photo);
+        User user2 = new User(username, "12345", email, photo);
+        assertTrue(user1.sameInformations(user2));
+    }
+
 }
