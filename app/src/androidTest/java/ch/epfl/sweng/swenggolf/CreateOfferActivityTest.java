@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
-import ch.epfl.sweng.swenggolf.offer.FakeFirebaseStorage;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
@@ -104,7 +104,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
+                hasDescendant(ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
 
         onView(withId(R.id.button_modify_offer)).perform(click());
 

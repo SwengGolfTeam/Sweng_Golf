@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.preference;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,9 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.UserFirebase;
-import ch.epfl.sweng.swenggolf.UserLocal;
+import ch.epfl.sweng.swenggolf.database.user.User;
+import ch.epfl.sweng.swenggolf.database.user.UserFirebase;
+import ch.epfl.sweng.swenggolf.database.user.UserLocal;
+import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListPreferenceAdapter
         extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
@@ -81,20 +81,14 @@ public class ListPreferenceAdapter
         }
     }
 
-    public class PreferenceViewHolder extends RecyclerView.ViewHolder {
-        private ImageView userpic;
-        private TextView username;
-        private TextView preference;
+    public class PreferenceViewHolder extends ThreeFieldsViewHolder {
 
         /**
          * Create a container for displaying a cell of the view.
          * Container contains user picture, username and preference.
          */
         public PreferenceViewHolder(View view) {
-            super(view);
-            userpic = view.findViewById(R.id.preference_userpic);
-            username = view.findViewById(R.id.preference_username);
-            preference = view.findViewById(R.id.preference_preference);
+            super(view, R.id.preference_username, R.id.preference_preference, R.id.preference_userpic);
         }
     }
 
@@ -104,19 +98,19 @@ public class ListPreferenceAdapter
         View v = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.preferences_list_quad, parent, false);
-        PreferenceViewHolder p = new PreferenceViewHolder(v);
-        return p;
+        PreferenceViewHolder preferenceHolder = new PreferenceViewHolder(v);
+        return preferenceHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         User current = mDataset.get(position);
-        Picasso.with(holder.userpic.getContext())
+        Picasso.with(holder.getMainContent().getContext())
                 .load(current.getPhoto())
                 .placeholder(DEFAULT_PICTURE)
-                .fit().into(holder.userpic);
-        holder.username.setText(current.getUserName());
-        holder.preference.setText(current.getPreference());
+                .fit().into((ImageView) holder.getMainContent());
+        ((TextView) holder.getTitle()).setText(current.getUserName());
+        ((TextView) holder.getSubTitle()).setText(current.getPreference());
     }
 
     @Override

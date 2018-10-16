@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Matcher;
@@ -10,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -28,7 +30,7 @@ public class MainMenuActivityInstrumentedTestIntents {
             new IntentsTestRule(MainMenuActivity.class);
 
     private void testIntent(String className, int id) {
-        onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));
+        onView(ViewMatchers.withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));
         intended(hasComponent(className));
     }
 

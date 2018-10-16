@@ -1,8 +1,10 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database.user;
 
 import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
+
+import ch.epfl.sweng.swenggolf.TestMode;
 
 /**
  * Just a temporary placeholder class in order to complete the Firebase Implementation.

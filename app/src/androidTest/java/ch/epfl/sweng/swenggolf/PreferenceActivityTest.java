@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -45,7 +46,7 @@ public class PreferenceActivityTest {
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
-        onView(withId(R.id.preference_list)).perform(scrollToLast);
+        onView(ViewMatchers.withId(R.id.preference_list)).perform(scrollToLast);
         String lastUserName = ListPreferenceAdapter
                 .usersInitial[userLength]
                 .getUserName();
