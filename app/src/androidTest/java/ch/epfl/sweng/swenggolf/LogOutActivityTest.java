@@ -16,6 +16,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+
 @RunWith(AndroidJUnit4.class)
 public class LogOutActivityTest {
 
@@ -29,7 +30,7 @@ public class LogOutActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
-    public static void setUp(){
+    public static void setUp() {
         TestMode.goToTest();
         TestMode.setUser(new UserLocal(name, uid, mail,preference));
     }

@@ -13,20 +13,19 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
-import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuActivityInstrumentedTestAvailable {
 
     @Rule
     public final ActivityTestRule<MainMenuActivity> mMenuRule =
-            new ActivityTestRule<>(MainMenuActivity.class,false,false);
+            new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         FirebaseAccount.test = true;
         mMenuRule.launchActivity(new Intent());
     }
@@ -34,13 +33,13 @@ public class MainMenuActivityInstrumentedTestAvailable {
     @Test
     public void usernameFieldIsOfUser() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.username);
-        assertThat(t.getText().toString(),is("usernameValid"));
+        assertThat(t.getText().toString(), is("usernameValid"));
     }
 
     @Test
     public void userIdFieldIsOfUser() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.usermail);
-        assertThat(t.getText().toString(),is("userIdValid"));
+        assertThat(t.getText().toString(), is("userIdValid"));
     }
 }
 

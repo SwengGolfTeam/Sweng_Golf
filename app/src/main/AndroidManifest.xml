@@ -7,34 +7,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="ch.epfl.sweng.swenggolf.database.SignInActivity">
+        <activity android:name=".database.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="ch.epfl.sweng.swenggolf.main.MainActivity"/>
-
-        <activity android:name="ch.epfl.sweng.swenggolf.main.MainMenuActivity"/>
-
-        <activity android:name="ch.epfl.sweng.swenggolf.database.LogOutActivity"/>
-
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainMenuActivity" />
+        <activity android:name=".database.LogOutActivity" />
         <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="@string/profile_activity_name"
-            android:parentActivityName="ch.epfl.sweng.swenggolf.main.MainActivity"/>
+            android:parentActivityName=".main.MainActivity" />
         <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.EditProfileActivity"
+            android:name=".profile.EditProfileActivity"
             android:label="@string/edit_profile_activity_name"
             android:parentActivityName=".profile.ProfileActivity" />
-            
 
         <activity android:name="ch.epfl.sweng.swenggolf.offer.CreateOfferActivity" />
         <activity android:name="ch.epfl.sweng.swenggolf.offer.ListOfferActivity" />
         <activity android:name="ch.epfl.sweng.swenggolf.offer.ShowOfferActivity"/>
         <activity android:name=".preference.ListPreferencesActivity"/>
+
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@ public interface User {
 
     /**
      * Get the User mail.
+     *
      * @return the corresponding mail
      */
     String getEmail();
@@ -16,18 +17,21 @@ public interface User {
 
     /**
      * Get the User name.
+     *
      * @return the corresponding name
      */
     String getUserName();
 
     /**
      * Get the User id.
+     *
      * @return the corresponding id
      */
     String getUserId();
 
     /**
      * Get the User photo.
+     *
      * @return the corresponding photo URI
      */
     Uri getPhoto();

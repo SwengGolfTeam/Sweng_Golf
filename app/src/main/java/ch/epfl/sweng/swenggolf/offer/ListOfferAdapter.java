@@ -11,6 +11,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
 
+
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
     private List<Offer> offerList;

@@ -4,8 +4,10 @@ import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
 
-// Just a temporary placeholder class in order to complete the Firebase Implementation
-public class UserLocal implements User{
+/**
+ * Just a temporary placeholder class in order to complete the Firebase Implementation.
+ */
+public class UserLocal implements User {
     private final String userName;
     private final String userId;
     private final String email;
@@ -15,7 +17,7 @@ public class UserLocal implements User{
     /**
      * Empty constructor for the listeners of Firebase.
      */
-    public UserLocal(){
+    public UserLocal() {
         this.userName = "";
         this.userId = "";
         this.email = "";
@@ -25,9 +27,10 @@ public class UserLocal implements User{
 
     /**
      * Construct a local user from FirebaseUser.
+     *
      * @param fu the FirebaseUser
      */
-    public UserLocal(FirebaseUser fu){
+    public UserLocal(FirebaseUser fu) {
         userName = fu.getDisplayName();
         email = fu.getEmail();
         userId = fu.getUid();
@@ -37,12 +40,12 @@ public class UserLocal implements User{
 
     /**
      * Constructor for a user.
+     *
      * @param username the username
-     * @param userId a unique identifier
-     * @param email the login method
-     * @param photo user photo
+     * @param userId   a unique identifier
+     * @param email    the login method
+     * @param photo    user photo
      */
-
     public UserLocal(String username, String userId, String email, Uri photo, String preference){
         Boolean pho = (photo==null);
         if(TestMode.isTest()) {
@@ -61,11 +64,11 @@ public class UserLocal implements User{
 
     /**
      * Constructor for a user with a null photo-> will change only placeholder.
+     *
      * @param username the username
-     * @param userId a unique identifier
-     * @param email the login method
+     * @param userId   a unique identifier
+     * @param email    the login method
      */
-
     public UserLocal(String username, String userId, String email, String preference){
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");
@@ -88,17 +91,17 @@ public class UserLocal implements User{
     }
 
     @Override
-    public String getUserId(){
+    public String getUserId() {
         return this.userId;
     }
 
     @Override
-    public String getUserName(){
+    public String getUserName() {
         return this.userName;
     }
 
     @Override
-    public String getEmail(){
+    public String getEmail() {
         return this.email;
     }
 
