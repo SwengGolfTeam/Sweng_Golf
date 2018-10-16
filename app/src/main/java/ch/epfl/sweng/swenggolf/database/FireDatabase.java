@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +32,7 @@ public final class FireDatabase extends Database {
         DatabaseReference.CompletionListener firebaseListener =
                 new DatabaseReference.CompletionListener() {
                     @Override
-                    public void onComplete(@Nullable com.google.firebase.database.DatabaseError databaseError,
+                    public void onComplete(com.google.firebase.database.DatabaseError databaseError,
                                            @NonNull DatabaseReference databaseReference) {
                         DbError error = NONE;
                         if (databaseError != null) {
@@ -66,8 +65,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList(String path, final ValueListener<List<T>> listener
-            , final Class<T> c) {
+    public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
         final ArrayList<T> list = new ArrayList<>();
 
