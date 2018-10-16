@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
@@ -28,24 +26,25 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user = intent.getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
-        //if (user != null) { // defensive? not useful?
+        if (user != null) {
             EditText editText = findViewById(R.id.edit_name);
             String userName = user.getUserName();
             editText.setText(userName);
             editText.setSelection(userName.length());
 
-        ImageView imageView = findViewById(R.id.ivProfile);
-        if (!user.getPhoto().isEmpty()) {
-            Uri photoUri = Uri.parse(user.getPhoto());
-            Picasso.with(this).load(photoUri).into(imageView);
+            ImageView imageView = findViewById(R.id.ivProfile);
+            if (!user.getPhoto().isEmpty()) {
+                Uri photoUri = Uri.parse(user.getPhoto());
+                Picasso.with(this).load(photoUri).into(imageView);
+            }
         }
-        //}
 
 
     }
 
     /**
      * Saves the changes and returns to the profile activity.
+     *
      * @param view the current view
      */
     public void saveChangesAndReturn(View view) {

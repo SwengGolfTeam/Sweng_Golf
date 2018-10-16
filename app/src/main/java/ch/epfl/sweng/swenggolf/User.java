@@ -14,8 +14,6 @@ public class User implements Parcelable {
     private  String photo;
 
 
-
-
     /**
      * Construct an empty local user.
      * It is actually used for json read user.
@@ -29,7 +27,8 @@ public class User implements Parcelable {
 
 
     /**
-     * Construct a local user from FirebaseUser.
+
+     * Construct a  user from FirebaseUser.
      * @param fu the FirebaseUser
      */
     public User(FirebaseUser fu){
@@ -40,13 +39,23 @@ public class User implements Parcelable {
     }
 
     /**
-     * Constructor for a user.
-     * @param username the username
-     * @param userId a unique identifier
-     * @param email the login method
-     * @param photo user photo
+     * Construct a user from another user.
+     *
+     * @param u the other user
      */
-    public User(String username, String userId, String email, String photo){
+    public User(User u) {
+        this(u.userName, u.userId, u.email, u.photo);
+    }
+
+    /**
+     * Constructor for a user.
+     *
+     * @param username the username
+     * @param userId   a unique identifier
+     * @param email    the login method
+     * @param photo    user photo
+     */
+    public User(String username, String userId, String email, String photo) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || photo == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
@@ -55,7 +64,6 @@ public class User implements Parcelable {
         this.email = email;
         this.photo = photo;
     }
-
 
 
     /**
@@ -71,6 +79,7 @@ public class User implements Parcelable {
 
     /**
      * Get the User id.
+     *
      * @return the corresponding id
      */
     public String getUserId(){
@@ -95,6 +104,7 @@ public class User implements Parcelable {
 
     /**
      * Get the User photo.
+     *
      * @return the corresponding photo Uri string
      */
     public String getPhoto() {
@@ -103,6 +113,7 @@ public class User implements Parcelable {
 
     /**
      * Set the userName.
+     *
      * @param userName the corresponding username
      */
     public void setUserName(String userName) {
@@ -111,6 +122,7 @@ public class User implements Parcelable {
 
     /**
      * Set the user ID.
+     *
      * @param userId the corresponding user ID
      */
     public void setUserId(String userId) {
@@ -125,13 +137,46 @@ public class User implements Parcelable {
         this.email = email;
     }
 
+
     /**
      * Set the user photo.
+     *
      * @param photo the corresponding photo
      */
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+
+    /**
+     * Methat which checks if two users have the same login account.
+     * @param user the user to compare
+     * @return true if they have the same uid, false otherwise
+     */
+    public boolean sameAccount(User user){
+        return this.userId == user.getUserId();
+    }
+
+    /**
+     * Methat which checks if two users have the same informations.
+     * @param user the user to compare
+     * @return true if they have the same info, false otherwise
+     */
+    public boolean sameInformations(User user){
+        return this.userName.equals(user.userName)
+                && this.email.equals(user.email)
+                && this.photo.equals(user.photo);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User){
+            User user = (User) obj;
+            return sameAccount(user) && sameInformations(user);
+        }
+        return false;
+    }
+
 
     /* implementation of Parcelable */
     @Override

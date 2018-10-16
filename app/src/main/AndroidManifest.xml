@@ -7,29 +7,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="ch.epfl.sweng.swenggolf.database.SignInActivity">
+        <activity android:name=".database.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <activity android:name="ch.epfl.sweng.swenggolf.main.MainActivity"/>
 
         <activity android:name="ch.epfl.sweng.swenggolf.main.MainMenuActivity"/>
 
-        <activity android:name="ch.epfl.sweng.swenggolf.database.LogOutActivity"/>
+        <activity android:name="ch.epfl.sweng.swenggolf.database.CreateUserActivity"/>
 
-        <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.ProfileActivity"/>
-        <activity
-            android:name="ch.epfl.sweng.swenggolf.profile.EditProfileActivity"/>
+
+        <activity android:name="ch.epfl.sweng.swenggolf.profile.ProfileActivity"/>
+        <activity android:name="ch.epfl.sweng.swenggolf.profile.EditProfileActivity"/>
             
 
         <activity android:name="ch.epfl.sweng.swenggolf.offer.CreateOfferActivity" />
         <activity android:name="ch.epfl.sweng.swenggolf.offer.ListOfferActivity" />
         <activity android:name="ch.epfl.sweng.swenggolf.offer.ShowOfferActivity"/>
+        <activity android:name=".database.WaitingActivity"></activity>
     </application>
 
 </manifest>

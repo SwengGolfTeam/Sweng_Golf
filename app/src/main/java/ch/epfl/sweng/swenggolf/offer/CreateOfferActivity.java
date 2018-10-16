@@ -32,7 +32,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         username = getIntent().getExtras().getString("username");
-            if (username == null) {
+        if (username == null) {
             throw new NullPointerException("No username given to CreateOfferActivity");
         }
         errorMessage = findViewById(R.id.error_message);
@@ -51,10 +51,10 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
 
-        if(!name.isEmpty() && !description.isEmpty()){
+        if (!name.isEmpty() && !description.isEmpty()) {
             final Offer newOffer = new Offer(username, name, description);
             DatabaseConnection db = DatabaseConnection.getInstance();
-            writeOffer(newOffer,db);
+            writeOffer(newOffer, db);
         } else {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
@@ -65,15 +65,16 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     /**
      * Write an offer into the database.
+     *
      * @param offer offer to be written
-     * @param db the database
+     * @param db    the database
      */
-    private void writeOffer(final Offer offer, DatabaseConnection db){
+    private void writeOffer(final Offer offer, DatabaseConnection db) {
         DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError,
                                    @NonNull DatabaseReference databaseReference) {
-                if(databaseError == null){
+                if (databaseError == null) {
 
                     Intent intent =
                             new Intent(CreateOfferActivity.this,
@@ -81,8 +82,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                     intent.putExtra("offer", offer);
                     startActivity(intent);
 
-                }
-                else{
+                } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }

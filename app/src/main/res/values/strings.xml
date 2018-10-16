@@ -18,7 +18,6 @@
     <string name="offers_posted">offers posted</string>
     <string name="offers_answered">offers answered</string>
     <string name="username">username</string>
-    <string name="name">Name</string>
     <string name="change_pic">Change profile picture</string>
     <string name="save">Save</string>
     <string name="offer_name">Offer name :</string>
@@ -26,8 +25,11 @@
     <string name="create_new_offer">Create new offer</string>
     <string name="button_create_offer">Create offer</string>
     <string name="button_show_offers">Show offer</string>
+    <string name="error_create_offer">The name and the description can\'t be empty.</string>
+    <string name="name">Name:</string>
+    <string name="mail">Mail:</string>
+    <string name="create_account">Create Account</string>
     <string name="error_create_offer_invalid">The name and the description can\'t be empty.</string>
     <string name="error_create_offer_database">Impossible to create the offer.</string>
     <string name="list_offer_error_database">Could not retrieve the offers.</string>
-
 </resources>

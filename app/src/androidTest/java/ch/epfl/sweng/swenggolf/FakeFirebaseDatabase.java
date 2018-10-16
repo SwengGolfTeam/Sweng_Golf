@@ -20,16 +20,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FakeFirebaseDatabase {
 
-    private static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
-            + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
-            + "Suspendisse potenti. Morbi vehicula ante nibh,"
-            + " at tristique tortor dignissim non."
-            + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
-            + "Mauris convallis sed mauris ut sodales."
-            + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
-            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
-            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+    private static final String lorem = ListOfferActivityTest.lorem;
 
     private static final Offer[] offers = {
             new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
@@ -50,6 +41,11 @@ public final class FakeFirebaseDatabase {
         return firebaseDatabaseOffers(true);
     }
 
+
+
+
+
+
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
      * of operations.
@@ -60,20 +56,20 @@ public final class FakeFirebaseDatabase {
     public static FirebaseDatabase firebaseDatabaseOffers(final boolean working) {
         FirebaseDatabase d = Mockito.mock(FirebaseDatabase.class);
         DatabaseReference root = Mockito.mock(DatabaseReference.class);
-        DatabaseReference values = Mockito.mock(DatabaseReference.class);
+        DatabaseReference valuesOffers = Mockito.mock(DatabaseReference.class);
         final DataSnapshot offerSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(d.getReference()).thenReturn(root);
 
         //Set up the offer list for read
-        setUpOfferRead(working, d, values, offerSnapshot);
+        setUpOfferRead(working, d, valuesOffers, offerSnapshot);
 
         //Handle the write on the database
-        setUpOfferWrite(working, root, values);
+        setUpOfferWrite(working, root,valuesOffers);
         return d;
     }
 
     private static void setUpOfferWrite(final boolean working, DatabaseReference root,
-                                        DatabaseReference values) {
+                                        DatabaseReference valuesOffers) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
@@ -87,9 +83,9 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        Mockito.when(root.child("offers")).thenReturn(values);
+        Mockito.when(root.child("offers")).thenReturn(valuesOffers);
         DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
-        Mockito.when(values.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
+        Mockito.when(valuesOffers.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
         Mockito.doAnswer(answerWrite).when(writeRef)
                 .setValue(ArgumentMatchers.any(Object.class),
@@ -97,7 +93,8 @@ public final class FakeFirebaseDatabase {
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
-                                       DatabaseReference values, final DataSnapshot offerSnapshot) {
+                                       DatabaseReference valuesOffers,
+                                       final DataSnapshot offerSnapshot) {
         List<Offer> offerList = Arrays.asList(offers);
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
@@ -106,9 +103,8 @@ public final class FakeFirebaseDatabase {
             dataList.add(data);
         }
         Mockito.when(offerSnapshot.getChildren()).thenReturn(dataList);
-
-        Mockito.when(d.getReference("/offers")).thenReturn(values);
-        Answer readAnswer = new Answer() {
+        Mockito.when(d.getReference("/offers")).thenReturn(valuesOffers);
+        Answer readAnswerOffers = new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
                 if (working) {
@@ -119,7 +115,8 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-        Mockito.doAnswer(readAnswer).when(values)
+        Mockito.doAnswer(readAnswerOffers).when(valuesOffers)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
     }
+
 }

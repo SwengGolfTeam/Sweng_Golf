@@ -13,12 +13,11 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
-import ch.epfl.sweng.swenggolf.R;
 
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;
@@ -31,49 +30,49 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_main_menu);
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
-        nav = ((NavigationView)(this.findViewById(R.id.drawer))).getHeaderView(0);
+        nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         setSupportActionBar(tb);
         setUserDisplay();
     }
 
     private boolean setUserDisplay() {
         account = FirebaseAccount.getCurrentUserAccount();
-        if(account != null){
+        if (account != null) {
             boolean name = setUserName();
             boolean mail = setUserMail();
             setUserPic();
             return name && mail;
-        }else{
+        } else {
             return false;
         }
     }
 
-    private boolean setValue(String textValue, TextView textField){
-        if(textValue != null && !textValue.isEmpty() && textField != null){
+    private boolean setValue(String textValue, TextView textField) {
+        if (textValue != null && !textValue.isEmpty() && textField != null) {
             textField.setText(textValue);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    private boolean setUserName(){
+    private boolean setUserName() {
         return setValue(account.getName(), (TextView) nav.findViewById(R.id.username));
     }
 
-    private boolean setUserMail(){
+    private boolean setUserMail() {
         return setValue(account.getId(), (TextView) nav.findViewById(R.id.usermail));
     }
 
-    private void setUserPic(){
+    private void setUserPic() {
         int errorDrawable = android.R.drawable.btn_dialog;
         ImageView userpicView = nav.findViewById(R.id.userpic);
         Picasso.with(this).load(account.getPhotoUrl()).error(errorDrawable).into(userpicView);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_toolbar_main,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
         return true;
     }
 

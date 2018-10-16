@@ -20,8 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import ch.epfl.sweng.swenggolf.TestMode;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.Config;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -44,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
-        if(TestMode.isTest()){
+        if (Config.isTest()) {
             goToLogOut();
         }
         mAuth = FirebaseAuth.getInstance();
@@ -63,24 +62,32 @@ public class SignInActivity extends AppCompatActivity {
     /**
      * initialize mAuthListener.
      **/
-    private void initializeMAuthListener(){
+    private void initializeMAuthListener() {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
+                if (firebaseAuth.getCurrentUser() != null) {
 
-                    goToLogOut();
+                    goToWait();
 
                 }
             }
         };
     }
 
+
     /**
      * Start the logoutActivity.
      */
-    private void goToLogOut(){
-        startActivity(new Intent(SignInActivity.this, LogOutActivity.class));
+    private void goToLogOut() {
+        startActivity(new Intent(SignInActivity.this, CreateUserActivity.class));
+    }
+
+    /**
+     * Start the logoutActivity.
+     */
+    private void goToWait() {
+        startActivity(new Intent(SignInActivity.this, WaitingActivity.class));
     }
 
     /**
@@ -88,7 +95,7 @@ public class SignInActivity extends AppCompatActivity {
      *
      * @return The corresponding google client
      */
-    private GoogleSignInClient setGoogleSignInClient(){
+    private GoogleSignInClient setGoogleSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("515318437233-vsola1ge0locvd4ft2jsc9i5"
@@ -129,7 +136,7 @@ public class SignInActivity extends AppCompatActivity {
      *
      * @param acct The google account
      */
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct){
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
