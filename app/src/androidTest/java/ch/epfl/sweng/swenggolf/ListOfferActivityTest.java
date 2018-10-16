@@ -22,6 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+
 @RunWith(AndroidJUnit4.class)
 public class ListOfferActivityTest {
 
@@ -36,6 +37,7 @@ public class ListOfferActivityTest {
     @Before
     public void init() {
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
+        TestMode.goToTest();
     }
 
     /**
@@ -69,7 +71,7 @@ public class ListOfferActivityTest {
         // Check if short description is displayed, then expand.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(shortDescription))));
-        
+
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(offerToTest.getTitle())), longClick()));
 

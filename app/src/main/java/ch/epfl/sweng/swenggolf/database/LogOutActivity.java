@@ -33,14 +33,14 @@ public class LogOutActivity extends AppCompatActivity {
         uid = findViewById(ch.epfl.sweng.swenggolf.R.id.uid);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         User user;
-        if(TestMode.isTest()){
+        if (TestMode.isTest()) {
             user = TestMode.getUser();
-        }
-        else {
+        } else {
             user = new UserFirebase(FirebaseAuth.getInstance().getCurrentUser());
         }
-        if(null == user){ quitLogOut();}
-        else{
+        if (null == user) {
+            quitLogOut();
+        } else {
             displayInformation(user);
         }
     }
@@ -50,26 +50,27 @@ public class LogOutActivity extends AppCompatActivity {
      *
      * @param view the current view
      */
-    public void clickToQuit(View view){
+    public void clickToQuit(View view) {
         quitLogOut();
     }
 
     /**
      * Launches the MainMenuActivity.
      */
-    private void quitLogOut(){
+    private void quitLogOut() {
         startActivity(new Intent(LogOutActivity.this, MainMenuActivity.class));
     }
 
     /**
      * Display all the informations of a localUser.
+     *
      * @param user The localUser
      */
-    private void displayInformation(User user){
+    private void displayInformation(User user) {
         name.setText(user.getUserName());
         mail.setText(user.getEmail());
         uid.setText(user.getUserId());
-        if(!TestMode.isTest()) {
+        if (!TestMode.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
     }

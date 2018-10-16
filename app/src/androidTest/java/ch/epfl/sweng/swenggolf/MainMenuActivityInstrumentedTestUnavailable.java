@@ -20,15 +20,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+
 @RunWith(AndroidJUnit4.class)
 public class MainMenuActivityInstrumentedTestUnavailable {
 
     @Rule
     public final ActivityTestRule<MainMenuActivity> mMenuRule =
-            new ActivityTestRule<>(MainMenuActivity.class,false,false);
+            new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         FirebaseAccount.test = false;
         mMenuRule.launchActivity(new Intent());
     }
@@ -37,18 +38,18 @@ public class MainMenuActivityInstrumentedTestUnavailable {
     public void testCanOpenDrawer() {
         DrawerLayout drawer = mMenuRule.getActivity().findViewById(R.id.side_menu);
         openDrawer(R.id.side_menu);
-        assertTrue("drawer was closed",drawer.isDrawerOpen(GravityCompat.START));
+        assertTrue("drawer was closed", drawer.isDrawerOpen(GravityCompat.START));
     }
 
     @Test
-    public void usernameFieldIsDefault(){
+    public void usernameFieldIsDefault() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.username);
-        assertThat(t.getText().toString(),is("username"));
+        assertThat(t.getText().toString(), is("username"));
     }
 
     @Test
     public void userIdFieldIsDefault() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.usermail);
-        assertThat(t.getText().toString(),is("userid"));
+        assertThat(t.getText().toString(), is("userid"));
     }
 }

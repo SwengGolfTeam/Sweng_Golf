@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
 public class Offer implements Parcelable {
 
     private static final int DESCRIPTION_LIMIT = 140;
@@ -10,6 +11,8 @@ public class Offer implements Parcelable {
     private final String author;
     private final String title;
     private final String description;
+    private final String linkPicture;
+    private final String uuid;
 
     /**
      * Contains the data of an offer.
@@ -17,8 +20,11 @@ public class Offer implements Parcelable {
      * @param author      the creator of the offer. Should not be empty
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture.
+     * @param uuid        offer identifier
      */
-    public Offer(String author, String title, String description) {
+    public Offer(String author, String title, String description,
+                 String linkPicture, String uuid) {
         if (author.isEmpty()) {
             throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
@@ -31,6 +37,19 @@ public class Offer implements Parcelable {
         this.author = author;
         this.title = title;
         this.description = description;
+        this.linkPicture = linkPicture;
+        this.uuid = uuid;
+    }
+
+    /**
+     * Contains the data of an offer.
+     *
+     * @param author      the creator of the offer. Should not be empty
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     */
+    public Offer(String author, String title, String description) {
+        this(author, title, description, "", "");
     }
 
     /**
@@ -40,6 +59,8 @@ public class Offer implements Parcelable {
         this.author = "";
         this.title = "";
         this.description = "";
+        this.linkPicture = "";
+        this.uuid = "";
     }
 
     /**
@@ -80,6 +101,14 @@ public class Offer implements Parcelable {
                 : description;
     }
 
+    public String getLinkPicture() {
+        return linkPicture;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -92,7 +121,9 @@ public class Offer implements Parcelable {
         dest.writeStringArray(new String[]{
                 this.author,
                 this.title,
-                this.description});
+                this.description,
+                this.linkPicture,
+                this.uuid});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -106,11 +137,13 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[3];
+        String[] data = new String[5];
 
         in.readStringArray(data);
         this.author = data[0];
         this.title = data[1];
         this.description = data[2];
+        this.linkPicture = data[3];
+        this.uuid = data[4];
     }
 }
