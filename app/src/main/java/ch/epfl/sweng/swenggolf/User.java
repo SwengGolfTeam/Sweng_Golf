@@ -38,6 +38,7 @@ public interface User {
 
     /**
      * Get the user preference.
+     *
      * @return the user preference
      */
     String getPreference();

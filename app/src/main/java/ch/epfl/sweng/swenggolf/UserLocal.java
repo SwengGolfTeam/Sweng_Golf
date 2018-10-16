@@ -46,9 +46,9 @@ public class UserLocal implements User {
      * @param email    the login method
      * @param photo    user photo
      */
-    public UserLocal(String username, String userId, String email, Uri photo, String preference){
-        Boolean pho = (photo==null);
-        if(TestMode.isTest()) {
+    public UserLocal(String username, String userId, String email, Uri photo, String preference) {
+        Boolean pho = (photo == null);
+        if (TestMode.isTest()) {
             pho = false;
         }
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || pho) {
@@ -69,7 +69,7 @@ public class UserLocal implements User {
      * @param userId   a unique identifier
      * @param email    the login method
      */
-    public UserLocal(String username, String userId, String email, String preference){
+    public UserLocal(String username, String userId, String email, String preference) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");
         }
@@ -82,12 +82,13 @@ public class UserLocal implements User {
 
     /**
      * Create a user with null photo and empty preference.
+     *
      * @param username the username
-     * @param userId a unique identifier
-     * @param email the login method
+     * @param userId   a unique identifier
+     * @param email    the login method
      */
-    public UserLocal(String username, String userId, String email){
-        this(username,userId,email,"");
+    public UserLocal(String username, String userId, String email) {
+        this(username, userId, email, "");
     }
 
     @Override

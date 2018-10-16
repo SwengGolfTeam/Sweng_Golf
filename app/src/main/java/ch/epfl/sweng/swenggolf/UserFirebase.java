@@ -36,7 +36,7 @@ public class UserFirebase implements User {
     }
 
     @Override
-    public String getPreference(){
+    public String getPreference() {
         return "Bananas";
     }
 }

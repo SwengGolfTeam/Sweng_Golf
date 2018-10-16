@@ -33,36 +33,36 @@ public class ListPreferenceAdapter
     private ArrayList<User> mDataset;
 
     public static final User[] usersInitial = {
-            new UserLocal("Anna","0","anna@mail.com","Tomatoes"),
-            new UserLocal("Bob","1","bob@mail.com","Screwdriver"),
-            new UserLocal("Geany","2","geany@mail.com","Comics"),
-            new UserLocal("Greg","3","greg@gmail.com","Ropes"),
-            new UserLocal("Fred","4","fred@gmail.com","Beverages"),
-            new UserLocal("AAnna","0","aanna@mail.com","Friends"),
-            new UserLocal("ABob","1","abob@mail.com","Washing machine"),
-            new UserLocal("AGeany","2","ageany@mail.com","Hammer"),
-            new UserLocal("AGreg","3","agreg@gmail.com","Lunch"),
-            new UserLocal("AFred","4","afred@gmail.com","Cheeseburgers"),
-            new UserLocal("BAnna","0","banna@mail.com","Champaign"),
-            new UserLocal("BBob","1","bbob@mail.com","Mushrooms"),
-            new UserLocal("BGeany","2","bgeany@mail.com","Nothing"),
-            new UserLocal("BGreg","3","bgreg@gmail.com","Fries"),
+            new UserLocal("Anna", "0", "anna@mail.com", "Tomatoes"),
+            new UserLocal("Bob", "1", "bob@mail.com", "Screwdriver"),
+            new UserLocal("Geany", "2", "geany@mail.com", "Comics"),
+            new UserLocal("Greg", "3", "greg@gmail.com", "Ropes"),
+            new UserLocal("Fred", "4", "fred@gmail.com", "Beverages"),
+            new UserLocal("AAnna", "0", "aanna@mail.com", "Friends"),
+            new UserLocal("ABob", "1", "abob@mail.com", "Washing machine"),
+            new UserLocal("AGeany", "2", "ageany@mail.com", "Hammer"),
+            new UserLocal("AGreg", "3", "agreg@gmail.com", "Lunch"),
+            new UserLocal("AFred", "4", "afred@gmail.com", "Cheeseburgers"),
+            new UserLocal("BAnna", "0", "banna@mail.com", "Champaign"),
+            new UserLocal("BBob", "1", "bbob@mail.com", "Mushrooms"),
+            new UserLocal("BGeany", "2", "bgeany@mail.com", "Nothing"),
+            new UserLocal("BGreg", "3", "bgreg@gmail.com", "Fries"),
             new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd",
-                    "4","fr@gmail.com","A nice sweatshirt, some hot shoes and a poncho")
+                    "4", "fr@gmail.com", "A nice sweatshirt, some hot shoes and a poncho")
     };
 
     /**
      * Create a new adapter for the list that fetches information about users.
      * If debug is set to true, a default list of users is used.
      */
-    public ListPreferenceAdapter(){
-        if(!debug){
+    public ListPreferenceAdapter() {
+        if (!debug) {
             ValueEventListener getUserList = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Iterable<DataSnapshot> usersData = dataSnapshot.getChildren();
                     ArrayList<User> users = new ArrayList<>();
-                    for (DataSnapshot user : usersData){
+                    for (DataSnapshot user : usersData) {
                         UserFirebase concreteUser = user.getValue(UserFirebase.class);
                         users.add(concreteUser);
                     }
@@ -71,18 +71,17 @@ public class ListPreferenceAdapter
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d("Loading users error","failed to retrieve users list for preferences");
+                    Log.d("Loading users error", "failed to retrieve users list for preferences");
                 }
             };
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             ref.addValueEventListener(getUserList);
-        }
-        else{
+        } else {
             mDataset = new ArrayList<User>(Arrays.asList(usersInitial));
         }
     }
 
-    public class PreferenceViewHolder extends RecyclerView.ViewHolder{
+    public class PreferenceViewHolder extends RecyclerView.ViewHolder {
         private ImageView userpic;
         private TextView username;
         private TextView preference;
@@ -91,7 +90,7 @@ public class ListPreferenceAdapter
          * Create a container for displaying a cell of the view.
          * Container contains user picture, username and preference.
          */
-        public PreferenceViewHolder(View view){
+        public PreferenceViewHolder(View view) {
             super(view);
             userpic = view.findViewById(R.id.preference_userpic);
             username = view.findViewById(R.id.preference_username);
@@ -104,7 +103,7 @@ public class ListPreferenceAdapter
     public PreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.preferences_list_quad,parent,false);
+                .inflate(R.layout.preferences_list_quad, parent, false);
         PreferenceViewHolder p = new PreferenceViewHolder(v);
         return p;
     }

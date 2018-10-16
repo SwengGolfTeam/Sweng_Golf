@@ -17,13 +17,13 @@ public class ListPreferencesActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_preference);
         mRecyclerView = findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new GridLayoutManager(this,SPAN_COUNT);
+        mLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new ListPreferenceAdapter();
