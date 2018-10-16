@@ -143,7 +143,11 @@ public class CreateOfferActivity extends AppCompatActivity {
                         }
                     }
                 });
-        createOfferObject(name, description, "");
+
+        if (TestMode.isTest()) {
+            createOfferObject(name, description, "");
+        }
+
     }
 
     /**
