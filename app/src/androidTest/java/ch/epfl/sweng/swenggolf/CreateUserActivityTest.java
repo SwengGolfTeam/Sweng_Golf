@@ -41,6 +41,9 @@ public class CreateUserActivityTest {
     public final ActivityTestRule<CreateUserActivity> mActivityRule =
             new ActivityTestRule<>(CreateUserActivity.class);
 
+    /**
+     * Initialise the Config and the Database for tests.
+     */
     @BeforeClass
     public static void setUp(){
         Config.goToTest();

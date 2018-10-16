@@ -3,13 +3,10 @@ package ch.epfl.sweng.swenggolf;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-
 
 import ch.epfl.sweng.swenggolf.database.Database;
 
@@ -20,11 +17,9 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -47,6 +42,9 @@ public class WaitingActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
 
+    /**
+     * Initialise the Config and the Database for tests.
+     */
     @Before
     public void setUp(){
         Config.goToTest();
@@ -81,7 +79,7 @@ public class WaitingActivityTest {
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals(userdb,(User)value);
+                assertEquals(userdb, value);
             }
 
             @Override
