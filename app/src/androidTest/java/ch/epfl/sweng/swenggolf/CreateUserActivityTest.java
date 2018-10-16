@@ -9,11 +9,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.DatabaseError;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -32,6 +35,7 @@ public class CreateUserActivityTest {
     private static final String mail = "Hello@World.ok";
     private static final String mailchanged = "Hello@World.okapi";
     private static final String uid = "123456789009876543211234567890";
+    private static final String photo = "photo";
 
     @Rule
     public final ActivityTestRule<CreateUserActivity> mActivityRule =
@@ -40,8 +44,11 @@ public class CreateUserActivityTest {
     @BeforeClass
     public static void setUp(){
         Config.goToTest();
-        Config.setUser(new User(name, uid, mail,"Hello"));
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
+        User user1 = new User(name, uid , mail, photo);
+        Config.setUser(new User(user1));
+        Database database = new FakeDatabase(true);
+        //database.write("/users", uid, user1);
+        Database.setDebugDatabase(database);
     }
 
     @Test
