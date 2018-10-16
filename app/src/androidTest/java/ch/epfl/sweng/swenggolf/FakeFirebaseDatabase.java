@@ -33,13 +33,13 @@ public final class FakeFirebaseDatabase {
     private static final String IMAGE = "img.jpg";
 
     private static final Offer[] offers = {
-            new Offer("Robin", "6-pack beers for ModStoch homework", LOREM, IMAGE, "1"),
-            new Offer("Eric", "Chocolate for tractor", LOREM, IMAGE, "2"),
-            new Offer("Ugo", "ModStoch help for food", LOREM, IMAGE, "3"),
-            new Offer("Elsa", "Pizzas for beer", LOREM, IMAGE, "4"),
-            new Offer("Seb", "Everything for a canton that doesn't suck and some "
+            new Offer("Robin", "id_robin", "6-pack beers for ModStoch homework", LOREM, IMAGE, "1"),
+            new Offer("Eric", "id_eric","Chocolate for tractor", LOREM, IMAGE, "2"),
+            new Offer("Ugo", "id_ugo","ModStoch help for food", LOREM, IMAGE, "3"),
+            new Offer("Elsa", "id_elsa", "Pizzas for beer", LOREM, IMAGE, "4"),
+            new Offer("Seb", "id_seb", "Everything for a canton that doesn't suck and some "
                     + "more text to overflow the box", LOREM, IMAGE, "5"),
-            new Offer("Markus", "My kingdom for a working DB", LOREM, IMAGE, "6")};
+            new Offer("Markus", "id_markus", "My kingdom for a working DB", LOREM, IMAGE, "6")};
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
