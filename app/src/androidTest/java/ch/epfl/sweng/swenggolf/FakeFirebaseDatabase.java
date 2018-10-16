@@ -19,7 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 
 public final class FakeFirebaseDatabase {
-    
+
     private static final String lorem = ListOfferActivityTest.lorem;
 
     private static final Offer[] offers = {
