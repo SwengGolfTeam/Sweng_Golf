@@ -61,11 +61,12 @@ public class DatabaseConnection {
      * @param newObject the element we want to add to the database
      *
      */
-    public void writeObject(String type, String id, Object newObject){
+    //TODO remove if confirmed that no longer needed
+    /*public void writeObject(String type, String id, Object newObject){
         DatabaseReference ref = db.getReference();
         ref.child(type).child(id).setValue(newObject);
         Log.d(dbWrite, type+"id="+id);
-    }
+    }*/
 
     /**
      * Writes a new offer in the database.

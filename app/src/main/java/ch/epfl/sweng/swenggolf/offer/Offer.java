@@ -8,6 +8,7 @@ public class Offer implements Parcelable {
     private static final int DESCRIPTION_LIMIT = 140;
 
     private final String author;
+    private final String userId;
     private final String title;
     private final String description;
 
@@ -18,7 +19,7 @@ public class Offer implements Parcelable {
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
      */
-    public Offer(String author, String title, String description) {
+    public Offer(String author, String userId, String title, String description) {
         if (author.isEmpty()) {
             throw new IllegalArgumentException("Author of the offer can't be empty.");
         }
@@ -28,7 +29,11 @@ public class Offer implements Parcelable {
         if (description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
+        if (userId.isEmpty()) {
+            throw new IllegalArgumentException("UserId of the offer can't be empty.");
+        }
         this.author = author;
+        this.userId = userId;
         this.title = title;
         this.description = description;
     }
@@ -38,6 +43,7 @@ public class Offer implements Parcelable {
      */
     public Offer() {
         this.author = "";
+        this.userId = "";
         this.title = "";
         this.description = "";
     }
@@ -70,6 +76,15 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Returns the offer's userId.
+     *
+     * @return the userId of the offer
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
      * Returns the shortened offer's description.
      *
      * @return the shortened description of the offer
@@ -91,6 +106,7 @@ public class Offer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{
                 this.author,
+                this.userId,
                 this.title,
                 this.description});
     }
@@ -106,11 +122,12 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[3];
+        String[] data = new String[4];
 
         in.readStringArray(data);
         this.author = data[0];
-        this.title = data[1];
-        this.description = data[2];
+        this.userId = data[1];
+        this.title = data[2];
+        this.description = data[3];
     }
 }

@@ -22,7 +22,6 @@ import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
-    private String username;
     private TextView errorMessage;
 
     @Override
@@ -31,10 +30,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        username = getIntent().getExtras().getString("username");
-            if (username == null) {
-            throw new NullPointerException("No username given to CreateOfferActivity");
-        }
         errorMessage = findViewById(R.id.error_message);
     }
 
@@ -52,7 +47,8 @@ public class CreateOfferActivity extends AppCompatActivity {
         final String description = descriptionText.getText().toString();
 
         if(!name.isEmpty() && !description.isEmpty()){
-            final Offer newOffer = new Offer(username, name, description);
+            final Offer newOffer = new Offer("username", "userID", name, description);
+            // TODO change "userID" and "username" to getUser() from config
             DatabaseConnection db = DatabaseConnection.getInstance();
             writeOffer(newOffer,db);
         } else {
