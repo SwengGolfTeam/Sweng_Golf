@@ -126,10 +126,14 @@ public class User implements Parcelable {
         ValueListener<List<String>> listener = new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {
-                assert(value.size() == 4);
-                email = value.get(0);
-                photo = value.get(1);
-                userName = value.get(3);
+                if (value != null) {
+                    assert (value.size() == 4);
+                    email = value.get(0);
+                    photo = value.get(1);
+                    userName = value.get(3);
+                } else {
+                    Log.d("User", "not a valid user in database");
+                }
             }
 
             @Override
