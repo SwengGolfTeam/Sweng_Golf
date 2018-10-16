@@ -2,16 +2,8 @@ package ch.epfl.sweng.swenggolf;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
-
-import java.util.List;
-
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User implements Parcelable {
@@ -117,31 +109,6 @@ public class User implements Parcelable {
      */
     public String getPhoto() {
         return photo;
-    }
-
-    /**
-     * Retrieves potential new information from database
-     */
-    public void updateFromDb() {
-        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
-            @Override
-            public void onDataChange(List<String> value) {
-                if (value != null) {
-                    assert (value.size() == 4);
-                    email = value.get(0);
-                    photo = value.get(1);
-                    userName = value.get(3);
-                } else {
-                    Log.d("User", "not a valid user in database");
-                }
-            }
-
-            @Override
-            public void onCancelled(ch.epfl.sweng.swenggolf.database.DatabaseError error) {
-                Log.d("DBERR", "Could not load updates of user.");
-            }
-        };
-        Database.getInstance().readList("/users/" + getUserId(), listener, String.class);
     }
 
     /**

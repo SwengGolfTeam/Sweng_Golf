@@ -34,7 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         setSupportActionBar(tb);
         setUserDisplay();
-        user.updateFromDb();
+        //user.updateFromDb();
     }
 
     private boolean setUserDisplay() {
