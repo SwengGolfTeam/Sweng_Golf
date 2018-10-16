@@ -53,7 +53,9 @@ public class ListOfferActivityTest {
         openListActivity();
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
+                hasDescendant(
+                        ViewMatchers
+                                .withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
 
         onView(withId(R.id.show_offer_title))
                 .check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));

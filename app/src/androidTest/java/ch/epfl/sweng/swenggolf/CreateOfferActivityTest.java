@@ -104,7 +104,9 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
+                hasDescendant(
+                        ViewMatchers
+                                .withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
 
         onView(withId(R.id.button_modify_offer)).perform(click());
 

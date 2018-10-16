@@ -88,7 +88,8 @@ public class ListPreferenceAdapter
          * Container contains user picture, username and preference.
          */
         public PreferenceViewHolder(View view) {
-            super(view, R.id.preference_username, R.id.preference_preference, R.id.preference_userpic);
+            super(view, R.id.preference_username,
+                    R.id.preference_preference, R.id.preference_userpic);
         }
     }
 

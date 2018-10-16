@@ -7,9 +7,6 @@ import ch.epfl.sweng.swenggolf.database.user.User;
  */
 public class TestMode {
 
-    public TestMode() {
-    }
-
     /**
      * onTest must be true for tests and false otherwise.
      */
