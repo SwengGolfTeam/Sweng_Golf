@@ -161,10 +161,8 @@ public class User {
                     && this.email.equals(other.email)
                     && this.userId.equals(other.userId)
                     && this.photo.equals(other.photo);
-
-            if(isTheSame) {
-                return true;
-            }
+            
+            return isTheSame;
         }
         return false;
     }
