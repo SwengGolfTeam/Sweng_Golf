@@ -145,9 +145,9 @@ public class User {
         }
         else {
             final User other = (User) obj;
-            if (this.userName.equals(other.userName) &&
-                    this.email.equals(other.email) &&
-                    this.userId.equals(other.userId)
+            if (this.userName.equals(other.userName)
+                    && this.email.equals(other.email)
+                    && this.userId.equals(other.userId)
                     && this.photo.equals(other.photo)
                     ) {
                 return true;

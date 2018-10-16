@@ -47,7 +47,6 @@ public class CreateUserActivityTest {
         User user1 = new User(name, uid , mail, photo);
         Config.setUser(new User(user1));
         Database database = new FakeDatabase(true);
-        //database.write("/users", uid, user1);
         Database.setDebugDatabase(database);
     }
 
