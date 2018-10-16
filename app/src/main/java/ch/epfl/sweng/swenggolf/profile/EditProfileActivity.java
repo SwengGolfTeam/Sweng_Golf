@@ -24,12 +24,12 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user = intent.getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
-        EditText editText = findViewById(R.id.edit_name);
-        String userName = user.getUserName();
-        if (userName != null) {
+        //if (user != null) {
+            EditText editText = findViewById(R.id.edit_name);
+            String userName = user.getUserName();
             editText.setText(userName);
             editText.setSelection(userName.length());
-        }
+        //}
 
     }
 
@@ -39,8 +39,8 @@ public class EditProfileActivity extends AppCompatActivity {
      */
     public void saveChangesAndReturn(View view) {
         EditText editText = findViewById(R.id.edit_name);
-        String username = editText.getText().toString();
-        user.setUserName(username);
+        String name = editText.getText().toString();
+        user.setUserName(name);
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(MainMenuActivity.EXTRA_USER, user);

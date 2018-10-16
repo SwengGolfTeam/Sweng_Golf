@@ -37,13 +37,17 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         user = getIntent().getParcelableExtra(MainMenuActivity.EXTRA_USER);
+        if (user == null) { // if not authenticated (e.g. tests)
+            user = new User();
+        }
 
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
 
+        displayUserData();
     }
 
-    private void prepareProfileData() {
+    /*private void prepareProfileData() {
         DatabaseConnection db = DatabaseConnection.getInstance();
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -62,16 +66,16 @@ public class ProfileActivity extends AppCompatActivity {
         };
         db.readObject("users", user.getUserId(), listener);
 
-    }
+    }*/
 
-    private void displayUserData(Map<String, String> userData) {
-        if (userData != null) {
+    private void displayUserData() {
+        //if (user != null) {
             TextView name = findViewById(R.id.name);
             name.setText(user.getUserName());
             displayCustomPicture(user.getPhoto());
 
             // TODO count the number of offers posted+answered and display them
-        }
+        //}
 
     }
 
