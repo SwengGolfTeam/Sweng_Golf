@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
@@ -22,8 +23,8 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;
     private View nav;
-    private User user = new User("Bob", "1234", "bob@gmail.com", "https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg");
-
+    //private User user = new User("Bob", "1234", "bob@gmail.com", "https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg");
+    private User user = Config.getUser();
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -33,6 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         setSupportActionBar(tb);
         setUserDisplay();
+        user.updateFromDb();
     }
 
     private boolean setUserDisplay() {

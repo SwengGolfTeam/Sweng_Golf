@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,6 +13,9 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseError;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -51,7 +55,15 @@ public class EditProfileActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.edit_name);
         String name = editText.getText().toString();
         user.setUserName(name);
-        //TODO écrire aussi dans la database
+
+        //TODO make the write in database inside user class ?
+        Database.getInstance().write("/users/" + user.getUserId(), "userName", name, new CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error) {
+                if (error != DatabaseError.NONE)
+                    Log.e("EditProfileActivity", "could not access to database");
+            }
+        });
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(MainMenuActivity.EXTRA_USER, user);
