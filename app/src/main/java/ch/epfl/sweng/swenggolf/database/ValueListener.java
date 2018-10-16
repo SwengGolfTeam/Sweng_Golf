@@ -14,5 +14,5 @@ public interface ValueListener<T> {
      *
      * @param error the error
      */
-    void onCancelled(DatabaseError error);
+    void onCancelled(DbError error);
 }

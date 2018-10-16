@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 
-import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
@@ -64,7 +64,7 @@ public class WaitingActivityTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
 
             }
         }, Config.getUser());
@@ -84,7 +84,7 @@ public class WaitingActivityTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
 
             }
         }, userdb);

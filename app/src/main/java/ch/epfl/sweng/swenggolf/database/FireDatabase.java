@@ -11,7 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.epfl.sweng.swenggolf.database.DatabaseError.NONE;
+import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
 public final class FireDatabase extends Database {
     private final FirebaseDatabase database;
@@ -35,9 +35,9 @@ public final class FireDatabase extends Database {
                     @Override
                     public void onComplete(@Nullable com.google.firebase.database.DatabaseError databaseError,
                                            @NonNull DatabaseReference databaseReference) {
-                        DatabaseError error = NONE;
+                        DbError error = NONE;
                         if (databaseError != null) {
-                            error = DatabaseError.getError(databaseError);
+                            error = DbError.getError(databaseError);
                         }
                         listener.onComplete(error);
                     }
@@ -59,7 +59,7 @@ public final class FireDatabase extends Database {
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                listener.onCancelled(DatabaseError.getError(databaseError));
+                listener.onCancelled(DbError.getError(databaseError));
             }
         };
         ref.child(id).addListenerForSingleValueEvent(firebaseListener);
@@ -82,7 +82,7 @@ public final class FireDatabase extends Database {
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                listener.onCancelled(DatabaseError.getError(databaseError));
+                listener.onCancelled(DbError.getError(databaseError));
             }
         };
         ref.addListenerForSingleValueEvent(firebaseListener);
