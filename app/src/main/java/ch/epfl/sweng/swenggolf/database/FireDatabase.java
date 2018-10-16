@@ -46,18 +46,19 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void read(String path, String id, final ValueListener<T> listener, final Class<T> c) {
+    public <T> void read(String path, String id, final ValueListener<T> listener,
+                         final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
 
         ValueEventListener firebaseListener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 T value = dataSnapshot.getValue(c);
                 listener.onDataChange(value);
             }
 
             @Override
-            public void onCancelled(@NonNull com.google.firebase.database.DatabaseError databaseError) {
+            public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
                 listener.onCancelled(DatabaseError.getError(databaseError));
             }
         };
@@ -65,7 +66,8 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
+    public <T> void readList(String path, final ValueListener<List<T>> listener
+            , final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
         final ArrayList<T> list = new ArrayList<>();
 
@@ -79,7 +81,7 @@ public final class FireDatabase extends Database {
             }
 
             @Override
-            public void onCancelled(@NonNull com.google.firebase.database.DatabaseError databaseError) {
+            public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
                 listener.onCancelled(DatabaseError.getError(databaseError));
             }
         };

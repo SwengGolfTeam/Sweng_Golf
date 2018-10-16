@@ -18,6 +18,10 @@ public abstract class Database {
         database = d;
     }
 
+    /**
+     * Return the singleton instance of the Database. Return a fake database if given.
+     * @return the database
+     */
     public static Database getInstance(){
         if(database == null){
             database = new FireDatabase();

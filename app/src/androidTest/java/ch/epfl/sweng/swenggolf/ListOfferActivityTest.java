@@ -47,7 +47,7 @@ public class ListOfferActivityTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void init() {
+    private void init() {
         Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("Author", "This is a title", lorem);
         Offer offer2 = new Offer("Author", "This is a title 2", lorem);
