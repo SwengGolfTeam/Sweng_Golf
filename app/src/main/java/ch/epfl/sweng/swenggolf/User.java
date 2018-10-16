@@ -153,17 +153,17 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj != null && obj instanceof User){
 
-            final User other = (User) obj;
+        final User other = (User) obj;
 
-            boolean isTheSame = this.userName.equals(other.userName)
-                    && this.email.equals(other.email)
-                    && this.userId.equals(other.userId)
-                    && this.photo.equals(other.photo);
-            
-            return isTheSame;
-        }
-        return false;
+        boolean isTheSame = obj != null
+                && obj instanceof User 
+                && this.userName.equals(other.userName)
+                && this.email.equals(other.email)
+                && this.userId.equals(other.userId)
+                && this.photo.equals(other.photo);
+
+        return isTheSame;
+
     }
 }
