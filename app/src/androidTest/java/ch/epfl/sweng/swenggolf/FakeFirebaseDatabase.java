@@ -19,12 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 
 public final class FakeFirebaseDatabase {
-
-
-    private static final User[] users = {
-            new User("Eric", "uid", "email", "photo")
-    };
-
+    
     private static final String lorem = ListOfferActivityTest.lorem;
 
     private static final Offer[] offers = {
@@ -62,21 +57,19 @@ public final class FakeFirebaseDatabase {
         FirebaseDatabase d = Mockito.mock(FirebaseDatabase.class);
         DatabaseReference root = Mockito.mock(DatabaseReference.class);
         DatabaseReference valuesOffers = Mockito.mock(DatabaseReference.class);
-        DatabaseReference valuesUsers = Mockito.mock(DatabaseReference.class);
         final DataSnapshot offerSnapshot = Mockito.mock(DataSnapshot.class);
-        final DataSnapshot userSnapshot = Mockito.mock(DataSnapshot.class);
         Mockito.when(d.getReference()).thenReturn(root);
 
         //Set up the offer list for read
-        setUpOfferRead(working, d, valuesOffers, valuesUsers, offerSnapshot, userSnapshot);
+        setUpOfferRead(working, d, valuesOffers, offerSnapshot);
 
         //Handle the write on the database
-        setUpOfferWrite(working, root,valuesOffers, valuesUsers);
+        setUpOfferWrite(working, root,valuesOffers);
         return d;
     }
 
     private static void setUpOfferWrite(final boolean working, DatabaseReference root,
-                                        DatabaseReference valuesOffers, DatabaseReference valuesUsers) {
+                                        DatabaseReference valuesOffers) {
         Answer answerWrite = new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) {
@@ -91,10 +84,8 @@ public final class FakeFirebaseDatabase {
             }
         };
         Mockito.when(root.child("offers")).thenReturn(valuesOffers);
-        Mockito.when(root.child("users")).thenReturn(valuesUsers);
         DatabaseReference writeRef = Mockito.mock(DatabaseReference.class);
         Mockito.when(valuesOffers.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
-        Mockito.when(valuesUsers.child(ArgumentMatchers.anyString())).thenReturn(writeRef);
 
         Mockito.doAnswer(answerWrite).when(writeRef)
                 .setValue(ArgumentMatchers.any(Object.class),
@@ -102,24 +93,18 @@ public final class FakeFirebaseDatabase {
     }
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
-                                       DatabaseReference valuesOffers,DatabaseReference valuesUsers, final DataSnapshot offerSnapshot, final DataSnapshot userSnapshot) {
+                                       DatabaseReference valuesOffers, final DataSnapshot offerSnapshot) {
         List<Offer> offerList = Arrays.asList(offers);
-        List<User> userList = Arrays.asList(users);
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
             DataSnapshot data = Mockito.mock(DataSnapshot.class);
             Mockito.when(data.getValue(Offer.class)).thenReturn(offer);
             dataList.add(data);
         }
-        for (User user : userList) {
-            DataSnapshot data = Mockito.mock(DataSnapshot.class);
-            Mockito.when(data.getValue(User.class)).thenReturn(user);
-            dataList.add(data);
-        }
+
         Mockito.when(offerSnapshot.getChildren()).thenReturn(dataList);
 
         Mockito.when(d.getReference("/offers")).thenReturn(valuesOffers);
-        Mockito.when(d.getReference("/users")).thenReturn(valuesUsers);
 
         Answer readAnswerOffers = new Answer() {
             public Object answer(InvocationOnMock invocation) {
@@ -148,9 +133,6 @@ public final class FakeFirebaseDatabase {
 
 
         Mockito.doAnswer(readAnswerOffers).when(valuesOffers)
-                .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
-
-        Mockito.doAnswer(readAnswerUsers).when(valuesUsers)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
 
 
