@@ -47,47 +47,19 @@ public class ProfileActivity extends AppCompatActivity {
         displayUserData();
     }
 
-    /*private void prepareProfileData() {
-        DatabaseConnection db = DatabaseConnection.getInstance();
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Map<String, String> userData = new HashMap<>();
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    userData.put(d.getKey(), d.getValue(String.class));
-                }
-                displayUserData(userData);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("DBERR", "databaseError:" + databaseError.getMessage());
-            }
-        };
-        db.readObject("users", user.getUserId(), listener);
-
-    }*/
-
     private void displayUserData() {
-        //if (user != null) {
-            TextView name = findViewById(R.id.name);
-            name.setText(user.getUserName());
-            displayCustomPicture(user.getPhoto());
-
-            // TODO count the number of offers posted+answered and display them
-        //}
-
-    }
-
-    private void displayCustomPicture(String uriString) {
+        TextView name = findViewById(R.id.name);
+        name.setText(user.getUserName());
         ImageView imageView = findViewById(R.id.ivProfile);
-        try {
-            Uri photoUri = Uri.parse(uriString);
+        if (!user.getPhoto().isEmpty()) {
+            Uri photoUri = Uri.parse(user.getPhoto());
             Picasso.with(this).load(photoUri).into(imageView);
-        } catch (NullPointerException e) {
-            // TODO display error message and leaves the default option?
         }
+
+        // TODO count the number of offers posted+answered and display them
+
     }
+
 
     /**
      * Launches the EditProfileActivity.
