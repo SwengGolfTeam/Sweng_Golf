@@ -42,4 +42,10 @@ public class OfferTest {
         assertEquals("Titles are not equal", title, offer.getTitle());
         assertEquals("Descriptions are not equal", description, offer.getDescription());
     }
+
+    @Test
+    public void testEmptyConstructor(){
+        Offer offer = new Offer();
+        assertEquals("Wrong uuid", "createdByEmptyConstructor", offer.getUuid());
+    }
 }
