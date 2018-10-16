@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.net.Uri;
 
 public class FirebaseAccount {
+
     private final Uri photoUrl;
     private final String userId;
     private final String username;
@@ -13,12 +14,12 @@ public class FirebaseAccount {
      * If test is set to true returns a user with initialized attributes.
      * Otherwise returns a user with empty attributes.
      */
-    public FirebaseAccount(){
-        if(test){
+    public FirebaseAccount() {
+        if (test) {
             photoUrl = Uri.parse("http://www.waytoblue.com/wp-content/uploads/2015/04/Care-Bear-4.png");
             userId = "userIdValid";
             username = "usernameValid";
-        }else{
+        } else {
             photoUrl = Uri.EMPTY;
             userId = "";
             username = "";
@@ -37,7 +38,7 @@ public class FirebaseAccount {
         return photoUrl;
     }
 
-    public static FirebaseAccount getCurrentUserAccount(){
+    public static FirebaseAccount getCurrentUserAccount() {
         return new FirebaseAccount();
     }
 

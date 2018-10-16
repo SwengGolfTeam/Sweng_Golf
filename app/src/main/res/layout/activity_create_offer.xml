@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -26,11 +26,11 @@
 
         <TextView
             android:id="@+id/textView"
-            android:labelFor="@string/offer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:labelFor="@string/offer_name"
             android:text="@string/offer_name"
             android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/offer_name"
@@ -39,73 +39,100 @@
 
         <EditText
             android:id="@+id/offer_name"
-            android:labelFor="@string/offer_description"
             android:layout_width="282dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:inputType="text"
+            android:labelFor="@string/offer_description"
             android:maxLength="@integer/offer_name_max_size"
             android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"
-            android:inputType="text" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:text="@string/offer_description"
             android:textSize="18sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/offer_description"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="@string/offer_picture"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/offer_picture"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/offer_picture" />
+
         <EditText
             android:id="@+id/offer_description"
-            android:layout_width="285dp"
-            android:layout_height="wrap_content"
+            android:layout_width="272dp"
+            android:layout_height="133dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="5"
             android:maxLength="@integer/offer_description_max_size"
+            android:maxLines="30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/offer_name"
-            android:inputType="text"/>
+            app:layout_constraintTop_toBottomOf="@+id/offer_name" />
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/offer_picture" />
+
+        <ImageView
+            android:id="@+id/offer_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:onClick="choosePicture"
+            android:maxHeight="250dip"
+            android:minHeight="30dip"
+            android:maxWidth="250dip"
+            android:minWidth="30dip"
+            app:layout_constraintStart_toStartOf="@+id/offer_description"
+            app:layout_constraintTop_toBottomOf="@+id/offer_description"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:adjustViewBounds="true" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="156dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="64dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:onClick="createOffer"
             android:text="@string/button_create_offer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/offer_description" />
-
-        <TextView
-            android:id="@+id/error_message"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@android:color/holo_red_dark"
-            app:layout_constraintBaseline_toBaselineOf="@+id/button"
-            app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/offer_picture" />
 
 
 

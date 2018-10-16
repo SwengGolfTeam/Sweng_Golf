@@ -10,6 +10,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class ListOfferAdapterTest {
 
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")

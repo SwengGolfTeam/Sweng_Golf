@@ -6,6 +6,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class OfferTest {
 
     private final String author = "Patrick", id = "id_"+author, title = "Echange un panda",

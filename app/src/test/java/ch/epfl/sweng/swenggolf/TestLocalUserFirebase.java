@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import static org.junit.Assert.assertEquals;
 
 
@@ -20,17 +19,17 @@ public class TestLocalUserFirebase {
 
 
     @Before
-    public void setup(){
+    public void setup() {
         user = TestHelper.getUser();
     }
 
     @Test
     public void testUser() {
         UserLocal u = new UserLocal(user);
-        assertEquals(TestHelper.getMail() , u.getEmail());
-        assertEquals(TestHelper.getName() , u.getUserName());
-        assertEquals(TestHelper.getPhoto() , u.getPhoto());
-        assertEquals(TestHelper.getUid() , u.getUserId());
+        assertEquals(TestHelper.getMail(), u.getEmail());
+        assertEquals(TestHelper.getName(), u.getUserName());
+        assertEquals(TestHelper.getPhoto(), u.getPhoto());
+        assertEquals(TestHelper.getUid(), u.getUserId());
 
     }
 }

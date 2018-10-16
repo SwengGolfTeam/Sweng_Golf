@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
 public class Offer implements Parcelable {
 
     private static final int DESCRIPTION_LIMIT = 140;
@@ -11,6 +12,40 @@ public class Offer implements Parcelable {
     private final String userId;
     private final String title;
     private final String description;
+    private final String linkPicture;
+    private final String uuid;
+
+    /**
+     * Contains the data of an offer.
+     *
+     * @param author      the creator of the offer. Should not be empty
+     * @param userId      the userId of the creator of the offer. Should not be empty
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture.
+     * @param uuid        offer identifier
+     */
+    public Offer(String author, String userId, String title, String description,
+                 String linkPicture, String uuid) {
+        if (author.isEmpty()) {
+            throw new IllegalArgumentException("Author of the offer can't be empty.");
+        }
+        if (userId.isEmpty()) {
+            throw new IllegalArgumentException("UserId of the offer can't be empty.");
+        }
+        if (title.isEmpty()) {
+            throw new IllegalArgumentException("Name of the offer can't be empty.");
+        }
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("Description of the offer can't be empty.");
+        }
+        this.author = author;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.linkPicture = linkPicture;
+        this.uuid = uuid;
+    }
 
     /**
      * Contains the data of an offer.
@@ -20,22 +55,7 @@ public class Offer implements Parcelable {
      * @param description the description of the offer. Should not be empty
      */
     public Offer(String author, String userId, String title, String description) {
-        if (author.isEmpty()) {
-            throw new IllegalArgumentException("Author of the offer can't be empty.");
-        }
-        if (title.isEmpty()) {
-            throw new IllegalArgumentException("Name of the offer can't be empty.");
-        }
-        if (description.isEmpty()) {
-            throw new IllegalArgumentException("Description of the offer can't be empty.");
-        }
-        if (userId.isEmpty()) {
-            throw new IllegalArgumentException("UserId of the offer can't be empty.");
-        }
-        this.author = author;
-        this.userId = userId;
-        this.title = title;
-        this.description = description;
+        this(author, userId, title, description, "", "");
     }
 
     /**
@@ -46,6 +66,8 @@ public class Offer implements Parcelable {
         this.userId = "";
         this.title = "";
         this.description = "";
+        this.linkPicture = "";
+        this.uuid = "createdByEmptyConstructor";
     }
 
     /**
@@ -95,6 +117,24 @@ public class Offer implements Parcelable {
                 : description;
     }
 
+    /**
+     * Returns the offer's url of the picture.
+     *
+     * @return the url of the picture of the offer
+     */
+    public String getLinkPicture() {
+        return linkPicture;
+    }
+
+    /**
+     * Returns the offer's uuid.
+     *
+     * @return the uuid of the offer
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -108,7 +148,9 @@ public class Offer implements Parcelable {
                 this.author,
                 this.userId,
                 this.title,
-                this.description});
+                this.description,
+                this.linkPicture,
+                this.uuid});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -122,12 +164,14 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[4];
+        String[] data = new String[6];
 
         in.readStringArray(data);
         this.author = data[0];
         this.userId = data[1];
         this.title = data[2];
         this.description = data[3];
+        this.linkPicture = data[4];
+        this.uuid = data[5];
     }
 }
