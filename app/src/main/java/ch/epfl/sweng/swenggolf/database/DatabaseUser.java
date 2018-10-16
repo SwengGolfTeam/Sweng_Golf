@@ -4,7 +4,10 @@ import ch.epfl.sweng.swenggolf.User;
 
 public class DatabaseUser {
 
-    private static ch.epfl.sweng.swenggolf.database.Database db = ch.epfl.sweng.swenggolf.database.Database.getInstance();
+
+    private DatabaseUser() {}
+
+    private static Database db = Database.getInstance();
 
 
     public static void addUser(User user) {

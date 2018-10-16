@@ -7,6 +7,7 @@ import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
+import ch.epfl.sweng.swenggolf.database.SignInActivity;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view the current view
      */
     public void loadSigninActivity(View view) {
-        startActivity(new Intent(this, WaitingActivity.class));
+        startActivity(new Intent(this, SignInActivity.class));
     }
 
 

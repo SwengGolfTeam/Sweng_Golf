@@ -48,6 +48,7 @@ public class CreateUserActivityTest {
         Config.setUser(new User(user1));
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
+
     }
 
     @Test

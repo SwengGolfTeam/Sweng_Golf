@@ -102,11 +102,8 @@ public final class FakeFirebaseDatabase {
             Mockito.when(data.getValue(Offer.class)).thenReturn(offer);
             dataList.add(data);
         }
-
         Mockito.when(offerSnapshot.getChildren()).thenReturn(dataList);
-
         Mockito.when(d.getReference("/offers")).thenReturn(valuesOffers);
-
         Answer readAnswerOffers = new Answer() {
             public Object answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
@@ -118,25 +115,8 @@ public final class FakeFirebaseDatabase {
                 return null;
             }
         };
-
-        Answer readAnswerUsers = new Answer() {
-            public Object answer(InvocationOnMock invocation) {
-                ValueEventListener listener = invocation.getArgument(0);
-                if (working) {
-                    listener.onDataChange(offerSnapshot);
-                } else {
-                    listener.onCancelled(Mockito.mock(DatabaseError.class));
-                }
-                return null;
-            }
-        };
-
-
-
         Mockito.doAnswer(readAnswerOffers).when(valuesOffers)
                 .addListenerForSingleValueEvent(ArgumentMatchers.any(ValueEventListener.class));
-
-
     }
 
 }

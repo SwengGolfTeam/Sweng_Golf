@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
@@ -52,7 +53,8 @@ public class WaitingActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-
+                Toast.makeText(WaitingActivity.this,
+                        "Error on Connection", Toast.LENGTH_SHORT).show();
             }
         }, user);
     }
