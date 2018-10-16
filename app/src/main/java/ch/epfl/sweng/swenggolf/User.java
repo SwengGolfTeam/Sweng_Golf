@@ -149,7 +149,7 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !User.class.isAssignableFrom(obj.getClass())) {
+        if (obj == null || !(obj instanceof User)) {
             return false;
         } else {
             final User other = (User) obj;
