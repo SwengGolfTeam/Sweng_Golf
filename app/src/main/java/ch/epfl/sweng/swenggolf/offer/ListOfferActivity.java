@@ -16,6 +16,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ListOfferActivity extends Activity {
@@ -71,7 +72,7 @@ public class ListOfferActivity extends Activity {
             }
 
             @Override
-            public void onCancelled(ch.epfl.sweng.swenggolf.database.DatabaseError error) {
+            public void onCancelled(DbError error) {
                 Log.d("DBERR", "Could not load offers from database.");
                 errorMessage.setVisibility(View.VISIBLE);
             }

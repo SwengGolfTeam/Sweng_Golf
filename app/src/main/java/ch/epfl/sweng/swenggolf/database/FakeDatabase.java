@@ -29,9 +29,9 @@ public class FakeDatabase extends Database {
                       @NonNull CompletionListener listener) {
         if (working) {
             write(path, id, object);
-            listener.onComplete(DatabaseError.NONE);
+            listener.onComplete(DbError.NONE);
         } else {
-            listener.onComplete(DatabaseError.UNKNOWN_ERROR);
+            listener.onComplete(DbError.UNKNOWN_ERROR);
         }
     }
 
@@ -46,7 +46,7 @@ public class FakeDatabase extends Database {
                 listener.onDataChange(null);
             }
         } else {
-            listener.onCancelled(DatabaseError.UNKNOWN_ERROR);
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 
@@ -57,7 +57,7 @@ public class FakeDatabase extends Database {
             List<T> list = getList(path);
             listener.onDataChange(list);
         } else {
-            listener.onCancelled(DatabaseError.UNKNOWN_ERROR);
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 

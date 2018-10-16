@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
@@ -36,7 +36,7 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
                 fail();
             }
         };
@@ -54,7 +54,7 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
                 fail();
             }
         };
@@ -76,7 +76,7 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
                 fail();
             }
         };
@@ -94,18 +94,18 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
                 fail();
             }
         };
         d.readList(path,listener,String.class);
     }
 
-    private void writeListenerError(boolean working, DatabaseError error) {
+    private void writeListenerError(boolean working, DbError error) {
         Database d = new FakeDatabase(working);
         CompletionListener listener = new CompletionListener() {
             @Override
-            public void onComplete(DatabaseError error) {
+            public void onComplete(DbError error) {
                 assertThat(error, is(error));
             }
         };
@@ -114,14 +114,14 @@ public class FakeDatabaseTest {
 
     @Test
     public void writeListenerReturnNone() {
-        writeListenerError(true, DatabaseError.NONE);
+        writeListenerError(true, DbError.NONE);
     }
 
 
 
     @Test
     public void writeListenerHasError() {
-        writeListenerError(false, DatabaseError.UNKNOWN_ERROR);
+        writeListenerError(false, DbError.UNKNOWN_ERROR);
     }
 
     @Test
@@ -136,8 +136,8 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                assertThat(error, is(DatabaseError.UNKNOWN_ERROR));
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
         d.read(path, id, listener, String.class);
@@ -155,8 +155,8 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                assertThat(error, is(DatabaseError.UNKNOWN_ERROR));
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
         d.readList(path,listener,String.class);

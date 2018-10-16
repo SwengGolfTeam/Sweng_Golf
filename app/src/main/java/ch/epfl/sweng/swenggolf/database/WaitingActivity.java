@@ -52,7 +52,7 @@ public class WaitingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
                 Toast.makeText(WaitingActivity.this,
                         "Error on Connection", Toast.LENGTH_SHORT).show();
             }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -11,7 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ch.epfl.sweng.swenggolf.database.DatabaseError.NONE;
+import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
 public final class FireDatabase extends Database {
     private final FirebaseDatabase database;
@@ -33,11 +32,11 @@ public final class FireDatabase extends Database {
         DatabaseReference.CompletionListener firebaseListener =
                 new DatabaseReference.CompletionListener() {
                     @Override
-                    public void onComplete(@Nullable com.google.firebase.database.DatabaseError databaseError,
+                    public void onComplete(com.google.firebase.database.DatabaseError databaseError,
                                            @NonNull DatabaseReference databaseReference) {
-                        DatabaseError error = NONE;
+                        DbError error = NONE;
                         if (databaseError != null) {
-                            error = DatabaseError.getError(databaseError);
+                            error = DbError.getError(databaseError);
                         }
                         listener.onComplete(error);
                     }
@@ -59,15 +58,14 @@ public final class FireDatabase extends Database {
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                listener.onCancelled(DatabaseError.getError(databaseError));
+                listener.onCancelled(DbError.getError(databaseError));
             }
         };
         ref.child(id).addListenerForSingleValueEvent(firebaseListener);
     }
 
     @Override
-    public <T> void readList(String path, final ValueListener<List<T>> listener
-            , final Class<T> c) {
+    public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
         final ArrayList<T> list = new ArrayList<>();
 
@@ -82,7 +80,7 @@ public final class FireDatabase extends Database {
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                listener.onCancelled(DatabaseError.getError(databaseError));
+                listener.onCancelled(DbError.getError(databaseError));
             }
         };
         ref.addListenerForSingleValueEvent(firebaseListener);

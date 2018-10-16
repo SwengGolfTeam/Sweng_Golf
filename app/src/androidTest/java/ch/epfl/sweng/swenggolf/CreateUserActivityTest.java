@@ -10,13 +10,10 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
-import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
-import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -69,7 +66,7 @@ public class CreateUserActivityTest {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DbError error) {
 
             }
         }, Config.getUser());
