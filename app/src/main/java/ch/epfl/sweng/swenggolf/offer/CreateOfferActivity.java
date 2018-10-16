@@ -51,10 +51,12 @@ public class CreateOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         username = getIntent().getExtras().getString("username");
         if (username == null) {
             throw new NullPointerException("No username given to CreateOfferActivity");
         }
+
         errorMessage = findViewById(R.id.error_message);
 
         offerToModify = getIntent().getParcelableExtra("offer");
@@ -143,7 +145,11 @@ public class CreateOfferActivity extends AppCompatActivity {
                         }
                     }
                 });
-        createOfferObject(name, description, "");
+
+        if (TestMode.isTest()) {
+            createOfferObject(name, description, "");
+        }
+
     }
 
     /**
@@ -161,7 +167,8 @@ public class CreateOfferActivity extends AppCompatActivity {
                 link = offerToModify.getLinkPicture();
             }
         }
-        final Offer newOffer = new Offer(username, name, description, link, uuid);
+        final Offer newOffer = new Offer(username, "userId", name, description, link, uuid);
+        // TODO change userId to real value when singleton User is added
         DatabaseConnection db = DatabaseConnection.getInstance();
         writeOffer(newOffer, db);
     }
