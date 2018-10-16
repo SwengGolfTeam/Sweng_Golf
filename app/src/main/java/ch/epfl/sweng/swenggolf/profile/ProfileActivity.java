@@ -1,14 +1,14 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
-import ch.epfl.sweng.swenggolf.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -38,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     /**
      * Launches the EditProfileActivity.
+     *
      * @param view the current view
      */
     public void editProfile(View view) {

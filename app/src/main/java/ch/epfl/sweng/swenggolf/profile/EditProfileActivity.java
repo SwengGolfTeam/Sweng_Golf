@@ -1,14 +1,14 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
-import ch.epfl.sweng.swenggolf.R;
 
 public class EditProfileActivity extends AppCompatActivity {
     private String uid;
@@ -32,6 +32,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     /**
      * Saves the changes and returns to the profile activity.
+     *
      * @param view the current view
      */
     public void saveChangesAndReturn(View view) {

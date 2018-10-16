@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ListOfferActivity extends Activity {

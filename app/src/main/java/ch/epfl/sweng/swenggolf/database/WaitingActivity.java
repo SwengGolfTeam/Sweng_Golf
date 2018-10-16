@@ -1,10 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.google.firebase.database.DatabaseReference;
+import android.support.v7.app.AppCompatActivity;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.User;
@@ -25,21 +23,21 @@ public class WaitingActivity extends AppCompatActivity {
     /**
      * Switch the actual activity to the MainMenuActivity.
      */
-    private void goToMainMenu(){
+    private void goToMainMenu() {
         startActivity(new Intent(WaitingActivity.this, MainMenuActivity.class));
     }
 
     /**
      * Switch the actual activity to CreateUserActivity.
      */
-    private void goToCreate(){
+    private void goToCreate() {
         startActivity(new Intent(WaitingActivity.this, CreateUserActivity.class));
     }
 
     /**
      * Choose which activity to launch next.
      */
-    public void changeActivity(){
+    public void changeActivity() {
         DatabaseUser.getUser(new ValueListener() {
 
             @Override
@@ -47,8 +45,7 @@ public class WaitingActivity extends AppCompatActivity {
                 if (value != null) {
                     Config.setUser((User) value);
                     goToMainMenu();
-                }
-                else{
+                } else {
                     goToCreate();
                 }
             }

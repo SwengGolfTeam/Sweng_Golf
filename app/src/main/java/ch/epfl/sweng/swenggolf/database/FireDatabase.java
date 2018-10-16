@@ -32,16 +32,16 @@ public final class FireDatabase extends Database {
 
         DatabaseReference.CompletionListener firebaseListener =
                 new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable com.google.firebase.database.DatabaseError databaseError,
-                                   @NonNull DatabaseReference databaseReference) {
-                DatabaseError  error = NONE;
-                if(databaseError != null){
-                    error = DatabaseError.getError(databaseError);
-                }
-                listener.onComplete(error);
-            }
-        };
+                    @Override
+                    public void onComplete(@Nullable com.google.firebase.database.DatabaseError databaseError,
+                                           @NonNull DatabaseReference databaseReference) {
+                        DatabaseError error = NONE;
+                        if (databaseError != null) {
+                            error = DatabaseError.getError(databaseError);
+                        }
+                        listener.onComplete(error);
+                    }
+                };
         ref.child(id).setValue(object, firebaseListener);
     }
 
@@ -74,7 +74,7 @@ public final class FireDatabase extends Database {
         ValueEventListener firebaseListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     list.add(data.getValue(c));
                 }
                 listener.onDataChange(list);

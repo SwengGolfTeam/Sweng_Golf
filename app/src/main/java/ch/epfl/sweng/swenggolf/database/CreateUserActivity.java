@@ -1,9 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,18 +39,19 @@ public class CreateUserActivity extends AppCompatActivity {
     /**
      * Launches the MainMenuActivity.
      */
-    private void quit(){
+    private void quit() {
         startActivity(new Intent(CreateUserActivity.this, MainMenuActivity.class));
     }
 
     /**
      * Display all the informations of a localUser.
+     *
      * @param user The localUser
      */
-    private void displayInformation(User user){
+    private void displayInformation(User user) {
         name.setText(user.getUserName());
         mail.setText(user.getEmail());
-        if(!Config.isTest()) {
+        if (!Config.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
     }
@@ -67,13 +67,12 @@ public class CreateUserActivity extends AppCompatActivity {
         String userMail = mail.getText().toString();
 
         //handle the exception if the EditText fields are null
-        if(!userName.isEmpty() && !userMail.isEmpty()){
+        if (!userName.isEmpty() && !userMail.isEmpty()) {
             User u = User.userChanged(user, userName, userMail);
             DatabaseUser.addUser(u);
             Config.setUser(u);
             quit();
-        }
-        else{
+        } else {
             Toast.makeText(this, "Please, enter correct info", Toast.LENGTH_SHORT).show();
             onClick(view);
         }

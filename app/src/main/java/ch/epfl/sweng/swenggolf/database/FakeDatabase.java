@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,13 +12,14 @@ public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     private final boolean working;
 
-    public FakeDatabase(boolean working){
+    public FakeDatabase(boolean working) {
         database = new HashMap<>();
         this.working = working;
     }
+
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
-        if(working) {
+        if (working) {
             database.put(path + "/" + id, object);
         }
     }
@@ -25,11 +27,10 @@ public class FakeDatabase extends Database {
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object,
                       @NonNull CompletionListener listener) {
-        if(working){
-            write(path,id,object);
+        if (working) {
+            write(path, id, object);
             listener.onComplete(DatabaseError.NONE);
-        }
-        else{
+        } else {
             listener.onComplete(DatabaseError.UNKNOWN_ERROR);
         }
     }
@@ -37,16 +38,14 @@ public class FakeDatabase extends Database {
     @Override
     public <T> void read(@NonNull String path, @NonNull String id,
                          @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
-        if(working){
+        if (working) {
             String key = path + "/" + id;
-            if(database.containsKey(key)){
+            if (database.containsKey(key)) {
                 listener.onDataChange((T) database.get(key));
-            }
-            else{
+            } else {
                 listener.onDataChange(null);
             }
-        }
-        else{
+        } else {
             listener.onCancelled(DatabaseError.UNKNOWN_ERROR);
         }
     }
@@ -54,20 +53,22 @@ public class FakeDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c) {
-        if(working) {
-            List<T> list = new ArrayList<>();
-            for (Map.Entry<String, Object> entry : database.entrySet()) {
-                if (entry.getKey().startsWith(path)) {
-                    list.add((T) entry.getValue());
-                }
-            }
-            if(list.isEmpty()){
-                list = null;
-            }
-                listener.onDataChange(list);
-        }
-        else{
+        if (working) {
+            List<T> list = getList(path);
+            listener.onDataChange(list);
+        } else {
             listener.onCancelled(DatabaseError.UNKNOWN_ERROR);
         }
+    }
+
+    @Nullable
+    private <T> List<T> getList(@NonNull String path) {
+        List<T> list = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : database.entrySet()) {
+            if (entry.getKey().startsWith(path)) {
+                list.add((T) entry.getValue());
+            }
+        }
+        return list.isEmpty() ? null : list;
     }
 }

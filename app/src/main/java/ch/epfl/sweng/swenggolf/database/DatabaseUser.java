@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class DatabaseUser {
 
@@ -9,7 +8,7 @@ public class DatabaseUser {
 
 
     public static void addUser(User user) {
-        db.write("/users",user.getUserId(),user);
+        db.write("/users", user.getUserId(), user);
     }
 
 
