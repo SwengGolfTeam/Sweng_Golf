@@ -27,9 +27,9 @@ public class MainMenuActivityInstrumentedTestIntents {
     public IntentsTestRule<MainMenuActivity> intentRule =
             new IntentsTestRule(MainMenuActivity.class);
 
-    private void testIntent(String c, int id) {
+    private void testIntent(String className, int id) {
         onView(withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));
-        intended(hasComponent(c));
+        intended(hasComponent(className));
     }
 
     @Before

@@ -86,7 +86,6 @@ public class ListPreferenceAdapter
         private ImageView userpic;
         private TextView username;
         private TextView preference;
-        private Context context;
 
         /**
          * Create a container for displaying a cell of the view.
@@ -94,7 +93,6 @@ public class ListPreferenceAdapter
          */
         public PreferenceViewHolder(View view){
             super(view);
-            context = view.getContext();
             userpic = view.findViewById(R.id.preference_userpic);
             username = view.findViewById(R.id.preference_username);
             preference = view.findViewById(R.id.preference_preference);
@@ -114,7 +112,7 @@ public class ListPreferenceAdapter
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         User current = mDataset.get(position);
-        Picasso.with(holder.context)
+        Picasso.with(holder.userpic.getContext())
                 .load(current.getPhoto())
                 .placeholder(DEFAULT_PICTURE)
                 .fit().into(holder.userpic);
