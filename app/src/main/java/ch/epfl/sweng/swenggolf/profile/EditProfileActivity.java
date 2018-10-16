@@ -29,7 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         Intent intent = getIntent();
-        user = Config.getUser();
+        user = intent.getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
         if (user != null) {
             EditText editText = findViewById(R.id.edit_name);
