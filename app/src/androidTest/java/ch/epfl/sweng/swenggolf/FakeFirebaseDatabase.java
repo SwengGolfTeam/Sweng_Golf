@@ -32,13 +32,13 @@ public final class FakeFirebaseDatabase {
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
     private static final Offer[] offers = {
-            new Offer("Robin", "6-pack beers for ModStoch homework", lorem),
-            new Offer("Eric", "Chocolate for tractor", lorem),
-            new Offer("Ugo", "ModStoch help for food", lorem),
-            new Offer("Elsa", "Pizzas for beer", lorem),
-            new Offer("Seb", "Everything for a canton that doesn't suck and some "
+            new Offer("Robin", "id_robin", "6-pack beers for ModStoch homework", lorem),
+            new Offer("Eric", "id_eric","Chocolate for tractor", lorem),
+            new Offer("Ugo", "id_ugo","ModStoch help for food", lorem),
+            new Offer("Elsa", "id_elsa", "Pizzas for beer", lorem),
+            new Offer("Seb", "id_seb", "Everything for a canton that doesn't suck and some "
                     + "more text to overflow the box", lorem),
-            new Offer("Markus", "My kingdom for a working DB", lorem)};
+            new Offer("Markus", "id_markus", "My kingdom for a working DB", lorem)};
 
     /**
      * Return a fake FirebaseDatabase used for read and write offers. Support only a limited number
