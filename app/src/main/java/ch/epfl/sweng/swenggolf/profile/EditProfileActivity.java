@@ -29,7 +29,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         Intent intent = getIntent();
-        user = Config.getUser();
+        user = intent.getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
         if (user != null) {
             EditText editText = findViewById(R.id.edit_name);
@@ -58,13 +58,16 @@ public class EditProfileActivity extends AppCompatActivity {
         user.setUserName(name);
 
         //TODO make the write in database inside user class ?
-        Database.getInstance().write("/users/" + user.getUserId(), "userName", name, new CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError error) {
-                if (error != DatabaseError.NONE)
-                    Log.e("EditProfileActivity", "could not access to database");
-            }
-        });
+        if (!user.getUserId().isEmpty()) { // when in test mode for instance
+            Config.getUser().setUserName(name);
+            Database.getInstance().write("/users/" + user.getUserId(), "userName", name, new CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError error) {
+                    if (error != DatabaseError.NONE)
+                        Log.e("EditProfileActivity", "could not access to database");
+                }
+            });
+        }
 
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(MainMenuActivity.EXTRA_USER, user);

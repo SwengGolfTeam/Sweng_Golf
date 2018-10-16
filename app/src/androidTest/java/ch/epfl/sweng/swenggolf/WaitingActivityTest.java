@@ -75,7 +75,7 @@ public class WaitingActivityTest {
     public void canGoToMenu() {
         Config.setUser(userdb);
         assertEquals(userdb, Config.getUser());
-        //DatabaseUser.addUser(userdb);
+        DatabaseUser.addUser(userdb);
         onView(withId(R.id.go_to_login_button)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
