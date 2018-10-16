@@ -93,4 +93,11 @@ public class UserTest {
         assertFalse(user1.equals("Hello"));
     }
 
+    @Test
+    public void sameAccount(){
+        User user1 = new User(username, id, email, photo);
+        User user2 = new User("hello", id, "taupe@poulpe.com", "photo");
+        assertTrue(user1.sameAccount(user2));
+    }
+
 }

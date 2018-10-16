@@ -147,17 +147,22 @@ public class User {
         this.photo = photo;
     }
 
+    public boolean sameAccount(User user){
+        return this.userId == user.getUserId();
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        } else if (obj instanceof User){
+        if(obj != null && obj instanceof User){
+
             final User other = (User) obj;
-            if (this.userName.equals(other.userName)
+
+            boolean isTheSame = this.userName.equals(other.userName)
                     && this.email.equals(other.email)
                     && this.userId.equals(other.userId)
-                    && this.photo.equals(other.photo)
-                    ) {
+                    && this.photo.equals(other.photo);
+
+            if(isTheSame) {
                 return true;
             }
         }
