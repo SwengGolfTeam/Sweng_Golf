@@ -34,8 +34,6 @@ public class MainMenuActivity extends AppCompatActivity {
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         setSupportActionBar(tb);
         setUserDisplay();
-        // set a cool picture
-        user.setPhoto("https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg");
     }
 
     private boolean setUserDisplay() {

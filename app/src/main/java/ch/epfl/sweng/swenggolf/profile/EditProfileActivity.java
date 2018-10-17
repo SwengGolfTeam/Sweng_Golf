@@ -39,10 +39,7 @@ public class EditProfileActivity extends AppCompatActivity {
             editText.setSelection(userName.length());
 
             ImageView imageView = findViewById(R.id.ivProfile);
-            if (!user.getPhoto().isEmpty()) {
-                Uri photoUri = Uri.parse(user.getPhoto());
-                Picasso.with(this).load(photoUri).into(imageView);
-            }
+            ProfileActivity.displayPicture(imageView, user, this);
         }
 
 

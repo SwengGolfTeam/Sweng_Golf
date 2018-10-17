@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.profile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backHome = new Intent(ProfileActivity.super.getApplicationContext(), MainMenuActivity.class);
+                Intent backHome = new Intent(ProfileActivity.this, MainMenuActivity.class);
                 startActivity(backHome);
             }
         });
@@ -56,13 +57,17 @@ public class ProfileActivity extends AppCompatActivity {
         TextView name = findViewById(R.id.name);
         name.setText(user.getUserName());
         ImageView imageView = findViewById(R.id.ivProfile);
-        if (!user.getPhoto().isEmpty()) {
-            Uri photoUri = Uri.parse(user.getPhoto());
-            Picasso.with(this).load(photoUri).into(imageView);
-        }
+        displayPicture(imageView, user, this);
 
         // TODO count the number of offers posted+answered and display them
 
+    }
+
+    protected static void displayPicture(ImageView imageView, User user, Context context) {
+        if (!user.getPhoto().isEmpty()) {
+            Uri photoUri = Uri.parse(user.getPhoto());
+            Picasso.with(context).load(photoUri).into(imageView);
+        }
     }
 
 
