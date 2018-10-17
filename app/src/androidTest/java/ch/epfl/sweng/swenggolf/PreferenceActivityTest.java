@@ -25,7 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -53,7 +52,7 @@ public class PreferenceActivityTest {
 
     @Rule
     public ActivityTestRule preferenceRule =
-            new ActivityTestRule<>(ListPreferencesActivity.class,false,false);
+            new ActivityTestRule<>(ListPreferencesActivity.class, false, false);
 
     /**
      * Enters adapter debug mode.

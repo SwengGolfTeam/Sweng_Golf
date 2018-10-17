@@ -9,12 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
-
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -22,6 +20,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
 
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
@@ -34,8 +33,8 @@ public class WaitingActivityTest {
     private static final String photo = "photo";
 
 
-    private static final User USERDB = new User(name, uid1 , mail, photo);
-    private static final User USERNOTDB = new User(name, uid2,mail, photo);
+    private static final User USERDB = new User(name, uid1, mail, photo);
+    private static final User USERNOTDB = new User(name, uid2, mail, photo);
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -46,7 +45,7 @@ public class WaitingActivityTest {
      * Initialise the Config and the Database for tests.
      */
     @Before
-    public void setUp(){
+    public void setUp() {
         Config.goToTest();
         Database database = new FakeDatabase(true);
         database.write("/users", uid1, USERDB);
@@ -68,7 +67,7 @@ public class WaitingActivityTest {
 
             }
         }, Config.getUser());
-    // intended(hasComponent(CreateUserActivity.class.getName()));
+        // intended(hasComponent(CreateUserActivity.class.getName()));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class WaitingActivityTest {
 
             }
         }, USERDB);
-    //intended(hasComponent(MainMenuActivity.class.getName()));
+        //intended(hasComponent(MainMenuActivity.class.getName()));
     }
 }
 

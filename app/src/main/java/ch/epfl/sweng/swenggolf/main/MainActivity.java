@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
-import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -24,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FakeUserDatabase.addNewUser("Hervé Bogoss", uid);
     }
 
     /**

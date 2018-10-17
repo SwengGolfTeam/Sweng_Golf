@@ -68,6 +68,7 @@ public class DatabaseConnection {
         ref.addListenerForSingleValueEvent(listener);
     }
 
+
     /**
      * Reads a specific offer from the database.
      *

@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -51,7 +50,7 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
-    public void testIntentProfile(){
-        testIntent(ProfileActivity.class.getName(),R.id.my_account);
+    public void testIntentProfile() {
+        testIntent(ProfileActivity.class.getName(), R.id.my_account);
     }
 }

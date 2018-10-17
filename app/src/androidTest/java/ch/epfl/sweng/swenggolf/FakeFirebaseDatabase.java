@@ -12,7 +12,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -33,8 +32,8 @@ public final class FakeFirebaseDatabase {
 
     private static final Offer[] offers = {
             new Offer("Robin", "id_robin", "6-pack beers for ModStoch homework", LOREM, IMAGE, "1"),
-            new Offer("Eric", "id_eric","Chocolate for tractor", LOREM, IMAGE, "2"),
-            new Offer("Ugo", "id_ugo","ModStoch help for food", LOREM, IMAGE, "3"),
+            new Offer("Eric", "id_eric", "Chocolate for tractor", LOREM, IMAGE, "2"),
+            new Offer("Ugo", "id_ugo", "ModStoch help for food", LOREM, IMAGE, "3"),
             new Offer("Elsa", "id_elsa", "Pizzas for beer", LOREM, IMAGE, "4"),
             new Offer("Seb", "id_seb", "Everything for a canton that doesn't suck and some "
                     + "more text to overflow the box", LOREM, IMAGE, "5"),

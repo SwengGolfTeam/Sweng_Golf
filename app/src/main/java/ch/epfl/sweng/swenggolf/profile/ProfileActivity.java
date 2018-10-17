@@ -1,19 +1,25 @@
 package ch.epfl.sweng.swenggolf.profile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private String uid;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,21 +27,48 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        uid = getIntent().getStringExtra(MainActivity.EXTRA_USERID);
-
-        TextView name = findViewById(R.id.name);
-        name.setText(FakeUserDatabase.accessTable(uid, "name"));
-        TextView textView = findViewById(R.id.username);
-        String username = FakeUserDatabase.accessTable(uid, "username");
-        if (username != null && !username.isEmpty()) {
-            String usernameString = "@" + username;
-            textView.setText(usernameString);
+        user = getIntent().getParcelableExtra(MainMenuActivity.EXTRA_USER);
+        if (user == null) { // if not authenticated (e.g. tests)
+            user = new User();
         }
-        TextView offersPosted = findViewById(R.id.offers1);
-        offersPosted.setText(FakeUserDatabase.accessTable(uid, "offers_posted"));
-        TextView offersAnswered = findViewById(R.id.offers2);
-        offersAnswered.setText(FakeUserDatabase.accessTable(uid, "offers_answered"));
+
+        Toolbar toolbar = findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backHome = new Intent(ProfileActivity.this, MainMenuActivity.class);
+                startActivity(backHome);
+            }
+        });
+
+        displayUserData();
     }
+
+    private void displayUserData() {
+        TextView name = findViewById(R.id.name);
+        name.setText(user.getUserName());
+        ImageView imageView = findViewById(R.id.ivProfile);
+        displayPicture(imageView, user, this);
+
+        // TODO count the number of offers posted+answered and display them
+
+    }
+
+    protected static void displayPicture(ImageView imageView, User user, Context context) {
+        if (!user.getPhoto().isEmpty()) {
+            Uri photoUri = Uri.parse(user.getPhoto());
+            Picasso.with(context).load(photoUri).into(imageView);
+        }
+    }
+
 
     /**
      * Launches the EditProfileActivity.
@@ -44,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
      */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
-        intent.putExtra(MainActivity.EXTRA_USERID, uid);
+        intent.putExtra(MainMenuActivity.EXTRA_USER, user);
         startActivity(intent);
     }
 }

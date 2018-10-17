@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
@@ -22,7 +22,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class CreateUserActivityTest {
@@ -42,9 +41,9 @@ public class CreateUserActivityTest {
      * Initialise the Config and the Database for tests.
      */
     @BeforeClass
-    public static void setUp(){
+    public static void setUp() {
         Config.goToTest();
-        User user1 = new User(NAME, UID , MAIL, PHOTO);
+        User user1 = new User(NAME, UID, MAIL, PHOTO);
         Config.setUser(new User(user1));
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
@@ -61,8 +60,8 @@ public class CreateUserActivityTest {
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals("mail test", ((User)(value)).getEmail(), MAIL_CHANGED);
-                assertEquals("NAME test", ((User)(value)).getUserName(), NAME_CHANGED);
+                assertEquals("mail test", ((User) (value)).getEmail(), MAIL_CHANGED);
+                assertEquals("NAME test", ((User) (value)).getUserName(), NAME_CHANGED);
             }
 
             @Override

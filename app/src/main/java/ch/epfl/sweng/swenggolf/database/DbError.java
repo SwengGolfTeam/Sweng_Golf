@@ -15,19 +15,32 @@ public enum DbError {
      */
     public static DbError getError(com.google.firebase.database.DatabaseError error) {
         switch (error.getCode()) {
-            case DatabaseError.DATA_STALE: return DATA_STALE;
-            case DatabaseError.DISCONNECTED: return DISCONNECTED;
-            case DatabaseError.EXPIRED_TOKEN: return EXPIRED_TOKEN;
-            case DatabaseError.INVALID_TOKEN: return INVALID_TOKEN;
-            case DatabaseError.MAX_RETRIES: return MAX_RETRIES;
-            case DatabaseError.NETWORK_ERROR: return NETWORK_ERROR;
-            case DatabaseError.OPERATION_FAILED: return OPERATION_FAILED;
-            case DatabaseError.OVERRIDDEN_BY_SET: return OVERRIDDEN_BY_SET;
-            case DatabaseError.PERMISSION_DENIED: return PERMISSION_DENIED;
-            case DatabaseError.UNAVAILABLE: return UNAVAILABLE;
-            case DatabaseError.UNKNOWN_ERROR: return UNKNOWN_ERROR;
-            case DatabaseError.USER_CODE_EXCEPTION: return USER_CODE_EXCEPTION;
-            case DatabaseError.WRITE_CANCELED: return WRITE_CANCELED;
+            case DatabaseError.DATA_STALE:
+                return DATA_STALE;
+            case DatabaseError.DISCONNECTED:
+                return DISCONNECTED;
+            case DatabaseError.EXPIRED_TOKEN:
+                return EXPIRED_TOKEN;
+            case DatabaseError.INVALID_TOKEN:
+                return INVALID_TOKEN;
+            case DatabaseError.MAX_RETRIES:
+                return MAX_RETRIES;
+            case DatabaseError.NETWORK_ERROR:
+                return NETWORK_ERROR;
+            case DatabaseError.OPERATION_FAILED:
+                return OPERATION_FAILED;
+            case DatabaseError.OVERRIDDEN_BY_SET:
+                return OVERRIDDEN_BY_SET;
+            case DatabaseError.PERMISSION_DENIED:
+                return PERMISSION_DENIED;
+            case DatabaseError.UNAVAILABLE:
+                return UNAVAILABLE;
+            case DatabaseError.UNKNOWN_ERROR:
+                return UNKNOWN_ERROR;
+            case DatabaseError.USER_CODE_EXCEPTION:
+                return USER_CODE_EXCEPTION;
+            case DatabaseError.WRITE_CANCELED:
+                return WRITE_CANCELED;
             default:
                 throw new IllegalArgumentException("The error code is incorrect.");
         }

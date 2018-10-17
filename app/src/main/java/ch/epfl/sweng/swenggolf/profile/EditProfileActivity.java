@@ -3,16 +3,23 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
 public class EditProfileActivity extends AppCompatActivity {
-    private String uid;
+    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +27,18 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         Intent intent = getIntent();
-        uid = intent.getStringExtra(MainActivity.EXTRA_USERID);
+        user = intent.getParcelableExtra(MainMenuActivity.EXTRA_USER);
 
-        EditText editText = findViewById(R.id.edit_username);
-        String username = FakeUserDatabase.accessTable(uid, "username");
-        if (username != null) {
-            editText.setText(username);
-            editText.setSelection(username.length());
+        if (user != null) {
+            EditText editText = findViewById(R.id.edit_name);
+            String userName = user.getUserName();
+            editText.setText(userName);
+            editText.setSelection(userName.length());
+
+            ImageView imageView = findViewById(R.id.ivProfile);
+            ProfileActivity.displayPicture(imageView, user, this);
         }
+
 
     }
 
@@ -37,12 +48,27 @@ public class EditProfileActivity extends AppCompatActivity {
      * @param view the current view
      */
     public void saveChangesAndReturn(View view) {
-        EditText editText = findViewById(R.id.edit_username);
-        String username = editText.getText().toString();
-        FakeUserDatabase.setUsername(uid, username);
+        EditText editText = findViewById(R.id.edit_name);
+        String name = editText.getText().toString();
+        user.setUserName(name);
+
+        //TODO make the write in database inside user class ?
+        if (!user.getUserId().isEmpty()) { // when in test mode for instance
+            Config.getUser().setUserName(name);
+            CompletionListener listener = new CompletionListener() {
+                @Override
+                public void onComplete(DbError error) {
+                    if (error != DbError.NONE) {
+                        Log.e("EditProfileActivity", "could not access to database");
+                    }
+                }
+            };
+            Database.getInstance().write("/users/" + user.getUserId(), "userName", name, listener);
+        }
 
         Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(MainActivity.EXTRA_USERID, uid);
+        intent.putExtra(MainMenuActivity.EXTRA_USER, user);
         startActivity(intent);
     }
+
 }

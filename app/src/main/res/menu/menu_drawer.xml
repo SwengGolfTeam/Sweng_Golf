@@ -20,6 +20,6 @@
             android:id="@+id/preference_activity"
             android:icon="@android:drawable/btn_star"
             android:title="@string/preferences"
-            android:onClick="loadPreferenceListActivity"/>
+            android:onClick="loadPreferenceListActivity" />
     </group>
 </menu>

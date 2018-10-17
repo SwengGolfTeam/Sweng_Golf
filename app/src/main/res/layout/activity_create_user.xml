@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/name"/>
+        android:text="@string/name" />
 
     <EditText
         android:id="@+id/name"
@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/mail"/>
+        android:text="@string/mail" />
 
     <EditText
         android:id="@+id/mail"

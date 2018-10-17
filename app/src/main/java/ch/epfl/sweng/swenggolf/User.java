@@ -1,9 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.auth.FirebaseUser;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
-public class User {
+public class User implements Parcelable {
 
     private final static String DEFAULT_PREFERENCE = "";
     private String userName;
@@ -25,7 +28,7 @@ public class User {
 
 
     /**
-     * Construct a user from FirebaseUser.
+     * Construct a  user from FirebaseUser.
      *
      * @param fu the FirebaseUser
      */
@@ -61,11 +64,11 @@ public class User {
     /**
      * Constructor for a user.
      *
-     * @param username      the username
-     * @param userId        a unique identifier
-     * @param email         the user mail
-     * @param photo         the user photo
-     * @param preference    the user preference
+     * @param username   the username
+     * @param userId     a unique identifier
+     * @param email      the user mail
+     * @param photo      the user photo
+     * @param preference the user preference
      */
     public User(String username, String userId, String email, String photo, String preference) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || photo == null || preference == null) {
@@ -165,6 +168,7 @@ public class User {
         this.email = email;
     }
 
+
     /**
      * Set the user photo.
      *
@@ -179,25 +183,27 @@ public class User {
      *
      * @param preference the corresponding preference
      */
-    public void setPreference(String preference){
+    public void setPreference(String preference) {
         this.preference = preference;
     }
 
     /**
      * Methat which checks if two users have the same login account.
+     *
      * @param user the user to compare
      * @return true if they have the same uid, false otherwise
      */
-    public boolean sameAccount(User user){
+    public boolean sameAccount(User user) {
         return this.userId == user.getUserId();
     }
 
     /**
      * Methat which checks if two users have the same informations.
+     *
      * @param user the user to compare
      * @return true if they have the same info, false otherwise
      */
-    public boolean sameInformations(User user){
+    public boolean sameInformations(User user) {
         return this.userName.equals(user.userName)
                 && this.email.equals(user.email)
                 && this.photo.equals(user.photo)
@@ -206,10 +212,42 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof User){
+        if (obj instanceof User) {
             User user = (User) obj;
             return sameAccount(user) && sameInformations(user);
         }
         return false;
+    }
+
+
+    /* implementation of Parcelable */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{userName, userId, email, photo});
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    private User(Parcel in) {
+        String[] data = new String[4];
+
+        in.readStringArray(data);
+        this.userName = data[0];
+        this.userId = data[1];
+        this.email = data[2];
+        this.photo = data[3];
     }
 }
