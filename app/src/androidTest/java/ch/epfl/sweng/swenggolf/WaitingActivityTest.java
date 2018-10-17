@@ -35,12 +35,11 @@ public class WaitingActivityTest {
     private static final String MAIL = "Hello@World.ok";
     private static final String UID_1 = "1234";
     private static final String UID_2 = "5678";
+    private static final String PHOTO = "PHOTO";
 
-    private static final String photo = "photo";
 
-
-    private static final User USERDB = new User(NAME, UID_1, MAIL, photo);
-    private static final User USERNOTDB = new User(NAME, UID_2, MAIL, photo);
+    private static final User USERDB = new User(NAME, UID_1, MAIL, PHOTO);
+    private static final User USERNOTDB = new User(NAME, UID_2, MAIL, PHOTO);
 
     @Rule
     public final ActivityTestRule<WaitingActivity> mActivityRule =
