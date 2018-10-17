@@ -1,19 +1,16 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;

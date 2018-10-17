@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -29,7 +27,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 
@@ -182,7 +179,6 @@ public class CreateOfferActivity extends AppCompatActivity {
      * Write an offer into the database.
      *
      * @param offer offer to be written
-     *
      */
     private void writeOffer(final Offer offer) {
         Database database = Database.getInstance();

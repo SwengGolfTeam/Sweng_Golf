@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;

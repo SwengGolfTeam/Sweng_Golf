@@ -8,10 +8,10 @@ import com.google.firebase.auth.FirebaseUser;
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User implements Parcelable {
 
-    private  String userName;
-    private  String userId;
-    private  String email;
-    private  String photo;
+    private String userName;
+    private String userId;
+    private String email;
+    private String photo;
 
     /**
      * Construct an empty local user (used for json).
@@ -25,11 +25,11 @@ public class User implements Parcelable {
 
 
     /**
-
      * Construct a  user from FirebaseUser.
+     *
      * @param fu the FirebaseUser
      */
-    public User(FirebaseUser fu){
+    public User(FirebaseUser fu) {
         userName = fu.getDisplayName();
         email = fu.getEmail();
         userId = fu.getUid();
@@ -66,13 +66,14 @@ public class User implements Parcelable {
 
     /**
      * Create an user with an existed user but with different name and different mail.
-     * @param user the original user
+     *
+     * @param user     the original user
      * @param username the to be changed name
-     * @param email the to be changed email
+     * @param email    the to be changed email
      * @return the changed user
      */
-    public static User userChanged(User user, String username, String email){
-        return new User(username, user.getUserId(),email, user.getPhoto());
+    public static User userChanged(User user, String username, String email) {
+        return new User(username, user.getUserId(), email, user.getPhoto());
     }
 
 
@@ -81,23 +82,25 @@ public class User implements Parcelable {
      *
      * @return the corresponding id
      */
-    public String getUserId(){
+    public String getUserId() {
         return this.userId;
     }
 
     /**
      * Get the User name.
+     *
      * @return the corresponding name
      */
-    public String getUserName(){
+    public String getUserName() {
         return this.userName;
     }
 
     /**
      * Get the User mail.
+     *
      * @return the corresponding mail
      */
-    public String getEmail(){
+    public String getEmail() {
         return this.email;
     }
 
@@ -143,6 +146,7 @@ public class User implements Parcelable {
 
     /**
      * Set the user email.
+     *
      * @param email the corresponding user email
      */
     public void setEmail(String email) {
@@ -162,19 +166,21 @@ public class User implements Parcelable {
 
     /**
      * Methat which checks if two users have the same login account.
+     *
      * @param user the user to compare
      * @return true if they have the same uid, false otherwise
      */
-    public boolean sameAccount(User user){
+    public boolean sameAccount(User user) {
         return this.userId == user.getUserId();
     }
 
     /**
      * Methat which checks if two users have the same informations.
+     *
      * @param user the user to compare
      * @return true if they have the same info, false otherwise
      */
-    public boolean sameInformations(User user){
+    public boolean sameInformations(User user) {
         return this.userName.equals(user.userName)
                 && this.email.equals(user.email)
                 && this.photo.equals(user.photo);
@@ -182,7 +188,7 @@ public class User implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof User){
+        if (obj instanceof User) {
             User user = (User) obj;
             return sameAccount(user) && sameInformations(user);
         }
@@ -198,7 +204,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {userName, userId, email, photo});
+        dest.writeStringArray(new String[]{userName, userId, email, photo});
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
@@ -211,7 +217,7 @@ public class User implements Parcelable {
         }
     };
 
-   private User(Parcel in) {
+    private User(Parcel in) {
         String[] data = new String[4];
 
         in.readStringArray(data);
