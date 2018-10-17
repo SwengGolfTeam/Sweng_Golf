@@ -36,7 +36,6 @@ import ch.epfl.sweng.swenggolf.database.StorageConnection;
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
-    //private String username;
     private TextView errorMessage;
     private Offer offerToModify;
 
@@ -52,11 +51,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       /* username = getIntent().getExtras().getString("username");
-        if (username == null) {
-            throw new NullPointerException("No username given to CreateOfferActivity");
-        }*/
 
         errorMessage = findViewById(R.id.error_message);
 
