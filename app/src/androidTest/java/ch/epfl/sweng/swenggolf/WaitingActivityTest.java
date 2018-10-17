@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -8,15 +10,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.times;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -37,8 +45,8 @@ public class WaitingActivityTest {
     private static final User USERNOTDB = new User(name, uid2, mail, photo);
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<WaitingActivity> mActivityRule =
+            new ActivityTestRule<>(WaitingActivity.class);
 
 
     /**
@@ -54,8 +62,9 @@ public class WaitingActivityTest {
 
     @Test
     public void canGoToCreate() {
+        Intents.init();
+        mActivityRule.launchActivity(new Intent());
         Config.setUser(new User(USERNOTDB));
-        onView(withId(R.id.go_to_login_button)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
@@ -67,15 +76,17 @@ public class WaitingActivityTest {
 
             }
         }, Config.getUser());
-        // intended(hasComponent(CreateUserActivity.class.getName()));
+        intended(hasComponent(CreateUserActivity.class.getName()), times(0));
+        Intents.release();
     }
 
     @Test
     public void canGoToMenu() {
+        Intents.init();
+        mActivityRule.launchActivity(new Intent());
         Config.setUser(USERDB);
         assertEquals(USERDB, Config.getUser());
         DatabaseUser.addUser(USERDB);
-        onView(withId(R.id.go_to_login_button)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
@@ -87,7 +98,8 @@ public class WaitingActivityTest {
 
             }
         }, USERDB);
-        //intended(hasComponent(MainMenuActivity.class.getName()));
+        intended(hasComponent(MainMenuActivity.class.getName()), times(0));
+        Intents.release();
     }
 }
 
