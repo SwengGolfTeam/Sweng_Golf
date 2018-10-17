@@ -73,6 +73,7 @@ public class User {
         return new User(username, user.getUserId(), email, user.getPhoto());
     }
 
+
     /**
      * Get the User id.
      *
@@ -100,6 +101,7 @@ public class User {
         return this.email;
     }
 
+
     /**
      * Get the User photo.
      *
@@ -108,6 +110,16 @@ public class User {
     public String getPhoto() {
         return photo;
     }
+    // TODO: check if need Uri for photo inUgo's part
+
+    /**
+     * Get the user preference.
+     *
+     * @return the user preference
+     */
+    public String getPreference() {return "Bananas";}
+    // TODO: implement it correctly, remove hardcoded value
+
 
     /**
      * Set the userName.

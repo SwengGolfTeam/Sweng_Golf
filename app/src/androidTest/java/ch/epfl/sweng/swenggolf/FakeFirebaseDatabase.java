@@ -98,7 +98,7 @@ public final class FakeFirebaseDatabase {
 
     private static void setUpOfferRead(final boolean working, FirebaseDatabase d,
                                        DatabaseReference values, final DataSnapshot offerSnapshot) {
-        List<Offer> offerList = Arrays.asList(offers);
+        Offer[] offerList = offers;
         List<DataSnapshot> dataList = new ArrayList<>();
         for (Offer offer : offerList) {
             DataSnapshot data = Mockito.mock(DataSnapshot.class);

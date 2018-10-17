@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf;
 
 import android.net.Uri;
 

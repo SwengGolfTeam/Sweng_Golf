@@ -12,10 +12,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerActions.openDrawer;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -37,8 +41,8 @@ public class MainMenuActivityInstrumentedTestUnavailable {
     @Test
     public void testCanOpenDrawer() {
         DrawerLayout drawer = mMenuRule.getActivity().findViewById(R.id.side_menu);
-        openDrawer(R.id.side_menu);
-        assertTrue("drawer was closed", drawer.isDrawerOpen(GravityCompat.START));
+        onView(withId(R.id.side_menu)).perform(open());
+        assertTrue("drawer was closed",drawer.isDrawerOpen(GravityCompat.START));
     }
 
     @Test

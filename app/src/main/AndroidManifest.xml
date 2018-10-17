@@ -30,6 +30,7 @@
         <activity android:name=".offer.ListOfferActivity" />
         <activity android:name=".offer.ShowOfferActivity" />
         <activity android:name=".database.WaitingActivity"></activity>
+        <activity android:name=".preference.ListPreferencesActivity"/>
     </application>
 
 </manifest>
