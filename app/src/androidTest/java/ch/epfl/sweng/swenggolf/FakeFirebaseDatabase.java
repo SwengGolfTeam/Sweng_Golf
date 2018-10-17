@@ -20,7 +20,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FakeFirebaseDatabase {
 
-    private static final String LOREM = "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+    private static final String LOREM = "In sit amet ligula tempus, mattis massa dictum, mollis."
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis."
             + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + " at tristique tortor dignissim non."
