@@ -211,7 +211,7 @@ public class User implements Parcelable {
         }
     };
 
-    private User(Parcel in) {
+   private User(Parcel in) {
         String[] data = new String[4];
 
         in.readStringArray(data);

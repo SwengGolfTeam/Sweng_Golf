@@ -10,9 +10,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 /**
  * Created by dannyroa on 5/10/15.
- *
  * Source code: https://github.com/dannyroa/espresso-samples.
- *
  * Allows a simple selection on RecylerView for testing purposes.
  */
 public class RecyclerViewMatcher {
