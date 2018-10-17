@@ -1,21 +1,22 @@
 package ch.epfl.sweng.swenggolf;
 
-import ch.epfl.sweng.swenggolf.database.user.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Class Used to know if we are running a test or not.
  */
-public class TestMode {
+public class Config {
 
-    private TestMode(){}
+    private Config() {
+    }
 
     /**
-     * onTest must be true for tests and false otherwise.
+     *   onTest must be true for tests and false otherwise.
      */
     private static boolean onTest = false;
 
     /**
-     * user is used to mock a UserFirebase during a test.
+     * user is used to mock a Firebase user during a test.
      */
     private static User user = null;
 
@@ -43,20 +44,20 @@ public class TestMode {
     }
 
     /**
-     * Method to get the UserFirebase.
+     * Method to get the Firebase user.
      *
-     * @return the corresponding UserFirebase
+     * @return the corresponding User
      */
     public static User getUser() {
-        return user;
+        return user == null ? new User(FirebaseAuth.getInstance().getCurrentUser()) : user;
     }
 
     /**
-     * Method used to set a mocked firebaseUser.
+     * Set the actual user.
+     *
+     * @param newUser user to copy in the static one
      */
-    public static void setUser(User user) {
-        TestMode.user = user;
+    public static void setUser(User newUser) {
+        user = newUser;
     }
-
-
 }

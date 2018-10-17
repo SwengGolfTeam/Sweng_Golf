@@ -8,6 +8,7 @@ import android.view.View;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
+import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ListOfferActivity.class);
         startActivity(intent);
     }
+
 
 }
 

@@ -19,10 +19,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.user.User;
-import ch.epfl.sweng.swenggolf.database.user.UserFirebase;
-import ch.epfl.sweng.swenggolf.database.user.UserLocal;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListPreferenceAdapter
@@ -32,22 +31,22 @@ public class ListPreferenceAdapter
     public static boolean debug = false;
     private ArrayList<User> mDataset;
 
-    public static final User[] usersInitial = {
-            new UserLocal("Anna", "0", "anna@mail.com", "Tomatoes"),
-            new UserLocal("Bob", "1", "bob@mail.com", "Screwdriver"),
-            new UserLocal("Geany", "2", "geany@mail.com", "Comics"),
-            new UserLocal("Greg", "3", "greg@gmail.com", "Ropes"),
-            new UserLocal("Fred", "4", "fred@gmail.com", "Beverages"),
-            new UserLocal("AAnna", "0", "aanna@mail.com", "Friends"),
-            new UserLocal("ABob", "1", "abob@mail.com", "Washing machine"),
-            new UserLocal("AGeany", "2", "ageany@mail.com", "Hammer"),
-            new UserLocal("AGreg", "3", "agreg@gmail.com", "Lunch"),
-            new UserLocal("AFred", "4", "afred@gmail.com", "Cheeseburgers"),
-            new UserLocal("BAnna", "0", "banna@mail.com", "Champaign"),
-            new UserLocal("BBob", "1", "bbob@mail.com", "Mushrooms"),
-            new UserLocal("BGeany", "2", "bgeany@mail.com", "Nothing"),
-            new UserLocal("BGreg", "3", "bgreg@gmail.com", "Fries"),
-            new UserLocal("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd",
+    public static final User[] USERS_INITIAL = {
+            new User("Anna", "0", "anna@mail.com", "Tomatoes"),
+            new User("Bob", "1", "bob@mail.com", "Screwdriver"),
+            new User("Geany", "2", "geany@mail.com", "Comics"),
+            new User("Greg", "3", "greg@gmail.com", "Ropes"),
+            new User("Fred", "4", "fred@gmail.com", "Beverages"),
+            new User("AAnna", "0", "aanna@mail.com", "Friends"),
+            new User("ABob", "1", "abob@mail.com", "Washing machine"),
+            new User("AGeany", "2", "ageany@mail.com", "Hammer"),
+            new User("AGreg", "3", "agreg@gmail.com", "Lunch"),
+            new User("AFred", "4", "afred@gmail.com", "Cheeseburgers"),
+            new User("BAnna", "0", "banna@mail.com", "Champaign"),
+            new User("BBob", "1", "bbob@mail.com", "Mushrooms"),
+            new User("BGeany", "2", "bgeany@mail.com", "Nothing"),
+            new User("BGreg", "3", "bgreg@gmail.com", "Fries"),
+            new User("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd",
                     "4", "fr@gmail.com", "A nice sweatshirt, some hot shoes and a poncho")
     };
 
@@ -63,8 +62,7 @@ public class ListPreferenceAdapter
                     Iterable<DataSnapshot> usersData = dataSnapshot.getChildren();
                     ArrayList<User> users = new ArrayList<>();
                     for (DataSnapshot user : usersData) {
-                        UserFirebase concreteUser = user.getValue(UserFirebase.class);
-                        users.add(concreteUser);
+                        users.add(Config.getUser());
                     }
                     mDataset = users;
                 }
@@ -77,7 +75,7 @@ public class ListPreferenceAdapter
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             ref.addValueEventListener(getUserList);
         } else {
-            mDataset = new ArrayList<User>(Arrays.asList(usersInitial));
+            mDataset = new ArrayList<User>(Arrays.asList(USERS_INITIAL));
         }
     }
 

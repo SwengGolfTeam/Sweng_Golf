@@ -42,13 +42,13 @@ public class PreferenceActivityTest {
      */
     @Test
     public void scrollingWorks(){
-        int userLength = ListPreferenceAdapter.usersInitial.length-1;
+        int userLength = ListPreferenceAdapter.USERS_INITIAL.length-1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
         onView(ViewMatchers.withId(R.id.preference_list)).perform(scrollToLast);
         String lastUserName = ListPreferenceAdapter
-                .usersInitial[userLength]
+                .USERS_INITIAL[userLength]
                 .getUserName();
         onView(withText(lastUserName)).check(matches(isDisplayed()));
     }
@@ -58,7 +58,7 @@ public class PreferenceActivityTest {
      */
     @Test
     public void firstElementIsDiplayed(){
-        String firstUserName = ListPreferenceAdapter.usersInitial[0].getUserName();
+        String firstUserName = ListPreferenceAdapter.USERS_INITIAL[0].getUserName();
         RecyclerViewMatcher rm = new RecyclerViewMatcher(R.id.preference_list);
         onView(rm.atPosition(0)).check(matches(hasDescendant(withText(firstUserName))));
     }

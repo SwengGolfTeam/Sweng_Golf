@@ -1,18 +1,14 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DatabaseReference.CompletionListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 public class DatabaseConnection {
     private static FirebaseDatabase db;
-    final String dbRead = "FIREBASE_READ";
-    private final String dbWrite = "FIREBASE_WRITE";
     private static DatabaseConnection databaseConnection = null;
 
     /**
@@ -49,19 +45,6 @@ public class DatabaseConnection {
      */
     public static void setDebugDatabase(FirebaseDatabase firebaseDatabase) {
         db = firebaseDatabase;
-    }
-
-    /**
-     * Writes a new offer in the database.
-     *
-     * @param type      what we want to write "offers" or "users"
-     * @param id        the unique identifier for this element
-     * @param newObject the element we want to add to the database
-     */
-    public void writeObject(String type, String id, Object newObject) {
-        DatabaseReference ref = db.getReference();
-        ref.child(type).child(id).setValue(newObject);
-        Log.d(dbWrite, type + "id=" + id);
     }
 
     /**
