@@ -117,7 +117,7 @@ public class User {
      *
      * @return the user preference
      */
-    public String getPreference() {return "Bananas"; }
+    public String getPreference() { return "Bananas"; }
     // TODO: implement it correctly, remove hardcoded value
 
 
