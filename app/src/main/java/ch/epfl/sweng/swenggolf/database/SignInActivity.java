@@ -65,9 +65,9 @@ public class SignInActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            if (firebaseAuth.getCurrentUser() != null) {
-                goToWait();
-            }
+                if (firebaseAuth.getCurrentUser() != null) {
+                    goToWait();
+                }
             }
         };
     }
