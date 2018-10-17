@@ -17,10 +17,8 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.times;
@@ -33,16 +31,16 @@ import static org.junit.Assert.assertNull;
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
 
-    private static final String name = "Hello";
-    private static final String mail = "Hello@World.ok";
-    private static final String uid1 = "1234";
-    private static final String uid2 = "5678";
+    private static final String NAME = "Hello";
+    private static final String MAIL = "Hello@World.ok";
+    private static final String UID_1 = "1234";
+    private static final String UID_2 = "5678";
 
     private static final String photo = "photo";
 
 
-    private static final User USERDB = new User(name, uid1, mail, photo);
-    private static final User USERNOTDB = new User(name, uid2, mail, photo);
+    private static final User USERDB = new User(NAME, UID_1, MAIL, photo);
+    private static final User USERNOTDB = new User(NAME, UID_2, MAIL, photo);
 
     @Rule
     public final ActivityTestRule<WaitingActivity> mActivityRule =
@@ -56,7 +54,7 @@ public class WaitingActivityTest {
     public void setUp() {
         Config.goToTest();
         Database database = new FakeDatabase(true);
-        database.write("/users", uid1, USERDB);
+        database.write("/users", UID_1, USERDB);
         Database.setDebugDatabase(database);
     }
 
