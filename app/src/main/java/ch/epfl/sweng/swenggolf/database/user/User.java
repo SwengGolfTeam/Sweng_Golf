@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database.user;
 
 import android.net.Uri;
 
@@ -12,7 +12,7 @@ public interface User {
      *
      * @return the corresponding mail
      */
-    public String getEmail();
+    String getEmail();
 
 
     /**
@@ -20,19 +20,26 @@ public interface User {
      *
      * @return the corresponding name
      */
-    public String getUserName();
+    String getUserName();
 
     /**
      * Get the User id.
      *
      * @return the corresponding id
      */
-    public String getUserId();
+    String getUserId();
 
     /**
      * Get the User photo.
      *
      * @return the corresponding photo URI
      */
-    public Uri getPhoto();
+    Uri getPhoto();
+
+    /**
+     * Get the user preference.
+     *
+     * @return the user preference
+     */
+    String getPreference();
 }

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database.user;
 
 import android.net.Uri;
 
@@ -33,5 +33,10 @@ public class UserFirebase implements User {
     @Override
     public Uri getPhoto() {
         return fu.getPhotoUrl();
+    }
+
+    @Override
+    public String getPreference() {
+        return "Bananas";
     }
 }

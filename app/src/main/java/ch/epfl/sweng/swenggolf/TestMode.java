@@ -1,12 +1,13 @@
 package ch.epfl.sweng.swenggolf;
 
+import ch.epfl.sweng.swenggolf.database.user.User;
+
 /**
  * Class Used to know if we are running a test or not.
  */
 public class TestMode {
 
-    private TestMode() {
-    }
+    private TestMode(){}
 
     /**
      * onTest must be true for tests and false otherwise.

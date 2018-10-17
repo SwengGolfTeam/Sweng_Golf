@@ -1,9 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.content.Intent;
-
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,8 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.TestMode;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.UserFirebase;
+import ch.epfl.sweng.swenggolf.database.user.User;
+import ch.epfl.sweng.swenggolf.database.user.UserFirebase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 

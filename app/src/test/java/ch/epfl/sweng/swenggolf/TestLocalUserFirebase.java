@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.database.user.UserLocal;
+
 import static org.junit.Assert.assertEquals;
 
 

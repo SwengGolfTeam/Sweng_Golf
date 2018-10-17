@@ -16,7 +16,7 @@
         app:title="@string/create_new_offer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 
     <android.support.constraint.ConstraintLayout
@@ -133,7 +133,6 @@
             android:text="@string/button_create_offer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/offer_picture" />
-
 
 
     </android.support.constraint.ConstraintLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    
+
     <LinearLayout
         android:id="@+id/main_menu_frame"
         android:orientation="vertical"
@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:menu="@menu/menu_toolbar_main">
-        </android.support.v7.widget.Toolbar>
+            app:menu="@menu/menu_toolbar_main"></android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -35,6 +34,5 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="start"
         app:menu="@menu/menu_drawer"
-        app:headerLayout="@layout/layout_header">
-    </android.support.design.widget.NavigationView>
+        app:headerLayout="@layout/layout_header"></android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

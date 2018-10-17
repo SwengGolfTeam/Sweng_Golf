@@ -1,8 +1,10 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.database.user;
 
 import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
+
+import ch.epfl.sweng.swenggolf.TestMode;
 
 /**
  * Just a temporary placeholder class in order to complete the Firebase Implementation.
@@ -12,6 +14,7 @@ public class UserLocal implements User {
     private final String userId;
     private final String email;
     private final Uri photo;
+    private final String preference;
 
     /**
      * Empty constructor for the listeners of Firebase.
@@ -20,7 +23,8 @@ public class UserLocal implements User {
         this.userName = "";
         this.userId = "";
         this.email = "";
-        this.photo = Uri.parse("");
+        this.photo = null;
+        this.preference = "";
     }
 
     /**
@@ -33,6 +37,7 @@ public class UserLocal implements User {
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl();
+        preference = "";
     }
 
     /**
@@ -43,8 +48,7 @@ public class UserLocal implements User {
      * @param email    the login method
      * @param photo    user photo
      */
-
-    public UserLocal(String username, String userId, String email, Uri photo) {
+    public UserLocal(String username, String userId, String email, Uri photo, String preference) {
         Boolean pho = (photo == null);
         if (TestMode.isTest()) {
             pho = false;
@@ -56,6 +60,7 @@ public class UserLocal implements User {
         this.userId = userId;
         this.email = email;
         this.photo = photo;
+        this.preference = preference;
     }
 
 
@@ -66,8 +71,7 @@ public class UserLocal implements User {
      * @param userId   a unique identifier
      * @param email    the login method
      */
-
-    public UserLocal(String username, String userId, String email) {
+    public UserLocal(String username, String userId, String email, String preference) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()) {
             throw new IllegalArgumentException("Invalid arguments for UserLocal");
         }
@@ -75,6 +79,18 @@ public class UserLocal implements User {
         this.userId = userId;
         this.email = email;
         this.photo = null;
+        this.preference = preference;
+    }
+
+    /**
+     * Create a user with null photo and empty preference.
+     *
+     * @param username the username
+     * @param userId   a unique identifier
+     * @param email    the login method
+     */
+    public UserLocal(String username, String userId, String email) {
+        this(username, userId, email, "");
     }
 
     @Override
@@ -97,4 +113,8 @@ public class UserLocal implements User {
         return photo;
     }
 
+    @Override
+    public String getPreference() {
+        return preference;
+    }
 }

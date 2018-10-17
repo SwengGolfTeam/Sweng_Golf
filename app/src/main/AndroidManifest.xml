@@ -25,9 +25,12 @@
             android:name=".profile.EditProfileActivity"
             android:label="@string/edit_profile_activity_name"
             android:parentActivityName=".profile.ProfileActivity" />
-        <activity android:name=".offer.CreateOfferActivity" />
-        <activity android:name=".offer.ListOfferActivity" />
-        <activity android:name=".offer.ShowOfferActivity" />
+
+        <activity android:name="ch.epfl.sweng.swenggolf.offer.CreateOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.offer.ListOfferActivity" />
+        <activity android:name="ch.epfl.sweng.swenggolf.offer.ShowOfferActivity"/>
+        <activity android:name=".preference.ListPreferencesActivity"/>
+
     </application>
 
 </manifest>

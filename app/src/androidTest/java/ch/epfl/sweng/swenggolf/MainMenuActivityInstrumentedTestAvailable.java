@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
