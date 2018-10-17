@@ -15,6 +15,6 @@ public class PreferenceAdapterTest {
     public void getItemCountReturnsRightValue(){
         ListPreferenceAdapter.debug = true;
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertEquals(adapter.getItemCount(),ListPreferenceAdapter.usersInitial.length);
+        assertEquals(adapter.getItemCount(),ListPreferenceAdapter.USERS_INITIAL.length);
     }
 }

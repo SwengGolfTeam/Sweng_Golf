@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -33,7 +32,7 @@ public class ListOfferActivityTest {
         return new RecyclerViewMatcher(recyclerViewId);
     }
 
-     public static final String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+     public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
             + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
             + "Suspendisse potenti. Morbi vehicula ante nibh,"
@@ -54,8 +53,8 @@ public class ListOfferActivityTest {
     @Before
     public void init() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = new Offer("Author","user_id", "This is a title", lorem);
-        Offer offer2 = new Offer("Author", "user_id","This is a title 2", lorem);
+        Offer offer1 = new Offer("Author","user_id", "This is a title", LOREM);
+        Offer offer2 = new Offer("Author", "user_id","This is a title 2", LOREM);
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
@@ -78,9 +77,6 @@ public class ListOfferActivityTest {
                         ViewMatchers
                                 .withText(
                                         ListOfferActivity.offerList.get(0).getTitle())), click()));
-
-       // onView(withId(R.id.show_offer_title))
-       //         .check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
     }
 
     @Test

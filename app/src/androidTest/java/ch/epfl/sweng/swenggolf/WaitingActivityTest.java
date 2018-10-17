@@ -34,8 +34,8 @@ public class WaitingActivityTest {
     private static final String photo = "photo";
 
 
-    private static final User userdb = new User(name, uid1 , mail, photo);
-    private static final User usernotdb = new User(name, uid2,mail, photo);
+    private static final User USERDB = new User(name, uid1 , mail, photo);
+    private static final User USERNOTDB = new User(name, uid2,mail, photo);
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -49,13 +49,13 @@ public class WaitingActivityTest {
     public void setUp(){
         Config.goToTest();
         Database database = new FakeDatabase(true);
-        database.write("/users", uid1, userdb);
+        database.write("/users", uid1, USERDB);
         Database.setDebugDatabase(database);
     }
 
     @Test
     public void canGoToCreate() {
-        Config.setUser(new User(usernotdb));
+        Config.setUser(new User(USERNOTDB));
         onView(withId(R.id.go_to_login_button)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
@@ -73,21 +73,21 @@ public class WaitingActivityTest {
 
     @Test
     public void canGoToMenu() {
-        Config.setUser(userdb);
-        assertEquals(userdb, Config.getUser());
-        DatabaseUser.addUser(userdb);
+        Config.setUser(USERDB);
+        assertEquals(USERDB, Config.getUser());
+        DatabaseUser.addUser(USERDB);
         onView(withId(R.id.go_to_login_button)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals(userdb, value);
+                assertEquals(USERDB, value);
             }
 
             @Override
             public void onCancelled(DbError error) {
 
             }
-        }, userdb);
+        }, USERDB);
     //intended(hasComponent(MainMenuActivity.class.getName()));
     }
 }

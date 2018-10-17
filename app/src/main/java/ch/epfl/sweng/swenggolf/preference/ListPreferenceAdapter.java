@@ -31,7 +31,7 @@ public class ListPreferenceAdapter
     public static boolean debug = false;
     private ArrayList<User> mDataset;
 
-    public static final User[] usersInitial = {
+    public static final User[] USERS_INITIAL = {
             new User("Anna", "0", "anna@mail.com", "Tomatoes"),
             new User("Bob", "1", "bob@mail.com", "Screwdriver"),
             new User("Geany", "2", "geany@mail.com", "Comics"),
@@ -75,7 +75,7 @@ public class ListPreferenceAdapter
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             ref.addValueEventListener(getUserList);
         } else {
-            mDataset = new ArrayList<User>(Arrays.asList(usersInitial));
+            mDataset = new ArrayList<User>(Arrays.asList(USERS_INITIAL));
         }
     }
 

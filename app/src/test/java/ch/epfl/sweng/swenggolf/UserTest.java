@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNull;
 
 public class UserTest {
 
-    private final String username = "Bob", id = "1234", email = "Google", photo = "Picsou";
+    private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou";
 
 
     @Before
@@ -22,31 +22,31 @@ public class UserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyusername(){
-        new User("", id, email, photo);
+        new User("", ID, EMAIL, PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyId(){
-        new User(username, "", email, photo);
+        new User(USERNAME, "", EMAIL, PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyLogin(){
-        new User(username, id, "", photo);
+        new User(USERNAME, ID, "", PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyPhoto() {
-        new User(username, id, email, null);
+        new User(USERNAME, ID, EMAIL, null);
     }
 
     @Test
     public void testGettersFull(){
-        User localUser = new User(username, id, email, photo);
-        assertEquals("Usernames not equal", username, localUser.getUserName());
-        assertEquals("userIds not equal", id, localUser.getUserId());
-        assertEquals("Logins not equal", email, localUser.getEmail());
-        assertEquals("Photo is not equal", photo, localUser.getPhoto());
+        User localUser = new User(USERNAME, ID, EMAIL, PHOTO);
+        assertEquals("Usernames not equal", USERNAME, localUser.getUserName());
+        assertEquals("userIds not equal", ID, localUser.getUserId());
+        assertEquals("Logins not equal", EMAIL, localUser.getEmail());
+        assertEquals("Photo is not equal", PHOTO, localUser.getPhoto());
     }
 
 
@@ -62,12 +62,12 @@ public class UserTest {
 
     @Test
     public void testSetters() {
-        User user1 = new User(username, id, email, photo);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = new User();
-        user2.setEmail(email);
-        user2.setUserName(username);
-        user2.setPhoto(photo);
-        user2.setUserId(id);
+        user2.setEmail(EMAIL);
+        user2.setUserName(USERNAME);
+        user2.setPhoto(PHOTO);
+        user2.setUserId(ID);
         assertEquals(user1.getEmail(), user2.getEmail());
         assertEquals(user1.getPhoto(), user2.getPhoto());
         assertEquals(user1.getUserId(), user2.getUserId());
@@ -76,17 +76,17 @@ public class UserTest {
 
     @Test
     public void testUserChanged(){
-        User user1 = new User(username, id, email, photo);
-        User user2 = User.userChanged(user1, "username", "email");
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
+        User user2 = User.userChanged(user1, "USERNAME", "EMAIL");
         assertFalse(user1.equals(user2));
-        user1.setUserName("username");
-        user1.setEmail("email");
+        user1.setUserName("USERNAME");
+        user1.setEmail("EMAIL");
         assertTrue(user1.equals(user2));
     }
 
     @Test
     public void testEquals(){
-        User user1 = new User(username, id, email, photo);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = new User(user1);
         assertTrue(user1.equals(user2));
         assertFalse(user1.equals(null));
@@ -95,15 +95,15 @@ public class UserTest {
 
     @Test
     public void sameAccount(){
-        User user1 = new User(username, id, email, photo);
-        User user2 = new User("hello", id, "taupe@poulpe.com", "photo");
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
+        User user2 = new User("hello", ID, "taupe@poulpe.com", "PHOTO");
         assertTrue(user1.sameAccount(user2));
     }
 
     @Test
     public void sameInformations(){
-        User user1 = new User(username, "67890", email, photo);
-        User user2 = new User(username, "12345", email, photo);
+        User user1 = new User(USERNAME, "67890", EMAIL, PHOTO);
+        User user2 = new User(USERNAME, "12345", EMAIL, PHOTO);
         assertTrue(user1.sameInformations(user2));
     }
 

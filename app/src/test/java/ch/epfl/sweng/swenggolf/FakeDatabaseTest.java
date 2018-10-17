@@ -17,22 +17,22 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class FakeDatabaseTest {
 
-    private final String path = "/offers";
-    private final String id = "id1";
-    private final String id2 = "id2";
-    private final String content = "This is a string";
-    private final String content2 = "This is a second string";
+    private static final String PATH = "/offers";
+    private static final String ID = "id1";
+    private static final String ID2 = "ID2";
+    private static final String CONTENT = "This is a string";
+    private static final String CONTENT_2 = "This is a second string";
 
     @Test
     public void writeAndReadReturnGoodValues() {
         Database d = new FakeDatabase(true);
 
-        d.write( path, id, content);
+        d.write(PATH, ID, CONTENT);
 
         ValueListener<String> listener = new ValueListener<String>() {
             @Override
             public void onDataChange(String value) {
-                assertThat(value, is(content));
+                assertThat(value, is(CONTENT));
             }
 
             @Override
@@ -40,7 +40,7 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.read(path, id, listener, String.class);
+        d.read(PATH, ID, listener, String.class);
 
     }
 
@@ -58,21 +58,21 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.read(path, id, listener, String.class);
+        d.read(PATH, ID, listener, String.class);
     }
 
     @Test
     public void writeAndReadListReturnGoodValues() {
         Database d = new FakeDatabase(true);
-        d.write(path,id,content);
-        d.write(path,id2,content2);
+        d.write(PATH, ID, CONTENT);
+        d.write(PATH, ID2, CONTENT_2);
 
         ValueListener<List<String>> listener = new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {
 
-                assertThat(value.contains(content), is(true));
-                assertThat(value.contains(content2), is(true));
+                assertThat(value.contains(CONTENT), is(true));
+                assertThat(value.contains(CONTENT_2), is(true));
             }
 
             @Override
@@ -80,7 +80,7 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.readList(path,listener,String.class);
+        d.readList(PATH,listener,String.class);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.readList(path,listener,String.class);
+        d.readList(PATH,listener,String.class);
     }
 
     private void writeListenerError(boolean working, DbError error) {
@@ -109,7 +109,7 @@ public class FakeDatabaseTest {
                 assertThat(error, is(error));
             }
         };
-        d.write(path, id, content, listener);
+        d.write(PATH, ID, CONTENT, listener);
     }
 
     @Test
@@ -140,7 +140,7 @@ public class FakeDatabaseTest {
                 assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
-        d.read(path, id, listener, String.class);
+        d.read(PATH, ID, listener, String.class);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class FakeDatabaseTest {
                 assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
-        d.readList(path,listener,String.class);
+        d.readList(PATH,listener,String.class);
     }
 
 

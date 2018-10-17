@@ -10,8 +10,8 @@ public class Config {
     private Config() {
     }
 
-    /*
-     *   TEST_MODE must be true for tests and false otherwise.
+    /**
+     *   onTest must be true for tests and false otherwise.
      */
     private static boolean onTest = false;
 

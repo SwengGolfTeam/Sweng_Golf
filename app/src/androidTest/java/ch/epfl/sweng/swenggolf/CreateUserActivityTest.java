@@ -27,12 +27,12 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class CreateUserActivityTest {
 
-    private static final String name = "Hello";
-    private static final String namechanged = "Hello World";
-    private static final String mail = "Hello@World.ok";
-    private static final String mailchanged = "Hello@World.okapi";
-    private static final String uid = "123456789009876543211234567890";
-    private static final String photo = "photo";
+    private static final String NAME = "Hello";
+    private static final String NAME_CHANGED = "Hello World";
+    private static final String MAIL = "Hello@World.ok";
+    private static final String MAIL_CHANGED = "Hello@World.okapi";
+    private static final String UID = "123456789009876543211234567890";
+    private static final String PHOTO = "photo";
 
     @Rule
     public final ActivityTestRule<CreateUserActivity> mActivityRule =
@@ -44,7 +44,7 @@ public class CreateUserActivityTest {
     @BeforeClass
     public static void setUp(){
         Config.goToTest();
-        User user1 = new User(name, uid , mail, photo);
+        User user1 = new User(NAME, UID , MAIL, PHOTO);
         Config.setUser(new User(user1));
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
@@ -53,16 +53,16 @@ public class CreateUserActivityTest {
 
     @Test
     public void canDisplay() {
-        onView(withId(R.id.mail)).check(matches(withText(mail)));
+        onView(withId(R.id.mail)).check(matches(withText(MAIL)));
         onView(withId(R.id.mail)).perform(typeText("api"));
-        onView(withId(R.id.name)).check(matches(withText(name)));
+        onView(withId(R.id.name)).check(matches(withText(NAME)));
         onView(withId(R.id.name)).perform(typeText(" World"));
         onView(withId(R.id.create_account)).perform(click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals("mail test", ((User)(value)).getEmail(), mailchanged);
-                assertEquals("name test", ((User)(value)).getUserName(), namechanged);
+                assertEquals("mail test", ((User)(value)).getEmail(), MAIL_CHANGED);
+                assertEquals("NAME test", ((User)(value)).getUserName(), NAME_CHANGED);
             }
 
             @Override
