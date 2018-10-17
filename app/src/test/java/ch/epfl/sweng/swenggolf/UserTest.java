@@ -16,22 +16,22 @@ public class UserTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Config.goToTest();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyusername(){
+    public void testEmptyusername() {
         new User("", ID, EMAIL, PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyId(){
+    public void testEmptyId() {
         new User(USERNAME, "", EMAIL, PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyLogin(){
+    public void testEmptyLogin() {
         new User(USERNAME, ID, "", PHOTO);
     }
 
@@ -41,7 +41,7 @@ public class UserTest {
     }
 
     @Test
-    public void testGettersFull(){
+    public void testGettersFull() {
         User localUser = new User(USERNAME, ID, EMAIL, PHOTO);
         assertEquals("Usernames not equal", USERNAME, localUser.getUserName());
         assertEquals("userIds not equal", ID, localUser.getUserId());
@@ -51,13 +51,13 @@ public class UserTest {
 
 
     @Test
-    public void testMockFirebaseUser(){
+    public void testMockFirebaseUser() {
         FirebaseUser fu = TestHelper.getFirebaseUser();
         User localUser = new User(fu);
         assertEquals("Usernames not equal", TestHelper.getName(), localUser.getUserName());
         assertEquals("userIds not equal", TestHelper.getUid(), localUser.getUserId());
         assertEquals("Logins not equal", TestHelper.getMail(), localUser.getEmail());
-        assertNull("Photo is null",localUser.getPhoto());
+        assertNull("Photo is null", localUser.getPhoto());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class UserTest {
     }
 
     @Test
-    public void testUserChanged(){
+    public void testUserChanged() {
         User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = User.userChanged(user1, "USERNAME", "EMAIL");
         assertFalse(user1.equals(user2));
@@ -85,7 +85,7 @@ public class UserTest {
     }
 
     @Test
-    public void testEquals(){
+    public void testEquals() {
         User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = new User(user1);
         assertTrue(user1.equals(user2));
@@ -94,14 +94,14 @@ public class UserTest {
     }
 
     @Test
-    public void sameAccount(){
+    public void sameAccount() {
         User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = new User("hello", ID, "taupe@poulpe.com", "PHOTO");
         assertTrue(user1.sameAccount(user2));
     }
 
     @Test
-    public void sameInformations(){
+    public void sameInformations() {
         User user1 = new User(USERNAME, "67890", EMAIL, PHOTO);
         User user2 = new User(USERNAME, "12345", EMAIL, PHOTO);
         assertTrue(user1.sameInformations(user2));
