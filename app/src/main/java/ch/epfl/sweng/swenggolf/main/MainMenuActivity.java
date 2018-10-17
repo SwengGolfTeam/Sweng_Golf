@@ -17,6 +17,7 @@ import ch.epfl.sweng.swenggolf.database.FakeUserDatabase;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 
@@ -109,6 +110,16 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadShowOffersActivity(MenuItem item) {
         Intent intent = new Intent(this, ListOfferActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Launches the PreferenceListActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void loadPreferenceListActivity(MenuItem item){
+        Intent intent = new Intent(this,ListPreferencesActivity.class);
         startActivity(intent);
     }
 }

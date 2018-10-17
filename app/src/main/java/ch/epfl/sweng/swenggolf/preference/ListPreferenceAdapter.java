@@ -56,17 +56,16 @@ public class ListPreferenceAdapter
      * If debug is set to true, a default list of users is used.
      */
     public ListPreferenceAdapter() {
+        mDataset = new ArrayList<>();
         if (!debug) {
             ValueEventListener getUserList = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Iterable<DataSnapshot> usersData = dataSnapshot.getChildren();
-                    ArrayList<User> users = new ArrayList<>();
                     for (DataSnapshot user : usersData) {
                         UserFirebase concreteUser = user.getValue(UserFirebase.class);
-                        users.add(concreteUser);
+                        mDataset.add(concreteUser);
                     }
-                    mDataset = users;
                 }
 
                 @Override
@@ -74,7 +73,7 @@ public class ListPreferenceAdapter
                     Log.d("Loading users error", "failed to retrieve users list for preferences");
                 }
             };
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users");
             ref.addValueEventListener(getUserList);
         } else {
             mDataset = new ArrayList<User>(Arrays.asList(usersInitial));
