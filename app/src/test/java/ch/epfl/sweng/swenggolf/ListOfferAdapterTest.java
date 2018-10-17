@@ -10,11 +10,12 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class ListOfferAdapterTest {
 
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     private final List<Offer> offerList =
-            Arrays.asList(new Offer("Jim", "Beer", "A lot of beer"));
+            Arrays.asList(new Offer("Jim", "id_Jim","Beer", "A lot of beer"));
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyList() {

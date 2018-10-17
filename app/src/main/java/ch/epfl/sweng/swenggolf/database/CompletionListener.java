@@ -7,5 +7,5 @@ public interface CompletionListener {
      *
      * @param error the error
      */
-    void onComplete(DatabaseError error);
+    void onComplete(DbError error);
 }

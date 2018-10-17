@@ -34,7 +34,6 @@ public class CreateUserActivity extends AppCompatActivity {
         displayInformation(user);
     }
 
-
     /**
      * Launches the MainMenuActivity.
      */

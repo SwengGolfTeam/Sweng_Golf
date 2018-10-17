@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".database.CreateUserActivity">
 
-
     <ImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"

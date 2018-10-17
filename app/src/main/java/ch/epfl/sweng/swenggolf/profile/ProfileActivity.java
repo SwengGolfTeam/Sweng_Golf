@@ -16,6 +16,7 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
+
 public class ProfileActivity extends AppCompatActivity {
 
     private User user;

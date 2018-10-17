@@ -10,22 +10,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
+
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
     private List<Offer> offerList;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends ThreeFieldsViewHolder {
 
-        protected final TextView title;
-        protected final TextView author;
-        protected final TextView description;
-
-        protected MyViewHolder(View view) {
-            super(view);
-            title = view.findViewById(R.id.show_offer_title);
-            author = view.findViewById(R.id.offer_author);
-            description = view.findViewById(R.id.offer_description);
+        public MyViewHolder(View view) {
+            super(view, R.id.show_offer_title, R.id.offer_author, R.id.offer_description);
         }
     }
 
@@ -54,14 +49,14 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Offer offer = offerList.get(position);
 
-        holder.title.setText(offer.getTitle());
+        ((TextView) holder.getTitle()).setText(offer.getTitle());
 
         // Get short description
         String description = offer.getShortDescription();
 
-        holder.description.setText(description);
+        ((TextView) holder.getMainContent()).setText(description);
 
-        holder.author.setText(offer.getAuthor());
+        ((TextView) holder.getSubTitle()).setText(offer.getAuthor());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

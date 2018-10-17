@@ -16,8 +16,9 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseError;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+
 
 public class EditProfileActivity extends AppCompatActivity {
     private User user;
@@ -62,8 +63,8 @@ public class EditProfileActivity extends AppCompatActivity {
             Config.getUser().setUserName(name);
             Database.getInstance().write("/users/" + user.getUserId(), "userName", name, new CompletionListener() {
                 @Override
-                public void onComplete(DatabaseError error) {
-                    if (error != DatabaseError.NONE)
+                public void onComplete(DbError error) {
+                    if (error != DbError.NONE)
                         Log.e("EditProfileActivity", "could not access to database");
                 }
             });

@@ -10,13 +10,13 @@ public class Config {
     private Config() {
     }
 
-    /*
-     *   TEST_MODE must be true for tests and false otherwise.
+    /**
+     *   onTest must be true for tests and false otherwise.
      */
     private static boolean onTest = false;
 
-    /*
-     *   user is used to mock a FirebaseUser during a test.
+    /**
+     * user is used to mock a Firebase user during a test.
      */
     private static User user = null;
 
@@ -44,7 +44,7 @@ public class Config {
     }
 
     /**
-     * Method to get the mock user.
+     * Method to get the Firebase user.
      *
      * @return the corresponding User
      */
@@ -61,5 +61,4 @@ public class Config {
     public static void setUser(User newUser) {
         user = newUser;
     }
-
 }

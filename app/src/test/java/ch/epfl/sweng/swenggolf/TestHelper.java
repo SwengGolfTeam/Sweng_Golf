@@ -6,49 +6,47 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
 
 public class TestHelper {
 
 
-
-    private static final String name = "Hello";
-    private static final String mail = "Hello@World.ok";
-    private static final String uid = "123456789009876543211234567890";
-    private static final String photoFirebase = null;
-    private static final String photo = "photo";
+    private static final String NAME = "Hello";
+    private static final String MAIL = "Hello@World.ok";
+    private static final String UID = "123456789009876543211234567890";
+    private static final String PHOTO_FIREBASE = null;
+    private static final String PHOTO = "PHOTO";
 
     public static FirebaseUser getFirebaseUser() {
         Uri uriphoto = Mockito.mock(Uri.class);
-        Mockito.when(uriphoto.toString()).thenReturn(photoFirebase);
+        Mockito.when(uriphoto.toString()).thenReturn(PHOTO_FIREBASE);
         FirebaseUser user = Mockito.mock(FirebaseUser.class);
-        Mockito.when(user.getUid()).thenReturn(uid);
-        Mockito.when(user.getEmail()).thenReturn(mail);
-        Mockito.when(user.getDisplayName()).thenReturn(name);
+        Mockito.when(user.getUid()).thenReturn(UID);
+        Mockito.when(user.getEmail()).thenReturn(MAIL);
+        Mockito.when(user.getDisplayName()).thenReturn(NAME);
         Mockito.when(user.getPhotoUrl()).thenReturn(uriphoto);
         return user;
     }
 
     public static User getUser(){
-        User user = new User(name, uid, mail, photo);
+        User user = new User(NAME, UID, MAIL, PHOTO);
         return user;
     }
 
-    public static String getPhoto() { return photo; }
+    public static String getPhoto() { return PHOTO; }
 
     public static String getName() {
-        return name;
+        return NAME;
     }
 
     public static String getMail() {
-        return mail;
+        return MAIL;
     }
 
     public static String getUid() {
-        return uid;
+        return UID;
     }
 
     public static String getPhotoFirebase() {
-        return photoFirebase;
+        return PHOTO_FIREBASE;
     }
 }

@@ -13,10 +13,8 @@ public class User implements Parcelable {
     private  String email;
     private  String photo;
 
-
     /**
-     * Construct an empty local user.
-     * It is actually used for json read user.
+     * Construct an empty local user (used for json).
      */
     public User() {
         userName = "";
@@ -77,6 +75,7 @@ public class User implements Parcelable {
         return new User(username, user.getUserId(),email, user.getPhoto());
     }
 
+
     /**
      * Get the User id.
      *
@@ -102,6 +101,7 @@ public class User implements Parcelable {
         return this.email;
     }
 
+
     /**
      * Get the User photo.
      *
@@ -110,6 +110,18 @@ public class User implements Parcelable {
     public String getPhoto() {
         return photo;
     }
+    // TODO: check if need Uri for photo in Ugo's part
+
+    /**
+     * Get the user preference.
+     *
+     * @return the user preference
+     */
+    public String getPreference() {
+        return "Bananas";
+    }
+    // TODO: implement it correctly, remove hardcoded value
+
 
     /**
      * Set the userName.
