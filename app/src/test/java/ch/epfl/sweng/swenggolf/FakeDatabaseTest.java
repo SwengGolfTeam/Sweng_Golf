@@ -4,16 +4,16 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.fail;
-
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class FakeDatabaseTest {
 
@@ -80,7 +80,7 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.readList(PATH,listener,String.class);
+        d.readList(PATH, listener, String.class);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class FakeDatabaseTest {
                 fail();
             }
         };
-        d.readList(PATH,listener,String.class);
+        d.readList(PATH, listener, String.class);
     }
 
     private void writeListenerError(boolean working, DbError error) {
@@ -116,7 +116,6 @@ public class FakeDatabaseTest {
     public void writeListenerReturnNone() {
         writeListenerError(true, DbError.NONE);
     }
-
 
 
     @Test
@@ -159,9 +158,8 @@ public class FakeDatabaseTest {
                 assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
-        d.readList(PATH,listener,String.class);
+        d.readList(PATH, listener, String.class);
     }
-
 
 
 }

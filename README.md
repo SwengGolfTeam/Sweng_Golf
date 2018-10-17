@@ -6,9 +6,9 @@
 ## App specification
 The idea is to offer a trading system that would allow users to exchange goods or services, without the need of money.
 
-[![Build Status](https://travis-ci.org/udamiano/Sweng_Golf.svg?branch=master)](https://travis-ci.org/udamiano/Sweng_Golf)
-[![Maintainability](https://api.codeclimate.com/v1/badges/443d71fb588eeced1819/maintainability)](https://codeclimate.com/github/udamiano/Sweng_Golf/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/443d71fb588eeced1819/test_coverage)](https://codeclimate.com/github/udamiano/Sweng_Golf/test_coverage)
+[![Build Status](https://travis-ci.org/SwengGolfTeam/Sweng_Golf.svg?branch=master)](https://travis-ci.org/SwengGolfTeam/Sweng_Golf)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7c724d4b727121965eed/maintainability)](https://codeclimate.com/github/SwengGolfTeam/Sweng_Golf/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7c724d4b727121965eed/test_coverage)](https://codeclimate.com/github/SwengGolfTeam/Sweng_Golf/test_coverage)
 
 
 ## Reminders

@@ -8,10 +8,13 @@ import com.google.firebase.auth.FirebaseUser;
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User implements Parcelable {
 
+    private static final String DEFAULT_PREFERENCE = "";
     private String userName;
     private String userId;
     private String email;
     private String photo;
+    private String preference;
+
 
     /**
      * Construct an empty local user (used for json).
@@ -21,6 +24,7 @@ public class User implements Parcelable {
         email = "";
         userId = "";
         photo = "";
+        preference = "";
     }
 
 
@@ -34,6 +38,7 @@ public class User implements Parcelable {
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl().toString();
+        preference = "";
     }
 
     /**
@@ -42,27 +47,41 @@ public class User implements Parcelable {
      * @param u the other user
      */
     public User(User u) {
-        this(u.userName, u.userId, u.email, u.photo);
+        this(u.userName, u.userId, u.email, u.photo, u.preference);
+    }
+
+    /**
+     * Constructor for a user with empty preference.
+     *
+     * @param username the username
+     * @param userId   a unique identifier
+     * @param email    the user mail
+     * @param photo    user photo
+     */
+    public User(String username, String userId, String email, String photo) {
+        this(username, userId, email, photo, DEFAULT_PREFERENCE);
     }
 
     /**
      * Constructor for a user.
      *
-     * @param username the username
-     * @param userId   a unique identifier
-     * @param email    the login method
-     * @param photo    user photo
+     * @param username   the username
+     * @param userId     a unique identifier
+     * @param email      the user mail
+     * @param photo      the user photo
+     * @param preference the user preference
      */
-    public User(String username, String userId, String email, String photo) {
-        if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || photo == null) {
+    public User(String username, String userId, String email, String photo, String preference) {
+        if (username.isEmpty() || userId.isEmpty() || email.isEmpty()
+                || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
         this.userName = username;
         this.userId = userId;
         this.email = email;
         this.photo = photo;
+        this.preference = preference;
     }
-
 
     /**
      * Create an user with an existed user but with different name and different mail.
@@ -121,10 +140,8 @@ public class User implements Parcelable {
      * @return the user preference
      */
     public String getPreference() {
-        return "Bananas";
+        return preference;
     }
-    // TODO: implement it correctly, remove hardcoded value
-
 
     /**
      * Set the userName.
@@ -163,6 +180,14 @@ public class User implements Parcelable {
         this.photo = photo;
     }
 
+    /**
+     * Set the user preference.
+     *
+     * @param preference the corresponding preference
+     */
+    public void setPreference(String preference) {
+        this.preference = preference;
+    }
 
     /**
      * Methat which checks if two users have the same login account.
@@ -183,7 +208,8 @@ public class User implements Parcelable {
     public boolean sameInformations(User user) {
         return this.userName.equals(user.userName)
                 && this.email.equals(user.email)
-                && this.photo.equals(user.photo);
+                && this.photo.equals(user.photo)
+                && this.preference.equals(user.preference);
     }
 
     @Override

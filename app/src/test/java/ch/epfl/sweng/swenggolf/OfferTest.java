@@ -9,12 +9,12 @@ import static org.junit.Assert.assertEquals;
 
 public class OfferTest {
 
-    private final String author = "Patrick", id = "id_"+author, title = "Echange un panda",
+    private final String author = "Patrick", id = "id_" + author, title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyAuthor() {
-        new Offer("",id, title, description);
+        new Offer("", id, title, description);
 
     }
 
@@ -44,7 +44,7 @@ public class OfferTest {
     }
 
     @Test
-    public void testEmptyConstructor(){
+    public void testEmptyConstructor() {
         Offer offer = new Offer();
         assertEquals("Wrong uuid", "createdByEmptyConstructor", offer.getUuid());
     }
