@@ -62,8 +62,6 @@ public class ListPreferenceAdapter
                     Iterable<DataSnapshot> usersData = dataSnapshot.getChildren();
                     ArrayList<User> users = new ArrayList<>();
                     for (DataSnapshot user : usersData) {
-                        //UserFirebase concreteUser = user.getValue(UserFirebase.class);
-                        //users.add(concreteUser);
                         users.add(Config.getUser());
                     }
                     mDataset = users;
