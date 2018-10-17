@@ -19,14 +19,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class PreferenceActivityTest {
     @Rule
     public ActivityTestRule preferenceRule =
-            new ActivityTestRule<>(ListPreferencesActivity.class,false,false);
+            new ActivityTestRule<>(ListPreferencesActivity.class, false, false);
 
     /**
      * Enters adapter debug mode.
@@ -41,8 +40,8 @@ public class PreferenceActivityTest {
      * Scrolls to last element and check that it is displayed.
      */
     @Test
-    public void scrollingWorks(){
-        int userLength = ListPreferenceAdapter.USERS_INITIAL.length-1;
+    public void scrollingWorks() {
+        int userLength = ListPreferenceAdapter.USERS_INITIAL.length - 1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
@@ -57,7 +56,7 @@ public class PreferenceActivityTest {
      * Checks that element with username of the first user is in the list.
      */
     @Test
-    public void firstElementIsDiplayed(){
+    public void firstElementIsDiplayed() {
         String firstUserName = ListPreferenceAdapter.USERS_INITIAL[0].getUserName();
         RecyclerViewMatcher rm = new RecyclerViewMatcher(R.id.preference_list);
         onView(rm.atPosition(0)).check(matches(hasDescendant(withText(firstUserName))));

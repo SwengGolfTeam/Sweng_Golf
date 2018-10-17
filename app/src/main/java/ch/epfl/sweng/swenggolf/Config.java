@@ -48,6 +48,7 @@ public class Config {
      *
      * @return the corresponding User
      */
+
     public static User getUser() {
         return user == null ? new User(FirebaseAuth.getInstance().getCurrentUser()) : user;
     }

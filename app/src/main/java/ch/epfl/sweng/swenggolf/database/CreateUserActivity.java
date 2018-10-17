@@ -46,6 +46,7 @@ public class CreateUserActivity extends AppCompatActivity {
      *
      * @param user The localUser
      */
+
     private void displayInformation(User user) {
         name.setText(user.getUserName());
         mail.setText(user.getEmail());

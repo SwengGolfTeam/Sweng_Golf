@@ -107,6 +107,14 @@
           }
         },
         {
+          "client_id": "515318437233-1on465mpv88mbe15251ebvp8kvmeo20q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.swenggolf",
+            "certificate_hash": "99cdbd7e9971cea109ca7a5b5c974f7e951d072b"
+          }
+        },
+        {
           "client_id": "515318437233-vsola1ge0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,14 +1,17 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.auth.FirebaseUser;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
-public class User {
+public class User implements Parcelable {
 
-    private String userName;
-    private String userId;
-    private String email;
-    private String photo;
+    private  String userName;
+    private  String userId;
+    private  String email;
+    private  String photo;
 
     /**
      * Construct an empty local user (used for json).
@@ -22,11 +25,11 @@ public class User {
 
 
     /**
-     * Construct a user from FirebaseUser.
-     *
+
+     * Construct a  user from FirebaseUser.
      * @param fu the FirebaseUser
      */
-    public User(FirebaseUser fu) {
+    public User(FirebaseUser fu){
         userName = fu.getDisplayName();
         email = fu.getEmail();
         userId = fu.getUid();
@@ -63,14 +66,13 @@ public class User {
 
     /**
      * Create an user with an existed user but with different name and different mail.
-     *
-     * @param user     the original user
+     * @param user the original user
      * @param username the to be changed name
-     * @param email    the to be changed email
+     * @param email the to be changed email
      * @return the changed user
      */
-    public static User userChanged(User user, String username, String email) {
-        return new User(username, user.getUserId(), email, user.getPhoto());
+    public static User userChanged(User user, String username, String email){
+        return new User(username, user.getUserId(),email, user.getPhoto());
     }
 
 
@@ -79,25 +81,23 @@ public class User {
      *
      * @return the corresponding id
      */
-    public String getUserId() {
+    public String getUserId(){
         return this.userId;
     }
 
     /**
      * Get the User name.
-     *
      * @return the corresponding name
      */
-    public String getUserName() {
+    public String getUserName(){
         return this.userName;
     }
 
     /**
      * Get the User mail.
-     *
      * @return the corresponding mail
      */
-    public String getEmail() {
+    public String getEmail(){
         return this.email;
     }
 
@@ -143,12 +143,12 @@ public class User {
 
     /**
      * Set the user email.
-     *
      * @param email the corresponding user email
      */
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     /**
      * Set the user photo.
@@ -187,5 +187,37 @@ public class User {
             return sameAccount(user) && sameInformations(user);
         }
         return false;
+    }
+
+
+    /* implementation of Parcelable */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[] {userName, userId, email, photo});
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+   private User(Parcel in) {
+        String[] data = new String[4];
+
+        in.readStringArray(data);
+        this.userName = data[0];
+        this.userId = data[1];
+        this.email = data[2];
+        this.photo = data[3];
     }
 }
