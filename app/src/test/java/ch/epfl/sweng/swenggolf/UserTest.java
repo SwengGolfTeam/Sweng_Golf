@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNull;
 
 public class UserTest {
 
-    private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou";
+    private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana";
 
 
     @Before
@@ -40,6 +40,11 @@ public class UserTest {
         new User(USERNAME, ID, EMAIL, null);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullPreference() {
+        User user = new User(USERNAME, ID, EMAIL, null);
+    }
+
     @Test
     public void testGettersFull() {
         User localUser = new User(USERNAME, ID, EMAIL, PHOTO);
@@ -62,16 +67,14 @@ public class UserTest {
 
     @Test
     public void testSetters() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
         User user2 = new User();
         user2.setEmail(EMAIL);
         user2.setUserName(USERNAME);
         user2.setPhoto(PHOTO);
         user2.setUserId(ID);
-        assertEquals(user1.getEmail(), user2.getEmail());
-        assertEquals(user1.getPhoto(), user2.getPhoto());
-        assertEquals(user1.getUserId(), user2.getUserId());
-        assertEquals(user1.getUserName(), user2.getUserName());
+        user2.setPreference(PREFERENCE);
+        assertEquals("Failed to set preference", user1, user2);
     }
 
     @Test
@@ -107,4 +110,15 @@ public class UserTest {
         assertTrue(user1.sameInformations(user2));
     }
 
+    @Test
+    public void defaultPreferenceWorks() {
+        User user = new User(USERNAME, ID, EMAIL, PHOTO);
+        assertEquals("Default preference is not empty", "", user.getPreference());
+    }
+
+    @Test
+    public void initializingUserWithPreferenceWorks() {
+        User user = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
+        assertEquals("Failed to initialize user preference", PREFERENCE, user.getPreference());
+    }
 }

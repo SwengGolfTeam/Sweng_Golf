@@ -3,18 +3,17 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 
