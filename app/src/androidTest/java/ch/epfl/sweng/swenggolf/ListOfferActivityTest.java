@@ -52,13 +52,20 @@ public class ListOfferActivityTest {
      */
     @Before
     public void init() {
+        setUpFakeDatabase();
+        Config.goToTest();
+    }
+
+    /**
+     * Set up a fake database with two offers.
+     */
+    protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("Author", "user_id", "This is a title", LOREM);
         Offer offer2 = new Offer("Author", "user_id", "This is a title 2", LOREM);
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
-        Config.goToTest();
     }
 
     /**

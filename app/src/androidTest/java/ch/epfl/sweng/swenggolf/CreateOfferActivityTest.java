@@ -13,10 +13,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -37,8 +40,6 @@ import static org.hamcrest.core.IsNot.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
 public class CreateOfferActivityTest {
@@ -52,7 +53,7 @@ public class CreateOfferActivityTest {
      */
     @Before
     public void init() {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
+        ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
         Config.goToTest();
     }
@@ -92,7 +93,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void showMessageErrorWhenCantCreateOffer() {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers(false));
+        Database.setDebugDatabase(new FakeDatabase(false));
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         onView(withId(R.id.error_message))
@@ -101,6 +102,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
+        ListOfferActivityTest.setUpFakeDatabase();
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
