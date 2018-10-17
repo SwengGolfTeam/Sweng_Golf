@@ -85,7 +85,6 @@ public class DatabaseConnection {
         } else if (listener == null) {
             throw new IllegalArgumentException("listener should not be null");
         }
-
         DatabaseReference ref = db.getReference(type + "/" + id);
         ref.addListenerForSingleValueEvent(listener);
     }

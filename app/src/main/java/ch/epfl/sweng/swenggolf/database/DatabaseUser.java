@@ -5,7 +5,8 @@ import ch.epfl.sweng.swenggolf.User;
 public class DatabaseUser {
 
 
-    private DatabaseUser() {}
+    private DatabaseUser() {
+    }
 
     private static Database db = Database.getInstance();
 
