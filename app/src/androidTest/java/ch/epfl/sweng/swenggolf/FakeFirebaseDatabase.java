@@ -20,16 +20,15 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FakeFirebaseDatabase {
 
-    private static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
-            + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
-            + "Suspendisse potenti. Morbi vehicula ante nibh,"
+    private static final String LOREM = "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis."
+            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + " at tristique tortor dignissim non."
-            + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + "Mauris convallis sed mauris ut sodales."
             + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
             + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
-            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+            + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat.";
     private static final String IMAGE = "img.jpg";
 
     private static final Offer[] offers = {

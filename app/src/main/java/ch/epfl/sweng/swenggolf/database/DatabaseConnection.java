@@ -9,8 +9,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class DatabaseConnection {
     private static FirebaseDatabase db;
-    final String dbRead = "FIREBASE_READ";
-    private final String dbWrite = "FIREBASE_WRITE";
     private static DatabaseConnection databaseConnection = null;
 
     /**

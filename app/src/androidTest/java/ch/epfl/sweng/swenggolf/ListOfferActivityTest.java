@@ -47,6 +47,9 @@ public class ListOfferActivityTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Configures a fake database and enables TestMode.
+     */
     @Before
     public void init() {
         Database database = new FakeDatabase(true);
@@ -55,6 +58,7 @@ public class ListOfferActivityTest {
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
+        Config.goToTest();
     }
 
     /**
