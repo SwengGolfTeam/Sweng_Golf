@@ -58,13 +58,15 @@ public class EditProfileActivity extends AppCompatActivity {
         //TODO make the write in database inside user class ?
         if (!user.getUserId().isEmpty()) { // when in test mode for instance
             Config.getUser().setUserName(name);
-            Database.getInstance().write("/users/" + user.getUserId(), "userName", name, new CompletionListener() {
+            CompletionListener listener = new CompletionListener() {
                 @Override
                 public void onComplete(DbError error) {
-                    if (error != DbError.NONE)
+                    if (error != DbError.NONE) {
                         Log.e("EditProfileActivity", "could not access to database");
+                    }
                 }
-            });
+            };
+            Database.getInstance().write("/users/" + user.getUserId(), "userName", name, listener);
         }
 
         Intent intent = new Intent(this, ProfileActivity.class);

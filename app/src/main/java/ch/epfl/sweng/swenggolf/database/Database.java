@@ -49,8 +49,8 @@ public abstract class Database {
      * @param path     the path where to write the object
      * @param id       the id of the object
      * @param object   the object to write
-     * @param listener the onComplete method of the listener will be called with DatabaseError.NONE if it was a
-     *                 success or UNKNOWN_ERROR otherwise.
+     * @param listener the onComplete method of the listener will be called with DbError.NONE
+     *                 if it was a success or UNKNOWN_ERROR otherwise.
      */
     public abstract void write(@NonNull String path, @NonNull String id, @NonNull Object object,
                                @NonNull CompletionListener listener);

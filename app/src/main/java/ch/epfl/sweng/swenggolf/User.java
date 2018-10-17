@@ -212,7 +212,7 @@ public class User implements Parcelable {
     };
 
     private User(Parcel in) {
-        String data[] = new String[4];
+        String[] data = new String[4];
 
         in.readStringArray(data);
         this.userName = data[0];
