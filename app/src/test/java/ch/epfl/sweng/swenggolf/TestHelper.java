@@ -27,12 +27,14 @@ public class TestHelper {
         return user;
     }
 
-    public static User getUser(){
+    public static User getUser() {
         User user = new User(NAME, UID, MAIL, PHOTO);
         return user;
     }
 
-    public static String getPhoto() { return PHOTO; }
+    public static String getPhoto() {
+        return PHOTO;
+    }
 
     public static String getName() {
         return NAME;

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 public class ConfigTest {
 
     @Test
-    public void testModeTest(){
+    public void testModeTest() {
         Config.quitTest();
         assertFalse(Config.isTest());
         Config.goToTest();
@@ -18,7 +18,7 @@ public class ConfigTest {
     }
 
     @Test
-    public void staticUserTest(){
+    public void staticUserTest() {
         User user1 = TestHelper.getUser();
         Config.setUser(new User(user1));
         assertTrue(user1.equals(Config.getUser()));

@@ -12,9 +12,9 @@ import static junit.framework.TestCase.assertEquals;
 public class PreferenceAdapterTest {
 
     @Test
-    public void getItemCountReturnsRightValue(){
+    public void getItemCountReturnsRightValue() {
         ListPreferenceAdapter.debug = true;
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertEquals(adapter.getItemCount(),ListPreferenceAdapter.USERS_INITIAL.length);
+        assertEquals(adapter.getItemCount(), ListPreferenceAdapter.USERS_INITIAL.length);
     }
 }

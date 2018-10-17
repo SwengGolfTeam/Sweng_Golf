@@ -3,11 +3,11 @@ package ch.epfl.sweng.swenggolf;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import ch.epfl.sweng.swenggolf.database.DbError;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-
-import ch.epfl.sweng.swenggolf.database.DbError;
 
 public class DbErrorTest {
 
@@ -60,7 +60,8 @@ public class DbErrorTest {
 
 
     @Test
-    public void getErrorOveriddenBySet() {        compare(DbError.OVERRIDDEN_BY_SET, com.google.firebase.database.DatabaseError.OVERRIDDEN_BY_SET);
+    public void getErrorOveriddenBySet() {
+        compare(DbError.OVERRIDDEN_BY_SET, com.google.firebase.database.DatabaseError.OVERRIDDEN_BY_SET);
     }
 
 
@@ -99,7 +100,6 @@ public class DbErrorTest {
         Mockito.when(firebaseError.getCode()).thenReturn(0);
         DbError.getError(firebaseError);
     }
-
 
 
 }
