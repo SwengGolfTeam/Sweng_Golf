@@ -42,12 +42,12 @@ public class MainMenuActivityInstrumentedTestIntents {
 
     @Test
     public void testIntentOfferList(){
-        testIntent(ListOfferActivity.class.getName(),R.id.friends);
+        testIntent(ListOfferActivity.class.getName(),R.id.offers);
     }
 
     @Test
     public void testIntentCreateOffer(){
-        testIntent(CreateOfferActivity.class.getName(),R.id.nearby_services);
+        testIntent(CreateOfferActivity.class.getName(),R.id.create_offer);
     }
 
     @Test

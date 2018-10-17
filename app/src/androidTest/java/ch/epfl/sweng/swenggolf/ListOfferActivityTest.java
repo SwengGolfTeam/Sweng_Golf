@@ -9,7 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -31,14 +32,33 @@ public class ListOfferActivityTest {
         return new RecyclerViewMatcher(recyclerViewId);
     }
 
+     public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
+            + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
+            + "Suspendisse potenti. Morbi vehicula ante nibh,"
+            + " at tristique tortor dignissim non."
+            + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
+            + "Mauris convallis sed mauris ut sodales."
+            + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
+            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
+            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
+
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Configures a fake database and enables TestMode.
+     */
     @Before
     public void init() {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
-        TestMode.goToTest();
+        Database database = new FakeDatabase(true);
+        Offer offer1 = new Offer("Author","user_id", "This is a title", LOREM);
+        Offer offer2 = new Offer("Author", "user_id","This is a title 2", LOREM);
+        database.write("/offers", "idoftheoffer1", offer1);
+        database.write("/offers", "idoftheoffer2", offer2);
+        Database.setDebugDatabase(database);
+        Config.goToTest();
     }
 
     /**
@@ -57,9 +77,6 @@ public class ListOfferActivityTest {
                         ViewMatchers
                                 .withText(
                                         ListOfferActivity.offerList.get(0).getTitle())), click()));
-
-        onView(withId(R.id.show_offer_title))
-                .check(matches(withText(ListOfferActivity.offerList.get(0).getTitle())));
     }
 
     @Test

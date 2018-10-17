@@ -54,7 +54,7 @@ public class CreateOfferActivityTest {
     public void init() {
         DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
-        TestMode.goToTest();
+        Config.goToTest();
     }
 
 

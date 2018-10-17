@@ -24,8 +24,8 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.UUID;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.TestMode;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 
@@ -71,7 +71,7 @@ public class CreateOfferActivity extends AppCompatActivity {
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
             ImageView picture = findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
-            if (!link.isEmpty() && !TestMode.isTest()) {
+            if (!link.isEmpty() && !Config.isTest()) {
                 Picasso.with(this).load(Uri.parse(link)).into(picture);
             }
         }
@@ -146,7 +146,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                     }
                 });
 
-        if (TestMode.isTest()) {
+        if (Config.isTest()) {
             createOfferObject(name, description, "");
         }
 

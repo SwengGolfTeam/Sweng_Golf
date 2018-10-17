@@ -14,9 +14,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".main.MainMenuActivity" />
-        <activity android:name=".database.LogOutActivity" />
+        <activity android:name=".main.MainActivity"/>
+        <activity android:name=".main.MainMenuActivity"/>
+        <activity android:name=".database.CreateUserActivity"/>
+
         <activity
             android:name=".profile.ProfileActivity"
             android:label="@string/profile_activity_name"
@@ -25,12 +26,11 @@
             android:name=".profile.EditProfileActivity"
             android:label="@string/edit_profile_activity_name"
             android:parentActivityName=".profile.ProfileActivity" />
-
-        <activity android:name="ch.epfl.sweng.swenggolf.offer.CreateOfferActivity" />
-        <activity android:name="ch.epfl.sweng.swenggolf.offer.ListOfferActivity" />
-        <activity android:name="ch.epfl.sweng.swenggolf.offer.ShowOfferActivity"/>
+        <activity android:name=".offer.CreateOfferActivity" />
+        <activity android:name=".offer.ListOfferActivity" />
+        <activity android:name=".offer.ShowOfferActivity" />
+        <activity android:name=".database.WaitingActivity"></activity>
         <activity android:name=".preference.ListPreferencesActivity"/>
-
     </application>
 
 </manifest>
