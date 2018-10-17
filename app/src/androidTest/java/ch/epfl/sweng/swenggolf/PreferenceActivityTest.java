@@ -58,14 +58,13 @@ public class PreferenceActivityTest {
      * Enters adapter debug mode.
      */
     @Before
-    public void setUp() throws InterruptedException{
+    public void setUp() {
         Database usersDatabase = new FakeDatabase(true);
         for(User user : USERS_INITIAL){
             usersDatabase.write("/users",user.getUserId(),user);
         }
         Database.setDebugDatabase(usersDatabase);
         preferenceRule.launchActivity(new Intent());
-        Thread.sleep(4000);
     }
 
     /**

@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseUser;
 // Just a temporary placeholder class in order to complete the Firebase Implementation
 public class User implements Parcelable {
 
-    private final static String DEFAULT_PREFERENCE = "";
+    private static final String DEFAULT_PREFERENCE = "";
     private String userName;
     private String userId;
     private String email;
@@ -71,7 +71,8 @@ public class User implements Parcelable {
      * @param preference the user preference
      */
     public User(String username, String userId, String email, String photo, String preference) {
-        if (username.isEmpty() || userId.isEmpty() || email.isEmpty() || photo == null || preference == null) {
+        if (username.isEmpty() || userId.isEmpty() || email.isEmpty()
+                || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
         this.userName = username;
@@ -179,7 +180,7 @@ public class User implements Parcelable {
     }
 
     /**
-     * Set the user preference
+     * Set the user preference.
      *
      * @param preference the corresponding preference
      */
