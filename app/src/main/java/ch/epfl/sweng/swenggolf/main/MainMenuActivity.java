@@ -37,39 +37,32 @@ public class MainMenuActivity extends AppCompatActivity {
         setUserDisplay();
     }
 
-    private boolean setUserDisplay() {
-        account = FirebaseAccount.getCurrentUserAccount();
-        if (account != null) {
-            boolean name = setUserName();
-            boolean mail = setUserMail();
+    private void setUserDisplay() {
+        if (user != null) {
+            setUserName();
+            setUserMail();
             setUserPic();
-            return name && mail;
-        } else {
-            return false;
         }
     }
 
-    private boolean setValue(String textValue, TextView textField) {
+    private void setValue(String textValue, TextView textField) {
         if (textValue != null && !textValue.isEmpty() && textField != null) {
             textField.setText(textValue);
-            return true;
-        } else {
-            return false;
         }
     }
 
-    private boolean setUserName() {
-        return setValue(account.getName(), (TextView) nav.findViewById(R.id.username));
+    private void setUserName() {
+        setValue(user.getUserName(), (TextView) nav.findViewById(R.id.username));
     }
 
-    private boolean setUserMail() {
-        return setValue(account.getId(), (TextView) nav.findViewById(R.id.usermail));
+    private void setUserMail() {
+        setValue(user.getEmail(), (TextView) nav.findViewById(R.id.usermail));
     }
 
     private void setUserPic() {
         int errorDrawable = android.R.drawable.btn_dialog;
         ImageView userpicView = nav.findViewById(R.id.userpic);
-        Picasso.with(this).load(account.getPhotoUrl()).error(errorDrawable).into(userpicView);
+        Picasso.with(this).load(user.getPhoto()).error(errorDrawable).into(userpicView);
     }
 
     @Override
