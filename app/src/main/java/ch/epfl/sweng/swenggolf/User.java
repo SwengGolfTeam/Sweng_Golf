@@ -230,7 +230,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{userName, userId, email, photo});
+        dest.writeStringArray(new String[]{userName, userId, email, photo, preference});
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
@@ -244,12 +244,13 @@ public class User implements Parcelable {
     };
 
     private User(Parcel in) {
-        String[] data = new String[4];
+        String[] data = new String[5];
 
         in.readStringArray(data);
         this.userName = data[0];
         this.userId = data[1];
         this.email = data[2];
         this.photo = data[3];
+        this.preference = data[4];
     }
 }

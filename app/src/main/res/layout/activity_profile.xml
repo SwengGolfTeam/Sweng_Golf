@@ -9,14 +9,26 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/profileToolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/profile_activity_name" />
+        app:title="@string/profile_activity_name" >
+
+        <ImageButton
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:onClick="editProfile"
+            android:src="@android:drawable/ic_menu_edit"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvProfile"
@@ -39,19 +51,6 @@
             android:src="@drawable/gender_neutral_user1" />
     </android.support.v7.widget.CardView>
 
-    <ImageButton
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#71c9ae"
-        android:onClick="editProfile"
-        android:src="@android:drawable/ic_menu_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
@@ -66,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cvProfile" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/name"
@@ -143,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
 
     <TextView
         android:id="@+id/profilePreferences"
@@ -158,6 +157,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profilePreferences"
+        android:orientation="horizontal">
+
+
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
@@ -166,7 +176,7 @@
         android:layout_marginTop="8dp"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
