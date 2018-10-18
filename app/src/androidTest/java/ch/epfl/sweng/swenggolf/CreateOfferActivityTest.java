@@ -49,7 +49,6 @@ public class CreateOfferActivityTest {
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    @Before
     public void init() {
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
@@ -59,6 +58,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void errorMessageDisplayed() {
+
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.error_message))
@@ -84,6 +84,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() {
+        init();
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()));
@@ -100,6 +101,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
+        init();
         ListOfferActivityTest.setUpFakeDatabase();
         onView(withId(R.id.show_offers_button)).perform(click());
 
