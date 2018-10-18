@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -26,7 +24,10 @@ import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 
 /**
@@ -35,7 +36,6 @@ import ch.epfl.sweng.swenggolf.database.StorageConnection;
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
-    private String username;
     private TextView errorMessage;
     private Offer offerToModify;
 
@@ -51,11 +51,6 @@ public class CreateOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        username = getIntent().getExtras().getString("username");
-        if (username == null) {
-            throw new NullPointerException("No username given to CreateOfferActivity");
-        }
 
         errorMessage = findViewById(R.id.error_message);
 
@@ -167,24 +162,25 @@ public class CreateOfferActivity extends AppCompatActivity {
                 link = offerToModify.getLinkPicture();
             }
         }
-        final Offer newOffer = new Offer(username, "userId", name, description, link, uuid);
-        // TODO change userId to real value when singleton User is added
-        DatabaseConnection db = DatabaseConnection.getInstance();
-        writeOffer(newOffer, db);
+        User user = Config.getUser();
+        final Offer newOffer = new Offer(user.getUserName(), user.getUserId(), name, description,
+                link, uuid);
+
+        writeOffer(newOffer);
     }
 
     /**
      * Write an offer into the database.
      *
      * @param offer offer to be written
-     * @param db    the database
      */
-    private void writeOffer(final Offer offer, DatabaseConnection db) {
-        DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+    private void writeOffer(final Offer offer) {
+        Database database = Database.getInstance();
+
+        CompletionListener listener = new CompletionListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError,
-                                   @NonNull DatabaseReference databaseReference) {
-                if (databaseError == null) {
+            public void onComplete(@Nullable DbError databaseError) {
+                if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this, "Offer created",
                             Toast.LENGTH_SHORT).show();
                     Intent intent =
@@ -198,6 +194,6 @@ public class CreateOfferActivity extends AppCompatActivity {
                 }
             }
         };
-        db.writeObject("offers", offer.getUuid(), offer, listener);
+        database.write("offers", offer.getUuid(), offer, listener);
     }
 }

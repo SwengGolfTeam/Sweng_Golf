@@ -15,6 +15,7 @@ public class User implements Parcelable {
     private String photo;
     private String preference;
 
+
     /**
      * Construct an empty local user (used for json).
      */

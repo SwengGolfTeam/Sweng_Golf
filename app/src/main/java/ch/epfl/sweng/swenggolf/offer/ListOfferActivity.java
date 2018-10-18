@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
-
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ListOfferActivity extends Activity {
 
@@ -67,25 +63,20 @@ public class ListOfferActivity extends Activity {
      * Get the offers from the database.
      */
     private void prepareOfferData() {
-        DatabaseConnection db = DatabaseConnection.getInstance();
-        ValueEventListener listener = new ValueEventListener() {
+        Database database = Database.getInstance();
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Offer> offers = new ArrayList<>();
-                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    Offer offer = noteDataSnapshot.getValue(Offer.class);
-                    offers.add(offer);
-                }
-                mAdapter.add(offers);
+            public void onDataChange(List<Offer> value) {
+                mAdapter.add(value);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DbError error) {
                 Log.d("DBERR", "Could not do things (aka load offers from database");
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        db.readOffers(listener);
+        database.readOffers(listener);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
