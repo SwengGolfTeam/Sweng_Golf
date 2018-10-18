@@ -18,10 +18,8 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 public class DatabaseTest {
     protected class TestDatabase extends Database {
@@ -75,9 +73,15 @@ public class DatabaseTest {
 
 
     @Test
+    public void getInstanceAndSetDebugDatabaseNoError(){
+        Database db = new TestDatabase();
+        db.getInstance();
+        db.setDebugDatabase(db);
+    }
+
+    @Test
     public void writeAndRead() {
         Database db = new TestDatabase();
-        db.setDebugDatabase(db);
 
         db.write(PATH, ID, CONTENT);
 
@@ -98,7 +102,6 @@ public class DatabaseTest {
     @Test
     public void readList(){
         Database db = new TestDatabase();
-        db.setDebugDatabase(db);
 
         db.write(PATH, ID, CONTENT);
         db.write(PATH, ID2, CONTENT_2);
@@ -121,7 +124,6 @@ public class DatabaseTest {
     @Test
     public void writeWithListener(){
         Database db = new TestDatabase();
-        db.setDebugDatabase(db);
 
         CompletionListener listener = new CompletionListener() {
             @Override
@@ -136,8 +138,6 @@ public class DatabaseTest {
     @Test
     public void readOffers(){
         Database db = new TestDatabase();
-
-        db.setDebugDatabase(db);
 
         db.write(PATH, ID, CONTENT);
         db.write(PATH, ID2, CONTENT_2);
