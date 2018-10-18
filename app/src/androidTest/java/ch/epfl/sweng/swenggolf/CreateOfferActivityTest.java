@@ -46,13 +46,18 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
+    @Before
+    public void setTest(){
+        Config.goToTest();
+        Config.setUser(new User("username", "id", "username@example.com","nophoto"));
+    }
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    public void init() {
+    public void initDatabse() {
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
-        Config.goToTest();
+
     }
 
 
@@ -84,7 +89,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() {
-        init();
+        initDatabse();
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()));
@@ -101,7 +106,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
-        init();
+        initDatabse();
         ListOfferActivityTest.setUpFakeDatabase();
         onView(withId(R.id.show_offers_button)).perform(click());
 
