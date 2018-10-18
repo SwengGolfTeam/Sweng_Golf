@@ -51,6 +51,7 @@ public class CreateOfferActivityTest {
         Config.goToTest();
         Config.setUser(new User("username", "id", "username@example.com","nophoto"));
     }
+    
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
