@@ -5,6 +5,7 @@ import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,12 +56,18 @@ public class WaitingActivityTest {
         Database database = new FakeDatabase(true);
         database.write("/users", UID_1, USERDB);
         Database.setDebugDatabase(database);
+
+        Intents.init();
+        mActivityRule.launchActivity(new Intent());
+    }
+
+    @After
+    public void close() {
+        Intents.release();
     }
 
     @Test
     public void canGoToCreate() {
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
         Config.setUser(new User(USERNOTDB));
         DatabaseUser.getUser(new ValueListener() {
             @Override
@@ -74,13 +81,10 @@ public class WaitingActivityTest {
             }
         }, Config.getUser());
         intended(hasComponent(CreateUserActivity.class.getName()), times(0));
-        Intents.release();
     }
 
     @Test
     public void canGoToMenu() {
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
         Config.setUser(USERDB);
         assertEquals(USERDB, Config.getUser());
         DatabaseUser.addUser(USERDB);
@@ -96,7 +100,6 @@ public class WaitingActivityTest {
             }
         }, USERDB);
         intended(hasComponent(MainMenuActivity.class.getName()), times(0));
-        Intents.release();
     }
 }
 
