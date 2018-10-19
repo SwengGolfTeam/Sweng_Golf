@@ -35,18 +35,12 @@ public class DatabaseTest {
 
         @Override
         public void write(@NonNull String path, @NonNull String id, @NonNull Object object, @NonNull CompletionListener listener) {
-            write(path, id, object);
-            listener.onComplete(DbError.NONE);
+            //not needed for the tests because abstract function
         }
 
         @Override
         public <T> void read(@NonNull String path, @NonNull String id, @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
-            String key = path + "/" + id;
-            if (database.containsKey(key)) {
-                listener.onDataChange((T) database.get(key));
-            } else {
-                listener.onDataChange(null);
-            }
+            //not needed for the tests beacause abstract function
         }
 
         @Override
@@ -80,63 +74,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void writeAndRead() {
-        Database db = new TestDatabase();
-
-        db.write(PATH, ID, CONTENT);
-
-        ValueListener<String> listener = new ValueListener<String>() {
-            @Override
-            public void onDataChange(String value) {
-                assertThat(value, is(CONTENT));
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                fail();
-            }
-        };
-        db.read(PATH, ID, listener, String.class);
-    }
-
-    @Test
-    public void readList(){
-        Database db = new TestDatabase();
-
-        db.write(PATH, ID, CONTENT);
-        db.write(PATH, ID2, CONTENT_2);
-        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
-            @Override
-            public void onDataChange(List<String> value) {
-
-                assertThat(value.contains(CONTENT), is(true));
-                assertThat(value.contains(CONTENT_2), is(true));
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                fail();
-            }
-        };
-        db.readList(PATH, listener, String.class);
-    }
-
-    @Test
-    public void writeWithListener(){
-        Database db = new TestDatabase();
-
-        CompletionListener listener = new CompletionListener() {
-            @Override
-            public void onComplete(DbError error) {
-                assertThat(error, is(DbError.NONE));
-            }
-        };
-        db.write(PATH, ID, CONTENT, listener);
-
-    }
-
-    @Test
-    public void readOffers(){
+    public void readOffersReturnsCorrectValues(){
         Database db = new TestDatabase();
 
         db.write(PATH, ID, CONTENT);
