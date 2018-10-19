@@ -13,10 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
@@ -42,37 +39,32 @@ import static org.hamcrest.core.IsNot.not;
 
 /**
  * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
 public class CreateOfferActivityTest {
-    private User currentUser;
-    private Offer currentOffer;
 
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
-            new IntentsTestRule<>(MainActivity.class,false,false);
+            new IntentsTestRule<>(MainActivity.class);
 
+    @Before
+    public void setTest(){
+        Config.goToTest();
+        Config.setUser(new User("username", "id", "username@example.com","nophoto"));
+    }
+    
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    @Before
-    public void init() {
-        currentUser = new User("MyName","MyId","myemail@mymailbox.com","MyPhoto");
-        currentOffer = new Offer("MyId","title","description");
-        Config.setUser(currentUser);
-        Database data = new FakeDatabase(true);
-        data.write("/offers", currentOffer.getUuid(), currentOffer);
-        data.write("/users", currentUser.getUserId(), currentUser);
-        Database.setDebugDatabase(data);
-        Config.goToTest();
-        intentsTestRule.launchActivity(new Intent());
+    public void initDatabse() {
+        ListOfferActivityTest.setUpFakeDatabase();
+        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
     }
 
 
     @Test
     public void errorMessageDisplayed() {
+
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.error_message))
@@ -98,6 +90,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() {
+        initDatabse();
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()));
@@ -114,6 +107,8 @@ public class CreateOfferActivityTest {
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
+        initDatabse();
+        ListOfferActivityTest.setUpFakeDatabase();
         onView(withId(R.id.show_offers_button)).perform(click());
 
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(

@@ -63,8 +63,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         mainContent.setText(description);
 
         final TextView subtitle = (TextView) holder.getSubTitle();
-        subtitle.setText("sssssss");
-        /*Database data = Database.getInstance();
+        Database data = Database.getInstance();
         data.read("/users",offer.getUserId(),new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
@@ -76,7 +75,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
                 Log.d(error.toString(),"Failed to load user name");
             }
         },
-        User.class);*/
+        User.class);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

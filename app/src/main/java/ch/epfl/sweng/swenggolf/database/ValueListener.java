@@ -5,7 +5,7 @@ public interface ValueListener<T> {
     /**
      * Return the value found in the database.
      *
-     * @param value the value
+     * @param value the value. The value should be null if it is not found
      */
     void onDataChange(T value);
 

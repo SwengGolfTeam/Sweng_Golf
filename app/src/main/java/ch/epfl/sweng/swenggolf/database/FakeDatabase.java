@@ -251,7 +251,9 @@ public class FakeDatabase extends Database {
             new Offer("14", "Help to fix me up",
                     "My torso lacks my legs, I might trade " +
                             "my double ended lightsaber if you're nice.",
-                    "https://vignette.wikia.nocookie.net/a2a264e8-38e0-4c5e-b11d-7232c1f808ce/scale-to-width-down/800",
+                    "https://vignette.wikia.nocookie.net/" +
+                            "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/" +
+                            "scale-to-width-down/800",
                     "014")
     };
 }

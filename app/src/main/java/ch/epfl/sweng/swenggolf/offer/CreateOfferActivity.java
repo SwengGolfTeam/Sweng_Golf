@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -19,11 +20,11 @@ import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -164,25 +165,24 @@ public class CreateOfferActivity extends AppCompatActivity {
             }
         }
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description, link, uuid);
-        Database data = Database.getInstance();
-        writeOffer(newOffer, data);
+        writeOffer(newOffer);
     }
 
     /**
      * Write an offer into the database.
      *
      * @param offer offer to be written
-     * @param db    the database
      */
-    private void writeOffer(final Offer offer, Database db) {
+    private void writeOffer(final Offer offer) {
         creationAsked = true;
+        Database database = Database.getInstance();
         final Intent intent =
                 new Intent(CreateOfferActivity.this,
                         ShowOfferActivity.class);
         CompletionListener listener = new CompletionListener() {
             @Override
-            public void onComplete(DbError error) {
-                if(error == DbError.NONE){
+            public void onComplete(@Nullable DbError databaseError) {
+                if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this, "Offer created",
                             Toast.LENGTH_SHORT).show();
                     intent.putExtra("offer", offer);
@@ -194,6 +194,6 @@ public class CreateOfferActivity extends AppCompatActivity {
             }
 
         };
-        db.write("/offers", offer.getUuid(), offer, listener);
+        database.write("/offers", offer.getUuid(), offer, listener);
     }
 }
