@@ -4,7 +4,6 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,10 +72,11 @@ public class DatabaseTest {
 
 
     @Test
-    public void getInstanceAndSetDebugDatabaseNoError(){
+    public void getInstanceAndSetDebugDatabaseNoException(){
         Database db = new TestDatabase();
-        db.getInstance();
+
         db.setDebugDatabase(db);
+        db.getInstance();
     }
 
     @Test
