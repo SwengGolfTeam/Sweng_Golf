@@ -26,7 +26,7 @@ public class MainMenuActivityInstrumentedTestAvailable {
 
     @Before
     public void setUp() {
-        FirebaseAccount.test = true;
+        Config.setUser(new User("usernameValid", "userIdValid", "emailValid", "photoValid"));
         mMenuRule.launchActivity(new Intent());
     }
 
@@ -37,9 +37,9 @@ public class MainMenuActivityInstrumentedTestAvailable {
     }
 
     @Test
-    public void userIdFieldIsOfUser() {
+    public void userMailFieldIsOfUser() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.usermail);
-        assertThat(t.getText().toString(), is("userIdValid"));
+        assertThat(t.getText().toString(), is("emailValid"));
     }
 }
 
