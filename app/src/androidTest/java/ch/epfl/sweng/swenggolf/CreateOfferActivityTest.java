@@ -13,10 +13,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -42,19 +47,27 @@ import static org.hamcrest.core.IsNot.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class CreateOfferActivityTest {
+    private User currentUser;
+    private Offer currentOffer;
 
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
-            new IntentsTestRule<>(MainActivity.class);
+            new IntentsTestRule<>(MainActivity.class,false,false);
 
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
     @Before
     public void init() {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers());
-        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
+        currentUser = new User("MyName","MyId","myemail@mymailbox.com","MyPhoto");
+        currentOffer = new Offer("MyId","title","description");
+        Config.setUser(currentUser);
+        Database data = new FakeDatabase(true);
+        data.write("/offers", currentOffer.getUuid(), currentOffer);
+        data.write("/users", currentUser.getUserId(), currentUser);
+        Database.setDebugDatabase(data);
         Config.goToTest();
+        intentsTestRule.launchActivity(new Intent());
     }
 
 
@@ -92,7 +105,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void showMessageErrorWhenCantCreateOffer() {
-        DatabaseConnection.setDebugDatabase(FakeFirebaseDatabase.firebaseDatabaseOffers(false));
+        Database.setDebugDatabase(new FakeDatabase(false));
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         onView(withId(R.id.error_message))

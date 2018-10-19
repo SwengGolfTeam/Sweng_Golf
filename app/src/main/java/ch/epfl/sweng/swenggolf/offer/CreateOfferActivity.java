@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,16 +16,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.DatabaseConnection;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 
 /**
@@ -35,9 +35,9 @@ import ch.epfl.sweng.swenggolf.database.StorageConnection;
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
-    private String username;
     private TextView errorMessage;
     private Offer offerToModify;
+    private boolean creationAsked;
 
     private ImageView imageView;
 
@@ -48,14 +48,10 @@ public class CreateOfferActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        creationAsked = false;
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        username = getIntent().getExtras().getString("username");
-        if (username == null) {
-            throw new NullPointerException("No username given to CreateOfferActivity");
-        }
 
         errorMessage = findViewById(R.id.error_message);
 
@@ -111,7 +107,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param view the view
      */
     public void createOffer(View view) {
-
+        if(creationAsked) { return; }
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
@@ -167,10 +163,9 @@ public class CreateOfferActivity extends AppCompatActivity {
                 link = offerToModify.getLinkPicture();
             }
         }
-        final Offer newOffer = new Offer(username, "userId", name, description, link, uuid);
-        // TODO change userId to real value when singleton User is added
-        DatabaseConnection db = DatabaseConnection.getInstance();
-        writeOffer(newOffer, db);
+        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description, link, uuid);
+        Database data = Database.getInstance();
+        writeOffer(newOffer, data);
     }
 
     /**
@@ -179,25 +174,26 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param offer offer to be written
      * @param db    the database
      */
-    private void writeOffer(final Offer offer, DatabaseConnection db) {
-        DatabaseReference.CompletionListener listener = new DatabaseReference.CompletionListener() {
+    private void writeOffer(final Offer offer, Database db) {
+        creationAsked = true;
+        final Intent intent =
+                new Intent(CreateOfferActivity.this,
+                        ShowOfferActivity.class);
+        CompletionListener listener = new CompletionListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError,
-                                   @NonNull DatabaseReference databaseReference) {
-                if (databaseError == null) {
+            public void onComplete(DbError error) {
+                if(error == DbError.NONE){
                     Toast.makeText(CreateOfferActivity.this, "Offer created",
                             Toast.LENGTH_SHORT).show();
-                    Intent intent =
-                            new Intent(CreateOfferActivity.this,
-                                    ShowOfferActivity.class);
                     intent.putExtra("offer", offer);
                     startActivity(intent);
-                } else {
+                }else{
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }
             }
+
         };
-        db.writeObject("offers", offer.getUuid(), offer, listener);
+        db.write("/offers", offer.getUuid(), offer, listener);
     }
 }
