@@ -17,6 +17,10 @@ public class DatabaseUser {
 
 
     public static void getUser(final ValueListener listener, User user) {
-        db.read("/users", user.getUserId(), listener, User.class);
+        getUser(listener, user.getUserId());
+    }
+
+    public static void getUser(final ValueListener listener, String userId) {
+        db.read("/users", userId, listener, User.class);
     }
 }

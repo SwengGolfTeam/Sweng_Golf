@@ -16,6 +16,7 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
@@ -44,9 +45,8 @@ public class ShowOfferActivity extends AppCompatActivity {
         offerTitle.setText(offer.getTitle());
 
         final TextView offerAuthor = findViewById(R.id.show_offer_author);
-        Database data = Database.getInstance();
         offerAuthor.setText("");
-        data.read("/users",offer.getUserId(),new ValueListener<User>() {
+        DatabaseUser.getUser(new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
                 offerAuthor.setText(value.getUserName());
@@ -54,10 +54,10 @@ public class ShowOfferActivity extends AppCompatActivity {
 
                     @Override
             public void onCancelled(DbError error) {
-                Log.d(error.toString(),"Failed to display username into offer displaying");
+                Log.d(error.toString(),"Failed to display username");
             }
         },
-        User.class);
+        offer.getUserId());
 
         TextView offerDescription = findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());

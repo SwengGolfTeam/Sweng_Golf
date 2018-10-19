@@ -10,9 +10,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
@@ -63,8 +65,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         mainContent.setText(description);
 
         final TextView subtitle = (TextView) holder.getSubTitle();
-        Database data = Database.getInstance();
-        data.read("/users",offer.getUserId(),new ValueListener<User>() {
+        DatabaseUser.getUser(new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
                 subtitle.setText(value.getUserName());
@@ -74,8 +75,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
             public void onCancelled(DbError error) {
                 Log.d(error.toString(),"Failed to load user name");
             }
-        },
-        User.class);
+        },Config.getUser());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
