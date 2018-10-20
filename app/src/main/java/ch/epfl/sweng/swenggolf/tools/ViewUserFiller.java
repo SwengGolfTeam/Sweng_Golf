@@ -12,6 +12,13 @@ public abstract class ViewUserFiller {
 
     private ViewUserFiller() {}
 
+    /**
+     * Fills a TextView with the username of a given user.
+     * This is done asynchronously.
+     *
+     * @param view the TextView to fill.
+     * @param userId the user to retrieve the username from.
+     */
     public static void fillWithUsername(final TextView view, String userId) {
         DatabaseUser.getUser(new ValueListener<User>() {
             @Override

@@ -91,9 +91,14 @@ public class FakeDatabase extends Database {
         return fakeValuedDatabase;
     }
 
+    private static final String WIKIA_NO_COOKIE = "https://vignette.wikia.nocookie.net/";
+    private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
+    private static final String STARWARS = "starwars/";
+
     public static final User[] FAKE_USERS = {
             new User("C3PO", "0", "c3po@gmail.com",
-                    "https://vignette.wikia.nocookie.net/starwars/"
+                    WIKIA_NO_COOKIE
+                            + STARWARS
                             + "images/5/51/C-3PO_EP3.png/revision/"
                             + "latest?cb=20131005124036",
                     "Peace"),
@@ -108,7 +113,8 @@ public class FakeDatabase extends Database {
                             + "6576537lpw-6576611-article-jpg_3988009.jpg",
                     "Resistance to the empire"),
             new User("Luke", "3", "armless@yahoo.com",
-                    "https://vignette.wikia.nocookie.net/fr.starwars/"
+                    WIKIA_NO_COOKIE
+                            + "fr.starwars/"
                             + "images/2/2d/Luke.jpg/revision/"
                             + "latest?cb=20150618122007",
                     "A new arm"),
@@ -153,17 +159,18 @@ public class FakeDatabase extends Database {
                             + "_mVgZLrAQM3cGzxeU",
                     "Anakin"),
             new User("Poe", "12", "xwingdriver@gmail.com",
-                    "https://vignette.wikia.nocookie.net/"
+                    WIKIA_NO_COOKIE
                             + "fr.starwars/images/1/1d/"
                             + "Poe_Dameron.png/revision/latest?cb=20161110202556",
                     "Spaceships"),
             new User("Dark Maul", "14", "halfman@gmail.com",
-                    "https://vignette.wikia.nocookie.net/starwars/"
+                    WIKIA_NO_COOKIE
+                            + STARWARS
                             + "images/7/79/Maul_SASWS_Forbes_Promo_HS.png/"
                             + "revision/latest?cb=20180909043811",
                     "Face make up"),
             new User("Jabba The Hutt", "15", "slut@yahoo.com",
-                    "https://vignette.wikia.nocookie.net/"
+                    WIKIA_NO_COOKIE
                             + "fr.starwars/images/3/39/"
                             + "Jabba_le_Hutt.png/revision/latest?cb=20170818180549",
                     "Carbonite Han Solo"),
@@ -181,15 +188,16 @@ public class FakeDatabase extends Database {
                     "I have a little droid with informations"
                             + " on the rebels care to exchange it against"
                             + " a ride from Tatooine ?",
-                    "https://vignette.wikia.nocookie.net/"
-                            + "starwars/images/f/ff/Sandcrawler.png/"
+                    WIKIA_NO_COOKIE
+                            + STARWARS
+                            + "images/f/ff/Sandcrawler.png/"
                             + "revision/latest?cb=20130812001443",
                     "01"),
             new Offer("13", "Defense against the droids",
                     "The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
                             + " I can exchange !",
-                    "https://lumiere-a.akamaihd.net/v1/images/"
+                    LUMIERE
                             + "databank_battledroid_01_169_1524f145.jpeg?"
                             + "region=0%2C0%2C1560%2C878&width=768",
                     "02"),
@@ -210,13 +218,14 @@ public class FakeDatabase extends Database {
                     "Defeat Dark Sidious. "
                             + "With me train you shall,"
                             + " If so you want.",
-                    "https://vignette.wikia.nocookie.net/starwars/"
+                    WIKIA_NO_COOKIE
+                            + STARWARS
                             + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
                     "05"),
             new Offer("4", "Help to get the senate",
                     "I'm looking for an apprentice to show him"
                             + " my unlimited power and take down the senate !",
-                    "https://lumiere-a.akamaihd.net/v1/images/"
+                    LUMIERE
                             + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342",
                     "06"),
             new Offer("5", "Prepare Surprise for a friend",
@@ -232,12 +241,12 @@ public class FakeDatabase extends Database {
                     "08"),
             new Offer("9", "bipbupbap",
                     "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                    "https://lumiere-a.akamaihd.net/v1/images/"
+                    LUMIERE
                             + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
                     "09"),
             new Offer("1", "Nice helmet to build ship",
                     "I must build some star like ship, you can have my helmet then !",
-                    "https://lumiere-a.akamaihd.net/v1/images/"
+                    LUMIERE
                             + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768",
                     "010"),
             new Offer("3", "Student job in a farm",
@@ -257,7 +266,7 @@ public class FakeDatabase extends Database {
             new Offer("14", "Help to fix me up",
                     "My torso lacks my legs, I might trade "
                             + "my double ended lightsaber if you're nice.",
-                    "https://vignette.wikia.nocookie.net/"
+                    WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
                             + "scale-to-width-down/800",
                     "014")

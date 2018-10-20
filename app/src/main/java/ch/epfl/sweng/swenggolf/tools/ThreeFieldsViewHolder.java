@@ -59,23 +59,4 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
         return mainContent;
     }
 
-    /**
-     * Fills subtitle with a user's username. This is done asynchronously.
-     *
-     * @userId the string representing the user from which the name must be fetched.
-     */
-    public void loadNameInSubtitle(String userId) {
-        DatabaseUser.getUser(new ValueListener<User>() {
-            @Override
-            public void onDataChange(User value) {
-                subTitle.setText(value.getUserName());
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(),"Failed to load user name");
-            }
-        },userId);
-    }
-
 }
