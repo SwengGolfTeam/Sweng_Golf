@@ -16,7 +16,7 @@ public class Config {
     private static boolean onTest = false;
 
     /**
-     *
+     * The ActivityCallback set before.
      */
     private static ActivityCallback activityCallback = null;
 
@@ -87,7 +87,7 @@ public class Config {
         Config.activityCallback = new ActivityCallback() {
             @Override
             public void isDone() {
-
+                //Do nothing because we want to reset it!
             }
         };
     }
