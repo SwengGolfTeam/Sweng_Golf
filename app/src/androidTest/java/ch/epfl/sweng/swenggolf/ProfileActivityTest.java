@@ -24,12 +24,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
-
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
     User user = new User("Patrick", "Vetterli", "1234567890", "");
 
+    /**
+     * Initialise the Config and the Database for tests.
+     */
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);

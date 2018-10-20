@@ -37,8 +37,6 @@ public class EditProfileActivity extends AppCompatActivity {
             ImageView imageView = findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this);
         }
-
-
     }
 
     /**
