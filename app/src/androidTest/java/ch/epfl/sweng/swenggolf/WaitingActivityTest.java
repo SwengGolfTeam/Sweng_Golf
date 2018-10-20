@@ -1,8 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.content.Intent;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.rule.ActivityTestRule;
+
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -13,19 +12,12 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.Intents.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -42,8 +34,8 @@ public class WaitingActivityTest {
     private static final User USERNOTDB = new User(NAME, UID_2, MAIL, PHOTO);
 
     @Rule
-    public final ActivityTestRule<WaitingActivity> mActivityRule =
-            new ActivityTestRule<>(WaitingActivity.class);
+    public final IntentsTestRule<WaitingActivity> mActivityRule =
+            new IntentsTestRule<>(WaitingActivity.class);
 
 
     /**
@@ -53,50 +45,31 @@ public class WaitingActivityTest {
     public void setUp() {
         Config.goToTest();
         Database database = new FakeDatabase(true);
-        database.write("/users", UID_1, USERDB);
         Database.setDebugDatabase(database);
+        DatabaseUser.addUser(USERDB);
     }
 
     @Test
     public void canGoToCreate() {
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
         Config.setUser(new User(USERNOTDB));
-        DatabaseUser.getUser(new ValueListener() {
+        Config.setActivityCallback(new ActivityCallback() {
             @Override
-            public void onDataChange(Object value) {
-                assertNull(value);
+            public void isDone() {
+                intended(hasComponent(CreateUserActivity.class.getName()));
             }
-
-            @Override
-            public void onCancelled(DbError error) {
-
-            }
-        }, Config.getUser());
-        intended(hasComponent(CreateUserActivity.class.getName()), times(0));
-        Intents.release();
+        });
     }
 
     @Test
     public void canGoToMenu() {
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
         Config.setUser(USERDB);
-        assertEquals(USERDB, Config.getUser());
-        DatabaseUser.addUser(USERDB);
-        DatabaseUser.getUser(new ValueListener() {
+        Config.setActivityCallback(new ActivityCallback() {
             @Override
-            public void onDataChange(Object value) {
-                assertEquals(USERDB, value);
+            public void isDone() {
+                intended(hasComponent(MainMenuActivity.class.getName()));
             }
-
-            @Override
-            public void onCancelled(DbError error) {
-
-            }
-        }, USERDB);
-        intended(hasComponent(MainMenuActivity.class.getName()), times(0));
-        Intents.release();
+        });
     }
+
 }
 

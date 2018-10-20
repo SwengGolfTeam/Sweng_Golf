@@ -16,6 +16,12 @@ public class Config {
     private static boolean onTest = false;
 
     /**
+     *
+     */
+    private static ActivityCallback activityCallback = null;
+
+
+    /**
      * user is used to mock a Firebase user during a test.
      */
     private static User user = null;
@@ -50,7 +56,11 @@ public class Config {
      */
 
     public static User getUser() {
-        return user == null ? new User(FirebaseAuth.getInstance().getCurrentUser()) : user;
+        if(user == null){
+            return isTest() ? new User() : new User(FirebaseAuth.getInstance().getCurrentUser());
+        } else {
+            return user;
+        }
     }
 
     /**
@@ -61,4 +71,36 @@ public class Config {
     public static void setUser(User newUser) {
         user = newUser;
     }
+
+    /**
+     * Set the ActivityCallback.
+     * @param activityCallback the ActivityCallback to set
+     */
+    public static void setActivityCallback(ActivityCallback activityCallback){
+        Config.activityCallback = activityCallback;
+    }
+
+    /**
+     * Reset The ActivityCallback.
+     */
+    public static void resetActivityCallback(){
+        Config.activityCallback = new ActivityCallback() {
+            @Override
+            public void isDone() {
+
+            }
+        };
+    }
+
+
+    /**
+     * Get the ActivityCallback.
+     */
+    public static ActivityCallback getActivityCallback(){
+        if(Config.activityCallback == null || !Config.isTest()) {
+            Config.resetActivityCallback();
+        }
+        return Config.activityCallback;
+    }
+
 }

@@ -49,6 +49,7 @@ public class WaitingActivity extends AppCompatActivity {
                 } else {
                     goToCreate();
                 }
+                Config.getActivityCallback();
             }
 
             @Override
