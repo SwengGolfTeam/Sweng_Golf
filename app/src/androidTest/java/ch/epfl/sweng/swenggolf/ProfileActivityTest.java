@@ -29,13 +29,13 @@ public class ProfileActivityTest {
 
     User user = new User("Patrick", "Vetterli", "1234567890", "");
 
-    /**
-     * Initialise the Config and the Database for tests.
-     */
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Initialise the Config and the Database for tests.
+     */
     @Before
     public void setUp(){
         Config.isTest();
