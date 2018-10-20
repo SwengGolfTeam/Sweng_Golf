@@ -1,9 +1,10 @@
 package ch.epfl.sweng.swenggolf.database;
 
+import java.util.function.Function;
+
 import ch.epfl.sweng.swenggolf.User;
 
 public class DatabaseUser {
-
 
     private DatabaseUser() {
     }
@@ -23,4 +24,5 @@ public class DatabaseUser {
     public static void getUser(final ValueListener listener, String userId) {
         db.read("/users", userId, listener, User.class);
     }
+
 }

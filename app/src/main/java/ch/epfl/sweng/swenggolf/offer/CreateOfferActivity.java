@@ -164,7 +164,8 @@ public class CreateOfferActivity extends AppCompatActivity {
                 link = offerToModify.getLinkPicture();
             }
         }
-        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description, link, uuid);
+        final Offer newOffer =
+                new Offer(Config.getUser().getUserId(), name, description, link, uuid);
         writeOffer(newOffer);
     }
 

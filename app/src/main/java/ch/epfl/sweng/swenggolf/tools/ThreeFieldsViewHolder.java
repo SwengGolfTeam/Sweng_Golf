@@ -1,12 +1,20 @@
 package ch.epfl.sweng.swenggolf.tools;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+
+import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
 
-    private View title;
-    private View subTitle;
+    private TextView title;
+    private TextView subTitle;
     private View mainContent;
 
     /**
@@ -49,6 +57,25 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
      */
     public View getMainContent() {
         return mainContent;
+    }
+
+    /**
+     * Fills subtitle with a user's username. This is done asynchronously.
+     *
+     * @userId the string representing the user from which the name must be fetched.
+     */
+    public void loadNameInSubtitle(String userId) {
+        DatabaseUser.getUser(new ValueListener<User>() {
+            @Override
+            public void onDataChange(User value) {
+                subTitle.setText(value.getUserName());
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(),"Failed to load user name");
+            }
+        },userId);
     }
 
 }

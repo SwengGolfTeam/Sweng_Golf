@@ -75,6 +75,11 @@ public class FakeDatabase extends Database {
         return list.isEmpty() ? null : list;
     }
 
+    /**
+     * Creates a database already filled with users and offers.
+     *
+     * @return the prefilled database.
+     */
     public static Database fakeDatabaseCreator() {
         Database fakeValuedDatabase = new FakeDatabase(true);
         for (User user : FAKE_USERS) {
@@ -143,8 +148,8 @@ public class FakeDatabase extends Database {
                             + "goods-img/1511931948337193297.jpg",
                     "tittutbipmip"),
             new User("Padme", "13", "princess@outlook.com",
-                    "https://encrypted-tbn0.gstatic.com/" +
-                            "images?q=tbn:ANd9GcT9I_hNNXaHQ31i6s-_EsOeUv8tMRWPe7C"
+                    "https://encrypted-tbn0.gstatic.com/"
+                            + "images?q=tbn:ANd9GcT9I_hNNXaHQ31i6s-_EsOeUv8tMRWPe7C"
                             + "_mVgZLrAQM3cGzxeU",
                     "Anakin"),
             new User("Poe", "12", "xwingdriver@gmail.com",
@@ -158,16 +163,16 @@ public class FakeDatabase extends Database {
                             + "revision/latest?cb=20180909043811",
                     "Face make up"),
             new User("Jabba The Hutt", "15", "slut@yahoo.com",
-                    "https://vignette.wikia.nocookie.net/" +
-                            "fr.starwars/images/3/39/"
+                    "https://vignette.wikia.nocookie.net/"
+                            + "fr.starwars/images/3/39/"
                             + "Jabba_le_Hutt.png/revision/latest?cb=20170818180549",
                     "Carbonite Han Solo"),
             new User("Dark Plagueis", "16", "thewise@hotmail.com",
                     "",
                     "Save myself from death"),
             new User("Grievous", "17", "hellothere@yahoo.com",
-                    "https://lumiere-a.akamaihd.net/v1/" +
-                            "images/General-Grievous_c9df9cb5.jpeg?"
+                    "https://lumiere-a.akamaihd.net/v1/"
+                            + "images/General-Grievous_c9df9cb5.jpeg?"
                             + "region=0%2C0%2C1200%2C675&width=768",
                     "Lightsabers")
     };
@@ -184,9 +189,9 @@ public class FakeDatabase extends Database {
                     "The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
                             + " I can exchange !",
-                    "https://lumiere-a.akamaihd.net/v1/images/" +
-                            "databank_battledroid_01_169_1524f145.jpeg?" +
-                            "region=0%2C0%2C1560%2C878&width=768",
+                    "https://lumiere-a.akamaihd.net/v1/images/"
+                            + "databank_battledroid_01_169_1524f145.jpeg?"
+                            + "region=0%2C0%2C1560%2C878&width=768",
                     "02"),
             new Offer("8", "Chosen one",
                     "Someone out there is the chosen one ?"
@@ -195,18 +200,18 @@ public class FakeDatabase extends Database {
                     "https://i.redd.it/4zqd4mvkq3n01.jpg",
                     "03"),
             new Offer("15", "Great Price to find a friend",
-                    "I'm looking for a \"friend\" of mine, a certain Han Solo," +
-                            " I offer a desert spaceship to interested !"
+                    "I'm looking for a \"friend\" of mine, a certain Han Solo,"
+                            + " I offer a desert spaceship to interested !"
                             + " It's him on the left.",
-                    "https://cdn3.whatculture.com/" +
-                            "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
+                    "https://cdn3.whatculture.com/"
+                            + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
                     "04"),
             new Offer("7", "Defeat Dark Sidious I must",
                     "Defeat Dark Sidious. "
                             + "With me train you shall,"
                             + " If so you want.",
-                    "https://vignette.wikia.nocookie.net/starwars/" +
-                            "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
+                    "https://vignette.wikia.nocookie.net/starwars/"
+                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
                     "05"),
             new Offer("4", "Help to get the senate",
                     "I'm looking for an apprentice to show him"

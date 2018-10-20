@@ -49,11 +49,6 @@ public class PreferenceActivityTest {
         preferenceRule.launchActivity(new Intent());
     }
 
-    @After
-    public void waitTo() throws InterruptedException{
-        Thread.sleep(4000);
-    }
-
     /**
      * Scrolls to last element and check that it is displayed.
      */
