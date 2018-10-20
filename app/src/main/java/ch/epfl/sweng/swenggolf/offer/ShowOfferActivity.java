@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
 public class ShowOfferActivity extends AppCompatActivity {
@@ -45,19 +46,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         offerTitle.setText(offer.getTitle());
 
         final TextView offerAuthor = findViewById(R.id.show_offer_author);
-        offerAuthor.setText("");
-        DatabaseUser.getUser(new ValueListener<User>() {
-            @Override
-            public void onDataChange(User value) {
-                offerAuthor.setText(value.getUserName());
-            }
-
-                    @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(),"Failed to display username");
-            }
-        },
-        offer.getUserId());
+        ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
 
         TextView offerDescription = findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());

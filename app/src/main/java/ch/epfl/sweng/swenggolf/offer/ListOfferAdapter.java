@@ -18,6 +18,7 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
+import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
@@ -65,6 +66,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         mainContent.setText(description);
 
         final TextView subtitle = (TextView) holder.getSubTitle();
+        ViewUserFiller.fillWithUsername(subtitle, Config.getUser().getUserId());
         DatabaseUser.getUser(new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
