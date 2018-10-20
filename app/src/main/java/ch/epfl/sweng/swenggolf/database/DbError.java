@@ -66,13 +66,13 @@ public enum DbError {
     UNAVAILABLE {
         @Override
         public String toString() {
-            return "Data unavailable";
+            return "Service unavailable";
         }
     },
     UNKNOWN_ERROR {
         @Override
         public String toString() {
-            return "Unknown Error";
+            return "Unknown error";
         }
     },
     USER_CODE_EXCEPTION {
