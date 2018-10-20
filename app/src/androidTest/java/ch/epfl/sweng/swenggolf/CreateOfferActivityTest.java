@@ -32,10 +32,12 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.VerificationModes.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.fail;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -50,7 +52,6 @@ public class CreateOfferActivityTest {
     @Before
     public void setTest(){
         Config.goToTest();
-        Config.setUser(new User("username", "id", "username@example.com","nophoto"));
     }
     
     /**
@@ -122,5 +123,11 @@ public class CreateOfferActivityTest {
         fillOffer();
 
         intended(hasComponent(ShowOfferActivity.class.getName()), times(2));
+    }
+
+    @Test
+    public void mmodifyingOfferViaShowOfferWorksOnlyOnCreator() {
+        if(Config.getUser().getUserId().equals("id")){ fail("");}
+        Config.setUser(new User("username", "id", "username@example.com","nophoto"));
     }
 }
