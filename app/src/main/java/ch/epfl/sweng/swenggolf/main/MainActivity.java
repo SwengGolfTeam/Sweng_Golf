@@ -25,17 +25,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the ProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void loadProfileActivity(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(EXTRA_USERID, uid);
-        startActivity(intent);
-    }
-
-    /**
      * Launches the SigninActivity.
      *
      * @param view the current view

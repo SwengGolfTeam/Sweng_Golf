@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,8 +14,8 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,8 +35,8 @@ public class ProfileActivityTest {
     User user = new User("Patrick", "Vetterli", "1234567890", "");
 
     @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public final IntentsTestRule<ProfileActivity> mActivityRule =
+            new IntentsTestRule<>(ProfileActivity.class, false, false);
 
     /**
      * Initialise the Config and the Database for tests.
@@ -46,12 +47,12 @@ public class ProfileActivityTest {
         Config.setUser(new User(user));
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
+        mActivityRule.launchActivity(new Intent());
     }
 
     @Test
     public void canEditUserName() {
-        String newName = "Anonymous";
-        onView(withId(R.id.profileButton)).perform(click());
+        String newName = "Jean-Jacques";
         onView(withId(R.id.edit)).perform(click());
         onView(withId(R.id.edit_name)).perform(replaceText(newName)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
@@ -73,13 +74,11 @@ public class ProfileActivityTest {
 
     @Test
     public void nameDisplayed() {
-        onView(withId(R.id.profileButton)).perform(click());
         onView(withId(R.id.name)).check(matches(withText(user.getUserName())));
     }
 
     @Test
     public void goToMenu() {
-        onView(withId(R.id.profileButton)).perform(click());
         onView(withContentDescription("abc_action_bar_up_description")).perform(click());
         intended(hasComponent(MainMenuActivity.class.getName()));
     }

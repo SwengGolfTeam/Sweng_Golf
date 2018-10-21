@@ -23,7 +23,7 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 
 public class MainMenuActivity extends AppCompatActivity {
-    private FirebaseAccount account;
+    private final User user = Config.getUser();
     private View nav;
 
     @Override
@@ -66,8 +66,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setUserPic() {
         int errorDrawable = android.R.drawable.btn_dialog;
-        ImageView userpicView = nav.findViewById(R.id.userpic);
-        Picasso.with(this).load(user.getPhoto()).error(errorDrawable).into(userpicView);
+        if (!user.getPhoto().isEmpty()) {
+            ImageView userpicView = nav.findViewById(R.id.userpic);
+            Picasso.with(this).load(user.getPhoto()).error(errorDrawable).into(userpicView);
+        }
     }
 
     @Override
@@ -75,8 +77,6 @@ public class MainMenuActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
         return true;
     }
-
-    public static final String EXTRA_USER = "ch.epfl.sweng.swenggolf.USER";
 
     /**
      * Launches the ProfileActivity.
@@ -95,8 +95,6 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadCreateOfferActivity(MenuItem item) {
         Intent intent = new Intent(this, CreateOfferActivity.class);
-        // TODO implement username when login effective
-        intent.putExtra("username", "God");
         startActivity(intent);
     }
 
