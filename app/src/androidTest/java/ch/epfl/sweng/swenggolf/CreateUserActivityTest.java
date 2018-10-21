@@ -17,10 +17,15 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -69,6 +74,15 @@ public class CreateUserActivityTest {
 
             }
         }, Config.getUser());
+    }
+
+    @Test
+    public void errorCorrectlyDisplayed() {
+        onView(withId(R.id.mail)).perform(replaceText(""));
+        onView(withId(R.id.create_account)).perform(click());
+        onView(withText(R.string.incorrect_user_creation))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 
 }
