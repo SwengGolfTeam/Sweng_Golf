@@ -14,9 +14,6 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_USERID = "ch.epfl.sweng.swenggolf.USERID";
-    private final String uid = "1234";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
