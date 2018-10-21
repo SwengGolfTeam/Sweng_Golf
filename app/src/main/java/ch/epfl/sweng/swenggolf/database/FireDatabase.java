@@ -16,14 +16,25 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 public final class FireDatabase extends Database {
     private final FirebaseDatabase database;
 
+
     protected FireDatabase() {
         database = FirebaseDatabase.getInstance();
+    }
+
+    /**
+     * Set the database to use. This should only be used when testing FireDatabase. If you just
+     * want a test Database to use, you should use FakeDatabase instead.
+     *
+     * @param database
+     */
+    public FireDatabase(FirebaseDatabase database) {
+        this.database = database;
     }
 
     @Override
     public void write(String path, String id, Object object) {
 
-        database.getReference().child(path).child(id).setValue(object);
+        database.getReference(path).child(id).setValue(object);
     }
 
     @Override
@@ -81,7 +92,7 @@ public final class FireDatabase extends Database {
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
-        database.getReference().child(path).child(id).removeValue(firebaseListener);
+        database.getReference(path).child(id).removeValue(firebaseListener);
     }
 
     @NonNull
