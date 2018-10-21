@@ -39,9 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +56,8 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.ivProfile);
         displayPicture(imageView, user, this);
 
-        // TODO count the number of offers posted+answered and display them
+        TextView preference = findViewById(R.id.preference1);
+        preference.setText(user.getPreference());
 
     }
 
