@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
@@ -55,7 +56,8 @@ public class WaitingActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DbError error) {
                 Toast.makeText(WaitingActivity.this,
-                        "Error on Connection", Toast.LENGTH_SHORT).show();
+                        R.string.connection_error, Toast.LENGTH_SHORT).show();
+                Config.getActivityCallback();
             }
         }, user);
     }

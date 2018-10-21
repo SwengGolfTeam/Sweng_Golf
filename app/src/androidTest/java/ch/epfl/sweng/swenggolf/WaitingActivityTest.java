@@ -15,8 +15,15 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
@@ -65,6 +72,21 @@ public class WaitingActivityTest {
             @Override
             public void isDone() {
                 intended(hasComponent(MainMenuActivity.class.getName()));
+            }
+        });
+    }
+
+    @Test
+    public void connectionErrorTest() {
+        Database database = new FakeDatabase(false);
+        Database.setDebugDatabase(database);
+        Config.setActivityCallback(new ActivityCallback() {
+            @Override
+            public void isDone() {
+                onView(withText(R.string.connection_error))
+                        .inRoot(withDecorView(not(is(
+                                mActivityRule.getActivity().getWindow().getDecorView()))))
+                        .check(matches(isDisplayed()));
             }
         });
     }
