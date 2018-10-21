@@ -102,6 +102,7 @@ public class ListOfferActivityTest {
                 onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                         .check(matches(hasDescendant(withText(value.getUserName()))));
             }
+            
             @Override
             public void onCancelled(DbError error) {
                 onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
