@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
@@ -64,19 +58,8 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         TextView mainContent = (TextView) holder.getMainContent();
         mainContent.setText(description);
 
-        final TextView subtitle = (TextView) holder.getSubTitle();
-        ViewUserFiller.fillWithUsername(subtitle, Config.getUser().getUserId());
-        DatabaseUser.getUser(new ValueListener<User>() {
-            @Override
-            public void onDataChange(User value) {
-                subtitle.setText(value.getUserName());
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Failed to load user name");
-            }
-        }, Config.getUser());
+        TextView author = (TextView) holder.getSubTitle();
+        ViewUserFiller.fillWithUsername(author, offer.getUserId());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
