@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:menu="@menu/menu_toolbar_main"/>
+            android:theme="@style/ToolbarTheme"
+            app:menu="@menu/menu_toolbar_main" />
 
     </LinearLayout>
 
