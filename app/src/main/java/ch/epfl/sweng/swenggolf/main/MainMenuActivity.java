@@ -33,6 +33,12 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
+        nav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadProfileActivity(v);
+            }
+        });
         setSupportActionBar(tb);
         setUserDisplay();
     }
@@ -76,9 +82,9 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Launches the ProfileActivity.
      *
-     * @param item the menu item that triggers the activity
+     * @param view the current view
      */
-    public void loadProfileActivity(MenuItem item) {
+    public void loadProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(EXTRA_USER, user);
         startActivity(intent);

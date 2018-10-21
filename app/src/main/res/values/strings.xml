@@ -2,7 +2,7 @@
     <string name="app_name">Sweng_Golf</string>
     <string name="my_account">My account</string>
     <string name="userpicture">userpicture</string>
-    <string name="userId">userid</string>
+    <string name="userMail">email</string>
     <string name="add_offer">add</string>
     <string name="title_activity_log_in">LogInActivity</string>
     <string name="title_activity_sign_in">SignIn</string>
