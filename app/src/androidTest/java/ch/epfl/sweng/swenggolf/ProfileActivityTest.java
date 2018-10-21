@@ -55,11 +55,12 @@ public class ProfileActivityTest {
         onView(withId(R.id.edit)).perform(click());
         onView(withId(R.id.edit_name)).perform(replaceText(newName)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
-        user.setUserName(newName);
+        final User newUser = new User(user);
+        newUser.setUserName(newName);
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals(user, value);
+                assertEquals(newUser, value);
             }
 
             @Override
