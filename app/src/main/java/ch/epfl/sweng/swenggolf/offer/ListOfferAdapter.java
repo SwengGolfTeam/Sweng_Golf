@@ -65,19 +65,8 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         TextView mainContent = (TextView) holder.getMainContent();
         mainContent.setText(description);
 
-        final TextView subtitle = (TextView) holder.getSubTitle();
-        ViewUserFiller.fillWithUsername(subtitle, Config.getUser().getUserId());
-        DatabaseUser.getUser(new ValueListener<User>() {
-            @Override
-            public void onDataChange(User value) {
-                subtitle.setText(value.getUserName());
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(),"Failed to load user name");
-            }
-        },Config.getUser());
+        TextView author = (TextView) holder.getSubTitle();
+        ViewUserFiller.fillWithUsername(author, offer.getUserId());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
