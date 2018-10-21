@@ -34,4 +34,5 @@
     <string name="preferences">Preferences</string>
     <string name="offers">Offers</string>
     <string name="create_offer">Create Offer</string>
+    <string name="incorrect_user_creation">\"Please, enter correct info\"</string>
 </resources>
