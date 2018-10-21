@@ -11,8 +11,11 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+
+import static android.util.Patterns.EMAIL_ADDRESS;
 
 
 public class CreateUserActivity extends AppCompatActivity {
@@ -55,6 +58,10 @@ public class CreateUserActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isEmailValid(CharSequence email) {
+        return EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 
     /**
      * Launches the MainMenuActivity.
@@ -65,15 +72,14 @@ public class CreateUserActivity extends AppCompatActivity {
         String userName = name.getText().toString();
         String userMail = mail.getText().toString();
 
-        //handle the exception if the EditText fields are null
-        if (!userName.isEmpty() && !userMail.isEmpty()) {
+        // Handle the exception if the EditText fields are null
+        if (!userName.isEmpty() && !userMail.isEmpty() && isEmailValid(userMail)) {
             User u = User.userChanged(user, userName, userMail);
             DatabaseUser.addUser(u);
             Config.setUser(u);
             quit();
         } else {
-            Toast.makeText(this, "Please, enter correct info", Toast.LENGTH_SHORT).show();
-            onClick(view);
+            Toast.makeText(this, R.string.incorrect_user_creation, Toast.LENGTH_SHORT).show();
         }
     }
 }
