@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -20,7 +19,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -54,9 +53,9 @@ public class ProfileActivityTest {
         String newName = "Anonymous";
         onView(withId(R.id.profileButton)).perform(click());
         onView(withId(R.id.edit)).perform(click());
-        onView(withId(R.id.edit_name)).perform(typeText(newName)).perform(closeSoftKeyboard());
+        onView(withId(R.id.edit_name)).perform(replaceText(newName)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
-        user.setUserName(user.getUserName()+newName);
+        user.setUserName(newName);
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
