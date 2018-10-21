@@ -19,7 +19,6 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
 

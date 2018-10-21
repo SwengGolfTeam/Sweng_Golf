@@ -44,6 +44,7 @@ public class MainMenuActivityInstrumentedTestIntents {
 
     @Test
     public void testIntentOfferList(){
+        ListOfferActivityTest.setUpFakeDatabase();
         testIntent(ListOfferActivity.class.getName(),R.id.offers);
     }
 

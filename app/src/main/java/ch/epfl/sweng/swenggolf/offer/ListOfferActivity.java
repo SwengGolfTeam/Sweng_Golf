@@ -64,15 +64,15 @@ public class ListOfferActivity extends Activity {
      */
     private void prepareOfferData() {
         Database database = Database.getInstance();
-        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+        ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
-            public void onDataChange(List<Offer> value) {
-                mAdapter.add(value);
+            public void onDataChange(List<Offer> offers) {
+                mAdapter.add(offers);
             }
 
             @Override
             public void onCancelled(DbError error) {
-                Log.d("DBERR", "Could not do things (aka load offers from database");
+                Log.d(error.toString(), "Unable to load offers from database");
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
