@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
