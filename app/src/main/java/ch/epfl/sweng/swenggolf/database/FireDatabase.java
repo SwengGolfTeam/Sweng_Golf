@@ -25,7 +25,7 @@ public final class FireDatabase extends Database {
      * Set the database to use. This should only be used when testing FireDatabase. If you just
      * want a test Database to use, you should use FakeDatabase instead.
      *
-     * @param database
+     * @param database the database
      */
     public FireDatabase(FirebaseDatabase database) {
         this.database = database;
