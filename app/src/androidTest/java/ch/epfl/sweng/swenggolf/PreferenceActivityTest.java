@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 
@@ -54,7 +55,7 @@ public class PreferenceActivityTest {
      */
     @Test
     public void scrollingWorks(){
-        int userLength = FakeDatabase.FAKE_USERS.length-1;
+        int userLength = FilledFakeDatabase.FAKE_USERS.length-1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
@@ -64,6 +65,6 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FakeDatabase.FAKE_USERS.length));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.FAKE_USERS.length));
     }
 }

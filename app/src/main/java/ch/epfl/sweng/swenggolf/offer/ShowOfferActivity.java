@@ -35,7 +35,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         if(!Config.getUser().getUserId().equals(offer.getUserId())){
             ImageView button = findViewById(R.id.button_modify_offer);
             button.setVisibility(View.INVISIBLE);
-            button.setEnabled(false);
+            button.setClickable(false);
         }
 
         setContents();
