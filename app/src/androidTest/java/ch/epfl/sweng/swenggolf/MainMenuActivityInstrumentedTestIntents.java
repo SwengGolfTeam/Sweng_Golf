@@ -1,9 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.design.widget.NavigationView;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -17,6 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -51,6 +54,7 @@ public class MainMenuActivityInstrumentedTestIntents {
 
     @Test
     public void testIntentProfile() {
-        testIntent(ProfileActivity.class.getName(), R.id.my_account);
+        onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
+        intended(hasComponent(ProfileActivity.class.getName()));
     }
 }
