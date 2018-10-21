@@ -92,7 +92,6 @@ public class Config {
         };
     }
 
-
     /**
      * Get the ActivityCallback.
      */

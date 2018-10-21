@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.auth.FirebaseUser;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
-public class User implements Parcelable {
+public class User {
 
     private static final String DEFAULT_PREFERENCE = "";
     private String userName;
@@ -221,35 +221,4 @@ public class User implements Parcelable {
         return false;
     }
 
-
-    /* implementation of Parcelable */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{userName, userId, email, photo});
-    }
-
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    private User(Parcel in) {
-        String[] data = new String[4];
-
-        in.readStringArray(data);
-        this.userName = data[0];
-        this.userId = data[1];
-        this.email = data[2];
-        this.photo = data[3];
-    }
 }

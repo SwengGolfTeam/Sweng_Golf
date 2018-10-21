@@ -25,7 +25,6 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;
     private View nav;
-    private User user = Config.getUser();
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -87,7 +86,6 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadProfileActivity(MenuItem item) {
         Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(EXTRA_USER, user);
         startActivity(intent);
     }
 
