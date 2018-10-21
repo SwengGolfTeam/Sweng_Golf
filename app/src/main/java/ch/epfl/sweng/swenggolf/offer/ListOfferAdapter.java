@@ -13,7 +13,6 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
@@ -75,9 +74,9 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
             @Override
             public void onCancelled(DbError error) {
-                Log.d(error.toString(),"Failed to load user name");
+                Log.d(error.toString(), "Failed to load user name");
             }
-        },Config.getUser());
+        }, Config.getUser());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

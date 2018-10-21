@@ -50,7 +50,7 @@ public abstract class Database {
      * @param id       the id of the object
      * @param object   the object to write
      * @param listener the onComplete method of the listener will be called with DbError.NONE
-     *                 if it was a success or UNKNOWN_ERROR otherwise.
+     *                 if it was a success or an error otherwise.
      */
     public abstract void write(@NonNull String path, @NonNull String id, @NonNull Object object,
                                @NonNull CompletionListener listener);
@@ -78,6 +78,17 @@ public abstract class Database {
     public abstract <T> void readList(@NonNull String path,
                                       @NonNull ValueListener<List<T>> listener,
                                       @NonNull Class<T> c);
+
+    /**
+     * Remove the value in path with the given id.
+     *
+     * @param path     the path where is the value we want to remove
+     * @param id       the id of the value we want to remove
+     * @param listener the onComplete method of the listener will be called with DbError.NONE
+     *                 if it was a success or an error otherwise.
+     */
+    public abstract void remove(@NonNull String path, @NonNull String id,
+                                @NonNull CompletionListener listener);
 
     /**
      * Read the list of all offers. It return the list using a listener.

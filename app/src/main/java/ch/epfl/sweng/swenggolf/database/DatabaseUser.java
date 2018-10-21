@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.database;
 
-import java.util.function.Function;
-
 import ch.epfl.sweng.swenggolf.User;
 
 public class DatabaseUser {
