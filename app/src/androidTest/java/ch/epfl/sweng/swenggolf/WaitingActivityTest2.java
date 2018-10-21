@@ -8,17 +8,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -26,17 +21,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
-public class WaitingActivityTest {
-
-    private static final String NAME = "Hello";
-    private static final String MAIL = "Hello@World.ok";
-    private static final String UID_1 = "1234";
-    private static final String UID_2 = "5678";
-    private static final String PHOTO = "PHOTO";
-
-
-    private static final User USERDB = new User(NAME, UID_1, MAIL, PHOTO);
-    private static final User USERNOTDB = new User(NAME, UID_2, MAIL, PHOTO);
+public class WaitingActivityTest2 {
 
     @Rule
     public final IntentsTestRule<WaitingActivity> mActivityRule =
@@ -49,32 +34,23 @@ public class WaitingActivityTest {
     @Before
     public void setUp() {
         Config.goToTest();
-        Database database = new FakeDatabase(true);
+        Database database = new FakeDatabase(false);
         Database.setDebugDatabase(database);
-        DatabaseUser.addUser(USERDB);
     }
 
     @Test
-    public void canGoToCreate() {
-        Config.setUser(new User(USERNOTDB));
+    public void connectionErrorTest() {
         Config.setActivityCallback(new ActivityCallback() {
             @Override
             public void isDone() {
-                intended(hasComponent(CreateUserActivity.class.getName()));
-            }
-        });
-    }
+                System.out.println("Hello");
+                onView(withText(R.string.connection_error))
+                        .inRoot(withDecorView(not(is(
+                                mActivityRule.getActivity().getWindow().getDecorView()))))
+                        .check(matches(isDisplayed()));
 
-    @Test
-    public void canGoToMenu() {
-        Config.setUser(USERDB);
-        Config.setActivityCallback(new ActivityCallback() {
-            @Override
-            public void isDone() {
-                intended(hasComponent(MainMenuActivity.class.getName()));
             }
         });
     }
 
 }
-

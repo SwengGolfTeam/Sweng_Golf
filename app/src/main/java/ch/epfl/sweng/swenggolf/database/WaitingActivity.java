@@ -50,14 +50,14 @@ public class WaitingActivity extends AppCompatActivity {
                 } else {
                     goToCreate();
                 }
-                Config.getActivityCallback();
+                Config.getActivityCallback().isDone();
             }
 
             @Override
             public void onCancelled(DbError error) {
                 Toast.makeText(WaitingActivity.this,
                         R.string.connection_error, Toast.LENGTH_SHORT).show();
-                Config.getActivityCallback();
+                Config.getActivityCallback().isDone();
             }
         }, user);
     }
