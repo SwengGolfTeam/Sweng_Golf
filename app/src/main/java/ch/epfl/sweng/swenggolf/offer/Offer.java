@@ -8,7 +8,6 @@ public class Offer implements Parcelable {
 
     private static final int DESCRIPTION_LIMIT = 140;
 
-    private final String author;
     private final String userId;
     private final String title;
     private final String description;
@@ -18,18 +17,15 @@ public class Offer implements Parcelable {
     /**
      * Contains the data of an offer.
      *
-     * @param author      the creator of the offer. Should not be empty
-     * @param userId      the userId of the creator of the offer. Should not be empty
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
      * @param linkPicture the link of the offer's picture.
+     * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
      */
-    public Offer(String author, String userId, String title, String description,
+    public Offer(String userId, String title, String description,
                  String linkPicture, String uuid) {
-        if (author.isEmpty()) {
-            throw new IllegalArgumentException("Author of the offer can't be empty.");
-        }
+
         if (userId.isEmpty()) {
             throw new IllegalArgumentException("UserId of the offer can't be empty.");
         }
@@ -39,7 +35,6 @@ public class Offer implements Parcelable {
         if (description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
-        this.author = author;
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -50,33 +45,23 @@ public class Offer implements Parcelable {
     /**
      * Contains the data of an offer.
      *
-     * @param author      the creator of the offer. Should not be empty
+     * @param userId      the id of the user.
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
      */
-    public Offer(String author, String userId, String title, String description) {
-        this(author, userId, title, description, "", "");
+    public Offer(String userId, String title, String description) {
+        this(userId, title, description, "", "");
     }
 
     /**
      * Empty builder for the listener of Firebase.
      */
     public Offer() {
-        this.author = "";
         this.userId = "";
         this.title = "";
         this.description = "";
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
-    }
-
-    /**
-     * Returns the offer's author's name.
-     *
-     * @return the creator of the offer
-     */
-    public String getAuthor() {
-        return author;
     }
 
     /**
@@ -145,7 +130,6 @@ public class Offer implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{
-                this.author,
                 this.userId,
                 this.title,
                 this.description,
@@ -164,14 +148,13 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[6];
+        String[] data = new String[5];
 
         in.readStringArray(data);
-        this.author = data[0];
-        this.userId = data[1];
-        this.title = data[2];
-        this.description = data[3];
-        this.linkPicture = data[4];
-        this.uuid = data[5];
+        this.userId = data[0];
+        this.title = data[1];
+        this.description = data[2];
+        this.linkPicture = data[3];
+        this.uuid = data[4];
     }
 }

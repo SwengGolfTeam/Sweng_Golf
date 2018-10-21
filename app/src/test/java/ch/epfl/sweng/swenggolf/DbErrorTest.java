@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.util.Log;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -101,5 +103,178 @@ public class DbErrorTest {
         DbError.getError(firebaseError);
     }
 
+    /**
+     * Assert that toString from a DbError returns the good value.
+     *
+     * @param error DbError under test
+     * @param errorMsg expected error message
+     */
+    public void toStringAssert(DbError error, String errorMsg) {
+        assertThat(error.toString(), is(errorMsg));
+    }
 
+
+    @Test
+    public void toStringNone() {
+        toStringAssert(DbError.NONE,"Everything went fine");
+    }
+
+    @Test
+    public void toStringDataStale() {
+        toStringAssert(DbError.DATA_STALE, "Data is outdated");
+    }
+
+    @Test
+    public void toStringDisconected() {
+        toStringAssert(DbError.DISCONNECTED,"Connection interrupted");
+    }
+
+
+    @Test
+    public void toStringExpiredToken() {
+        toStringAssert(DbError.EXPIRED_TOKEN, "Connection as expired");
+    }
+
+
+    @Test
+    public void toStringInvalidToken() {
+        toStringAssert(DbError.INVALID_TOKEN, "Connection is invalid");
+    }
+
+
+    @Test
+    public void toStringMaxRetries() {
+        toStringAssert(DbError.MAX_RETRIES, "Max trials reached");
+    }
+
+
+    @Test
+    public void toStringNetworkError() {
+        toStringAssert(DbError.NETWORK_ERROR, "Network unavailable");
+    }
+
+    @Test
+    public void toStringOperationFailed() {
+        toStringAssert(DbError.OPERATION_FAILED, "Operation failed");
+    }
+
+    @Test
+    public void toStringOveriddenBySet() {
+        toStringAssert(DbError.OVERRIDDEN_BY_SET, "Overriden by set");
+    }
+
+    @Test
+    public void toStringPermissionDenied() {
+        toStringAssert(DbError.PERMISSION_DENIED, "Permission denied");
+    }
+
+    @Test
+    public void toStringUnavailable() {
+        toStringAssert(DbError.UNAVAILABLE, "Service unavailable");
+    }
+
+
+    @Test
+    public void toStringUnknownError() {
+        toStringAssert(DbError.UNKNOWN_ERROR, "Unknown error");
+    }
+
+
+    @Test
+    public void toStringCodeException() {
+        toStringAssert(DbError.USER_CODE_EXCEPTION, "User code exception");
+    }
+
+
+    @Test
+    public void toStringWriteCancelled() {
+        toStringAssert(DbError.WRITE_CANCELED, "Write was cancelled");
+    }
+
+    /**
+     * Checks that the message isn't to long to be displayed as a Log debug tag.
+     *
+     * @param error the DbError under test
+     */
+    public void isLoggableAssert(DbError error) {
+        assertThat(error.toString().length() <= 23, is(true));
+    }
+
+    @Test
+    public void isLoggableNone() {
+        isLoggableAssert(DbError.NONE);
+    }
+
+    @Test
+    public void isLoggableDataStale() {
+        isLoggableAssert(DbError.DATA_STALE);
+    }
+
+    @Test
+    public void isLoggableDisconected() {
+        isLoggableAssert(DbError.DISCONNECTED);
+    }
+
+
+    @Test
+    public void isLoggableExpiredToken() {
+        isLoggableAssert(DbError.EXPIRED_TOKEN);
+    }
+
+
+    @Test
+    public void isLoggableInvalidToken() {
+        isLoggableAssert(DbError.INVALID_TOKEN);
+    }
+
+
+    @Test
+    public void isLoggableMaxRetries() {
+        isLoggableAssert(DbError.MAX_RETRIES);
+    }
+
+
+    @Test
+    public void isLoggableNetworkError() {
+        isLoggableAssert(DbError.NETWORK_ERROR);
+    }
+
+    @Test
+    public void isLoggableOperationFailed() {
+        isLoggableAssert(DbError.OPERATION_FAILED);
+    }
+
+    @Test
+    public void isLoggableOveriddenBySet() {
+        isLoggableAssert(DbError.OVERRIDDEN_BY_SET);
+    }
+
+    @Test
+    public void isLoggablePermissionDenied() {
+        isLoggableAssert(DbError.PERMISSION_DENIED);
+    }
+
+    @Test
+    public void isLoggableUnavailable() {
+        isLoggableAssert(DbError.UNAVAILABLE);
+    }
+
+
+    @Test
+    public void isLoggableUnknownError() {
+        isLoggableAssert(DbError.UNKNOWN_ERROR);
+    }
+
+
+    @Test
+    public void isLoggableCodeException() {
+        isLoggableAssert(DbError.USER_CODE_EXCEPTION);
+    }
+
+
+    @Test
+    public void isLoggableWriteCancelled() {
+        isLoggableAssert(DbError.WRITE_CANCELED);
+    }
 }
+

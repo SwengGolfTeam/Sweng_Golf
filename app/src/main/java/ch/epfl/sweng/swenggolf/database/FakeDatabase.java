@@ -4,16 +4,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     private final boolean working;
 
     public FakeDatabase(boolean working) {
-        database = new HashMap<>();
+        this.database = new TreeMap<>();
         this.working = working;
     }
 
@@ -70,5 +73,14 @@ public class FakeDatabase extends Database {
             }
         }
         return list.isEmpty() ? null : list;
+    }
+
+    /**
+     * Creates a database already filled with users and offers.
+     *
+     * @return an instance of FilledFakeDatabase.
+     */
+    public static Database fakeDatabaseCreator() {
+        return new FilledFakeDatabase();
     }
 }

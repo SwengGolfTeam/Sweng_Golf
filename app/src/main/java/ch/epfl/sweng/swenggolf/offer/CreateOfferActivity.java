@@ -24,7 +24,7 @@ import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
+
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -38,6 +38,7 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     private TextView errorMessage;
     private Offer offerToModify;
+    private boolean creationAsked;
 
     private ImageView imageView;
 
@@ -48,6 +49,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        creationAsked = false;
         setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,7 +108,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param view the view
      */
     public void createOffer(View view) {
-
+        if(creationAsked) { return; }
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
@@ -162,10 +164,8 @@ public class CreateOfferActivity extends AppCompatActivity {
                 link = offerToModify.getLinkPicture();
             }
         }
-        User user = Config.getUser();
-        final Offer newOffer = new Offer(user.getUserName(), user.getUserId(), name, description,
-                link, uuid);
-
+        final Offer newOffer =
+                new Offer(Config.getUser().getUserId(), name, description, link, uuid);
         writeOffer(newOffer);
     }
 
@@ -175,25 +175,26 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param offer offer to be written
      */
     private void writeOffer(final Offer offer) {
+        creationAsked = true;
         Database database = Database.getInstance();
-
+        final Intent intent =
+                new Intent(CreateOfferActivity.this,
+                        ShowOfferActivity.class);
         CompletionListener listener = new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this, "Offer created",
                             Toast.LENGTH_SHORT).show();
-                    Intent intent =
-                            new Intent(CreateOfferActivity.this,
-                                    ShowOfferActivity.class);
                     intent.putExtra("offer", offer);
                     startActivity(intent);
-                } else {
+                }else{
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }
             }
+
         };
-        database.write("offers", offer.getUuid(), offer, listener);
+        database.write("/offers", offer.getUuid(), offer, listener);
     }
 }

@@ -6,7 +6,11 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import com.google.firebase.database.DatabaseError;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 
@@ -31,25 +36,6 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class PreferenceActivityTest {
 
-    private static final User[] USERS_INITIAL = {
-            new User("Anna", "0", "anna@mail.com", "Tomatoes"),
-            new User("Bob", "1", "bob@mail.com", "Screwdriver"),
-            new User("Geany", "2", "geany@mail.com", "Comics"),
-            new User("Greg", "3", "greg@gmail.com", "Ropes"),
-            new User("Fred", "4", "fred@gmail.com", "Beverages"),
-            new User("AAnna", "5", "aanna@mail.com", "Friends"),
-            new User("ABob", "6", "abob@mail.com", "Washing machine"),
-            new User("AGeany", "7", "ageany@mail.com", "Hammer"),
-            new User("AGreg", "8", "agreg@gmail.com", "Lunch"),
-            new User("AFred", "9", "afred@gmail.com", "Cheeseburgers"),
-            new User("BAnna", "10", "banna@mail.com", "Champaign"),
-            new User("BBob", "11", "bbob@mail.com", "Mushrooms"),
-            new User("BGeany", "12", "bgeany@mail.com", "Nothing"),
-            new User("BGreg", "13", "bgreg@gmail.com", "Fries"),
-            new User("BFreEricisSIstirusiwssjdsidjsidskdisjdijsmdisjd",
-                    "14", "fr@gmail.com", "A nice sweatshirt, some hot shoes and a poncho")
-    };
-
     @Rule
     public ActivityTestRule preferenceRule =
             new ActivityTestRule<>(ListPreferencesActivity.class, false, false);
@@ -59,11 +45,8 @@ public class PreferenceActivityTest {
      */
     @Before
     public void setUp() {
-        Database usersDatabase = new FakeDatabase(true);
-        for(User user : USERS_INITIAL){
-            usersDatabase.write("/users",user.getUserId(),user);
-        }
-        Database.setDebugDatabase(usersDatabase);
+        Database fake = FakeDatabase.fakeDatabaseCreator();
+        Database.setDebugDatabase(fake);
         preferenceRule.launchActivity(new Intent());
     }
 
@@ -72,7 +55,7 @@ public class PreferenceActivityTest {
      */
     @Test
     public void scrollingWorks(){
-        int userLength = USERS_INITIAL.length-1;
+        int userLength = FilledFakeDatabase.FAKE_USERS.length-1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
@@ -82,6 +65,6 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(USERS_INITIAL.length));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.FAKE_USERS.length));
     }
 }
