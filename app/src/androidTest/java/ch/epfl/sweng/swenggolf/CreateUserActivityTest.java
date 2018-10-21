@@ -79,18 +79,17 @@ public class CreateUserActivityTest {
     @Test
     public void errorCorrectlyDisplayed() {
         onView(withId(R.id.mail)).perform(replaceText(""));
-        onView(withId(R.id.create_account)).perform(click());
         checkError();
     }
 
     @Test
     public void errorDisplayedWheninvalidEmailGiven() {
         onView(withId(R.id.mail)).perform(replaceText("whatever"));
-        onView(withId(R.id.create_account)).perform(click());
         checkError();
     }
 
     private void checkError() {
+        onView(withId(R.id.create_account)).perform(click());
         onView(withText(R.string.incorrect_user_creation))
                 .inRoot(withDecorView(not(is(
                         mActivityRule.getActivity().getWindow().getDecorView()))))
