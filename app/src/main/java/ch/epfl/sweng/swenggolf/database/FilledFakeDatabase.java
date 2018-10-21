@@ -5,7 +5,10 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FilledFakeDatabase extends FakeDatabase {
 
-    public FilledFakeDatabase() {
+    /**
+     * Returns a prefilled FakeDatabase.
+     */
+    protected FilledFakeDatabase() {
         super(true);
         for (User user : FAKE_USERS) {
             write("/users", user.getUserId(), user);
@@ -112,69 +115,83 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + " a ride from Tatooine ?",
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/f/ff/Sandcrawler.png/"
-                            + "revision/latest?cb=20130812001443", "01"),
+                            + "revision/latest?cb=20130812001443",
+                    "01"),
             new Offer("13", "Defense against the droids",
                     "The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
                             + " I can exchange !",
                     LUMIERE
                             + "databank_battledroid_01_169_1524f145.jpeg?"
-                            + "region=0%2C0%2C1560%2C878&width=768", "02"),
+                            + "region=0%2C0%2C1560%2C878&width=768",
+                    "02"),
             new Offer("8", "Chosen one",
                     "Someone out there is the chosen one ?"
                             + " If you are I can train you !"
                             + " Warning, last apprentice got bad burns !",
-                    "https://i.redd.it/4zqd4mvkq3n01.jpg", "03"),
+                    "https://i.redd.it/4zqd4mvkq3n01.jpg",
+                    "03"),
             new Offer("15", "Great Price to find a friend",
                     "I'm looking for a \"friend\" of mine, a certain Han Solo,"
                             + " I offer a desert spaceship to interested !"
                             + " It's him on the left.",
                     "https://cdn3.whatculture.com/"
-                            + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg", "04"),
+                            + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
+                    "04"),
             new Offer("7", "Defeat Dark Sidious I must",
                     "Defeat Dark Sidious. "
                             + "With me train you shall,"
                             + " If so you want.",
                     WIKIA_NO_COOKIE + STARWARS
-                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911", "05"),
+                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
+                    "05"),
             new Offer("4", "Help to get the senate",
                     "I'm looking for an apprentice to show him"
                             + " my unlimited power and take down the senate !",
                     LUMIERE
-                            + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342", "06"),
+                            + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342",
+                    "06"),
             new Offer("5", "Prepare Surprise for a friend",
                     "Someone would like to help me prepare a surprise "
                             + "for a friend ? Create a display with \"NOT YET !\""
                             + " on it. I'll invite you to a beer then.",
-                    "", "07"),
+                    "",
+                    "07"),
             new Offer("10", "Take revenge on my apprentice",
                     "Need someone to find my apprentice, some \"bat\" guy. "
                             + "I'll show you the League of Shadows !",
-                    "", "08"),
+                    "",
+                    "08"),
             new Offer("9", "bipbupbap",
                     "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
                     LUMIERE
-                            + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768", "09"),
+                            + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
+                    "09"),
             new Offer("1", "Nice helmet to build ship",
                     "I must build some star like ship, you can have my helmet then !",
                     LUMIERE
-                            + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768", "010"),
+                            + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768",
+                    "010"),
             new Offer("3", "Student job in a farm",
                     "I need help to rebuild my spaceship in exchange I can help "
                             + "with farm work since I'm pretty good at farm stuff !",
-                    "https://www.jedidefender.com/collect92/lukexwing%20anh.jpg", "011"),
+                    "https://www.jedidefender.com/collect92/lukexwing%20anh.jpg",
+                    "011"),
             new Offer("17", "Lightsaber to find Jedi",
                     "I'm looking for a bold general, care to help me ?",
-                    "", "012"),
+                    "",
+                    "012"),
             new Offer("2", "Transport some important data",
                     "I have some nice crew of people that can help you "
                             + "do anything if you are okay to transport some data !",
-                    "", "013"),
+                    "",
+                    "013"),
             new Offer("14", "Help to fix me up",
                     "My torso lacks my legs, I might trade "
                             + "my double ended lightsaber if you're nice.",
                     WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
-                            + "scale-to-width-down/800", "014")
+                            + "scale-to-width-down/800",
+                    "014")
     };
 }

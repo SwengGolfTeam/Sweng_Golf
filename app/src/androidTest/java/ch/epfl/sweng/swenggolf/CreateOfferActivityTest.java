@@ -63,7 +63,7 @@ public class CreateOfferActivityTest {
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    public void initDatabse() {
+    private void initDatabse() {
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
     }
@@ -112,7 +112,7 @@ public class CreateOfferActivityTest {
                 .check(matches(withText(R.string.error_create_offer_database)));
     }
 
-    public void goToShowOffer(boolean setToOtherThanOwner) {
+    private void goToShowOffer(boolean setToOtherThanOwner) {
         initDatabse();
         if(setToOtherThanOwner) {
             User u = new User("username",
