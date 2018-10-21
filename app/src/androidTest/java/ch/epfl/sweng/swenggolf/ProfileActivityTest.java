@@ -53,7 +53,6 @@ public class ProfileActivityTest {
     public void canEditUserName() {
         String newName = "Anonymous";
         onView(withId(R.id.profileButton)).perform(click());
-        onView(withId(R.id.name)).check(matches(withText(user.getUserName())));
         onView(withId(R.id.edit)).perform(click());
         onView(withId(R.id.edit_name)).perform(typeText(newName)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
@@ -70,6 +69,12 @@ public class ProfileActivityTest {
             }
         };
         DatabaseUser.getUser(vl, user);
+    }
+
+    @Test
+    public void nameDisplayed() {
+        onView(withId(R.id.profileButton)).perform(click());
+        onView(withId(R.id.name)).check(matches(withText(user.getUserName())));
     }
 
     @Test
