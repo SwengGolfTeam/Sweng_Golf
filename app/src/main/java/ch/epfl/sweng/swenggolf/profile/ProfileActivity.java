@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -27,10 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        user = getIntent().getParcelableExtra(MainMenuActivity.EXTRA_USER);
-        if (user == null) { // if not authenticated (e.g. tests)
-            user = new User();
-        }
+        user = Config.getUser();
 
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
@@ -77,7 +75,6 @@ public class ProfileActivity extends AppCompatActivity {
      */
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
-        intent.putExtra(MainMenuActivity.EXTRA_USER, user);
         startActivity(intent);
     }
 }
