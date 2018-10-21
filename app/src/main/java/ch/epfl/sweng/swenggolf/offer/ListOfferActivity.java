@@ -8,7 +8,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,19 +20,24 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-public class ListOfferActivity extends Activity {
+public class ListOfferActivity extends FragmentConverter {
 
     private ListOfferAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     public static final List<Offer> offerList = new ArrayList<>();
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstance) {
+        return inflater.inflate(R.layout.activity_list_offer, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_offer);
         errorMessage = findViewById(R.id.error_message);
 
         setRecyclerView();
@@ -39,14 +46,14 @@ public class ListOfferActivity extends Activity {
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
@@ -56,7 +63,7 @@ public class ListOfferActivity extends Activity {
     }
 
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(this, mRecyclerView, clickListener);
+        return new ListOfferTouchListener(getActivity(), mRecyclerView, clickListener);
     }
 
     /**
@@ -87,7 +94,7 @@ public class ListOfferActivity extends Activity {
                 @Override
                 public void onItemClick(View view, int position) {
                     Intent intent =
-                            new Intent(ListOfferActivity.this,
+                            new Intent(ListOfferActivity.this.getContext(),
                                     ShowOfferActivity.class);
                     Offer offer = offerList.get(position);
                     intent.putExtra("offer", offer);

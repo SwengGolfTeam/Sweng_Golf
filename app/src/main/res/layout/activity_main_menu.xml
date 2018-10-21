@@ -17,13 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:menu="@menu/menu_toolbar_main"></android.support.v7.widget.Toolbar>
+            app:menu="@menu/menu_toolbar_main"/>
 
-        <android.support.v7.widget.RecyclerView
+        <fragment
+            android:id="@+id/ch.epfl.swenggolf.main.CentralFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 
@@ -34,5 +33,5 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="start"
         app:menu="@menu/menu_drawer"
-        app:headerLayout="@layout/layout_header"></android.support.design.widget.NavigationView>
+        app:headerLayout="@layout/layout_header"/>
 </android.support.v4.widget.DrawerLayout>

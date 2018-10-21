@@ -5,7 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,17 +21,23 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
-public class ShowOfferActivity extends AppCompatActivity {
+public class ShowOfferActivity extends FragmentConverter {
 
     private Offer offer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_show_offer, container, false);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_offer);
 
         offer = getIntent().getParcelableExtra("offer");
         if(!Config.getUser().getUserId().equals(offer.getUserId())){
@@ -53,7 +61,7 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         if (!offer.getLinkPicture().isEmpty()) {
             ImageView offerPicture = findViewById(R.id.show_offer_picture);
-            Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
+            Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
     }
 
@@ -64,6 +72,7 @@ public class ShowOfferActivity extends AppCompatActivity {
      * @param view the view
      */
     public void modifyOffer(View view) {
+        replaceFragment(new CreateOfferActivity(), R.id.ch_epfl_swenggolf_main_CentralFragment);
         Intent intent = new Intent(this, CreateOfferActivity.class);
         intent.putExtra("offer", offer);
         startActivity(intent);

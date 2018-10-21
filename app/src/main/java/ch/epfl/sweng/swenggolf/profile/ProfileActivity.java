@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,14 +18,19 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends FragmentConverter {
 
     private User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreateView(LayoutInflater inflater, ViewGroup container,
+                              )
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
@@ -31,7 +38,6 @@ public class ProfileActivity extends AppCompatActivity {
         user = Config.getUser();
 
         Toolbar toolbar = findViewById(R.id.profileToolbar);
-        setSupportActionBar(toolbar);
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {

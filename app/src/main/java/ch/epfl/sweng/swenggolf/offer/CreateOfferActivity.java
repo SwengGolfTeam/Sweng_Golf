@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,12 +33,15 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * The activity used to create offers. Note that the intent extras
  * must contain a string with key "username".
  */
-public class CreateOfferActivity extends AppCompatActivity {
+public class CreateOfferActivity extends FragmentConverter {
 
     private TextView errorMessage;
     private Offer offerToModify;
@@ -46,13 +53,16 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 71;
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_create_offer, container, false);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
-        setContentView(R.layout.activity_create_offer);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         errorMessage = findViewById(R.id.error_message);
 
@@ -69,7 +79,7 @@ public class CreateOfferActivity extends AppCompatActivity {
             ImageView picture = findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
             if (!link.isEmpty() && !Config.isTest()) {
-                Picasso.with(this).load(Uri.parse(link)).into(picture);
+                Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
             }
         }
     }
@@ -87,7 +97,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
@@ -177,17 +187,15 @@ public class CreateOfferActivity extends AppCompatActivity {
     private void writeOffer(final Offer offer) {
         creationAsked = true;
         Database database = Database.getInstance();
-        final Intent intent =
-                new Intent(CreateOfferActivity.this,
-                        ShowOfferActivity.class);
         CompletionListener listener = new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
-                    Toast.makeText(CreateOfferActivity.this, "Offer created",
+                    Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             Toast.LENGTH_SHORT).show();
                     intent.putExtra("offer", offer);
                     startActivity(intent);
+                    replaceFragment(new ShowOfferActivity(), R.id.ch_epfl_swenggolf_main_CentralFragment);
                 }else{
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
