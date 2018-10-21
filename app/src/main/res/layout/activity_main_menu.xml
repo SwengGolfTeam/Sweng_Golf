@@ -20,7 +20,7 @@
             app:menu="@menu/menu_toolbar_main"/>
 
         <fragment
-            android:id="@+id/ch.epfl.swenggolf.main.CentralFragment"
+            android:id="@+id/centralFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

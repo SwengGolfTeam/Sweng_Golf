@@ -66,7 +66,7 @@ public class CreateOfferActivity extends FragmentConverter {
 
         errorMessage = findViewById(R.id.error_message);
 
-        offerToModify = getIntent().getParcelableExtra("offer");
+        offerToModify = getArguments().getParcelable("offer");
         preFillFields();
     }
 
@@ -193,9 +193,10 @@ public class CreateOfferActivity extends FragmentConverter {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             Toast.LENGTH_SHORT).show();
-                    intent.putExtra("offer", offer);
-                    startActivity(intent);
-                    replaceFragment(new ShowOfferActivity(), R.id.ch_epfl_swenggolf_main_CentralFragment);
+                    ShowOfferActivity showOff = new ShowOfferActivity();
+                    Bundle offerBundle = new Bundle();
+                    offerBundle.putParcelable("offer", offer);
+                    replaceCentralFragment(showOff);
                 }else{
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -16,16 +18,21 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends FragmentConverter {
     private User user;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_edit_profile, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
 
         user = Config.getUser();
         if (user != null) {
@@ -35,7 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
             editText.setSelection(userName.length());
 
             ImageView imageView = findViewById(R.id.ivProfile);
-            ProfileActivity.displayPicture(imageView, user, this);
+            ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
     }
 
@@ -51,9 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.setUserName(name);
         DatabaseUser.addUser(user);
 
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
-
+        replaceCentralFragment(new ProfileActivity());
     }
 
 }

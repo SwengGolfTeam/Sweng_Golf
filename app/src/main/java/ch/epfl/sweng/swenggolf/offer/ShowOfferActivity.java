@@ -39,7 +39,7 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        offer = getIntent().getParcelableExtra("offer");
+        offer = getArguments().getParcelable("offer");
         if(!Config.getUser().getUserId().equals(offer.getUserId())){
             ImageView button = findViewById(R.id.button_modify_offer);
             button.setVisibility(View.INVISIBLE);
@@ -72,9 +72,9 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the view
      */
     public void modifyOffer(View view) {
-        replaceFragment(new CreateOfferActivity(), R.id.ch_epfl_swenggolf_main_CentralFragment);
-        Intent intent = new Intent(this, CreateOfferActivity.class);
-        intent.putExtra("offer", offer);
-        startActivity(intent);
+        CreateOfferActivity createFrag = new CreateOfferActivity();
+        Bundle createBundle = new Bundle();
+        createBundle.putParcelable("offer", offer);
+        replaceCentralFragment(createFrag);
     }
 }

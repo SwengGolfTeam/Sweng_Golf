@@ -25,6 +25,10 @@ public abstract class FragmentConverter extends Fragment {
 
     protected void replaceFragment(Fragment fragment, int viewId) {
         FragmentManager manager = getFragmentManager();
-        manager.beginTransaction().replace(R.id.ch_epfl_swenggolf_main_CentralFragment, fragment).commit();
+        manager.beginTransaction().replace(viewId, fragment).commit();
+    }
+
+    protected void replaceCentralFragment(Fragment fragment) {
+        replaceFragment(fragment, R.id.centralFragment);
     }
 }

@@ -26,32 +26,16 @@ public class ProfileActivity extends FragmentConverter {
     private User user;
 
     @Override
-    public void onCreateView(LayoutInflater inflater, ViewGroup container,
-                              )
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_profile, container, false);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_profile);
-
         user = Config.getUser();
-
-        Toolbar toolbar = findViewById(R.id.profileToolbar);
-
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backHome = new Intent(ProfileActivity.this, MainMenuActivity.class);
-                startActivity(backHome);
-            }
-        });
 
         displayUserData();
     }
@@ -60,7 +44,7 @@ public class ProfileActivity extends FragmentConverter {
         TextView name = findViewById(R.id.name);
         name.setText(user.getUserName());
         ImageView imageView = findViewById(R.id.ivProfile);
-        displayPicture(imageView, user, this);
+        displayPicture(imageView, user, this.getContext());
 
         // TODO count the number of offers posted+answered and display them
 
@@ -80,7 +64,6 @@ public class ProfileActivity extends FragmentConverter {
      * @param view the current view
      */
     public void editProfile(View view) {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new EditProfileActivity());
     }
 }

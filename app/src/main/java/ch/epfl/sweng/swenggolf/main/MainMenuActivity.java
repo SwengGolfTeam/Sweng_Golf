@@ -3,7 +3,11 @@ package ch.epfl.sweng.swenggolf.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,22 +23,37 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.FirebaseAccount;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 
 public class MainMenuActivity extends AppCompatActivity {
     private FirebaseAccount account;
+    private FragmentManager manager;
     private View nav;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_main_menu);
-        android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
-        setSupportActionBar(tb);
         setUserDisplay();
+        launchFragment();
+    }
+
+    private void setToolBar() {
+        android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setHomeAsUpIndicator(R.drawable.ic_menu);
+    }
+
+    private void launchFragment() {
+        Fragment offerList = new ListOfferActivity();
+        manager = getSupportFragmentManager();
+        manager.beginTransaction().add(R.id.centralFragment, offerList).commit();
     }
 
     private boolean setUserDisplay() {
@@ -80,14 +99,17 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public static final String EXTRA_USER = "ch.epfl.sweng.swenggolf.USER";
 
+    private void replaceCentralFragment(Fragment fragment) {
+        manager.beginTransaction().replace(R.id.centralFragment, fragment).commit();
+    }
+
     /**
      * Launches the ProfileActivity.
      *
      * @param item the menu item that triggers the activity
      */
     public void loadProfileActivity(MenuItem item) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new ProfileActivity());
     }
 
     /**
@@ -96,10 +118,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadCreateOfferActivity(MenuItem item) {
-        Intent intent = new Intent(this, CreateOfferActivity.class);
-        // TODO implement username when login effective
-        intent.putExtra("username", "God");
-        startActivity(intent);
+        replaceCentralFragment(new CreateOfferActivity());
     }
 
     /**
@@ -108,8 +127,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadShowOffersActivity(MenuItem item) {
-        Intent intent = new Intent(this, ListOfferActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new ListOfferActivity());
     }
 
     /**
@@ -118,7 +136,20 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadPreferenceListActivity(MenuItem item) {
-        Intent intent = new Intent(this, ListPreferencesActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new ListPreferencesActivity());
+    }
+
+    private void openDrawer() {
+        DrawerLayout drawer = findViewById(R.id.side_menu);
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public boolean  onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home :
+                openDrawer();
+        }
+        return true;
     }
 }

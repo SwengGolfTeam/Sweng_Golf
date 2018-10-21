@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOfferActivity extends FragmentConverter {
@@ -93,12 +95,12 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    Intent intent =
-                            new Intent(ListOfferActivity.this.getContext(),
-                                    ShowOfferActivity.class);
                     Offer offer = offerList.get(position);
-                    intent.putExtra("offer", offer);
-                    startActivity(intent);
+                    Bundle offerBundle = new Bundle();
+                    offerBundle.putParcelable("offer", offer);
+                    Fragment listOffer = new ListOfferActivity();
+                    listOffer.setArguments(offerBundle);
+                    replaceCentralFragment(listOffer);
                 }
 
                 @Override
