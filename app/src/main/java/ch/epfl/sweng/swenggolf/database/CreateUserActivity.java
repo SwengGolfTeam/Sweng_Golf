@@ -15,6 +15,8 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
+import static android.util.Patterns.EMAIL_ADDRESS;
+
 
 public class CreateUserActivity extends AppCompatActivity {
 
@@ -56,6 +58,10 @@ public class CreateUserActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isEmailValid(CharSequence email) {
+        return EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 
     /**
      * Launches the MainMenuActivity.
@@ -67,7 +73,7 @@ public class CreateUserActivity extends AppCompatActivity {
         String userMail = mail.getText().toString();
 
         // Handle the exception if the EditText fields are null
-        if (!userName.isEmpty() && !userMail.isEmpty()) {
+        if (!userName.isEmpty() && !userMail.isEmpty() && isEmailValid(userMail)) {
             User u = User.userChanged(user, userName, userMail);
             DatabaseUser.addUser(u);
             Config.setUser(u);
