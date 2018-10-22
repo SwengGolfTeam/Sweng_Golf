@@ -1,7 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +27,7 @@ public class WaitingActivityTest2 {
 
     @Rule
     public final IntentsTestRule<WaitingActivity> mActivityRule =
-            new IntentsTestRule<>(WaitingActivity.class);
+            new IntentsTestRule<>(WaitingActivity.class, false, false);
 
 
     /**
@@ -36,14 +38,16 @@ public class WaitingActivityTest2 {
         Config.goToTest();
         Database database = new FakeDatabase(false);
         Database.setDebugDatabase(database);
+
     }
 
     @Test
     public void connectionErrorTest() {
+        Log.d("WAITING", "Start tests");
         Config.setActivityCallback(new ActivityCallback() {
             @Override
             public void isDone() {
-                System.out.println("Hello");
+                Log.d("WAITING", "callback");
                 onView(withText(R.string.connection_error))
                         .inRoot(withDecorView(not(is(
                                 mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -51,6 +55,9 @@ public class WaitingActivityTest2 {
 
             }
         });
+        Log.d("WAITING", "starting activity");
+        mActivityRule.launchActivity(new Intent());
+        Log.d("WAITING", "activity started");
     }
 
 }
