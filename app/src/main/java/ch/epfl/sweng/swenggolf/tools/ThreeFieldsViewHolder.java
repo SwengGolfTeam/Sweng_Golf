@@ -26,7 +26,8 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
         this.mainContent = container.findViewById(mainContent);
 
         // change font to custom one
-        Typeface customFont = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/niramit_medium.ttf");
+        Typeface customFont = Typeface.createFromAsset(itemView.getContext().getAssets(),
+                "fonts/niramit_medium.ttf");
         this.title.setTypeface(customFont);
         this.subTitle.setTypeface(customFont);
         if (this.mainContent instanceof TextView) {

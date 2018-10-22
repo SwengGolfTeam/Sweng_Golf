@@ -53,9 +53,7 @@ public class ProfileActivityTest {
     @Test
     public void canEditUserName() {
         String newName = "Jean-Jacques";
-        onView(withId(R.id.edit)).perform(click());
-        onView(withId(R.id.edit_name)).perform(replaceText(newName)).perform(closeSoftKeyboard());
-        onView(withId(R.id.saveButton)).perform(click());
+        editField(R.id.edit_name, newName);
         final User newUser = new User(user);
         newUser.setUserName(newName);
         ValueListener vl = new ValueListener() {
@@ -83,12 +81,16 @@ public class ProfileActivityTest {
         intended(hasComponent(MainMenuActivity.class.getName()));
     }
 
+    private void editField(int editTextId, String newText) {
+        onView(withId(R.id.edit)).perform(click());
+        onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
+        onView(withId(R.id.saveButton)).perform(click());
+    }
+
     @Test
     public void canEditPreferences() {
         String newPref = "coffee";
-        onView(withId(R.id.edit)).perform(click());
-        onView(withId(R.id.edit_pref)).perform(replaceText(newPref)).perform(closeSoftKeyboard());
-        onView(withId(R.id.saveButton)).perform(click());
+        editField(R.id.edit_pref, newPref);
         final User newUser = new User(user);
         newUser.setPreference(newPref);
         ValueListener vl = new ValueListener() {
