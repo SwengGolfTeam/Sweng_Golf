@@ -13,48 +13,17 @@ import java.util.Map;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 public class DatabaseTest {
-    protected class TestDatabase extends Database {
-        private final Map<String, Object> database;
-
-        public TestDatabase(){
-            database = new HashMap<>();
-        }
-
-        @Override
-        public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
-            database.put(path + "/" + id, object);
-        }
-
-        @Override
-        public void write(@NonNull String path, @NonNull String id, @NonNull Object object, @NonNull CompletionListener listener) {
-            //not needed for the tests because abstract function
-        }
-
-        @Override
-        public <T> void read(@NonNull String path, @NonNull String id, @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
-            //not needed for the tests beacause abstract function
-        }
-
-        @Override
-        public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c) {
-            List<T> list = new ArrayList<>();
-            for (Map.Entry<String, Object> entry : database.entrySet()) {
-                if (entry.getKey().startsWith(path)) {
-                    list.add((T) entry.getValue());
-                }
-            }
-            List<T> returnList = list.isEmpty() ? null : list;
-            listener.onDataChange(returnList);
-        }
-    }
 
     private static final String PATH = "/offers";
     private static final String ID = "123456789";
@@ -67,7 +36,7 @@ public class DatabaseTest {
 
     @Test
     public void getInstanceAndSetDebugDatabaseNoException(){
-        Database db = new TestDatabase();
+        Database db = new FakeDatabase(true);
 
         db.setDebugDatabase(db);
         db.getInstance();
@@ -75,7 +44,7 @@ public class DatabaseTest {
 
     @Test
     public void readOffersReturnsCorrectValues(){
-        Database db = new TestDatabase();
+        Database db = new FakeDatabase(true);
 
         db.write(PATH, ID, CONTENT);
         db.write(PATH, ID2, CONTENT_2);
@@ -94,6 +63,58 @@ public class DatabaseTest {
             }
         };
         db.readOffers(listener);
+    }
+
+    @Test
+    public void removeRemoveElements() {
+        Database db = new FakeDatabase(true);
+        db.write(PATH, ID, CONTENT);
+        ValueListener<String> listener = new ValueListener<String>() {
+            @Override
+            public void onDataChange(String value) {
+                assertThat(value, is(CONTENT));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+        db.read(PATH, ID, listener, String.class);
+
+        CompletionListener completionListener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                assertThat(error, is(DbError.NONE));
+            }
+        };
+
+        db.remove(PATH, ID, completionListener);
+
+        ValueListener<String> valueListener = new ValueListener<String>() {
+            @Override
+            public void onDataChange(String value) {
+                assertNull(value);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+        db.read(PATH, ID, valueListener, String.class);
+    }
+
+    @Test
+    public void removeGetError() {
+        Database database = new FakeDatabase(false);
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                assertThat(error, is(not(DbError.NONE.NONE)));
+            }
+        };
+        database.remove(PATH, ID, listener);
     }
 
 
