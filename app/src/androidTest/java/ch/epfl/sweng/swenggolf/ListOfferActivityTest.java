@@ -31,6 +31,7 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -105,8 +106,7 @@ public class ListOfferActivityTest {
             
             @Override
             public void onCancelled(DbError error) {
-                onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                        .check(matches(hasDescendant(withText(UUID.randomUUID().toString()))));
+                fail();
             }
         }, offer.getUserId());
 
