@@ -54,10 +54,11 @@ public final class FakeFirebaseStorage {
             @Override
             public Object answer(InvocationOnMock invocation) throws Exception {
                 OnCompleteListener<Uri> listener = invocation.getArgument(0);
-                if (working)
+                if (working) {
                     listener.onComplete(taskUri);
-                else
+                } else {
                     throw new Exception("Storage is not working");
+                }
                 return null;
             }
         };
