@@ -8,6 +8,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.firebase.storage.FirebaseStorage;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -142,5 +144,14 @@ public class CreateOfferActivityTest {
         goToShowOffer(true);
         onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
+    }
+
+    @Test//(expected = Exception.class)
+    public void exceptionIsThrownWhenStorageNotWorking(){
+        ListOfferActivityTest.setUpFakeDatabase();
+        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
+        onView(withId(R.id.create_offer_button)).perform(click());
+        fillOffer();
+        intended(hasComponent(ShowOfferActivity.class.getName()));
     }
 }

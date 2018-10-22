@@ -13,7 +13,7 @@ import java.util.UUID;
 
 
 public class StorageConnection {
-    private static FirebaseStorage st;
+    private static FirebaseStorage st = null;
     private static StorageConnection storageConnection = null;
 
     /**
