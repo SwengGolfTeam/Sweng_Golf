@@ -3,14 +3,22 @@ package ch.epfl.sweng.swenggolf;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.model.TestTimedOutException;
+
+import java.net.ConnectException;
+import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -23,6 +31,7 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -66,8 +75,8 @@ public class ListOfferActivityTest {
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
-        Config.setUser(new User("aaa","user_id","ccc","ddd"));
-        database.write("/users",Config.getUser().getUserId(),Config.getUser());
+        Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
+        database.write("/users", Config.getUser().getUserId(), Config.getUser());
     }
 
     /**
@@ -78,14 +87,39 @@ public class ListOfferActivityTest {
     }
 
     @Test
+    public void offerCorrectlyDisplayedInTheList() {
+        openListActivity();
+
+        Offer offer = ListOfferActivity.offerList.get(0);
+
+        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                .check(matches(hasDescendant(withText(offer.getTitle()))));
+        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                .check(matches(hasDescendant(withText(offer.getShortDescription()))));
+
+        DatabaseUser.getUser(new ValueListener<User>() {
+            @Override
+            public void onDataChange(User value) {
+                onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                        .check(matches(hasDescendant(withText(value.getUserName()))));
+            }
+            
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        }, offer.getUserId());
+
+
+
+   }
+
+    @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
         openListActivity();
 
-        onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(
-                        ViewMatchers
-                                .withText(
-                                        ListOfferActivity.offerList.get(0).getTitle())), click()));
+        onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
+                ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
     }
 
     @Test
