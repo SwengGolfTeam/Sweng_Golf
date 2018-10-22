@@ -52,9 +52,12 @@ public final class FakeFirebaseStorage {
         final Task<Uri> taskUri = Mockito.mock(Task.class);
         Answer answerWrite = new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) {
+            public Object answer(InvocationOnMock invocation) throws Exception {
                 OnCompleteListener<Uri> listener = invocation.getArgument(0);
-                listener.onComplete(taskUri);
+                if (working)
+                    listener.onComplete(taskUri);
+                else
+                    throw new Exception("Storage is not working");
                 return null;
             }
         };

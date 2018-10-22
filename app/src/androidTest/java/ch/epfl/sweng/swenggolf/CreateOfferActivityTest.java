@@ -146,7 +146,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
     }
 
-    @Test//(expected = Exception.class)
+    @Test(expected = Exception.class)
     public void exceptionIsThrownWhenStorageNotWorking(){
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
