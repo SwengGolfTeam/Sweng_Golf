@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -108,7 +107,9 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param view the view
      */
     public void createOffer(View view) {
-        if(creationAsked) { return; }
+        if (creationAsked) {
+            return;
+        }
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
@@ -188,7 +189,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     intent.putExtra("offer", offer);
                     startActivity(intent);
-                }else{
+                } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }

@@ -84,7 +84,7 @@ public enum DbError {
     WRITE_CANCELED {
         @Override
         public String toString() {
-            return  "Write was cancelled";
+            return "Write was cancelled";
         }
     };
 

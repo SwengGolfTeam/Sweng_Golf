@@ -1,15 +1,8 @@
 package ch.epfl.sweng.swenggolf.tools;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
 
