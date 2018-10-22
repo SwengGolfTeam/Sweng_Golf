@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.tools;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,14 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
         this.title = container.findViewById(title);
         this.subTitle = container.findViewById(subTitle);
         this.mainContent = container.findViewById(mainContent);
+
+        // change font to custom one
+        Typeface customFont = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/niramit_medium.ttf");
+        this.title.setTypeface(customFont);
+        this.subTitle.setTypeface(customFont);
+        if (this.mainContent instanceof TextView) {
+            ((TextView) this.mainContent).setTypeface(customFont);
+        }
     }
 
     /**

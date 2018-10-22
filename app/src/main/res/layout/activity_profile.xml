@@ -68,11 +68,9 @@
 
     <View
         android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="16dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
