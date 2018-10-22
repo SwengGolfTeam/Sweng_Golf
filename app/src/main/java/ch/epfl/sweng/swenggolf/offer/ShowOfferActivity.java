@@ -108,11 +108,11 @@ public class ShowOfferActivity extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
-                    Toast.makeText(ShowOfferActivity.this, "Offer deleted",
+                    Toast.makeText(ShowOfferActivity.this, R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ShowOfferActivity.this, ListOfferActivity.class));
                 } else {
-                    Toast.makeText(ShowOfferActivity.this, "Offer couldn't be deleted",
+                    Toast.makeText(ShowOfferActivity.this, R.string.offer_couldnt_be_deleted,
                             Toast.LENGTH_SHORT).show();
                 }
             }

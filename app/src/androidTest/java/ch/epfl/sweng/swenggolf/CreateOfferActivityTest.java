@@ -52,8 +52,8 @@ import static org.junit.Assert.fail;
 public class CreateOfferActivityTest {
 
     @Rule
-    public IntentsTestRule<MainActivity> intentsTestRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public IntentsTestRule<ListOfferActivity> intentsTestRule =
+            new IntentsTestRule<>(ListOfferActivity.class);
 
     @Before
     public void setTest(){
