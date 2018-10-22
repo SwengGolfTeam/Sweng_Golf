@@ -29,14 +29,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
         user = Config.getUser();
         if (user != null) {
-            EditText editText = findViewById(R.id.edit_name);
-            String userName = user.getUserName();
-            editText.setText(userName);
-            editText.setSelection(userName.length());
-
+            displayElement((EditText) findViewById(R.id.edit_name), user.getUserName());
+            displayElement((EditText) findViewById(R.id.edit_pref), user.getPreference());
             ImageView imageView = findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this);
         }
+    }
+
+    private void displayElement(EditText editText, String elem) {
+        editText.setText(elem);
+        editText.setSelection(elem.length());
     }
 
     /**
@@ -45,15 +47,20 @@ public class EditProfileActivity extends AppCompatActivity {
      * @param view the current view
      */
     public void saveChangesAndReturn(View view) {
-        EditText editText = findViewById(R.id.edit_name);
-        String name = editText.getText().toString();
-
+        // save new name
+        EditText editedName = findViewById(R.id.edit_name);
+        String name = editedName.getText().toString();
         user.setUserName(name);
+
+        // save new preferences
+        EditText editedPref = findViewById(R.id.edit_pref);
+        String pref = editedPref.getText().toString();
+        user.setPreference(pref);
+
         DatabaseUser.addUser(user);
 
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-
     }
 
 }

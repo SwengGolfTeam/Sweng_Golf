@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
-    User user = new User("Patrick", "Vetterli", "1234567890", "");
+    User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
 
     @Rule
     public final IntentsTestRule<ProfileActivity> mActivityRule =
@@ -81,5 +81,28 @@ public class ProfileActivityTest {
     public void goToMenu() {
         onView(withContentDescription("abc_action_bar_up_description")).perform(click());
         intended(hasComponent(MainMenuActivity.class.getName()));
+    }
+
+    @Test
+    public void canEditPreferences() {
+        String newPref = "coffee";
+        onView(withId(R.id.edit)).perform(click());
+        onView(withId(R.id.edit_pref)).perform(replaceText(newPref)).perform(closeSoftKeyboard());
+        onView(withId(R.id.saveButton)).perform(click());
+        final User newUser = new User(user);
+        newUser.setPreference(newPref);
+        ValueListener vl = new ValueListener() {
+            @Override
+            public void onDataChange(Object value) {
+                assertEquals(newUser, value);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                //nothing to do
+            }
+        };
+        DatabaseUser.getUser(vl, user);
+
     }
 }
