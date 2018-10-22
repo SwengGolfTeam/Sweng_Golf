@@ -4,21 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -32,7 +25,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_offer);
 
         offer = getIntent().getParcelableExtra("offer");
-        if(!Config.getUser().getUserId().equals(offer.getUserId())){
+        if (!Config.getUser().getUserId().equals(offer.getUserId())) {
             ImageView button = findViewById(R.id.button_modify_offer);
             button.setVisibility(View.INVISIBLE);
             button.setClickable(false);
