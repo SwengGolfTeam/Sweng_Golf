@@ -56,7 +56,7 @@ public class Config {
      */
 
     public static User getUser() {
-        if(user == null){
+        if (user == null) {
             return isTest() ? new User() : new User(FirebaseAuth.getInstance().getCurrentUser());
         } else {
             return user;
@@ -74,16 +74,17 @@ public class Config {
 
     /**
      * Set the ActivityCallback.
+     *
      * @param activityCallback the ActivityCallback to set
      */
-    public static void setActivityCallback(ActivityCallback activityCallback){
+    public static void setActivityCallback(ActivityCallback activityCallback) {
         Config.activityCallback = activityCallback;
     }
 
     /**
      * Reset The ActivityCallback.
      */
-    public static void resetActivityCallback(){
+    public static void resetActivityCallback() {
         Config.activityCallback = new ActivityCallback() {
             @Override
             public void isDone() {
@@ -95,8 +96,8 @@ public class Config {
     /**
      * Get the ActivityCallback.
      */
-    public static ActivityCallback getActivityCallback(){
-        if(Config.activityCallback == null || !Config.isTest()) {
+    public static ActivityCallback getActivityCallback() {
+        if (Config.activityCallback == null || !Config.isTest()) {
             Config.resetActivityCallback();
         }
         return Config.activityCallback;

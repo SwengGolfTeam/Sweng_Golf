@@ -1,8 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.firebase.auth.FirebaseUser;
 
 // Just a temporary placeholder class in order to complete the Firebase Implementation
