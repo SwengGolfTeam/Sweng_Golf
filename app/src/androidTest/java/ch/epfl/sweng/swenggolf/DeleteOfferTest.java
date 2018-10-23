@@ -79,11 +79,12 @@ public class DeleteOfferTest {
         Config.goToTest();
     }
 
+    private static Database database = new FakeDatabase(true);
+
     /**
      * Set up a fake database with two offers.
      */
     protected static void setUpFakeDatabase() {
-        Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("user_id", TITLE1, "Hello");
         Offer offer2 = new Offer("user_id", "This is a title 2", "LOREM");
         database.write("/offers", ID1, offer1);
@@ -119,10 +120,10 @@ public class DeleteOfferTest {
         onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
         onView(withId(R.id.button_delete_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
-        /*onView(withText(R.string.offer_deleted))
+        onView(withText(R.string.offer_deleted))
                 .inRoot(withDecorView(CoreMatchers.not(is(
                         mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));*/
+                .check(matches(isDisplayed()));
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
@@ -131,11 +132,10 @@ public class DeleteOfferTest {
 
             @Override
             public void onCancelled(DbError error) {
-                //Do Nothing
+                fail();
             }
         };
-        Database.getInstance().read("/offers", ID1, vl, Offer.class);
+        database.read("/offers", ID1, vl, Offer.class);
     }
-
 
 }

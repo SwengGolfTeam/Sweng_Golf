@@ -121,6 +121,7 @@ public class ShowOfferActivity extends AppCompatActivity {
                     Toast.makeText(ShowOfferActivity.this, R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(ShowOfferActivity.this, ListOfferActivity.class));
+                    finish();
                 }
             }
 
