@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
@@ -34,11 +36,13 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.VerificationModes.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 
 /**
@@ -50,6 +54,10 @@ public class CreateOfferActivityTest {
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
+
+    @Rule
+    public final ActivityTestRule<CreateOfferActivity> mActivityRule =
+            new ActivityTestRule<>(CreateOfferActivity.class);
 
     @Before
     public void setTest(){
@@ -73,11 +81,8 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
-    private void fillOffer(){
-        fillOffer(true);
-    }
 
-    private void fillOffer(Boolean finalclick) {
+    private void fillOffer() {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
@@ -91,9 +96,7 @@ public class CreateOfferActivityTest {
         intending(not(isInternal())).respondWith(result);
 
         onView(withId(R.id.offer_picture)).perform(click());
-        if (finalclick) {
-            onView(withId(R.id.button)).perform(click());
-        }
+        onView(withId(R.id.button)).perform(click());
     }
 
     @Test
@@ -150,9 +153,10 @@ public class CreateOfferActivityTest {
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
         onView(withId(R.id.create_offer_button)).perform(click());
-        fillOffer(false);
-        // TODO check for toast
-        onView(withId(R.id.error_message))
-                .check(matches(withText(R.string.error_upload_image)));
+        fillOffer();
+        onView(withText(R.string.error_upload_image))
+                .inRoot(withDecorView(not(is(
+                        mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 }

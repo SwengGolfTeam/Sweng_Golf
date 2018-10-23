@@ -143,10 +143,8 @@ public class CreateOfferActivity extends AppCompatActivity {
                         }
                     });
         } catch (Exception e){
-            //Toast.makeText(CreateOfferActivity.this, "Unable to upload image", Toast.LENGTH_SHORT).show();
-            errorMessage.setText(R.string.error_upload_image);
-            errorMessage.setVisibility(View.VISIBLE);
             e.printStackTrace();
+            Toast.makeText(CreateOfferActivity.this, R.string.error_upload_image, Toast.LENGTH_SHORT).show();
         }
 
         if (Config.isTest()) {
