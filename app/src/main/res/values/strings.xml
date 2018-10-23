@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Sweng_Golf</string>
+    <string name="app_name">PolyTroc</string>
     <string name="my_account">My account</string>
     <string name="userpicture">userpicture</string>
-    <string name="userId">userid</string>
+    <string name="userMail">email</string>
     <string name="add_offer">add</string>
     <string name="title_activity_log_in">LogInActivity</string>
     <string name="title_activity_sign_in">SignIn</string>
@@ -12,7 +12,7 @@
     <string name="go_to_main_menu">Go To Main Menu</string>
     <string name="profile_activity_name">Profile</string>
     <string name="edit_profile_activity_name">Edit Profile</string>
-    <string name="user_preferences">Preferences</string>
+    <string name="user_preferences">Preferences:</string>
     <string name="offers_posted">offers posted</string>
     <string name="offers_answered">offers answered</string>
     <string name="username">username</string>
@@ -24,7 +24,7 @@
     <string name="create_new_offer">Create new offer</string>
     <string name="button_create_offer">Create offer</string>
     <string name="button_show_offers">Show offer</string>
-    <string name="error_create_offer">The name and the description can\'t be empty.</string>
+    <string name="error_create_offer">The name and the description cannot be empty.</string>
     <string name="name">Name:</string>
     <string name="mail">Mail:</string>
     <string name="create_account">Create Account</string>
@@ -32,7 +32,7 @@
     <string name="error_upload_image">Unable to upload the image</string>
     <string name="error_create_offer_database">Impossible to create the offer.</string>
     <string name="list_offer_error_database">Could not retrieve the offers.</string>
-    <string name="preferences">Preferences</string>
+    <string name="preferences">What others need</string>
     <string name="offers">Offers</string>
     <string name="create_offer">Create Offer</string>
     <string name="incorrect_user_creation">\"Please, enter correct info\"</string>

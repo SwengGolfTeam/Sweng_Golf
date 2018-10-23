@@ -8,22 +8,18 @@
 
     <LinearLayout
         android:id="@+id/main_menu_frame"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:menu="@menu/menu_toolbar_main"></android.support.v7.widget.Toolbar>
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </android.support.v7.widget.RecyclerView>
+            android:theme="@style/ToolbarTheme"
+            app:menu="@menu/menu_toolbar_main"
+            app:navigationContentDescription="abc_action_bar_home_description"/>
 
     </LinearLayout>
 
@@ -31,8 +27,9 @@
         android:id="@+id/drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_gravity="start"
-        app:menu="@menu/menu_drawer"
-        app:headerLayout="@layout/layout_header"></android.support.design.widget.NavigationView>
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/layout_header"
+        app:menu="@menu/menu_drawer"></android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>
