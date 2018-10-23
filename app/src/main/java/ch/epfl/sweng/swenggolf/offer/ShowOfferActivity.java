@@ -32,10 +32,10 @@ public class ShowOfferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_offer);
         offer = getIntent().getParcelableExtra("offer");
         if (!Config.getUser().getUserId().equals(offer.getUserId())) {
-            ImageView button_modify = findViewById(R.id.button_modify_offer);
-            hideButton(button_modify);
-            ImageView button_delete = findViewById(R.id.button_delete_offer);
-            hideButton(button_delete);
+            ImageView buttonModify = findViewById(R.id.button_modify_offer);
+            hideButton(buttonModify);
+            ImageView buttonDelete = findViewById(R.id.button_delete_offer);
+            hideButton(buttonDelete);
         }
 
         setContents();
