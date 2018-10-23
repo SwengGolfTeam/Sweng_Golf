@@ -35,15 +35,12 @@ import ch.epfl.sweng.swenggolf.database.StorageConnection;
  */
 public class CreateOfferActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE_REQUEST = 71;
     private TextView errorMessage;
     private Offer offerToModify;
     private boolean creationAsked;
-
     private ImageView imageView;
-
     private Uri filePath;
-
-    private static final int PICK_IMAGE_REQUEST = 71;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,9 +139,10 @@ public class CreateOfferActivity extends AppCompatActivity {
                             // else an exception is already thrown by @NonNull
                         }
                     });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(CreateOfferActivity.this, R.string.error_upload_image, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateOfferActivity.this,
+                    R.string.error_upload_image, Toast.LENGTH_SHORT).show();
         }
 
         if (Config.isTest()) {

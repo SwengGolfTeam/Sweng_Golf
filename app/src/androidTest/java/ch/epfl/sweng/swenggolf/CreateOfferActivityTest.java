@@ -9,8 +9,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.firebase.storage.FirebaseStorage;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,18 +50,17 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferActivityTest {
 
     @Rule
+    public final ActivityTestRule<CreateOfferActivity> mActivityRule =
+            new ActivityTestRule<>(CreateOfferActivity.class);
+    @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
-    @Rule
-    public final ActivityTestRule<CreateOfferActivity> mActivityRule =
-            new ActivityTestRule<>(CreateOfferActivity.class);
-
     @Before
-    public void setTest(){
+    public void setTest() {
         Config.goToTest();
     }
-    
+
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
@@ -118,9 +115,9 @@ public class CreateOfferActivityTest {
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
         initDatabse();
-        if(setToOtherThanOwner) {
+        if (setToOtherThanOwner) {
             User u = new User("username",
-                    "id" + Config.getUser().getUserId(), "username@example.com","nophoto");
+                    "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
@@ -149,7 +146,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void imageUploadWhenStorageNotWorking(){
+    public void imageUploadWhenStorageNotWorking() {
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
         onView(withId(R.id.create_offer_button)).perform(click());
