@@ -73,8 +73,11 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
+    private void fillOffer(){
+        fillOffer(true);
+    }
 
-    private void fillOffer() {
+    private void fillOffer(Boolean finalclick) {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
@@ -88,7 +91,9 @@ public class CreateOfferActivityTest {
         intending(not(isInternal())).respondWith(result);
 
         onView(withId(R.id.offer_picture)).perform(click());
-        onView(withId(R.id.button)).perform(click());
+        if (finalclick) {
+            onView(withId(R.id.button)).perform(click());
+        }
     }
 
     @Test
@@ -140,12 +145,14 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
     }
 
-    @Test(expected = Exception.class) // comment to trigger build
-    public void exceptionIsThrownWhenStorageNotWorking(){
+    @Test
+    public void imageUploadWhenStorageNotWorking(){
         ListOfferActivityTest.setUpFakeDatabase();
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
         onView(withId(R.id.create_offer_button)).perform(click());
-        fillOffer();
-        intended(hasComponent(ShowOfferActivity.class.getName()));
+        fillOffer(false);
+        // TODO check for toast
+        onView(withId(R.id.error_message))
+                .check(matches(withText(R.string.error_upload_image)));
     }
 }

@@ -130,19 +130,24 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     private void uploadImage(final String name, final String description) {
         StorageConnection storage = StorageConnection.getInstance();
-
-        storage.writeFile(filePath)
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            String link = task.getResult().toString();
-                            createOfferObject(name, description, link);
-                        } else {
-                            // TODO Handle failures
+        try {
+            storage.writeFile(filePath)
+                    .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                String link = task.getResult().toString();
+                                createOfferObject(name, description, link);
+                            }
+                            // else an exception is already thrown by @NonNull
                         }
-                    }
-                });
+                    });
+        } catch (Exception e){
+            //Toast.makeText(CreateOfferActivity.this, "Unable to upload image", Toast.LENGTH_SHORT).show();
+            errorMessage.setText(R.string.error_upload_image);
+            errorMessage.setVisibility(View.VISIBLE);
+            e.printStackTrace();
+        }
 
         if (Config.isTest()) {
             createOfferObject(name, description, "");

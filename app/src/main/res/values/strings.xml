@@ -29,6 +29,7 @@
     <string name="mail">Mail:</string>
     <string name="create_account">Create Account</string>
     <string name="error_create_offer_invalid">The name and the description can\'t be empty.</string>
+    <string name="error_upload_image">Unable to upload the image</string>
     <string name="error_create_offer_database">Impossible to create the offer.</string>
     <string name="list_offer_error_database">Could not retrieve the offers.</string>
     <string name="preferences">Preferences</string>

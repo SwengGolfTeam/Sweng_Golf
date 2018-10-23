@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import ch.epfl.sweng.swenggolf.database.DbError;
+
 
 public final class FakeFirebaseStorage {
 
@@ -52,12 +54,12 @@ public final class FakeFirebaseStorage {
         final Task<Uri> taskUri = Mockito.mock(Task.class);
         Answer answerWrite = new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Exception {
+            public Object answer(InvocationOnMock invocation) {
                 OnCompleteListener<Uri> listener = invocation.getArgument(0);
                 if (working) {
                     listener.onComplete(taskUri);
                 } else {
-                    throw new Exception("Storage is not working");
+                    listener.onComplete(null);
                 }
                 return null;
             }
