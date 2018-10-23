@@ -120,10 +120,6 @@ public class DeleteOfferTest {
         onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
         onView(withId(R.id.button_delete_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
-        onView(withText(R.string.offer_deleted))
-                .inRoot(withDecorView(CoreMatchers.not(is(
-                        mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
