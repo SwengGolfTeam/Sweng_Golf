@@ -1,42 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu_header"
     android:layout_width="match_parent"
+    android:layout_height="@dimen/drawer_header_height"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="60dp"
-    android:paddingBottom="20dp"
-    android:theme="@style/MainMenuHeader">
+    android:background="@drawable/background_menu"
+    android:gravity="bottom">
 
     <FrameLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:padding="2dp">
 
-        <ImageView
-            android:id="@+id/userpic"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/btn_dialog"
-            android:contentDescription="@string/userpicture" />
+            app:cardCornerRadius="30dp">
+
+            <ImageView
+                android:id="@+id/userpic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/userpicture"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/btn_dialog" />
+        </android.support.v7.widget.CardView>
     </FrameLayout>
 
     <TextView
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/username"
         android:ellipsize="end"
+        android:text="@string/username"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textSize="20sp" />
+        android:textColor="@android:color/white"/>
 
     <TextView
         android:id="@+id/usermail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/userId"
         android:ellipsize="end"
-        android:textSize="15sp" />
+        android:text="@string/userMail"
+        android:textSize="15sp"
+        android:textStyle="italic"
+        android:textColor="@android:color/white" />
 </LinearLayout>
