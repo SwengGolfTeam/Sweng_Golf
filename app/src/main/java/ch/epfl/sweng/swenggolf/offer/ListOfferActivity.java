@@ -3,10 +3,13 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,8 +21,9 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
-public class ListOfferActivity extends Activity {
+public class ListOfferActivity extends AppCompatActivity {
 
     private ListOfferAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
@@ -32,6 +36,23 @@ public class ListOfferActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_offer);
         errorMessage = findViewById(R.id.error_message);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // add back arrow to toolbar
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backHome = new Intent(ListOfferActivity.this, MainMenuActivity.class);
+                startActivity(backHome);
+            }
+        });
 
         setRecyclerView();
     }
