@@ -101,22 +101,11 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void alertDialogAppearsTest() {
-        openListActivity();
-        onView(withId(R.id.offers_recycler_view))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.button_delete_offer)).perform(click());
-        onView(withText("Delete entry")).check(matches(isDisplayed()));
-    }
-
-
-    @Test
     public void cancelDialog() {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.button_delete_offer)).perform(click());
-        onView(withText("Delete entry")).check(matches(isDisplayed()));
         onView(withText(android.R.string.no)).perform(click());
         onView(withId(R.id.button_delete_offer)).perform(click());
         onView(withText("Delete entry")).check(matches(isDisplayed()));
