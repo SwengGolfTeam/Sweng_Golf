@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_main_menu);
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
+        setToolBar();
         setUserDisplay();
         launchFragment();
     }
@@ -45,9 +47,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private void setToolBar() {
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayHomeAsUpEnabled(true);
-        bar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void launchFragment() {
@@ -91,16 +91,12 @@ public class MainMenuActivity extends AppCompatActivity {
         Picasso.with(this).load(account.getPhotoUrl()).error(errorDrawable).into(userpicView);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
-        return true;
-    }
-
     public static final String EXTRA_USER = "ch.epfl.sweng.swenggolf.USER";
 
     private void replaceCentralFragment(Fragment fragment) {
         manager.beginTransaction().replace(R.id.centralFragment, fragment).commit();
+        DrawerLayout drawerLayout = findViewById(R.id.side_menu);
+        drawerLayout.closeDrawers();
     }
 
     /**
@@ -139,17 +135,4 @@ public class MainMenuActivity extends AppCompatActivity {
         replaceCentralFragment(new ListPreferencesActivity());
     }
 
-    private void openDrawer() {
-        DrawerLayout drawer = findViewById(R.id.side_menu);
-        drawer.openDrawer(GravityCompat.START);
-    }
-
-    @Override
-    public boolean  onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home :
-                openDrawer();
-        }
-        return true;
-    }
 }

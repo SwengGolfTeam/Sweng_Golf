@@ -20,13 +20,9 @@ public class ListPreferencesActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_list_preference, container,false);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+        View inflated = inflater.inflate(R.layout.activity_list_preference, container,false);
         super.onCreate(savedInstanceState);
-        mRecyclerView = findViewById(R.id.preference_list);
+        mRecyclerView = inflated.findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new GridLayoutManager(this.getContext(), SPAN_COUNT);
@@ -34,5 +30,7 @@ public class ListPreferencesActivity extends FragmentConverter {
 
         mAdapter = new ListPreferenceAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        return inflated;
     }
+
 }

@@ -1,15 +1,17 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,7 +23,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOfferActivity extends FragmentConverter {
@@ -34,19 +35,16 @@ public class ListOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        return inflater.inflate(R.layout.activity_list_offer, container, false);
+        setHasOptionsMenu(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+        View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
+        setRecyclerView(inflated);
+        errorMessage = inflated.findViewById(R.id.error_message);
+        return inflated;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        errorMessage = findViewById(R.id.error_message);
-
-        setRecyclerView();
-    }
-
-    private void setRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
+    private void setRecyclerView(View view) {
+        RecyclerView mRecyclerView = view.findViewById(R.id.offers_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -98,7 +96,7 @@ public class ListOfferActivity extends FragmentConverter {
                     Offer offer = offerList.get(position);
                     Bundle offerBundle = new Bundle();
                     offerBundle.putParcelable("offer", offer);
-                    Fragment listOffer = new ListOfferActivity();
+                    Fragment listOffer = new ShowOfferActivity();
                     listOffer.setArguments(offerBundle);
                     replaceCentralFragment(listOffer);
                 }
@@ -143,4 +141,22 @@ public class ListOfferActivity extends FragmentConverter {
                     }
                 }
             };
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_list_offer, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home : {
+                openDrawer();
+            }
+            case R.id.add_offer : {
+                replaceCentralFragment(new CreateOfferActivity());
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

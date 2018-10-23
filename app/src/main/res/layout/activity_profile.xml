@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".profile.ProfileActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/profileToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationContentDescription="abc_action_bar_up_description"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/profile_activity_name" />
-
     <android.support.v7.widget.CardView
         android:id="@+id/cvProfile"
         android:layout_width="120dp"
@@ -39,19 +26,6 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/gender_neutral_user1" />
     </android.support.v7.widget.CardView>
-
-    <ImageButton
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#71c9ae"
-        android:onClick="editProfile"
-        android:src="@android:drawable/ic_menu_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name"

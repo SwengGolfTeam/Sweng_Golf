@@ -53,25 +53,24 @@ public class CreateOfferActivity extends FragmentConverter {
 
     private static final int PICK_IMAGE_REQUEST = 71;
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_create_offer, container, false);
+        View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
+        errorMessage = inflated.findViewById(R.id.error_message);
+        return inflated;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        errorMessage = findViewById(R.id.error_message);
-
-        offerToModify = getArguments().getParcelable("offer");
         preFillFields();
     }
 
     private void preFillFields() {
-        if (offerToModify != null) {
+        if (getArguments() != null) {
+            offerToModify = getArguments().getParcelable("offer");
             EditText title = findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
             EditText description = findViewById(R.id.offer_description);

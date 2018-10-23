@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -27,31 +28,35 @@ public class EditProfileActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_edit_profile, container, false);
+        View inflated = inflater.inflate(R.layout.activity_edit_profile, container, false);
+        createUserView(inflated);
+        return inflated;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void createUserView(View view) {
         user = Config.getUser();
         if (user != null) {
-            EditText editText = findViewById(R.id.edit_name);
+            EditText editText = view.findViewById(R.id.edit_name);
             String userName = user.getUserName();
             editText.setText(userName);
             editText.setSelection(userName.length());
 
-            ImageView imageView = findViewById(R.id.ivProfile);
+            ImageView imageView = view.findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this.getContext());
+        }
+    }
+
+    @Override
+    public boolean onSelectedOptionsMenu(MenuItem item) {
+        switch (item.getItemId()) {
+
         }
     }
 
     /**
      * Saves the changes and returns to the profile activity.
-     *
-     * @param view the current view
      */
-    public void saveChangesAndReturn(View view) {
+    public void saveChangesAndReturn() {
         EditText editText = findViewById(R.id.edit_name);
         String name = editText.getText().toString();
 

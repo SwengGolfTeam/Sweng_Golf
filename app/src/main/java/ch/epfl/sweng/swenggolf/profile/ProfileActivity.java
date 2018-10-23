@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
@@ -28,22 +29,22 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_profile, container, false);
+        setHasOptionsMenu(true);
+        View inflated = inflater.inflate(R.layout.activity_profile, container, false);
+        displayUserData(inflated);
+        return inflated;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         user = Config.getUser();
-
-        displayUserData();
     }
 
-    private void displayUserData() {
-        TextView name = findViewById(R.id.name);
+    private void displayUserData(View view) {
+        TextView name = view.findViewById(R.id.name);
         name.setText(user.getUserName());
-        ImageView imageView = findViewById(R.id.ivProfile);
+        ImageView imageView = view.findViewById(R.id.ivProfile);
         displayPicture(imageView, user, this.getContext());
 
         // TODO count the number of offers posted+answered and display them
@@ -57,13 +58,22 @@ public class ProfileActivity extends FragmentConverter {
         }
     }
 
-
-    /**
-     * Launches the EditProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void editProfile(View view) {
-        replaceCentralFragment(new EditProfileActivity());
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_profile,menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : {
+                openDrawer();
+            }
+            case R.id.edit_profile : {
+                replaceCentralFragment(new EditProfileActivity());
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
