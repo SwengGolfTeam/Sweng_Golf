@@ -129,7 +129,6 @@ public class User {
     public String getPhoto() {
         return photo;
     }
-    // TODO: check if need Uri for photo in Ugo's part
 
     /**
      * Get the user preference.
