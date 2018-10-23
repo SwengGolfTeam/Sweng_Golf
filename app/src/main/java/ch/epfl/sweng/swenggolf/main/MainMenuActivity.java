@@ -3,6 +3,9 @@ package ch.epfl.sweng.swenggolf.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,12 +27,22 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 public class MainMenuActivity extends AppCompatActivity {
     private final User user = Config.getUser();
     private View nav;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_main_menu);
+        mDrawerLayout = findViewById(R.id.side_menu);
+
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        }
+
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         nav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +50,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 loadProfileActivity(v);
             }
         });
-        setSupportActionBar(tb);
         setUserDisplay();
     }
 
@@ -75,6 +87,16 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
