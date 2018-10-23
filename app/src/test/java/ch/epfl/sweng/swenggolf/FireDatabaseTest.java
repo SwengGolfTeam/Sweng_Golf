@@ -13,6 +13,10 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FireDatabase;
@@ -21,6 +25,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -33,6 +38,7 @@ public class FireDatabaseTest {
     private static final String PATH = "path";
     private static final String ID = "id";
     public static final Offer OFFER = new Offer("id", "title", "description");
+    private static final List<String> LIST = Arrays.asList("a", "b", "c", "d", "e");
 
     @Test
     public void writeAndReadReturnCorrectValues() {
@@ -52,7 +58,7 @@ public class FireDatabaseTest {
         ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER);
 
         FireDatabase d = new FireDatabase(database);
-        d.write(PATH, ID, listener);
+        d.write(PATH, ID, OFFER,listener);
         d.read(PATH, ID, listenerOffer, Offer.class);
 
     }
@@ -90,6 +96,70 @@ public class FireDatabaseTest {
 
         FireDatabase d = new FireDatabase(database);
         d.remove(PATH, ID, listener);
+    }
+
+    @Test
+    public void writeWithoutListener() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        DatabaseReference idReference = setUpPath(database);
+
+        Answer<Void> ans = new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                assertThat((Offer) invocation.getArgument(0), is(OFFER));
+                return null;
+            }
+        };
+        doAnswer(ans).when(idReference).setValue(any(Offer.class));
+
+        FireDatabase d = new FireDatabase(database);
+        d.write(PATH, ID, OFFER);
+    }
+
+    @Test
+    public void readListReturnCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        DatabaseReference categoryReference = mock(DatabaseReference.class);
+        when(database.getReference(anyString())).thenReturn(categoryReference);
+
+        setUpReadListData(categoryReference);
+
+        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                assertThat(value, is(LIST));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+        FireDatabase d = new FireDatabase(database);
+        d.readList(PATH, listener,String.class);
+
+    }
+
+    private void setUpReadListData(DatabaseReference categoryReference) {
+        List<DataSnapshot> data = new ArrayList<>();
+        for(String s : LIST){
+            DataSnapshot snapshot = mock(DataSnapshot.class);
+            when(snapshot.getValue(String.class)).thenReturn(s);
+            data.add(snapshot);
+        }
+        final DataSnapshot list = mock(DataSnapshot.class);
+        when(list.getChildren()).thenReturn(data);
+
+        Answer<Void> ans = new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation){
+                ValueEventListener listener = invocation.getArgument(0);
+                listener.onDataChange(list);
+                return null;
+            }
+        };
+        doAnswer(ans).when(categoryReference)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     @NonNull
