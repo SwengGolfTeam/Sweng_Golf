@@ -94,7 +94,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this entry?")
+                .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteOfferInDatabase();
