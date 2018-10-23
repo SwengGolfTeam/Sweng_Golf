@@ -101,7 +101,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void AlertDialogAppearsTest() {
+    public void alertDialogAppearsTest() {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -110,7 +110,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void ToastPositiveAppears() {
+    public void toastPositiveAppears() {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -123,23 +123,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void ToastNegativeAppears() {
-        openListActivity();
-        onView(withId(R.id.offers_recycler_view))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        Database database = new FakeDatabase(false);
-        Database.setDebugDatabase(database);
-        onView(withId(R.id.button_delete_offer)).perform(click());
-        onView(withText(android.R.string.yes)).perform(click());
-        onView(withText(R.string.offer_couldnt_be_deleted))
-                .inRoot(withDecorView(CoreMatchers.not(is(
-                        mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-    }
-
-
-    @Test
-    public void CancelDialog() {
+    public void cancelDialog() {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -151,7 +135,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void DeleteElementTest() {
+    public void deleteElementTest() {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -171,5 +155,6 @@ public class DeleteOfferTest {
         };
         Database.getInstance().read("/offers", ID1, vl, Offer.class);
     }
+
 
 }
