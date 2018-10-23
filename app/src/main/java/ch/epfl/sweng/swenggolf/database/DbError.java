@@ -3,90 +3,31 @@ package ch.epfl.sweng.swenggolf.database;
 import com.google.firebase.database.DatabaseError;
 
 public enum DbError {
-    NONE {
-        @Override
-        public String toString() {
-            return "Everything went fine";
-        }
-    },
-    DATA_STALE {
-        @Override
-        public String toString() {
-            return "Data is outdated";
-        }
-    },
-    DISCONNECTED {
-        @Override
-        public String toString() {
-            return "Connection interrupted";
-        }
-    },
-    EXPIRED_TOKEN {
-        @Override
-        public String toString() {
-            return "Connection as expired";
-        }
-    },
-    INVALID_TOKEN {
-        @Override
-        public String toString() {
-            return "Connection is invalid";
-        }
-    },
-    MAX_RETRIES {
-        @Override
-        public String toString() {
-            return "Max trials reached";
-        }
-    },
-    NETWORK_ERROR {
-        @Override
-        public String toString() {
-            return "Network unavailable";
-        }
-    },
-    OPERATION_FAILED {
-        @Override
-        public String toString() {
-            return "Operation failed";
-        }
-    },
-    OVERRIDDEN_BY_SET {
-        @Override
-        public String toString() {
-            return "Overriden by set";
-        }
-    },
-    PERMISSION_DENIED {
-        @Override
-        public String toString() {
-            return "Permission denied";
-        }
-    },
-    UNAVAILABLE {
-        @Override
-        public String toString() {
-            return "Service unavailable";
-        }
-    },
-    UNKNOWN_ERROR {
-        @Override
-        public String toString() {
-            return "Unknown error";
-        }
-    },
-    USER_CODE_EXCEPTION {
-        @Override
-        public String toString() {
-            return "User code exception";
-        }
-    },
-    WRITE_CANCELED {
-        @Override
-        public String toString() {
-            return "Write was cancelled";
-        }
-    };
+    NONE("Everything went fine"),
+    DATA_STALE("Data is outdated"),
+    DISCONNECTED("Connection interrupted"),
+    EXPIRED_TOKEN("Connection as expired"),
+    INVALID_TOKEN("Connection is invalid"),
+    MAX_RETRIES("Max trials reached"),
+    NETWORK_ERROR("Network unavailable"),
+    OPERATION_FAILED("Operation failed"),
+    OVERRIDDEN_BY_SET("Overriden by set"),
+    PERMISSION_DENIED("Permission denied"),
+    UNAVAILABLE("Service unavailable"),
+    UNKNOWN_ERROR("Unknown error"),
+    USER_CODE_EXCEPTION("User code exception"),
+    WRITE_CANCELED("Write was cancelled");
+
+    DbError(String message) {
+        this.message = message;
+    }
+
+    private final String message;
+
+    @Override
+    public String toString() {
+        return message;
+    }
 
     /**
      * Return the DbError given a firebase error.
