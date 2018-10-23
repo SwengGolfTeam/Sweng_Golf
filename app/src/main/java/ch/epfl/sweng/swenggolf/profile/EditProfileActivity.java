@@ -57,5 +57,4 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
-
 }

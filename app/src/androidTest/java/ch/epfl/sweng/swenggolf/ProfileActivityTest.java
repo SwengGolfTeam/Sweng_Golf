@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
-    User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
+    final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
 
     @Rule
     public final IntentsTestRule<ProfileActivity> mActivityRule =
@@ -53,21 +53,18 @@ public class ProfileActivityTest {
     @Test
     public void canEditUserName() {
         String newName = "Jean-Jacques";
-        editField(R.id.edit_name, newName);
         final User newUser = new User(user);
         newUser.setUserName(newName);
-        ValueListener vl = new ValueListener() {
-            @Override
-            public void onDataChange(Object value) {
-                assertEquals(newUser, value);
-            }
+        canEditField(R.id.edit_name, newUser, newName);
+    }
 
-            @Override
-            public void onCancelled(DbError error) {
-                //nothing to do
-            }
-        };
-        DatabaseUser.getUser(vl, user);
+    @Test
+    public void canEditPreferences() {
+        String newPref = "coffee";
+        User newUser = new User(user);
+        newUser.setPreference(newPref);
+        canEditField(R.id.edit_pref, newUser, newPref);
+
     }
 
     @Test
@@ -81,18 +78,10 @@ public class ProfileActivityTest {
         intended(hasComponent(MainMenuActivity.class.getName()));
     }
 
-    private void editField(int editTextId, String newText) {
+    private void canEditField(int editTextId, final User newUser, String newText) {
         onView(withId(R.id.edit)).perform(click());
         onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
-    }
-
-    @Test
-    public void canEditPreferences() {
-        String newPref = "coffee";
-        editField(R.id.edit_pref, newPref);
-        final User newUser = new User(user);
-        newUser.setPreference(newPref);
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {

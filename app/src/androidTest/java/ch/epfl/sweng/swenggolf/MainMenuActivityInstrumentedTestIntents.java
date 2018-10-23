@@ -55,6 +55,11 @@ public class MainMenuActivityInstrumentedTestIntents {
 
     @Test
     public void testIntentProfile() {
+        testIntent(ProfileActivity.class.getName(), R.id.my_account);
+    }
+
+    @Test
+    public void testIntentProfileByClickingOnPicture() {
         onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
         intended(hasComponent(ProfileActivity.class.getName()));
     }

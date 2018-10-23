@@ -80,6 +80,16 @@ public class MainMenuActivity extends AppCompatActivity {
     /**
      * Launches the ProfileActivity.
      *
+     * @param item the menu item that triggers the activity
+     */
+    public void loadProfileActivity(MenuItem item) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Launches the ProfileActivity.
+     *
      * @param view the current view
      */
     public void loadProfileActivity(View view) {

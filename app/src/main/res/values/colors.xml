@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#006155</color>
-    <color name="colorAccent">#188c6b</color>
+    <color name="colorPrimary">#058b59</color>
+    <color name="colorPrimaryDark">#003024</color>
+    <color name="colorAccent">#035b3b</color>
     <color name="offer_list_author">#999999</color>
     <color name="offer_list_name">#222222</color>
     <color name="primary_material_light_1">#00bcd4</color>

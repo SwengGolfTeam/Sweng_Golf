@@ -1,9 +1,5 @@
 <resources>
 
-    <style name="MainMenuHeader">
-        <item name="android:background">@color/colorPrimaryDark</item>
-    </style>
-
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/caviar_dreams</item>
         <item name="android:textColorPrimary">@android:color/white</item>
