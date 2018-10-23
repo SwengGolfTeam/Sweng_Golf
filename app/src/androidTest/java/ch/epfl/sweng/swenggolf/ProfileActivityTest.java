@@ -73,7 +73,7 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void goToMenu() {
+    public void canGoToMenu() {
         onView(withContentDescription("abc_action_bar_up_description")).perform(click());
         intended(hasComponent(MainMenuActivity.class.getName()));
     }

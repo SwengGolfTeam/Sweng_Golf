@@ -3,8 +3,10 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.Gravity;
 import android.widget.TextView;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,6 +14,14 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerActions.close;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -39,6 +49,15 @@ public class MainMenuActivityInstrumentedTestAvailable {
     public void userMailFieldIsOfUser() {
         TextView t = mMenuRule.getActivity().findViewById(R.id.usermail);
         assertThat(t.getText().toString(), is("emailValid"));
+    }
+
+    @Test
+    public void canCloseAndOpenDrawerWithButton() {
+        Matcher v = withId(R.id.side_menu);
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(v).check(matches(isOpen(Gravity.LEFT)));
+        onView(v).perform(close());
+        onView(v).check(matches(isClosed(Gravity.LEFT)));
     }
 }
 

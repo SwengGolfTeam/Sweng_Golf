@@ -13,7 +13,8 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ToolbarTheme"
         app:title="@string/offers"
-        app:menu="@menu/menu_toolbar_main"/>
+        app:menu="@menu/menu_toolbar_main"
+        app:navigationContentDescription="abc_action_bar_up_description"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/offers_recycler_view"

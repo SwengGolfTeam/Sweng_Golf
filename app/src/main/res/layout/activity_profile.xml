@@ -13,9 +13,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ToolbarTheme"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:navigationContentDescription="abc_action_bar_up_description"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="@string/profile_activity_name">
