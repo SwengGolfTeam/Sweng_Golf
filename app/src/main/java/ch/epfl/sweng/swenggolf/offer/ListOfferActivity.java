@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -36,7 +37,7 @@ public class ListOfferActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+        setHomeIcon(R.drawable.ic_menu);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
         setRecyclerView(inflated);
         errorMessage = inflated.findViewById(R.id.error_message);
@@ -93,12 +94,13 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    Offer offer = offerList.get(position);
+                    Offer showOffer = offerList.get(position);
                     Bundle offerBundle = new Bundle();
-                    offerBundle.putParcelable("offer", offer);
+                    offerBundle.putParcelable("offer", showOffer);
                     Fragment listOffer = new ShowOfferActivity();
                     listOffer.setArguments(offerBundle);
-                    replaceCentralFragment(listOffer);
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.centralFragment, listOffer);
+                    transaction.commit();
                 }
 
                 @Override
@@ -152,9 +154,11 @@ public class ListOfferActivity extends FragmentConverter {
         switch (item.getItemId()){
             case android.R.id.home : {
                 openDrawer();
+                break;
             }
             case R.id.add_offer : {
                 replaceCentralFragment(new CreateOfferActivity());
+                break;
             }
         }
         return super.onOptionsItemSelected(item);

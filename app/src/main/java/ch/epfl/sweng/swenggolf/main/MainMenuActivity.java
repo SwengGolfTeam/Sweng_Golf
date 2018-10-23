@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -53,7 +54,9 @@ public class MainMenuActivity extends AppCompatActivity {
     private void launchFragment() {
         Fragment offerList = new ListOfferActivity();
         manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.centralFragment, offerList).commit();
+        FragmentTransaction transaction = manager.beginTransaction().add(R.id.centralFragment, offerList, "list_offer");
+        transaction.addToBackStack("list_offer");
+        transaction.commit();
     }
 
     private boolean setUserDisplay() {
@@ -106,15 +109,6 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadProfileActivity(MenuItem item) {
         replaceCentralFragment(new ProfileActivity());
-    }
-
-    /**
-     * Launches the CreateOfferActivity.
-     *
-     * @param item the menu item that triggers the activity
-     */
-    public void loadCreateOfferActivity(MenuItem item) {
-        replaceCentralFragment(new CreateOfferActivity());
     }
 
     /**

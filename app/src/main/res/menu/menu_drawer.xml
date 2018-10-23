@@ -12,11 +12,6 @@
             android:title="@string/offers"
             android:onClick="loadShowOffersActivity" />
         <item
-            android:id="@+id/create_offer"
-            android:icon="@android:drawable/ic_menu_directions"
-            android:title="@string/create_offer"
-            android:onClick="loadCreateOfferActivity" />
-        <item
             android:id="@+id/preference_activity"
             android:icon="@android:drawable/btn_star"
             android:title="@string/preferences"

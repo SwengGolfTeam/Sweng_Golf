@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ public class ProfileActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        setHomeIcon(R.drawable.ic_menu);
         View inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData(inflated);
         return inflated;
@@ -68,9 +70,13 @@ public class ProfileActivity extends FragmentConverter {
         switch (item.getItemId()) {
             case android.R.id.home : {
                 openDrawer();
+                break;
             }
             case R.id.edit_profile : {
-                replaceCentralFragment(new EditProfileActivity());
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.centralFragment, new EditProfileActivity());
+                transaction.commit();
+                break;
             }
         }
         return super.onOptionsItemSelected(item);

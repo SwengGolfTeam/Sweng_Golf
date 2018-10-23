@@ -28,7 +28,15 @@ public class EditProfileActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHomeIcon(R.drawable.ic_baseline_arrow_back_24px);
+        setHasOptionsMenu(true);
         View inflated = inflater.inflate(R.layout.activity_edit_profile, container, false);
+        inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChangesAndReturn(v);
+            }
+        });
         createUserView(inflated);
         return inflated;
     }
@@ -46,17 +54,10 @@ public class EditProfileActivity extends FragmentConverter {
         }
     }
 
-    @Override
-    public boolean onSelectedOptionsMenu(MenuItem item) {
-        switch (item.getItemId()) {
-
-        }
-    }
-
     /**
      * Saves the changes and returns to the profile activity.
      */
-    public void saveChangesAndReturn() {
+    public void saveChangesAndReturn(View view) {
         EditText editText = findViewById(R.id.edit_name);
         String name = editText.getText().toString();
 
@@ -66,4 +67,14 @@ public class EditProfileActivity extends FragmentConverter {
         replaceCentralFragment(new ProfileActivity());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : {
+                replaceCentralFragment(new ProfileActivity());
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

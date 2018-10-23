@@ -5,6 +5,5 @@
         android:id="@+id/button_modify_offer"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/modify_offer"
-        android:onClick="modifyOffer"
         app:showAsAction="always"/>
 </menu>

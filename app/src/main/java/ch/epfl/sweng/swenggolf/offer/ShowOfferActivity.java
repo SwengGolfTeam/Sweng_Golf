@@ -2,7 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,22 +23,17 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 public class ShowOfferActivity extends FragmentConverter {
 
+    private boolean userIsCreator;
     private Offer offer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_foreground);
+        setHomeIcon(R.drawable.ic_baseline_arrow_back_24px);
         assert getArguments() != null;
-        offer = getArguments().getParcelable("offer");
         View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
-        if(!Config.getUser().getUserId().equals(offer.getUserId())){
-            ImageView button = inflated.findViewById(R.id.button_modify_offer);
-            button.setVisibility(View.INVISIBLE);
-            button.setClickable(false);
-        }
-
+        userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
         setContents(inflated);
         return inflated;
     }
@@ -46,20 +41,21 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        offer = getArguments().getParcelable("offer");
     }
 
-    private void setContents(View inflated) {
-        TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
+    private void setContents(View view) {
+        TextView offerTitle = view.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
 
-        final TextView offerAuthor = inflated.findViewById(R.id.show_offer_author);
+        final TextView offerAuthor = view.findViewById(R.id.show_offer_author);
         ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
 
-        TextView offerDescription = inflated.findViewById(R.id.show_offer_description);
+        TextView offerDescription = view.findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());
 
         if (!offer.getLinkPicture().isEmpty()) {
-            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
+            ImageView offerPicture = view.findViewById(R.id.show_offer_picture);
             Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
     }
@@ -72,22 +68,29 @@ public class ShowOfferActivity extends FragmentConverter {
         CreateOfferActivity createFrag = new CreateOfferActivity();
         Bundle createBundle = new Bundle();
         createBundle.putParcelable("offer", offer);
+        createFrag.setArguments(createBundle);
         replaceCentralFragment(createFrag);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_show_offer, menu);
+        if(userIsCreator) {
+            inflater.inflate(R.menu.menu_show_offer, menu);
+        } else {
+            inflater.inflate(R.menu.menu_empty, menu);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home : {
-                getFragmentManager().popBackStack();
+                getFragmentManager().beginTransaction().replace(R.id.centralFragment,getFragmentManager().findFragmentByTag("list_offer")).commit();
+                break;
             }
             case R.id.button_modify_offer : {
                 modifyOffer();
+                break;
             }
         }
         return super.onOptionsItemSelected(item);

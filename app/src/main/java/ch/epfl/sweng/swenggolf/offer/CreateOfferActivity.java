@@ -1,7 +1,9 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.inputmethodservice.Keyboard;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,8 +14,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +61,22 @@ public class CreateOfferActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
+        setHomeIcon(R.drawable.ic_baseline_arrow_back_24px);
+        setHasOptionsMenu(true);
         errorMessage = inflated.findViewById(R.id.error_message);
+        preFillFields(inflated);
+        inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosePicture(v);
+            }
+        });
+        inflated.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createOffer(v);
+            }
+        });
         return inflated;
     }
 
@@ -65,17 +84,16 @@ public class CreateOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
-        preFillFields();
     }
 
-    private void preFillFields() {
+    private void preFillFields(View view) {
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable("offer");
-            EditText title = findViewById(R.id.offer_name);
+            EditText title = view.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
-            EditText description = findViewById(R.id.offer_description);
+            EditText description = view.findViewById(R.id.offer_description);
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
-            ImageView picture = findViewById(R.id.offer_picture);
+            ImageView picture = view.findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
             if (!link.isEmpty() && !Config.isTest()) {
                 Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
@@ -195,6 +213,7 @@ public class CreateOfferActivity extends FragmentConverter {
                     ShowOfferActivity showOff = new ShowOfferActivity();
                     Bundle offerBundle = new Bundle();
                     offerBundle.putParcelable("offer", offer);
+                    showOff.setArguments(offerBundle);
                     replaceCentralFragment(showOff);
                 }else{
                     errorMessage.setVisibility(View.VISIBLE);
@@ -204,5 +223,17 @@ public class CreateOfferActivity extends FragmentConverter {
 
         };
         database.write("/offers", offer.getUuid(), offer, listener);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : {
+                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                replaceCentralFragment(new ListOfferActivity());
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

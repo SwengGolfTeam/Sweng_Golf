@@ -2,15 +2,19 @@ package ch.epfl.sweng.swenggolf.tools;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
@@ -41,9 +45,19 @@ public abstract class FragmentConverter extends Fragment {
         inflater.inflate(R.menu.menu_empty , menu);
     }
 
-
     protected void replaceCentralFragment(Fragment fragment) {
         replaceFragment(fragment, R.id.centralFragment);
+    }
+
+    protected void setBackCentralFragment(Fragment fragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.centralFragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    protected void setHomeIcon(int resId) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(resId);
     }
 
     protected void openDrawer() {

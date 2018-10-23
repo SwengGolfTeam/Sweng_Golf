@@ -6,6 +6,5 @@
         android:id="@+id/add_offer"
         android:title="@string/add_offer"
         android:icon="@android:drawable/ic_menu_add"
-        android:onClick="loadCreateOfferActivity"
         app:showAsAction="always" />
 </menu>
