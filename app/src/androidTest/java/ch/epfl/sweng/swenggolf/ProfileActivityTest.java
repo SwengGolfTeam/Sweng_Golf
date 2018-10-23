@@ -33,6 +33,7 @@ import static org.junit.Assert.assertEquals;
 public class ProfileActivityTest {
 
     final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
+    User newUser;
 
     @Rule
     public final IntentsTestRule<ProfileActivity> mActivityRule =
@@ -45,6 +46,7 @@ public class ProfileActivityTest {
     public void setUp(){
         Config.isTest();
         Config.setUser(new User(user));
+        newUser = new User(user);
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
@@ -53,7 +55,6 @@ public class ProfileActivityTest {
     @Test
     public void canEditUserName() {
         String newName = "Jean-Jacques";
-        final User newUser = new User(user);
         newUser.setUserName(newName);
         canEditField(R.id.edit_name, newUser, newName);
     }
@@ -61,7 +62,6 @@ public class ProfileActivityTest {
     @Test
     public void canEditPreferences() {
         String newPref = "coffee";
-        User newUser = new User(user);
         newUser.setPreference(newPref);
         canEditField(R.id.edit_pref, newUser, newPref);
 
