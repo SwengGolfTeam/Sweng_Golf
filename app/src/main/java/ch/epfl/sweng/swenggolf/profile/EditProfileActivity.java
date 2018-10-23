@@ -1,11 +1,10 @@
 package ch.epfl.sweng.swenggolf.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -14,11 +13,8 @@ import android.widget.ImageView;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
-import ch.epfl.sweng.swenggolf.database.CompletionListener;
-import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 

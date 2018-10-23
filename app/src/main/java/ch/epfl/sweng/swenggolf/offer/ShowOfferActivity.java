@@ -2,22 +2,29 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.content.DialogInterface;
+
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -82,18 +89,69 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home : {
-                getFragmentManager().beginTransaction().replace(R.id.centralFragment,getFragmentManager().findFragmentByTag("list_offer")).commit();
-                break;
+    public boolean onOptionsItemSelected(MenuItem item){
+                switch (item.getItemId()) {
+                    case android.R.id.home: {
+                        getFragmentManager().beginTransaction().replace(R.id.centralFragment, getFragmentManager().findFragmentByTag("list_offer")).commit();
+                        break;
+                    }
+                    case R.id.button_modify_offer: {
+                        modifyOffer();
+                        break;
+                    }
+                    case R.id.button_delete_offer: {
+                        deleteOffer();
+                        break;
+                    }
+                }
+                return super.onOptionsItemSelected(item);
             }
-            case R.id.button_modify_offer : {
-                modifyOffer();
-                break;
+    /**
+     * Launches the DeleteOfferActivity using the current offer.
+     */
+    public void deleteOffer() {
+        showDeleteAlertDialog();
+    }
+
+    /**
+     * Display the Alert Dialog for the delete.
+     */
+    public void showDeleteAlertDialog(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this offer?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteOfferInDatabase();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    /**
+     * Delete the offer in the database.
+     */
+    private void deleteOfferInDatabase(){
+        Database database = Database.getInstance();
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DbError databaseError) {
+                if (databaseError == DbError.NONE) {
+                    Toast.makeText(getContext(), R.string.offer_deleted,
+                            Toast.LENGTH_SHORT).show();
+                    replaceCentralFragment(new ListOfferActivity());
+                }
             }
-        }
-        return super.onOptionsItemSelected(item);
+
+        };
+        database.remove("/offers", offer.getUuid(), listener);
     }
 
 }
