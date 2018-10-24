@@ -91,7 +91,7 @@ public class CreateOfferActivityTest {
         Instrumentation.ActivityResult result =
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(not(isInternal())).respondWith(result);
-
+        closeSoftKeyboard();
         onView(withId(R.id.offer_picture)).perform(click());
         onView(withId(R.id.button)).perform(click());
     }
@@ -143,18 +143,5 @@ public class CreateOfferActivityTest {
         goToShowOffer(true);
         onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
-    }
-
-    @Test
-    public void imageUploadWhenStorageNotWorking() {
-        ListOfferActivityTest.setUpFakeDatabase();
-        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
-        onView(withId(R.id.create_offer_button)).perform(click());
-        fillOffer();
-        closeSoftKeyboard();
-        onView(withText(R.string.error_upload_image))
-                .inRoot(withDecorView(not(is(
-                        mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
     }
 }
