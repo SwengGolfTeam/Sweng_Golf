@@ -151,6 +151,7 @@ public class CreateOfferActivityTest {
         StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage(false));
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
+        closeSoftKeyboard();
         onView(withText(R.string.error_upload_image))
                 .inRoot(withDecorView(not(is(
                         mActivityRule.getActivity().getWindow().getDecorView()))))
