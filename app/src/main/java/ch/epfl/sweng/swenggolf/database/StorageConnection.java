@@ -11,6 +11,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.UUID;
 
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 
 public class StorageConnection {
     private static FirebaseStorage st;
@@ -71,5 +73,14 @@ public class StorageConnection {
                         return ref.getDownloadUrl();
                     }
                 });
+    }
+
+    /**
+     * Delete the image associted to the offer.
+     * @param offer the offer
+     */
+    public static void deleteImage(Offer offer){
+        StorageReference photoRef = st.getReferenceFromUrl(offer.getLinkPicture());
+        photoRef.delete();
     }
 }

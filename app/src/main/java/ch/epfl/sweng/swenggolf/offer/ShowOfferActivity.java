@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -19,6 +21,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.StorageConnection;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -127,6 +130,7 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         };
         database.remove("/offers", offer.getUuid(), listener);
+        StorageConnection.deleteImage(offer);
     }
 
 }

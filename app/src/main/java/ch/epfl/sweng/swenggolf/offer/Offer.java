@@ -3,6 +3,8 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.storage.StorageReference;
+
 
 public class Offer implements Parcelable {
 
@@ -157,4 +159,5 @@ public class Offer implements Parcelable {
         this.linkPicture = data[3];
         this.uuid = data[4];
     }
+
 }
