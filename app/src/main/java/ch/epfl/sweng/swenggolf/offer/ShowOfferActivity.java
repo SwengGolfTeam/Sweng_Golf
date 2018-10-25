@@ -16,9 +16,13 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -127,6 +131,27 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         };
         database.remove("/offers", offer.getUuid(), listener);
+    }
+
+    public void openUserProfile(View v) {
+
+        DatabaseUser.getUser(new ValueListener<User>() {
+                                 @Override
+                                 public void onDataChange(User user) {
+                                     Intent intent = new Intent(ShowOfferActivity.this,
+                                             ProfileActivity.class);
+                                     intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
+                                     startActivity(intent);
+                                 }
+
+                                 @Override
+                                 public void onCancelled(DbError error) {
+                                     Toast.makeText(ShowOfferActivity.this,
+                                             R.string.error_load_user, Toast.LENGTH_LONG).show();
+                                 }
+                             }
+                             , offer.getUserId());
+
     }
 
 }

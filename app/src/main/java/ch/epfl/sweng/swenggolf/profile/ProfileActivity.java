@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_profile);
 
-        user = Config.getUser();
+        user = getIntent().getParcelableExtra("ch.epfl.sweng.swenggolf.user");
+        if(user == null){
+            throw new NullPointerException("The user given to ProfileActivity can not be null");
+        }
 
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
@@ -49,7 +53,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        showEditButton();
+
         displayUserData();
+    }
+
+    private void showEditButton() {
+        if(user.getUserId().equals(Config.getUser().getUserId()) ){
+            ImageButton button = findViewById(R.id.edit);
+            button.setVisibility(View.VISIBLE);
+        }
     }
 
     private void displayUserData() {

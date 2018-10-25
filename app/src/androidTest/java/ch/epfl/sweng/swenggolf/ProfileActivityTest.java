@@ -49,7 +49,7 @@ public class ProfileActivityTest {
         newUser = new User(user);
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(new Intent().putExtra("ch.epfl.sweng.swenggolf.user", user));
     }
 
     @Test
