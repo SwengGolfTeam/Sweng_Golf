@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     private TextView errorMessage;
     private Offer offerToModify;
     private boolean creationAsked;
+    private Spinner categorySpinner;
 
     private ImageView imageView;
 
@@ -53,10 +56,17 @@ public class CreateOfferActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupSpinner();
+
         errorMessage = findViewById(R.id.error_message);
 
         offerToModify = getIntent().getParcelableExtra("offer");
         preFillFields();
+    }
+
+    private void setupSpinner(){
+        categorySpinner = findViewById(R.id.category_spinner);
+        categorySpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Category.values()));
     }
 
     private void preFillFields() {
@@ -115,29 +125,29 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
+        final Category category = Category.stringToTag(categorySpinner.getSelectedItem().toString());
 
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else if (filePath != null) {
-            uploadImage(name, description);
+            uploadImage(name, description, category);
         } else {
-            createOfferObject(name, description, "");
+            createOfferObject(name, description, "", category);
         }
 
 
     }
 
-    private void uploadImage(final String name, final String description) {
+    private void uploadImage(final String name, final String description, final Category tag) {
         StorageConnection storage = StorageConnection.getInstance();
-
         storage.writeFile(filePath)
                 .addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             String link = task.getResult().toString();
-                            createOfferObject(name, description, link);
+                            createOfferObject(name, description, link, tag);
                         } else {
                             // TODO Handle failures
                         }
@@ -145,7 +155,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                 });
 
         if (Config.isTest()) {
-            createOfferObject(name, description, "");
+            createOfferObject(name, description, "", tag);
         }
 
     }
@@ -157,7 +167,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param description the description of the offer
      * @param link        the link of the offer's picture
      */
-    protected void createOfferObject(String name, String description, String link) {
+    protected void createOfferObject(String name, String description, String link, Category tag) {
         String uuid = UUID.randomUUID().toString();
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
@@ -166,7 +176,7 @@ public class CreateOfferActivity extends AppCompatActivity {
             }
         }
         final Offer newOffer =
-                new Offer(Config.getUser().getUserId(), name, description, link, uuid);
+                new Offer(Config.getUser().getUserId(), name, description, link, uuid, tag);
         writeOffer(newOffer);
     }
 
