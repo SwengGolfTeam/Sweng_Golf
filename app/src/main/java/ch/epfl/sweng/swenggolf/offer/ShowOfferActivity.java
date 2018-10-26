@@ -47,9 +47,10 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     /**
      * Help to hide a button.
+     *
      * @param button button to hide
      */
-    private void hideButton(ImageView button){
+    private void hideButton(ImageView button) {
         button.setVisibility(View.INVISIBLE);
         button.setClickable(false);
     }
@@ -94,7 +95,7 @@ public class ShowOfferActivity extends AppCompatActivity {
     /**
      * Display the Alert Dialog for the delete.
      */
-    public void showDeleteAlertDialog(){
+    public void showDeleteAlertDialog() {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete entry")
@@ -116,7 +117,7 @@ public class ShowOfferActivity extends AppCompatActivity {
     /**
      * Delete the offer in the database.
      */
-    private void deleteOfferInDatabase(){
+    private void deleteOfferInDatabase() {
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override
@@ -150,7 +151,7 @@ public class ShowOfferActivity extends AppCompatActivity {
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
                              }
-                             , offer.getUserId());
+                , offer.getUserId());
 
     }
 

@@ -43,4 +43,5 @@ public class ProfileActivityOtherUserTest {
         onView(withId(R.id.edit)).check(matches(withEffectiveVisibility(
                 ViewMatchers.Visibility.GONE)));
     }
+
 }
