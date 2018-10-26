@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     private final boolean working;
@@ -70,6 +73,10 @@ public class FakeDatabase extends Database {
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
         }
+    }
+    @Override
+    public void getByCategory(final Category cat, final ValueListener<List<Offer>> listener) {
+    //TODO fake version
     }
 
     @Nullable

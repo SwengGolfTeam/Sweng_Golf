@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public abstract class Database {
@@ -89,6 +90,9 @@ public abstract class Database {
      */
     public abstract void remove(@NonNull String path, @NonNull String id,
                                 @NonNull CompletionListener listener);
+
+    // TODO javadoc
+    public abstract void getByCategory(final Category cat, final ValueListener<List<Offer>> listener);
 
     /**
      * Read the list of all offers. It return the list using a listener.

@@ -6,10 +6,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
@@ -111,4 +115,30 @@ public final class FireDatabase extends Database {
         };
     }
 
+    @Override
+    public void getByCategory(final Category cat, final ValueListener<List<Offer>> listener){
+        final DatabaseReference ref = database.getReference("offers");
+        final ArrayList<Offer> list = new ArrayList<>();
+
+        Query query = ref.orderByChild("tag").equalTo(cat.toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot offer : dataSnapshot.getChildren()) {
+                        list.add(offer.getValue(Offer.class));
+                    }
+                    listener.onDataChange(list);
+                } else {
+                    // TODO handle empty quesry -> No data was found bla bla bla
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //TODO error handling
+            }
+        });
+
+    }
 }

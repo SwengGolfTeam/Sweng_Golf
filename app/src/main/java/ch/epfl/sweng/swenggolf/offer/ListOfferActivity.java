@@ -97,7 +97,8 @@ public class ListOfferActivity extends AppCompatActivity {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        database.readOffers(listener);
+        //database.readOffers(listener);
+        database.getByCategory(Category.None, listener); //TODO change with select options
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
