@@ -14,24 +14,10 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_USERID = "ch.epfl.sweng.swenggolf.USERID";
-    private final String uid = "1234";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    /**
-     * Launches the ProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void loadProfileActivity(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(EXTRA_USERID, uid);
-        startActivity(intent);
     }
 
     /**

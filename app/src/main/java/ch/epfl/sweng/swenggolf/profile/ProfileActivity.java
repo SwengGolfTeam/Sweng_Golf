@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,7 +31,7 @@ public class ProfileActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        setHomeIcon(R.drawable.ic_menu);
+        setHomeIcon(R.drawable.ic_menu_black_24dp);
         View inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData(inflated);
         return inflated;
@@ -49,7 +49,8 @@ public class ProfileActivity extends FragmentConverter {
         ImageView imageView = view.findViewById(R.id.ivProfile);
         displayPicture(imageView, user, this.getContext());
 
-        // TODO count the number of offers posted+answered and display them
+        TextView preference = findViewById(R.id.preference1);
+        preference.setText(user.getPreference());
 
     }
 

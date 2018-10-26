@@ -1,10 +1,10 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
@@ -25,11 +25,15 @@ import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+
 import static android.support.test.espresso.contrib.DrawerActions.open;
+
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
@@ -75,4 +79,11 @@ public class MainMenuActivityInstrumentedTestIntents {
     public void testIntentProfile() {
         testReplacement(ProfileActivity.class.getName(), R.id.my_account);
     }
+
+    @Test
+    public void testIntentProfileByClickingOnPicture() {
+        onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
+        intended(hasComponent(ProfileActivity.class.getName()));
+    }
+
 }

@@ -3,9 +3,9 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/my_account"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="@string/my_account"
-            android:onClick="loadProfileActivity" />
+            android:icon="@drawable/ic_profile"
+            android:onClick="loadProfileActivity"
+            android:title="@string/my_account" />
         <item
             android:id="@+id/offers"
             android:icon="@android:drawable/ic_menu_myplaces"

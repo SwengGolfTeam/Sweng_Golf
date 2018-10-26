@@ -1,9 +1,10 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOfferActivity extends FragmentConverter {
@@ -37,7 +39,7 @@ public class ListOfferActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         setHasOptionsMenu(true);
-        setHomeIcon(R.drawable.ic_menu);
+        setHomeIcon(R.drawable.ic_menu_black_24dp);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
         setRecyclerView(inflated);
         errorMessage = inflated.findViewById(R.id.error_message);

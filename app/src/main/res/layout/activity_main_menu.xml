@@ -8,16 +8,17 @@
 
     <LinearLayout
         android:id="@+id/main_menu_frame"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:menu="@menu/menu_list_offer"/>
+            android:theme="@style/ToolbarTheme"
+            app:navigationContentDescription="abc_action_bar_home_description"/>
 
         <FrameLayout
             android:id="@+id/centralFragment"
@@ -30,8 +31,9 @@
         android:id="@+id/drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_gravity="start"
-        app:menu="@menu/menu_drawer"
-        app:headerLayout="@layout/layout_header"/>
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/layout_header"
+        app:menu="@menu/menu_drawer"/>
+
 </android.support.v4.widget.DrawerLayout>

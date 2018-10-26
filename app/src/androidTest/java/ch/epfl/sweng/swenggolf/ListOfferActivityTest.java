@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
@@ -28,7 +30,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.fail;
@@ -53,8 +58,8 @@ public class ListOfferActivityTest {
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
 
     /**
      * Configures a fake database and enables TestMode.
@@ -109,10 +114,14 @@ public class ListOfferActivityTest {
                 fail();
             }
         }, offer.getUserId());
-
-
-
    }
+
+    @Test
+    public void canGoToMenu() {
+        openListActivity();
+        onView(withContentDescription("abc_action_bar_up_description")).perform(click());
+        intended(hasComponent(MainMenuActivity.class.getName()));
+    }
 
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
