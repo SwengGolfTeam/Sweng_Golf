@@ -6,6 +6,8 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 
@@ -34,11 +37,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(AndroidJUnit4.class)
-public class PreferenceActivityTest {
+public class PreferenceActivityTest extends MainMenuActivity {
+    private FragmentManager manager;
 
     @Rule
     public ActivityTestRule preferenceRule =
-            new ActivityTestRule<>(ListPreferencesActivity.class, false, false);
+            new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Enters adapter debug mode.
@@ -47,7 +51,8 @@ public class PreferenceActivityTest {
     public void setUp() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
-        preferenceRule.launchActivity(new Intent());
+        //preferenceRule.launchActivity(new Intent());
+        ((AppCompatActivity)preferenceRule.getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity()).commit();
     }
 
     /**

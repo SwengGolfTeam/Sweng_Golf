@@ -127,4 +127,12 @@ public class MainMenuActivity extends AppCompatActivity {
         replaceCentralFragment(new ListPreferencesActivity());
     }
 
+    /**
+     * Launches the createOfferActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void createOfferActivity(MenuItem item) {
+        replaceCentralFragment(new CreateOfferActivity());
+    }
 }

@@ -52,7 +52,7 @@ public class ProfileActivityTest {
     public void canEditUserName() {
         String newName = "Anonymous";
         onView(withId(R.id.profileButton)).perform(click());
-        onView(withId(R.id.edit)).perform(click());
+        onView(withId(R.id.edit_profile)).perform(click());
         onView(withId(R.id.edit_name)).perform(replaceText(newName)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(click());
         final User newUser = new User(user);
