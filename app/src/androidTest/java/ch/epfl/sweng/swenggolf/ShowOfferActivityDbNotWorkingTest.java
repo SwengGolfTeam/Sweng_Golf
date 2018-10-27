@@ -32,6 +32,7 @@ public class ShowOfferActivityDbNotWorkingTest {
             new IntentsTestRule<>(ShowOfferActivity.class, false, false);
 
     private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
+
     /**
      * Set up a fake database, a fake user and launch activity.
      */

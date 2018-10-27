@@ -11,6 +11,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
 public final class TestUtility {
+
+    /**
+     * Use this test to check if we can see a Toast.
+     * @param mActivityRule the tested activity
+     * @param toastMessage the message of the Toast
+     */
     public static void testToastShow(ActivityTestRule mActivityRule, int toastMessage) {
         onView(withText(toastMessage)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
