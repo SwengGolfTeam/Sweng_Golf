@@ -31,26 +31,25 @@ public class ShowOfferActivityDbNotWorkingTest {
     public final IntentsTestRule<ShowOfferActivity> mActivityRule =
             new IntentsTestRule<>(ShowOfferActivity.class, false, false);
 
-    private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
-
+    private final FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
+    private final User user = FilledFakeDatabase.FAKE_USERS[0];
+    private final Offer offer = FilledFakeDatabase.FAKE_OFFERS[5];
     /**
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
     public void setUp() {
         Database.setDebugDatabase(database);
-        User user = FilledFakeDatabase.FAKE_USERS[0];
         Config.setUser(user);
         Intent intent = new Intent();
-        Offer offer = FilledFakeDatabase.FAKE_OFFERS[0];
+
         intent.putExtra("offer", offer);
         mActivityRule.launchActivity(intent);
     }
 
     @Test
     public void openProfileFromOfferShowToastOnFail() {
-        onView(withId(R.id.show_offer_title)).perform(click());
-        database.setWorking(false);
+        database.setEntryNotWorking("/users", offer.getUserId());
         onView(withId(R.id.show_offer_author)).perform(click());
         testToastShow(mActivityRule, R.string.error_load_user);
     }
