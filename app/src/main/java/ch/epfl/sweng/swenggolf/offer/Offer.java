@@ -187,6 +187,6 @@ public class Offer implements Parcelable {
         this.description = data[2];
         this.linkPicture = data[3];
         this.uuid = data[4];
-        this.tag = Category.stringToTag(data[5]);
+        this.tag = Category.valueOf(data[5]);
     }
 }

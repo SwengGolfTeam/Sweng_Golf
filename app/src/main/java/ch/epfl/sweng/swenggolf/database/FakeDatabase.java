@@ -74,6 +74,7 @@ public class FakeDatabase extends Database {
             listener.onComplete(DbError.UNKNOWN_ERROR);
         }
     }
+
     @Override
     public void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener) {
     //TODO fake version

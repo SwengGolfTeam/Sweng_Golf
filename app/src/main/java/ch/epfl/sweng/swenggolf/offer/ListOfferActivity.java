@@ -100,7 +100,7 @@ public class ListOfferActivity extends AppCompatActivity {
         };
         //database.readOffers(listener);
         List<Category> categories = Arrays.asList(Category.values());
-        database.getByCategory(categories, listener); //TODO change with select options
+        database.getByCategory(categories, listener);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =

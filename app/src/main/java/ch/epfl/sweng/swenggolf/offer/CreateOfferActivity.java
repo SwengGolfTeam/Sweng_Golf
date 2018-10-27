@@ -125,7 +125,7 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
-        final Category category = Category.stringToTag(categorySpinner.getSelectedItem().toString());
+        final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
