@@ -24,6 +24,7 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
@@ -67,7 +68,7 @@ public class CreateOfferActivityTest {
     public void errorMessageDisplayed() {
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(click());
+        onView(withId(R.id.button)).perform(scrollTo(),click());
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
