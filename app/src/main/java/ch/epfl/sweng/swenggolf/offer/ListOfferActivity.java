@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,6 +57,12 @@ public class ListOfferActivity extends AppCompatActivity {
         });
 
         setRecyclerView();
+    }
+
+    @Override //TODO WTF?
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_drawer, menu);
+        return true;
     }
 
     private void setRecyclerView() {
