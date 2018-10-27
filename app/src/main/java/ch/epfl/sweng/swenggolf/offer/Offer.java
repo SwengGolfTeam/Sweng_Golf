@@ -65,7 +65,7 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
      * @param that an offer
      */
     public Offer(Offer that){

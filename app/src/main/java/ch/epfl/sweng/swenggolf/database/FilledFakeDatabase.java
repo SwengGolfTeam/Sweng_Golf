@@ -22,18 +22,36 @@ public final class FilledFakeDatabase extends FakeDatabase {
     private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
     private static final String STARWARS = "starwars/";
 
+    /**
+     * Return an user from the list.
+     * @param index  the index of the user.
+     * @return
+     */
     public static User getUser(int index) {
         return new User(FAKE_USERS[index]);
     }
 
+    /**
+     * Return an offer from the list
+     * @param index the index of the offer.
+     * @return
+     */
     public static Offer getOffer(int index) {
         return new Offer(FAKE_OFFERS[index]);
     }
 
+    /**
+     * The number of offers.
+     * @return number of offers
+     */
     public static int numberOffer() {
         return FAKE_OFFERS.length;
     }
 
+    /**
+     * The number of users.
+     * @return number of users
+     */
     public static int numberUser() {
         return FAKE_USERS.length;
     }

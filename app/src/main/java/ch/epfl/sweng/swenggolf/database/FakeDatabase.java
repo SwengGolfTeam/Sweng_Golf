@@ -15,6 +15,10 @@ public class FakeDatabase extends Database {
     Set<String> workingOnEntry;
     private  boolean working;
 
+    /**
+     * Create a new FakeDatabase that can be used to mock the Database.
+     * @param working if the database work or send errors
+     */
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
         this.working = working;
@@ -43,7 +47,7 @@ public class FakeDatabase extends Database {
     public <T> void read(@NonNull String path, @NonNull String id,
                          @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
         String key = path + "/" + id;
-        if (working && !workingOnEntry.contains(key)) {
+        if (isWorkingforEntry(key)) {
 
             if (database.containsKey(key)) {
                 listener.onDataChange((T) database.get(key));
@@ -53,6 +57,10 @@ public class FakeDatabase extends Database {
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    private boolean isWorkingforEntry(String key) {
+        return working && !workingOnEntry.contains(key);
     }
 
     @Override
@@ -115,4 +123,5 @@ public class FakeDatabase extends Database {
     public void setEntryNotWorking(String path, String id) {
         workingOnEntry.add(path + "/" + id);
     }
+
 }
