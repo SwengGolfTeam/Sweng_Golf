@@ -1,8 +1,10 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,23 +42,22 @@ public class CreateUserActivityTest {
 
     @Rule
     public final ActivityTestRule<CreateUserActivity> mActivityRule =
-            new ActivityTestRule<>(CreateUserActivity.class);
+            new ActivityTestRule<>(CreateUserActivity.class, false, false);
 
     /**
      * Initialise the Config and the Database for tests.
      */
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         Config.goToTest();
         User user1 = new User(NAME, UID, MAIL, PHOTO);
         Config.setUser(new User(user1));
-        Database database = new FakeDatabase(true);
-        Database.setDebugDatabase(database);
-
+        Database.setDebugDatabase(new FakeDatabase(true));
+        mActivityRule.launchActivity(new Intent());
     }
 
     @Test
-    public void canDisplay() {
+    public void canDisplay() throws InterruptedException {
         onView(withId(R.id.mail)).check(matches(withText(MAIL)));
         onView(withId(R.id.mail)).perform(typeText("api"));
         onView(withId(R.id.name)).check(matches(withText(NAME)));

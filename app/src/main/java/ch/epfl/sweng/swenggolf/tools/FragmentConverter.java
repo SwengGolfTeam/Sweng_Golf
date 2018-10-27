@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,8 +21,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 public abstract class FragmentConverter extends Fragment {
-
-    private View inflated;
 
     protected <T extends View> T findViewById(int id) {
         return getView().findViewById(id);
@@ -49,15 +48,11 @@ public abstract class FragmentConverter extends Fragment {
         replaceFragment(fragment, R.id.centralFragment);
     }
 
-    protected void setBackCentralFragment(Fragment fragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    protected void setHomeIcon(int resId) {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(resId);
+    protected void setToolbar(int homeIconResId, int titleResId) {
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        setHasOptionsMenu(true);
+        actionBar.setHomeAsUpIndicator(homeIconResId);
+        actionBar.setTitle(getResources().getString(titleResId));
     }
 
     protected void openDrawer() {

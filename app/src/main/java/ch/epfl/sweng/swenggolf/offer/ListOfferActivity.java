@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -36,18 +37,17 @@ public class ListOfferActivity extends FragmentConverter {
     public static final List<Offer> offerList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        setHasOptionsMenu(true);
-        setHomeIcon(R.drawable.ic_menu_black_24dp);
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
         setRecyclerView(inflated);
         errorMessage = inflated.findViewById(R.id.error_message);
         return inflated;
     }
 
-    private void setRecyclerView(View view) {
-        RecyclerView mRecyclerView = view.findViewById(R.id.offers_recycler_view);
+    private void setRecyclerView(View inflated) {
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -58,6 +58,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
 
         offerList.clear();
         prepareOfferData();
@@ -74,7 +75,7 @@ public class ListOfferActivity extends FragmentConverter {
      */
     private void prepareOfferData() {
         Database database = Database.getInstance();
-        ValueListener listener = new ValueListener<List<Offer>>() {
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
                 mAdapter.add(offers);
@@ -97,18 +98,13 @@ public class ListOfferActivity extends FragmentConverter {
                 @Override
                 public void onItemClick(View view, int position) {
                     Offer showOffer = offerList.get(position);
-                    Bundle offerBundle = new Bundle();
-                    offerBundle.putParcelable("offer", showOffer);
-                    Fragment listOffer = new ShowOfferActivity();
-                    listOffer.setArguments(offerBundle);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.centralFragment, listOffer);
-                    transaction.commit();
+                    replaceCentralFragment(OfferUtils.createShowOfferWithOffer(showOffer));
                 }
 
                 @Override
                 public void onLongItemClick(View view, int position) {
                     // Expands or retract the description
-                    TextView descriptionView = view.findViewById(R.id.offer_description);
+                    TextView descriptionView = findViewById(R.id.offer_description);
                     Offer currentOffer = offerList.get(position);
                     expandOrRetractOffer(descriptionView, currentOffer);
                 }

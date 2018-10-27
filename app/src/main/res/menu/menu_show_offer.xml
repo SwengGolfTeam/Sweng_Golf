@@ -10,5 +10,5 @@
         android:id="@+id/button_delete_offer"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete_offer"
-        app:showAsAction="never|withText"/>
+        app:showAsAction="ifRoom"/>
 </menu>

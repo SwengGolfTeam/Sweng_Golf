@@ -1,26 +1,22 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.DrawerMatchers;
+import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.TestTimedOutException;
-
-import java.net.ConnectException;
-import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -33,6 +29,7 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -58,8 +55,8 @@ public class ListOfferActivityTest {
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
     @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class);
 
     /**
      * Configures a fake database and enables TestMode.
@@ -81,7 +78,7 @@ public class ListOfferActivityTest {
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
-        database.write("/users", Config.getUser().getUserId(), Config.getUser());
+        DatabaseUser.addUser(Config.getUser());
     }
 
     /**
@@ -93,8 +90,6 @@ public class ListOfferActivityTest {
 
     @Test
     public void offerCorrectlyDisplayedInTheList() {
-        openListActivity();
-
         Offer offer = ListOfferActivity.offerList.get(0);
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
@@ -117,24 +112,19 @@ public class ListOfferActivityTest {
    }
 
     @Test
-    public void canGoToMenu() {
-        openListActivity();
-        onView(withContentDescription("abc_action_bar_up_description")).perform(click());
-        intended(hasComponent(MainMenuActivity.class.getName()));
+    public void canOpenMenu() {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
 
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
-        openListActivity();
-
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
                 ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
     }
 
     @Test
     public void offerCorrectlyExpandedAndRetractedAfterLongPressOnList() {
-        openListActivity();
-
         Offer offerToTest = ListOfferActivity.offerList.get(0);
         Offer otherOffer = ListOfferActivity.offerList.get(1);
 
@@ -173,7 +163,8 @@ public class ListOfferActivityTest {
     }
 
     @Test
-    public void listShowCorrectly() {
-        onView(withId(R.id.show_offers_button)).perform(click());
+    public void backFromListIsMenu() {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
 }

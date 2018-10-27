@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.app.AppCompatActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,35 +22,34 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
-    final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
-    User newUser;
+    private static final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
+    private User newUser;
 
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<MainMenuActivity>(MainMenuActivity.class, false, false);
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Initialise the Config and the Database for tests.
      */
     @Before
     public void setUp(){
-        Config.isTest();
         Config.setUser(new User(user));
         newUser = new User(user);
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
-        ((AppCompatActivity)mActivityRule.getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ProfileActivity()).commit();
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ProfileActivity()).commit();
     }
 
     @Test
@@ -75,9 +73,9 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void canGoToMenu() {
-        onView(withContentDescription("abc_action_bar_up_description")).perform(click());
-        intended(hasComponent(MainMenuActivity.class.getName()));
+    public void canGoToMenu() throws InterruptedException {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(isOpen()));
     }
 
     private void canEditField(int editTextId, final User newUser, String newText) {

@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -22,14 +22,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class SignInActivityTest {
 
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<SignInActivity> mActivityRule =
+            new ActivityTestRule<>(SignInActivity.class);
 
     @Test
     public void goToSignInActivityTest() {
         Intents.init();
         mActivityRule.launchActivity(new Intent());
-        onView(withId(R.id.go_to_login_button)).perform(click());
         intended(hasComponent(SignInActivity.class.getName()));
         Intents.release();
     }

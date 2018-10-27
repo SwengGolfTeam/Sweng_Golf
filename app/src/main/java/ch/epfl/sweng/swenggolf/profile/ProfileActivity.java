@@ -30,8 +30,7 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        setHomeIcon(R.drawable.ic_menu_black_24dp);
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.profile_activity_name);
         View inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData(inflated);
         return inflated;
@@ -43,13 +42,13 @@ public class ProfileActivity extends FragmentConverter {
         user = Config.getUser();
     }
 
-    private void displayUserData(View view) {
-        TextView name = view.findViewById(R.id.name);
+    private void displayUserData(View inflated) {
+        TextView name = inflated.findViewById(R.id.name);
         name.setText(user.getUserName());
-        ImageView imageView = view.findViewById(R.id.ivProfile);
+        ImageView imageView = inflated.findViewById(R.id.ivProfile);
         displayPicture(imageView, user, this.getContext());
 
-        TextView preference = findViewById(R.id.preference1);
+        TextView preference = inflated.findViewById(R.id.preference1);
         preference.setText(user.getPreference());
 
     }
@@ -74,9 +73,7 @@ public class ProfileActivity extends FragmentConverter {
                 break;
             }
             case R.id.edit_profile : {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.centralFragment, new EditProfileActivity());
-                transaction.commit();
+                replaceCentralFragment(new EditProfileActivity());
                 break;
             }
         }

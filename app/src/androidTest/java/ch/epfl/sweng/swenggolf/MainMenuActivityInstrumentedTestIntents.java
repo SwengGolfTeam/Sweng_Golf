@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -29,8 +31,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 
 import static android.support.test.espresso.contrib.DrawerActions.open;
 
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,50 +40,52 @@ import static org.hamcrest.Matchers.is;
 public class MainMenuActivityInstrumentedTestIntents {
     @Rule
     public ActivityTestRule<MainMenuActivity> intentRule =
-            new ActivityTestRule<>(MainMenuActivity.class);
+            new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
-    private void testReplacement(String className, int id) {
-        onView(ViewMatchers.withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));
+    private void testReplacement(Class expectedClass, int id, boolean click) {
+        if(click){onView(ViewMatchers.withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));}
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        List<Fragment> frags = ((AppCompatActivity)intentRule.getActivity()).getSupportFragmentManager().getFragments();
-        assertThat(frags.get(0).getClass().getName(), is(className));
+        List<Fragment> frags = intentRule.getActivity().getSupportFragmentManager().getFragments();
+        assertThat(frags.get(0).getClass().getName(), is(expectedClass.getName()));
     }
 
     @Before
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+        Config.setUser(FilledFakeDatabase.FAKE_USERS[0]);
+        intentRule.launchActivity(new Intent());
         Matcher v = withId(R.id.side_menu);
         onView(v).perform(open());
     }
 
     @Test
     public void testIntentOfferList(){
-        testReplacement(ListOfferActivity.class.getName(),R.id.offers);
+        testReplacement(ListOfferActivity.class,R.id.offers, true);
     }
 
     @Test
-    public void testIntentPreferenceList() {
-        testReplacement(ListPreferencesActivity.class.getName(), R.id.preference_activity);
+    public void testIntentPreferenceList() throws InterruptedException {
+        testReplacement(ListPreferencesActivity.class, R.id.preference_activity, true);
     }
 
     @Test
     public void testIntentCreateOffer(){
-        testReplacement(CreateOfferActivity.class.getName(),R.id.create_offer);
+        testReplacement(CreateOfferActivity.class,R.id.create_offer, true);
     }
 
     @Test
-    public void testIntentProfile() {
-        testReplacement(ProfileActivity.class.getName(), R.id.my_account);
+    public void testIntentProfile() throws InterruptedException {
+        testReplacement(ProfileActivity.class, R.id.my_account, true);
     }
 
     @Test
     public void testIntentProfileByClickingOnPicture() {
         onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
-        intended(hasComponent(ProfileActivity.class.getName()));
+        testReplacement(ProfileActivity.class, 0, false);
     }
 
 }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PolyTroc</string>
     <string name="my_account">My account</string>
     <string name="userpicture">userpicture</string>

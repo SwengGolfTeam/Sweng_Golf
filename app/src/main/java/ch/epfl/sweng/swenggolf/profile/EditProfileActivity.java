@@ -24,8 +24,7 @@ public class EditProfileActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHomeIcon(R.drawable.ic_baseline_arrow_back_24px);
-        setHasOptionsMenu(true);
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.profile_activity_name);
         View inflated = inflater.inflate(R.layout.activity_edit_profile, container, false);
         inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,12 +36,12 @@ public class EditProfileActivity extends FragmentConverter {
         return inflated;
     }
 
-    public void createUserView(View view) {
+    public void createUserView(View inflated) {
         user = Config.getUser();
         if (user != null) {
-            displayElement((EditText) view.findViewById(R.id.edit_name), user.getUserName());
-            displayElement((EditText) view.findViewById(R.id.edit_pref), user.getPreference());
-            ImageView imageView = findViewById(R.id.ivProfile);
+            displayElement((EditText) inflated.findViewById(R.id.edit_name), user.getUserName());
+            displayElement((EditText) inflated.findViewById(R.id.edit_pref), user.getPreference());
+            ImageView imageView = inflated.findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
     }

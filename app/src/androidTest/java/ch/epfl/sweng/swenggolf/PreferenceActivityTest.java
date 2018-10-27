@@ -37,11 +37,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(AndroidJUnit4.class)
-public class PreferenceActivityTest extends MainMenuActivity {
-    private FragmentManager manager;
+public class PreferenceActivityTest {
 
     @Rule
-    public ActivityTestRule preferenceRule =
+    public ActivityTestRule<MainMenuActivity> preferenceRule =
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     /**
@@ -51,8 +50,8 @@ public class PreferenceActivityTest extends MainMenuActivity {
     public void setUp() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
-        //preferenceRule.launchActivity(new Intent());
-        ((AppCompatActivity)preferenceRule.getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity()).commit();
+        preferenceRule.launchActivity(new Intent());
+        preferenceRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity()).commit();
     }
 
     /**

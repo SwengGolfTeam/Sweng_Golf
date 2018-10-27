@@ -2,29 +2,39 @@ package ch.epfl.sweng.swenggolf;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.UUID;
+
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.StorageConnection;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -32,11 +42,14 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.VerificationModes.times;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
 
 /**
@@ -46,12 +59,26 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferActivityTest {
 
     @Rule
-    public IntentsTestRule<MainActivity> intentsTestRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainMenuActivity> intentsTestRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
     public void setTest(){
+        initDatabse();
         Config.goToTest();
+        intentsTestRule.launchActivity(new Intent());
+    }
+
+    private void goToCreateOffer(boolean hasOffer) {
+        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
+        CreateOfferActivity fragment = new CreateOfferActivity();
+        if(hasOffer) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("offer", new Offer("20","20","20"));
+            DatabaseUser.addUser(new User("20","20","20","20"));
+            fragment.setArguments(bundle);
+        }
+        transaction.replace(R.id.centralFragment, new CreateOfferActivity()).commit();
     }
     
     /**
@@ -65,8 +92,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void errorMessageDisplayed() {
-
-        onView(withId(R.id.create_offer_button)).perform(click());
+        goToCreateOffer(false);
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
@@ -89,52 +115,82 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button)).perform(click());
     }
 
+    private void assertDisplayedFragment(Class expectedClass) {
+        String currentFragmentName = intentsTestRule.getActivity().getSupportFragmentManager().getFragments().get(0).getClass().getName();
+        assertThat(currentFragmentName, is(expectedClass.getName()));
+    }
+
     @Test
-    public void createOfferShowOfferWhenValidInput() {
-        initDatabse();
-        onView(withId(R.id.create_offer_button)).perform(click());
+    public void createOfferShowOfferWhenValidInput() throws InterruptedException {
+        ListOfferActivityTest.setUpFakeDatabase();
+        goToCreateOffer(false);
         fillOffer();
-        intended(hasComponent(ShowOfferActivity.class.getName()));
+        assertDisplayedFragment(ShowOfferActivity.class);
     }
 
     @Test
     public void showMessageErrorWhenCantCreateOffer() {
         Database.setDebugDatabase(new FakeDatabase(false));
-        onView(withId(R.id.create_offer_button)).perform(click());
+        goToCreateOffer(false);
         fillOffer();
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_database)));
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        initDatabse();
+        Offer testOffer = new Offer(Config.getUser().getUserId(),"Test","Test");
+        Database.getInstance().write("/offers",UUID.randomUUID().toString(), testOffer);
+        ShowOfferActivity showOfferFragment = new ShowOfferActivity();
+        Bundle offerBundle = new Bundle();
+        offerBundle.putParcelable("offer", testOffer);
+        showOfferFragment.setArguments(offerBundle);
         if(setToOtherThanOwner) {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com","nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
-
-        onView(withId(R.id.show_offers_button)).perform(click());
-        onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
-                hasDescendant(
-                        ViewMatchers
-                                .withText(
-                                        ListOfferActivity.offerList.get(0).getTitle())), click()));
+        intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, showOfferFragment).commit();
     }
 
     @Test
-    public void modifyingOfferViaShowOfferWorks() {
+    public void modifyingOfferViaShowOfferWorks() throws InterruptedException {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
+        assertDisplayedFragment(CreateOfferActivity.class);
         fillOffer();
-        intended(hasComponent(ShowOfferActivity.class.getName()), times(2));
+        assertDisplayedFragment(ShowOfferActivity.class);
+    }
+
+    private void worksOnlyOnCreator(int id) {
+        goToShowOffer(true);
+        onView(withId(id)).check(doesNotExist());
     }
 
     @Test
     public void modifyingOfferViaShowOfferWorksOnlyOnCreator() {
-        goToShowOffer(true);
-        onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
+        worksOnlyOnCreator(R.id.button_modify_offer);
+    }
+
+    @Test
+    public void deleteOfferViaShowOfferWorksOnlyOnCreator() {
+        worksOnlyOnCreator(R.id.button_delete_offer);
+    }
+
+    private void assertBackFrom(boolean hasOffer, Class expectedDisplayedClass) {
+        goToCreateOffer(hasOffer);
+        assertDisplayedFragment(CreateOfferActivity.class);
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        assertDisplayedFragment(expectedDisplayedClass);
+    }
+
+    @Test
+    public void backFromEmptyOfferIsListOffer() {
+        assertBackFrom(false, ListOfferActivity.class);
+    }
+
+    @Test
+    public void backFromModifyOfferIsShowOffer() {
+        assertBackFrom(true, ShowOfferActivity.class);
     }
 }

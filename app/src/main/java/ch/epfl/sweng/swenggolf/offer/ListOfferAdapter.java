@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -75,7 +76,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
      * @param offers a list of offers
      */
     public void add(@NonNull List<Offer> offers) {
-        offerList.addAll(offers);
+        if(offers != null){offerList.addAll(offers);}
         notifyDataSetChanged();
     }
 }

@@ -23,7 +23,7 @@ public class ListPreferencesActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.activity_list_preference, container,false);
-        setHasOptionsMenu(true);
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.preferences);
         super.onCreate(savedInstanceState);
         mRecyclerView = inflated.findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);
@@ -41,10 +41,6 @@ public class ListPreferencesActivity extends FragmentConverter {
         switch (item.getItemId()) {
             case android.R.id.home : {
                 openDrawer();
-                break;
-            }
-            case R.id.add_offer : {
-                loadCreateOfferActivity();
                 break;
             }
         }
