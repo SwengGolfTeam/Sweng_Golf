@@ -11,10 +11,10 @@ public final class FilledFakeDatabase extends FakeDatabase {
     protected FilledFakeDatabase() {
         super(true);
         for (User user : FAKE_USERS) {
-            write("/users", user.getUserId(), user);
+            write("/users", user.getUserId(), new User(user));
         }
         for (Offer offer : FAKE_OFFERS) {
-            write("/offers", offer.getUuid(), offer);
+            write("/offers", offer.getUuid(), new Offer(offer));
         }
     }
 
@@ -22,7 +22,23 @@ public final class FilledFakeDatabase extends FakeDatabase {
     private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
     private static final String STARWARS = "starwars/";
 
-    public static final User[] FAKE_USERS = {
+    public static User getUser(int index) {
+        return new User(FAKE_USERS[index]);
+    }
+
+    public static Offer getOffer(int index) {
+        return new Offer(FAKE_OFFERS[index]);
+    }
+
+    public static int numberOffer() {
+        return FAKE_OFFERS.length;
+    }
+
+    public static int numberUser() {
+        return FAKE_USERS.length;
+    }
+
+    private static final User[] FAKE_USERS = {
             new User("C3PO", "0", "c3po@gmail.com",
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/5/51/C-3PO_EP3.png/revision/"
@@ -108,7 +124,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "region=0%2C0%2C1200%2C675&width=768",
                     "Lightsabers")
     };
-    public static final Offer[] FAKE_OFFERS = {
+    private static final Offer[] FAKE_OFFERS = {
             new Offer("0", "Little Droid for ride",
                     "I have a little droid with informations"
                             + " on the rebels care to exchange it against"

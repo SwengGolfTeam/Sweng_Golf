@@ -65,7 +65,7 @@ public class PreferenceActivityTest {
      */
     @Test
     public void scrollingWorks(){
-        int userLength = FilledFakeDatabase.FAKE_USERS.length-1;
+        int userLength = FilledFakeDatabase.numberUser()-1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
@@ -75,12 +75,12 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.FAKE_USERS.length));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberUser()));
     }
 
     @Test
     public void showProfileWhenClickOnView() {
-        User user = FilledFakeDatabase.FAKE_USERS[0];
+        User user = FilledFakeDatabase.getUser(0);
         onView(withId(R.id.preference_list)).perform(actionOnItem(hasDescendant(
                 ViewMatchers.withText(user.getUserName())), click()));
         intended(allOf(hasComponent(ProfileActivity.class.getName()),

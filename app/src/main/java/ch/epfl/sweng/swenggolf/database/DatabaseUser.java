@@ -7,11 +7,11 @@ public class DatabaseUser {
     private DatabaseUser() {
     }
 
-    private static Database db = Database.getInstance();
+
 
 
     public static void addUser(User user) {
-        db.write("/users", user.getUserId(), user);
+        Database.getInstance().write("/users", user.getUserId(), user);
     }
 
 
@@ -20,7 +20,7 @@ public class DatabaseUser {
     }
 
     public static void getUser(final ValueListener<User> listener, String userId) {
-        db.read("/users", userId, listener, User.class);
+        Database.getInstance().read("/users", userId, listener, User.class);
     }
 
 }

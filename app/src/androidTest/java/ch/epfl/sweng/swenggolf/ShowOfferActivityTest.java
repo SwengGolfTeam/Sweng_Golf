@@ -2,10 +2,12 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -20,7 +22,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-
+@RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityTest {
     @Rule
     public final IntentsTestRule<ShowOfferActivity> mActivityRule =
@@ -32,10 +34,10 @@ public class ShowOfferActivityTest {
     @Before
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
-        User user = FilledFakeDatabase.FAKE_USERS[0];
+        User user = FilledFakeDatabase.getUser(0);
         Config.setUser(user);
         Intent intent = new Intent();
-        Offer offer = FilledFakeDatabase.FAKE_OFFERS[0];
+        Offer offer = FilledFakeDatabase.getOffer(0);
         intent.putExtra("offer", offer);
         mActivityRule.launchActivity(intent);
     }
