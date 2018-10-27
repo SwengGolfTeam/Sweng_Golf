@@ -13,6 +13,7 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -49,6 +50,7 @@ public class ShowOfferActivityDbNotWorkingTest {
 
     @Test
     public void openProfileFromOfferShowToastOnFail() {
+        onView(withId(R.id.show_offer_title)).perform(click());
         database.setEntryNotWorking("/users", offer.getUserId());
         onView(withId(R.id.show_offer_author)).perform(click());
         testToastShow(mActivityRule, R.string.error_load_user);
