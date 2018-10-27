@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -98,7 +99,8 @@ public class ListOfferActivity extends AppCompatActivity {
             }
         };
         //database.readOffers(listener);
-        database.getByCategory(Category.None, listener); //TODO change with select options
+        List<Category> categories = Arrays.asList(Category.values());
+        database.getByCategory(categories, listener); //TODO change with select options
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =

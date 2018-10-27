@@ -92,7 +92,7 @@ public abstract class Database {
                                 @NonNull CompletionListener listener);
 
     // TODO javadoc
-    public abstract void getByCategory(final Category cat, final ValueListener<List<Offer>> listener);
+    public abstract void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener);
 
     /**
      * Read the list of all offers. It return the list using a listener.

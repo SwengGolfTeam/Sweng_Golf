@@ -116,29 +116,30 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void getByCategory(final Category cat, final ValueListener<List<Offer>> listener){
+    public void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener){
         final DatabaseReference ref = database.getReference("offers");
-        final ArrayList<Offer> list = new ArrayList<>();
 
-        Query query = ref.orderByChild("tag").equalTo(cat.toString());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot offer : dataSnapshot.getChildren()) {
-                        list.add(offer.getValue(Offer.class));
+        for(int i=0; i<categories.size(); i++){
+            Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        ArrayList<Offer> list = new ArrayList<>();
+                        for (DataSnapshot offer : dataSnapshot.getChildren()) {
+                            list.add(offer.getValue(Offer.class));
+                        }
+                        listener.onDataChange(list);
+                    } else {
+                        // TODO handle empty queries -> No data was found bla bla bla
                     }
-                    listener.onDataChange(list);
-                } else {
-                    // TODO handle empty quesry -> No data was found bla bla bla
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //TODO error handling
-            }
-        });
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    //TODO error handling
+                }
+            });
+        }
     }
 }
