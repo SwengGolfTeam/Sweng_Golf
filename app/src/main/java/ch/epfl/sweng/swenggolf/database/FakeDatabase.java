@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
-    private final boolean working;
+    private  boolean working;
 
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
@@ -90,5 +90,13 @@ public class FakeDatabase extends Database {
      */
     public static Database fakeDatabaseCreator() {
         return new FilledFakeDatabase();
+    }
+
+    /**
+     * Set the database to a "non-working" mode if false.
+     * @param w working
+     */
+    public void setWorking(boolean w) {
+        working =w;
     }
 }
