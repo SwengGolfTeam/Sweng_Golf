@@ -20,6 +20,7 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.TestUtility.testToastShow;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -46,8 +47,8 @@ public class ShowOfferActivityDbNotWorkingTest {
     @Test
     public void openProfileFromOfferShowToastOnFail() {
         onView(withId(R.id.show_offer_author)).perform(click());
-        onView(withText(R.string.error_load_user)).inRoot
-                (withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        testToastShow(mActivityRule, R.string.error_load_user);
     }
+
+
 }
