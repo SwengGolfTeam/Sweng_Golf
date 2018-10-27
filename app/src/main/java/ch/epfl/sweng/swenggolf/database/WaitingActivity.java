@@ -3,9 +3,11 @@ package ch.epfl.sweng.swenggolf.database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
@@ -43,6 +45,7 @@ public class WaitingActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(Object value) {
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 if (value != null) {
                     Config.setUser((User) value);
                     goToMainMenu();
