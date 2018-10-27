@@ -29,6 +29,9 @@ public class ProfileActivityOtherUserTest {
     public final IntentsTestRule<ProfileActivity> mActivityRule =
             new IntentsTestRule<>(ProfileActivity.class, false, false);
 
+    /**
+     * Set up a fake database and user.
+     */
     @Before
     public void setUp() {
         Config.isTest();

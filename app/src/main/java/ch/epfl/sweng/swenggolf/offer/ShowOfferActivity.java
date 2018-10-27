@@ -134,6 +134,10 @@ public class ShowOfferActivity extends AppCompatActivity {
         database.remove("/offers", offer.getUuid(), listener);
     }
 
+    /**
+     * Open the user profile when we click on his name.
+     * @param v the view
+     */
     public void openUserProfile(View v) {
 
         DatabaseUser.getUser(new ValueListener<User>() {
@@ -150,8 +154,8 @@ public class ShowOfferActivity extends AppCompatActivity {
                                      Toast.makeText(ShowOfferActivity.this,
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
-                             }
-                , offer.getUserId());
+                             },
+                 offer.getUserId());
 
     }
 

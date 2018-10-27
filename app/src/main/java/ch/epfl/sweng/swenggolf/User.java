@@ -234,6 +234,10 @@ public class User implements Parcelable {
         dest.writeString(this.preference);
     }
 
+    /**
+     * Create a User from a Parcel.
+     * @param in the parcel
+     */
     public User(Parcel in) {
         this.userName = in.readString();
         this.userId = in.readString();
