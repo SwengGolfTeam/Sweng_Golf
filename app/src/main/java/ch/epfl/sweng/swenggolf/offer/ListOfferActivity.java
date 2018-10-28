@@ -146,9 +146,7 @@ public class ListOfferActivity extends AppCompatActivity {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        // TODO cleanup
-        //database.readOffers(listener);
-        database.getByCategory(categories, listener);
+        database.readOffers(listener, categories);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =

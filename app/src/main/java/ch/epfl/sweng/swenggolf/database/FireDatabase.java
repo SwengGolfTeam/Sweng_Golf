@@ -116,7 +116,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener){
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories){
         final DatabaseReference ref = database.getReference("offers");
 
         if (categories.isEmpty()){
@@ -133,12 +133,12 @@ public final class FireDatabase extends Database {
                             list.add(offer.getValue(Offer.class));
                         }
                     }
-                    listener.onDataChange(list); // when no data found -> return empty list
+                    listener.onDataChange(list); // when no data was found -> return empty list
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    //TODO error handling
+                    listener.onCancelled(DbError.getError(databaseError));
                 }
             });
         }

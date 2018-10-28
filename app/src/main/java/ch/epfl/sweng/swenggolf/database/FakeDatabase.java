@@ -76,8 +76,9 @@ public class FakeDatabase extends Database {
     }
 
     @Override
-    public void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener) {
-    //TODO fake version
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories) {
+        readList("/offers", listener, Offer.class);
+        //TODO when not all categories
     }
 
     @Nullable
