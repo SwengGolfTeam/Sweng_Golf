@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 public class ShowOfferActivity extends AppCompatActivity {
 
     private Offer offer;
+    private ListAnswerAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,21 @@ public class ShowOfferActivity extends AppCompatActivity {
             ImageView offerPicture = findViewById(R.id.show_offer_picture);
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
+    }
+
+    private void setRecyclerView() {
+        RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new ListAnswerAdapter(offer.getAnswers());
+        // Add dividing line
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     /**

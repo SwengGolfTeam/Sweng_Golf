@@ -7,41 +7,41 @@ import android.widget.TextView;
 
 public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView title;
-    private TextView subTitle;
-    private View mainContent;
+    private TextView fieldOne;
+    private TextView fieldTwo;
+    private View fieldThree;
 
     /**
      * Creates a holder with the ids for the Views to use to display.
      *
      * @param container   the View that will contain the elements
-     * @param title       the id of the title View
-     * @param subTitle    the id of the subtitle View
-     * @param mainContent the id of the content view
+     * @param fieldOne       the id of the fieldOne View
+     * @param fieldTwo    the id of the subtitle View
+     * @param fieldThree the id of the content view
      */
-    public ThreeFieldsViewHolder(View container, int title, int subTitle, int mainContent) {
+    public ThreeFieldsViewHolder(View container, int fieldOne, int fieldTwo, int fieldThree) {
         super(container);
-        this.title = container.findViewById(title);
-        this.subTitle = container.findViewById(subTitle);
-        this.mainContent = container.findViewById(mainContent);
+        this.fieldOne = container.findViewById(fieldOne);
+        this.fieldTwo = container.findViewById(fieldTwo);
+        this.fieldThree = container.findViewById(fieldThree);
 
         // change font to custom one
         Typeface customFont = Typeface.createFromAsset(itemView.getContext().getAssets(),
                 "fonts/niramit_medium.ttf");
-        this.title.setTypeface(customFont);
-        this.subTitle.setTypeface(customFont);
-        if (this.mainContent instanceof TextView) {
-            ((TextView) this.mainContent).setTypeface(customFont);
+        this.fieldOne.setTypeface(customFont);
+        this.fieldTwo.setTypeface(customFont);
+        if (this.fieldThree instanceof TextView) {
+            ((TextView) this.fieldThree).setTypeface(customFont);
         }
     }
 
     /**
-     * Getter for the title.
+     * Getter for the fieldOne.
      *
-     * @return the view associated to the title
+     * @return the view associated to the fieldOne
      */
-    public View getTitle() {
-        return title;
+    public View getFieldOne() {
+        return fieldOne;
     }
 
     /**
@@ -49,8 +49,8 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
      *
      * @return the view associated to the subtitle
      */
-    public View getSubTitle() {
-        return subTitle;
+    public View getFieldTwo() {
+        return fieldTwo;
     }
 
     /**
@@ -58,8 +58,8 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
      *
      * @return the view associated to the main content
      */
-    public View getMainContent() {
-        return mainContent;
+    public View getFieldThree() {
+        return fieldThree;
     }
 
 }

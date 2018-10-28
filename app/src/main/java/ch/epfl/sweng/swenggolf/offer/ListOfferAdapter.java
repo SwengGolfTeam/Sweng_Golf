@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,15 +50,15 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Offer offer = offerList.get(position);
 
-        TextView title = (TextView) holder.getTitle();
+        TextView title = (TextView) holder.getFieldOne();
         title.setText(offer.getTitle());
 
         // Get short description
         String description = offer.getShortDescription();
-        TextView mainContent = (TextView) holder.getMainContent();
+        TextView mainContent = (TextView) holder.getFieldThree();
         mainContent.setText(description);
 
-        TextView author = (TextView) holder.getSubTitle();
+        TextView author = (TextView) holder.getFieldTwo();
         ViewUserFiller.fillWithUsername(author, offer.getUserId());
     }
 
