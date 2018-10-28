@@ -98,6 +98,8 @@ public class ListOfferActivity extends AppCompatActivity {
     }
 
     private void setRecyclerView(List<Category> categories) {
+        noOffers.setVisibility(View.VISIBLE);
+
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -130,9 +132,7 @@ public class ListOfferActivity extends AppCompatActivity {
             @Override
             public void onDataChange(List<Offer> offers) {
                 findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if (offers.isEmpty()){
-                    noOffers.setVisibility(View.VISIBLE);
-                } else {
+                if (!offers.isEmpty()){
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
                 }

@@ -1,5 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 public enum Category {
-    None, Food, Service, Drinks;
+    Other, Food, Service, Drinks, Test;
 }
