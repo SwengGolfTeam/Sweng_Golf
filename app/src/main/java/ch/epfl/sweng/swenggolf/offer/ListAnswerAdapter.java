@@ -26,7 +26,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.My
     public static class MyViewHolder extends ThreeFieldsViewHolder {
 
         public MyViewHolder(View view) {
-            super(view, R.id.answer_description, R.id.user_name, R.id.user_pic);
+            super(view, R.id.user_name, R.id.answer_description, R.id.user_pic);
         }
     }
 
@@ -46,7 +46,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.My
     @Override
     public ListAnswerAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.reactions, parent, false);
+                .inflate(R.layout.reactions_others, parent, false);
         return new ListAnswerAdapter.MyViewHolder(view);
     }
 

@@ -9,6 +9,12 @@ public class Answer {
         this.description = description;
     }
 
+    //TODO need this? But how is data recovered?
+    public Answer() {
+        userId = "";
+        description = "";
+    }
+
     public String getUserId() {
         return userId;
     }

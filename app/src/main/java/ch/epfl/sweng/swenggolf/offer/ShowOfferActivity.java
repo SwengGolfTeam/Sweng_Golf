@@ -11,8 +11,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +24,12 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -45,6 +52,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         }
 
         setContents();
+        setRecyclerView();
     }
 
     /**
@@ -70,12 +78,52 @@ public class ShowOfferActivity extends AppCompatActivity {
             ImageView offerPicture = findViewById(R.id.show_offer_picture);
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
+
+        setAnswers();
+    }
+
+    private void setAnswers() {
+        LinearLayout mLayout = findViewById(R.id.list_answers);
+
+        LayoutInflater mInflater = getLayoutInflater();
+        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mLayout.addView(mView);
+
+        ValueListener<User> vlUser = new ValueListener<User>() {
+            @Override
+            public void onDataChange(User value) {
+                TextView userName = findViewById(R.id.user_name_);
+                userName.setText(value.getUserName());
+                ImageView userPic = findViewById(R.id.user_pic_);
+                Picasso.with(userPic.getContext())
+                        .load(Uri.parse(value.getPhoto()))
+                        .placeholder(R.drawable.gender_neutral_user1)
+                        .fit().into(userPic);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load user from database");
+            }
+        };
+        DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
+    }
+
+    public void postAnswer(View view) {
+        EditText editText = findViewById(R.id.answer_description_);
+        offer.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        Database.getInstance().write("/offers", offer.getUuid(), offer);
     }
 
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 

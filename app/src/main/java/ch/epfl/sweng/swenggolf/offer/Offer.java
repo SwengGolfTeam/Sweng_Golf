@@ -145,13 +145,15 @@ public class Offer implements Parcelable {
     // TODO put answers in parcel too
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        int size = 5 + answers.size();
+        int size = 5 + 2*answers.size();
+        dest.writeInt(size);
         String[] bundle = new String[size];
         bundle[0] = this.userId;
         bundle[1] = this.title;
         bundle[2] = this.description;
         bundle[3] = this.linkPicture;
         bundle[4] = this.uuid;
+
         for (int i = 0; i < answers.size(); ++i) {
             bundle[2*i+5] = answers.get(i).getUserId();
             bundle[2*i+6] = answers.get(i).getDescription();
@@ -170,7 +172,9 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[5];
+        // TODO how can we know the size of the parcel? (without making it more a mess than it already is)
+        int size = in.readInt();
+        String[] data = new String[size];
 
         in.readStringArray(data);
         this.userId = data[0];
