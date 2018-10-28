@@ -119,20 +119,21 @@ public final class FireDatabase extends Database {
     public void getByCategory(final List<Category> categories, @NonNull final ValueListener<List<Offer>> listener){
         final DatabaseReference ref = database.getReference("offers");
 
+        if (categories.isEmpty()){
+            listener.onDataChange(new ArrayList<Offer>());
+        }
         for(int i=0; i<categories.size(); i++){
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<Offer> list = new ArrayList<>();
                     if (dataSnapshot.exists()) {
-                        ArrayList<Offer> list = new ArrayList<>();
                         for (DataSnapshot offer : dataSnapshot.getChildren()) {
                             list.add(offer.getValue(Offer.class));
                         }
-                        listener.onDataChange(list);
-                    } else {
-                        // TODO handle empty queries -> No data was found bla bla bla
                     }
+                    listener.onDataChange(list); // when no data found -> return empty list
                 }
 
                 @Override

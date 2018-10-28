@@ -33,6 +33,7 @@ public class ListOfferActivity extends AppCompatActivity {
     private Menu mOptionsMenu;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
+    private TextView noOffers;
     public static final List<Offer> offerList = new ArrayList<>();
 
 
@@ -41,6 +42,7 @@ public class ListOfferActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_offer);
         errorMessage = findViewById(R.id.error_message);
+        noOffers = findViewById(R.id.no_offers_to_show);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,13 +68,14 @@ public class ListOfferActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         mOptionsMenu = menu;
         getMenuInflater().inflate(R.menu.menu_list_offers, menu);
-        addAllCategoriestoMenu(R.id.menu_offers);
+        addAllCategoriesToMenu(R.id.menu_offers);
         return true;
     }
 
-    private void addAllCategoriestoMenu(int groupId){
-        for (int i=0; i<Category.values().length; i++) {
-            mOptionsMenu.add(groupId, i, Menu.NONE, Category.values()[i].toString()).setCheckable(true).setChecked(true);
+    private void addAllCategoriesToMenu(int groupId){
+        Category[] categoriesEnum = Category.values();
+        for (int i=0; i<categoriesEnum.length; i++) {
+            mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString()).setCheckable(true).setChecked(true);
         }
     }
     @Override
@@ -126,17 +129,24 @@ public class ListOfferActivity extends AppCompatActivity {
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-                findViewById(R.id.offer_list_loading).setVisibility(View.INVISIBLE);
-                mAdapter.add(offers);
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                if (offers.isEmpty()){
+                    noOffers.setVisibility(View.VISIBLE);
+                } else {
+                    noOffers.setVisibility(View.GONE);
+                    mAdapter.add(offers);
+                }
+
             }
 
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
-                findViewById(R.id.offer_list_loading).setVisibility(View.INVISIBLE);
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
+        // TODO cleanup
         //database.readOffers(listener);
         database.getByCategory(categories, listener);
     }
