@@ -55,6 +55,7 @@ public class EditProfileActivity extends AppCompatActivity {
         DatabaseUser.addUser(user);
 
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
         startActivity(intent);
     }
 }

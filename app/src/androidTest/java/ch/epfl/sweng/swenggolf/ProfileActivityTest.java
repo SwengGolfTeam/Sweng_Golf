@@ -1,7 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -21,10 +23,12 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
@@ -49,7 +53,7 @@ public class ProfileActivityTest {
         newUser = new User(user);
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
-        mActivityRule.launchActivity(new Intent());
+        mActivityRule.launchActivity(new Intent().putExtra("ch.epfl.sweng.swenggolf.user", user));
     }
 
     @Test
@@ -80,8 +84,9 @@ public class ProfileActivityTest {
 
     private void canEditField(int editTextId, final User newUser, String newText) {
         onView(withId(R.id.edit)).perform(click());
+        Espresso.closeSoftKeyboard();
         onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
-        onView(withId(R.id.saveButton)).perform(click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {

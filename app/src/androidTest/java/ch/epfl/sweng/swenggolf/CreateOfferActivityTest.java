@@ -24,6 +24,7 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
@@ -50,10 +51,10 @@ public class CreateOfferActivityTest {
             new IntentsTestRule<>(MainActivity.class);
 
     @Before
-    public void setTest(){
+    public void setTest() {
         Config.goToTest();
     }
-    
+
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
@@ -65,10 +66,10 @@ public class CreateOfferActivityTest {
 
     @Test
     public void errorMessageDisplayed() {
-
         onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(click());
-        onView(withId(R.id.error_message))
+        onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(scrollTo(),click());
+        onView(withId(R.id.error_message)).perform(scrollTo())
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
@@ -108,9 +109,9 @@ public class CreateOfferActivityTest {
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
         initDatabse();
-        if(setToOtherThanOwner) {
+        if (setToOtherThanOwner) {
             User u = new User("username",
-                    "id" + Config.getUser().getUserId(), "username@example.com","nophoto");
+                    "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }

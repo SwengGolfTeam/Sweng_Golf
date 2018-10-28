@@ -6,9 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 public class UserTest {
 
@@ -120,5 +122,11 @@ public class UserTest {
     public void initializingUserWithPreferenceWorks() {
         User user = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
         assertEquals("Failed to initialize user preference", PREFERENCE, user.getPreference());
+    }
+
+    @Test
+    public void newArrayHasGoodSize() {
+        int size = 10;
+        assertThat(User.CREATOR.newArray(size).length, is(size));
     }
 }

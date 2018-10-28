@@ -107,6 +107,7 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadProfileActivity(MenuItem item) {
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
         startActivity(intent);
     }
 
@@ -117,6 +118,7 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadProfileActivity(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
         startActivity(intent);
     }
 
