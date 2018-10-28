@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -9,10 +8,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 public class ListOfferActivity extends AppCompatActivity {
 
     private ListOfferAdapter mAdapter;
+    private Menu mOptionsMenu;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     public static final List<Offer> offerList = new ArrayList<>();
@@ -55,17 +58,43 @@ public class ListOfferActivity extends AppCompatActivity {
                 startActivity(backHome);
             }
         });
-
-        setRecyclerView();
+        List<Category> allCategories = Arrays.asList(Category.values()); // by default
+        setRecyclerView(allCategories);
     }
 
-    @Override //TODO WTF?
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_drawer, menu);
+        mOptionsMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_list_offers, menu);
+        addAllCategoriestoMenu(R.id.menu_offers);
         return true;
     }
 
-    private void setRecyclerView() {
+    private void addAllCategoriestoMenu(int groupId){
+        for (int i=0; i<Category.values().length; i++) {
+            mOptionsMenu.add(groupId, i, Menu.NONE, Category.values()[i].toString()).setCheckable(true).setChecked(true);
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.isChecked()){
+            item.setChecked(false);
+        } else {
+            item.setChecked(true);
+        }
+        List<Category> listCategories = new ArrayList<>();
+        Category[] catEnum = Category.values();
+        for(int i=0; i<catEnum.length; i++){
+            if(mOptionsMenu.getItem(i).isChecked()){
+                listCategories.add(catEnum[i]);
+            }
+        }
+        setRecyclerView(listCategories);
+        return false;
+    }
+
+    private void setRecyclerView(List<Category> categories) {
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -79,7 +108,7 @@ public class ListOfferActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData();
+        prepareOfferData(categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -91,7 +120,7 @@ public class ListOfferActivity extends AppCompatActivity {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData() {
+    private void prepareOfferData(List<Category> categories) {
         Database database = Database.getInstance();
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
@@ -106,7 +135,6 @@ public class ListOfferActivity extends AppCompatActivity {
             }
         };
         //database.readOffers(listener);
-        List<Category> categories = Arrays.asList(Category.values());
         database.getByCategory(categories, listener);
     }
 
