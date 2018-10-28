@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNull;
 
 public class UserTest {
 
-    private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana";
+private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
 
 
     @Before
@@ -67,13 +67,14 @@ public class UserTest {
 
     @Test
     public void testSetters() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
         User user2 = new User();
         user2.setEmail(EMAIL);
         user2.setUserName(USERNAME);
         user2.setPhoto(PHOTO);
         user2.setUserId(ID);
         user2.setPreference(PREFERENCE);
+        user2.setDescription(DESCRIPTION);
         assertEquals("Failed to set preference", user1, user2);
     }
 
@@ -89,7 +90,7 @@ public class UserTest {
 
     @Test
     public void testEquals() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE,DESCRIPTION);
         User user2 = new User(user1);
         assertTrue(user1.equals(user2));
         assertFalse(user1.equals(null));
@@ -105,9 +106,9 @@ public class UserTest {
 
     @Test
     public void sameInformations() {
-        User user1 = new User(USERNAME, "67890", EMAIL, PHOTO);
-        User user2 = new User(USERNAME, "12345", EMAIL, PHOTO);
-        assertTrue(user1.sameInformations(user2));
+        User user1 = new User(USERNAME, "67890", EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
+        User user2 = new User(USERNAME, "12345", EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
+        assertTrue(user1.sameInformation(user2));
     }
 
     @Test
@@ -120,5 +121,13 @@ public class UserTest {
     public void initializingUserWithPreferenceWorks() {
         User user = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
         assertEquals("Failed to initialize user preference", PREFERENCE, user.getPreference());
+    }
+
+    @Test
+    public void getDescription() {
+        User user = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
+        assertEquals("Default description",User.DEFAULT_DESCRIPTION, user.getDescription());
+        user.setDescription(DESCRIPTION);
+        assertEquals(DESCRIPTION, user.getDescription());
     }
 }

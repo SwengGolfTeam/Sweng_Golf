@@ -60,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView preference = findViewById(R.id.preference1);
         preference.setText(user.getPreference());
+        TextView description = findViewById(R.id.description);
+        description.setText(user.getDescription());
 
     }
 

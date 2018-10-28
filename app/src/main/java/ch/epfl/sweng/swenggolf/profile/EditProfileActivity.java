@@ -26,6 +26,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (user != null) {
             displayElement((EditText) findViewById(R.id.edit_name), user.getUserName());
             displayElement((EditText) findViewById(R.id.edit_pref), user.getPreference());
+            displayElement((EditText) findViewById(R.id.edit_description), user.getDescription());
             ImageView imageView = findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this);
         }
@@ -51,6 +52,11 @@ public class EditProfileActivity extends AppCompatActivity {
         EditText editedPref = findViewById(R.id.edit_pref);
         String pref = editedPref.getText().toString();
         user.setPreference(pref);
+
+        // save new preferences
+        EditText editedDescription = findViewById(R.id.edit_description);
+        String description = editedDescription.getText().toString();
+        user.setDescription(description);
 
         DatabaseUser.addUser(user);
 

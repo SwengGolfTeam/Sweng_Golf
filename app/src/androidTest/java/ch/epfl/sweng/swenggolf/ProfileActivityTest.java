@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ProfileActivityTest {
 
-    final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
+    final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea", "Hello, I'm a rhododendron");
     User newUser;
 
     @Rule
@@ -68,8 +68,18 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void nameDisplayed() {
+    public void canEditDescription() {
+        String newDescription = "Hey!";
+        newUser.setDescription(newDescription);
+        canEditField(R.id.edit_description, newUser, newDescription);
+
+    }
+
+    @Test
+    public void userInfoDisplayed() {
         onView(withId(R.id.name)).check(matches(withText(user.getUserName())));
+        onView(withId(R.id.preference1)).check(matches(withText(user.getPreference())));
+        onView(withId(R.id.description)).check(matches(withText(user.getDescription())));
     }
 
     @Test
