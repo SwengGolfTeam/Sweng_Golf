@@ -40,8 +40,6 @@ public class ShowOfferActivity extends AppCompatActivity {
     private ListAnswerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    protected static int favPos = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,7 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         setContents();
         setRecyclerView();
+        setAnswer();
     }
 
     /**
@@ -82,7 +81,6 @@ public class ShowOfferActivity extends AppCompatActivity {
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
 
-        setAnswer();
     }
 
     private void setAnswer() {
@@ -116,6 +114,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.answer_description_);
         offer.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write("/offers", offer.getUuid(), offer);
+        editText.getText().clear();
     }
 
     private void setRecyclerView() {
@@ -130,7 +129,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new ListAnswerAdapter(offer.getAnswers());
+        mAdapter = new ListAnswerAdapter(offer.getAnswers(), offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -140,8 +139,9 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     public void chooseFavorite(View view) {
         ListAnswerAdapter.AnswerViewHolder holder = (ListAnswerAdapter.AnswerViewHolder) view.getTag();
-        favPos = holder.getLayoutPosition();
-        ((ImageButton) view).setImageResource(R.drawable.ic_favorite);
+        offer.setPositionFavorite(holder.getLayoutPosition());
+        Database.getInstance().write("/offers", offer.getUuid(), offer);
+
     }
 
     /**

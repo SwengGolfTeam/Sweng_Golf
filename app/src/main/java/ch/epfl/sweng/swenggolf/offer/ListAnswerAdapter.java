@@ -24,6 +24,7 @@ import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
     private List<Answer> answerList;
+    private Offer offer;
 
     public static class AnswerViewHolder extends ThreeFieldsViewHolder {
 
@@ -41,11 +42,12 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
      *
      * @param answerList the list of offers to be displayed
      */
-    public ListAnswerAdapter(List<Answer> answerList) {
-        if (answerList == null) {
+    public ListAnswerAdapter(List<Answer> answerList, Offer offer) {
+        if (answerList == null || offer == null) {
             throw new IllegalArgumentException();
         }
         this.answerList = answerList;
+        this.offer = offer;
     }
 
 
@@ -87,7 +89,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         description.setText(answer.getDescription());
 
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
-        if (ShowOfferActivity.favPos == position) {
+        if (offer.getPositionFavorite() == position) {
             favButton.setImageResource(R.drawable.ic_favorite);
         } else {
             favButton.setImageResource(R.drawable.ic_favorite_border);

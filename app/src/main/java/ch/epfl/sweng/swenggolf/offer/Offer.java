@@ -17,6 +17,7 @@ public class Offer implements Parcelable {
     private final String linkPicture;
     private final String uuid;
     private final List<Answer> answers;
+    private int positionFavorite;
 
     /**
      * Contains the data of an offer.
@@ -45,6 +46,7 @@ public class Offer implements Parcelable {
         this.linkPicture = linkPicture;
         this.uuid = uuid;
         this.answers = new LinkedList<>();
+        this.positionFavorite = -1;
     }
 
     /**
@@ -68,6 +70,7 @@ public class Offer implements Parcelable {
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
         this.answers = new LinkedList<>();
+        this.positionFavorite = -1;
     }
 
     /**
@@ -135,6 +138,14 @@ public class Offer implements Parcelable {
         return answers;
     }
 
+    public int getPositionFavorite() {
+        return positionFavorite;
+    }
+
+    public void setPositionFavorite(int pos) {
+        positionFavorite = pos;
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -147,6 +158,7 @@ public class Offer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         int size = 5 + 2*answers.size();
         dest.writeInt(size);
+        dest.writeInt(positionFavorite);
         String[] bundle = new String[size];
         bundle[0] = this.userId;
         bundle[1] = this.title;
@@ -175,6 +187,8 @@ public class Offer implements Parcelable {
         // TODO how can we know the size of the parcel? (without making it more a mess than it already is)
         int size = in.readInt();
         String[] data = new String[size];
+
+        this.positionFavorite = in.readInt();
 
         in.readStringArray(data);
         this.userId = data[0];
