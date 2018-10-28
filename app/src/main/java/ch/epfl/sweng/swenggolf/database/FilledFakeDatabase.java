@@ -25,16 +25,16 @@ public final class FilledFakeDatabase extends FakeDatabase {
     /**
      * Return an user from the list.
      * @param index  the index of the user.
-     * @return
+     * @return the user at this index
      */
     public static User getUser(int index) {
         return new User(FAKE_USERS[index]);
     }
 
     /**
-     * Return an offer from the list
+     * Return an offer from the list.
      * @param index the index of the offer.
-     * @return
+     * @return the offer at this index
      */
     public static Offer getOffer(int index) {
         return new Offer(FAKE_OFFERS[index]);

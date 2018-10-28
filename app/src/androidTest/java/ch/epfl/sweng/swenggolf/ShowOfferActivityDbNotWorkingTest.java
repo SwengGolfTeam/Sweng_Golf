@@ -36,9 +36,9 @@ public class ShowOfferActivityDbNotWorkingTest {
     public final IntentsTestRule<ShowOfferActivity> mActivityRule =
             new IntentsTestRule<>(ShowOfferActivity.class, false, false);
 
-    private final FakeDatabase database = new FakeDatabase(true);
-    private final User user = new User("patrick", "0", "email", "photo", "preference");
-    private final Offer offer = new Offer("0", "title", "description");
+    private static final FakeDatabase database = new FakeDatabase(true);
+    private static final User user = new User("patrick", "0", "email", "photo", "preference");
+    private static final Offer offer = new Offer("0", "title", "description");
 
     /**
      * Set up a fake database, a fake user and launch activity.
