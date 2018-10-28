@@ -122,15 +122,18 @@ public class ListOfferActivity extends AppCompatActivity {
      */
     private void prepareOfferData(List<Category> categories) {
         Database database = Database.getInstance();
+        findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
+                findViewById(R.id.offer_list_loading).setVisibility(View.INVISIBLE);
                 mAdapter.add(offers);
             }
 
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
+                findViewById(R.id.offer_list_loading).setVisibility(View.INVISIBLE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
