@@ -10,6 +10,7 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
     private TextView fieldOne;
     private TextView fieldTwo;
     private View fieldThree;
+    private View container;
 
     /**
      * Creates a holder with the ids for the Views to use to display.
@@ -21,6 +22,7 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
      */
     public ThreeFieldsViewHolder(View container, int fieldOne, int fieldTwo, int fieldThree) {
         super(container);
+        this.container = container;
         this.fieldOne = container.findViewById(fieldOne);
         this.fieldTwo = container.findViewById(fieldTwo);
         this.fieldThree = container.findViewById(fieldThree);
@@ -33,6 +35,10 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
         if (this.fieldThree instanceof TextView) {
             ((TextView) this.fieldThree).setTypeface(customFont);
         }
+    }
+
+    public View getContainer() {
+        return container;
     }
 
     /**
