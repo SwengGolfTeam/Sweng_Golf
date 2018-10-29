@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+
 import java.io.IOException;
 
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -38,7 +40,7 @@ public abstract class Storage {
     protected Storage() {
     }
 
-    public abstract void write(Uri uri, Offer offer);
+    public abstract void write(Uri uri, String path, OnCompleteListener<Uri> listener);
 
     public abstract void remove(String linkPicture);
 

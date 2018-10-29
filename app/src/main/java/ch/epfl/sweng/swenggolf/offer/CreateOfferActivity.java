@@ -42,7 +42,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     private Offer offerToModify;
     private boolean creationAsked;
 
-    private Uri filePath;
+    private Uri filePath = null;
 
 
     @Override
@@ -118,8 +118,19 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     }
 
-    private void uploadImage(Offer offer) {
-        Storage.getInstance().write(filePath, offer);
+    private void uploadImage(final Offer offer) {
+        OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    offer.updateLinkToPicture(link);
+                } else {
+                    // TODO Handle failures
+                }
+            }
+        };
+        Storage.getInstance().write(filePath, "images/" + offer.getUuid(), listener);
     }
 
     /**
@@ -139,8 +150,11 @@ public class CreateOfferActivity extends AppCompatActivity {
         final Offer newOffer =
                 new Offer(Config.getUser().getUserId(), name, description, "", uuid);
 
-        writeOffer(newOffer);
-        uploadImage(newOffer);
+        if (filePath == null) {
+            writeOffer(newOffer);
+        } else {
+            uploadImage(newOffer);
+        }
     }
 
     /**

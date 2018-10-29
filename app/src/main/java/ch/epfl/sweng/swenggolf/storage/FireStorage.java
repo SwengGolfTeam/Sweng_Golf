@@ -20,9 +20,13 @@ public final class FireStorage extends Storage {
         storage = FirebaseStorage.getInstance();
     }
 
+    public FireStorage(FirebaseStorage storage) {
+        this.storage = storage;
+    }
+
     @Override
-    public void write(Uri uri, final Offer offer) {
-        final StorageReference ref = storage.getReference().child("images/" + offer.getUuid());
+    public void write(Uri uri, String path, OnCompleteListener<Uri> listener) {
+        final StorageReference ref = storage.getReference().child(path);
 
         ref.putFile(uri)
                 .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -35,17 +39,7 @@ public final class FireStorage extends Storage {
                         return ref.getDownloadUrl();
                     }
                 })
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            String link = task.getResult().toString();
-                            offer.updateLinkToPicture(link);
-                        } else {
-                            // TODO Handle failures
-                        }
-                    }
-                });
+                .addOnCompleteListener(listener);
     }
 
     @Override

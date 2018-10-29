@@ -2,6 +2,8 @@ package ch.epfl.sweng.swenggolf.storage;
 
 import android.net.Uri;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,13 +20,12 @@ public final class FakeStorage extends Storage {
     }
 
     @Override
-    public void write(Uri uri, Offer offer) {
-
+    public void write(Uri uri, String path, OnCompleteListener<Uri> listener) {
+        //offer.updateLinkToPicture(uri.toString());
     }
 
     @Override
     public void remove(String linkPicture) {
-
     }
 
 }
