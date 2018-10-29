@@ -37,5 +37,9 @@
     <string name="incorrect_user_creation">\"Please, enter correct info\"</string>
     <string name="modify_offer">modify offer</string>
     <string name="offer_deleted">Offer deleted</string>
+<<<<<<< HEAD
     <string name="delete_offer">Delete offer</string>
+=======
+    <string name="error_load_user">Could not load user profile.</string>
+>>>>>>> 16e1515864284d738686471922239da7e2e8d0fd
 </resources>

@@ -19,13 +19,16 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.TestUtility.testToastShow;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
@@ -61,8 +64,8 @@ public class CreateUserActivityTest {
         onView(withId(R.id.mail)).check(matches(withText(MAIL)));
         onView(withId(R.id.mail)).perform(typeText("api"));
         onView(withId(R.id.name)).check(matches(withText(NAME)));
-        onView(withId(R.id.name)).perform(typeText(" World"));
-        onView(withId(R.id.create_account)).perform(click());
+        onView(withId(R.id.name)).perform(typeText(" World"), closeSoftKeyboard());
+        onView(withId(R.id.create_account)).perform(scrollTo(),click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
@@ -85,16 +88,13 @@ public class CreateUserActivityTest {
 
     @Test
     public void errorDisplayedWheninvalidEmailGiven() {
-        onView(withId(R.id.mail)).perform(replaceText("whatever"));
+        onView(withId(R.id.mail)).perform(replaceText("whatever"), closeSoftKeyboard());
         checkError();
     }
 
     private void checkError() {
         onView(withId(R.id.create_account)).perform(click());
-        onView(withText(R.string.incorrect_user_creation))
-                .inRoot(withDecorView(not(is(
-                        mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        testToastShow(mActivityRule,R.string.incorrect_user_creation);
     }
 
 }

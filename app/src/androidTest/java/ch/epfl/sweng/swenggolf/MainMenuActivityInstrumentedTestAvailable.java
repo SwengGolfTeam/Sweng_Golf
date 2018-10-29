@@ -52,10 +52,9 @@ public class MainMenuActivityInstrumentedTestAvailable {
     }
 
     @Test
-    public void canCloseAndOpenDrawerWithButton() throws InterruptedException {
+    public void canCloseAndOpenDrawerWithButton() {
         Matcher v = withId(R.id.side_menu);
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
-        Thread.sleep(500);
         onView(v).check(matches(isOpen(Gravity.LEFT)));
         onView(v).perform(close());
         onView(v).check(matches(isClosed(Gravity.LEFT)));

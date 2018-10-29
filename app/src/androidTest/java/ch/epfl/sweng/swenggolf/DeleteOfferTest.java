@@ -71,13 +71,6 @@ public class DeleteOfferTest {
         DatabaseUser.addUser(Config.getUser());
     }
 
-    /**
-     * Opens the list activity.
-     */
-    public void openListActivity() {
-        onView(withId(R.id.show_offers_button)).perform(click());
-    }
-
     @Test
     public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.preference;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListPreferenceAdapter
@@ -63,11 +65,22 @@ public class ListPreferenceAdapter
 
     @NonNull
     @Override
-    public PreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PreferenceViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View v = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.preferences_list_quad, parent, false);
-        PreferenceViewHolder preferenceHolder = new PreferenceViewHolder(v);
+        final PreferenceViewHolder preferenceHolder = new PreferenceViewHolder(v);
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = preferenceHolder.getAdapterPosition();
+                User user = mDataset.get(position);
+                Intent intent = new Intent(parent.getContext(), ProfileActivity.class);
+                intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
+                parent.getContext().startActivity(intent);
+            }
+        });
         return preferenceHolder;
     }
 

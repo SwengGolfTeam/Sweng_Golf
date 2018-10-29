@@ -81,13 +81,6 @@ public class ListOfferActivityTest {
         DatabaseUser.addUser(Config.getUser());
     }
 
-    /**
-     * Opens the list activity.
-     */
-    public void openListActivity() {
-        onView(withId(R.id.show_offers_button)).perform(click());
-    }
-
     @Test
     public void offerCorrectlyDisplayedInTheList() {
         Offer offer = ListOfferActivity.offerList.get(0);

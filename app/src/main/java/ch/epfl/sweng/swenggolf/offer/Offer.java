@@ -65,6 +65,18 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Copy constructor.
+     * @param that an offer
+     */
+    public Offer(Offer that){
+        userId = that.userId;
+        title = that.title;
+        description = that.description;
+        linkPicture = that.linkPicture;
+        uuid = that.uuid;
+    }
+
+    /**
      * Returns the offer's title.
      *
      * @return the name of the offer

@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +23,13 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -115,7 +120,7 @@ public class ShowOfferActivity extends FragmentConverter {
     /**
      * Display the Alert Dialog for the delete.
      */
-    public void showDeleteAlertDialog(){
+    public void showDeleteAlertDialog() {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Delete entry")
@@ -137,7 +142,7 @@ public class ShowOfferActivity extends FragmentConverter {
     /**
      * Delete the offer in the database.
      */
-    private void deleteOfferInDatabase(){
+    private void deleteOfferInDatabase() {
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override
@@ -151,6 +156,32 @@ public class ShowOfferActivity extends FragmentConverter {
 
         };
         database.remove("/offers", offer.getUuid(), listener);
+    }
+
+    /**
+     * Open the user profile when we click on his name.
+     * @param v the view
+     */
+    public void openUserProfile(View v) {
+
+        DatabaseUser.getUser(new ValueListener<User>() {
+                                 @Override
+                                 public void onDataChange(User user) {
+                                     Bundle bundle = new Bundle();
+                                     bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
+                                     Fragment profileActivity = new ProfileActivity();
+                                     profileActivity.setArguments(bundle);
+                                     replaceCentralFragment(profileActivity);
+                                 }
+
+                                 @Override
+                                 public void onCancelled(DbError error) {
+                                     Toast.makeText(ShowOfferActivity.this.getContext(),
+                                             R.string.error_load_user, Toast.LENGTH_LONG).show();
+                                 }
+                             },
+                 offer.getUserId());
+
     }
 
 }

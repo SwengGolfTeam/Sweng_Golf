@@ -1,8 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,9 +25,11 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -49,7 +55,7 @@ public class ProfileActivityTest {
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
-        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ProfileActivity()).commit();
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, TestUtility.userFragment(new ProfileActivity(), user)).commit();
     }
 
     @Test
@@ -80,8 +86,9 @@ public class ProfileActivityTest {
 
     private void canEditField(int editTextId, final User newUser, String newText) {
         onView(withId(R.id.edit_profile)).perform(click());
+        Espresso.closeSoftKeyboard();
         onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
-        onView(withId(R.id.saveButton)).perform(click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {

@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.profile;
 
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 
@@ -67,6 +68,10 @@ public class EditProfileActivity extends FragmentConverter {
 
         DatabaseUser.addUser(user);
 
+        Fragment ProfileActivity = new ProfileActivity();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
+        ProfileActivity.setArguments(bundle);
         replaceCentralFragment(new ProfileActivity());
     }
 

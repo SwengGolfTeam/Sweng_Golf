@@ -33,6 +33,7 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -63,10 +64,8 @@ public class CreateOfferActivityTest {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
-    public void setTest(){
+    public void setTest() {
         initDatabse();
-        Config.goToTest();
-        intentsTestRule.launchActivity(new Intent());
     }
 
     private void goToCreateOffer(boolean hasOffer) {
@@ -80,7 +79,7 @@ public class CreateOfferActivityTest {
         }
         transaction.replace(R.id.centralFragment, new CreateOfferActivity()).commit();
     }
-    
+
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
@@ -94,7 +93,10 @@ public class CreateOfferActivityTest {
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
         onView(withId(R.id.button)).perform(click());
-        onView(withId(R.id.error_message))
+        onView(withId(R.id.error_message));
+        onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(scrollTo(),click());
+        onView(withId(R.id.error_message)).perform(scrollTo())
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
@@ -146,7 +148,7 @@ public class CreateOfferActivityTest {
         showOfferFragment.setArguments(offerBundle);
         if(setToOtherThanOwner) {
             User u = new User("username",
-                    "id" + Config.getUser().getUserId(), "username@example.com","nophoto");
+                    "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
@@ -154,7 +156,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void modifyingOfferViaShowOfferWorks() throws InterruptedException {
+    public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
         assertDisplayedFragment(CreateOfferActivity.class);

@@ -23,6 +23,7 @@ import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -103,7 +104,20 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadProfileActivity(MenuItem item) {
-        replaceCentralFragment(new ProfileActivity());
+        loadProfileActivity((View)null);
+    }
+
+    /**
+     * Launches the ProfileActivity.
+     *
+     * @param view the current view
+     */
+    public void loadProfileActivity(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
+        Fragment profileActivity = new ProfileActivity();
+        profileActivity.setArguments(bundle);
+        replaceCentralFragment(profileActivity);
     }
 
     /**

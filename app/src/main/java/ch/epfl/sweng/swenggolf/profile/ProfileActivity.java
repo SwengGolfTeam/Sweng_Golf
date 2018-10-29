@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,13 +42,21 @@ public class ProfileActivity extends FragmentConverter {
     }
 
     private void displayUserData(View inflated) {
+
+        user = getArguments().getParcelable("ch.epfl.sweng.swenggolf.user");
+        if (user == null) {
+            throw new NullPointerException("The user given to ProfileActivity can not be null");
+        }
+
         TextView name = inflated.findViewById(R.id.name);
         name.setText(user.getUserName());
         ImageView imageView = inflated.findViewById(R.id.ivProfile);
         displayPicture(imageView, user, this.getContext());
-
         TextView preference = inflated.findViewById(R.id.preference1);
         preference.setText(user.getPreference());
+
+        // add back arrow to toolbar
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.profile_activity_name);
 
     }
 
@@ -62,7 +69,8 @@ public class ProfileActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.menu_profile,menu);
+        int id = user.equals(Config.getUser()) ? R.menu.menu_profile : R.menu.menu_empty;
+        menuInflater.inflate(id, menu);
     }
 
     @Override
