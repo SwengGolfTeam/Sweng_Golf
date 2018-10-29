@@ -81,20 +81,19 @@ public class FakeDatabase extends Database {
         List<Offer> offers = getList("/offers");
 
         if (working) {
-            offers = removeOffersWrongCategories(offers, categories);
+            removeOffersWrongCategories(offers, categories);
             listener.onDataChange(offers);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 
-    private List<Offer> removeOffersWrongCategories(List<Offer> offers, List<Category> categories) {
+    private void removeOffersWrongCategories(List<Offer> offers, List<Category> categories) {
         for (Offer o : offers) {
             if (!categories.contains(o.getTag()) && offers != null) {
                 offers.remove(o);
             }
         }
-        return offers;
     }
 
     @Nullable
