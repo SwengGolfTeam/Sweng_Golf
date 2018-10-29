@@ -137,7 +137,12 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     public void chooseFavorite(View view) {
         ListAnswerAdapter.AnswerViewHolder holder = (ListAnswerAdapter.AnswerViewHolder) view.getTag();
-        offer.setPositionFavorite(holder.getLayoutPosition());
+        int pos = holder.getLayoutPosition();
+        if (offer.getPositionFavorite() != pos) {
+            offer.setPositionFavorite(pos);
+        } else {
+            offer.setPositionFavorite(-1);
+        }
         Database.getInstance().write("/offers", offer.getUuid(), offer);
         mAdapter.notifyDataSetChanged();
 
