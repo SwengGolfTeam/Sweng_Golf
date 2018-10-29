@@ -28,14 +28,39 @@ public class FireStorageTest {
 
     private static final String PATH = "path";
     private static final Uri URI = mock(Uri.class);
-    private static final Offer OFFER = new Offer("id", "title", "description");
 
     @Test
     public void writeWorksCorrectly() {
+        FireStorage s = setupStorage(true);
+        s.write(URI, PATH, getListener());
+    }
+
+    @Test(expected = Exception.class)
+    public void writeFailsCorrectly() {
+        FireStorage s = setupStorage(false);
+        s.write(URI, PATH, getListener());
+    }
+
+    private FireStorage setupStorage(boolean working) {
         FirebaseStorage storage = mock(FirebaseStorage.class);
 
         final StorageReference idRef = setUpPath(storage);
+        mockWrite(idRef, working);
 
+        return new FireStorage(storage);
+    }
+
+    private StorageReference setUpPath(FirebaseStorage storage) {
+        StorageReference catRef = mock(StorageReference.class);
+        StorageReference idRef = mock(StorageReference.class);
+
+        when(storage.getReference()).thenReturn(catRef);
+        when(catRef.child(anyString())).thenReturn(idRef);
+
+        return idRef;
+    }
+
+    private void mockWrite(StorageReference idRef, final boolean working) {
         UploadTask uploadTask = mock(UploadTask.class);
 
         final Task<Uri> uriTask = mock(Task.class);
@@ -48,7 +73,7 @@ public class FireStorageTest {
             @Override
             public Task<Uri> answer(InvocationOnMock invocation) throws Exception {
                 Task<UploadTask.TaskSnapshot> insideTask = mock(Task.class);
-                when(insideTask.isSuccessful()).thenReturn(true);
+                when(insideTask.isSuccessful()).thenReturn(working);
 
                 Continuation<UploadTask.TaskSnapshot, Task<Uri>> continuation =
                         invocation.getArgument(0);
@@ -67,8 +92,10 @@ public class FireStorageTest {
             }
         };
         doAnswer(completeAnswer).when(uriTask).addOnCompleteListener(any(OnCompleteListener.class));
+    }
 
-        OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
+    private OnCompleteListener<Uri> getListener() {
+        return new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
@@ -78,18 +105,13 @@ public class FireStorageTest {
                 }
             }
         };
-
-        FireStorage s = new FireStorage(storage);
-        s.write(URI, PATH, listener);
     }
 
-    private StorageReference setUpPath(FirebaseStorage storage) {
-        StorageReference catRef = mock(StorageReference.class);
-        StorageReference idRef = mock(StorageReference.class);
-
-        when(storage.getReference()).thenReturn(catRef);
-        when(catRef.child(anyString())).thenReturn(idRef);
-
-        return idRef;
+    @Test
+    public void removeWorksCorrectly() {
+        FirebaseStorage storage = mock(FirebaseStorage.class);
+        StorageReference ref = mock(StorageReference.class);
+        when(storage.getReferenceFromUrl(anyString())).thenReturn(ref);
+        when(ref.delete()).thenReturn(null);
     }
 }

@@ -27,7 +27,10 @@ public final class FakeStorage extends Storage {
 
     @Override
     public void write(Uri uri, String path, OnCompleteListener<Uri> listener) {
-        listener.onComplete(new FakeTask(uri, working));
+        Task<Uri> fakeTask = new FakeTask(uri, working);
+        if (fakeTask.isComplete() && !fakeTask.isCanceled()) {
+            listener.onComplete(fakeTask);
+        }
     }
 
     @Override
@@ -35,8 +38,7 @@ public final class FakeStorage extends Storage {
         // TODO implement when necessary
     }
 
-    private final class FakeTask extends Task<Uri> {
-        // TODO implement when not working
+    public static final class FakeTask extends Task<Uri> {
 
         private final Uri uri;
         private final boolean working;
@@ -70,13 +72,13 @@ public final class FakeStorage extends Storage {
         @Nullable
         @Override
         public <X extends Throwable> Uri getResult(@NonNull Class<X> aClass) throws X {
-            return null;
+            return uri;
         }
 
         @Nullable
         @Override
         public Exception getException() {
-            return null;
+            return new Exception();
         }
 
         @NonNull
