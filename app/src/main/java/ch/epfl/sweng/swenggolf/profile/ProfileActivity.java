@@ -34,7 +34,6 @@ public class ProfileActivity extends AppCompatActivity {
         if (user == null) {
             throw new NullPointerException("The user given to ProfileActivity can not be null");
         }
-
         Toolbar toolbar = findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
 
@@ -72,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView preference = findViewById(R.id.preference1);
         preference.setText(user.getPreference());
+        TextView description = findViewById(R.id.description);
+        description.setText(user.getDescription());
 
     }
 

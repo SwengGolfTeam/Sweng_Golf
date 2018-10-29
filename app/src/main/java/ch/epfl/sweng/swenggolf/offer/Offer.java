@@ -3,9 +3,6 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import ch.epfl.sweng.swenggolf.database.Database;
-
-
 public class Offer implements Parcelable {
 
     private static final int DESCRIPTION_LIMIT = 140;
@@ -181,4 +178,5 @@ public class Offer implements Parcelable {
         this.linkPicture = data[3];
         this.uuid = data[4];
     }
+
 }

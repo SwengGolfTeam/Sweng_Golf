@@ -24,6 +24,7 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.Storage;
+
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
