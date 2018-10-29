@@ -21,6 +21,8 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.storage.FakeStorage;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -59,7 +61,9 @@ public class ProfileActivityTest {
         Config.setUser(new User(user));
         newUser = new User(user);
         Database database = new FakeDatabase(true);
+        Storage storage = new FakeStorage(true);
         Database.setDebugDatabase(database);
+        Storage.setDebugStorage(storage);
         mActivityRule.launchActivity(new Intent().putExtra("ch.epfl.sweng.swenggolf.user", user));
     }
 
