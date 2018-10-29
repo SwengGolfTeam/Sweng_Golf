@@ -44,16 +44,16 @@ public class FireStorageTest {
         when(uriTask.isSuccessful()).thenReturn(true);
         when(uriTask.getResult()).thenReturn(URI);
 
-        Answer<Void> continueAnswer = new Answer<Void>() {
+        Answer<Task<Uri>> continueAnswer = new Answer<Task<Uri>>() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Exception {
+            public Task<Uri> answer(InvocationOnMock invocation) throws Exception {
                 Task<UploadTask.TaskSnapshot> insideTask = mock(Task.class);
                 when(insideTask.isSuccessful()).thenReturn(true);
 
                 Continuation<UploadTask.TaskSnapshot, Task<Uri>> continuation =
                         invocation.getArgument(0);
                 continuation.then(insideTask);
-                return null;
+                return uriTask;
             }
         };
         doAnswer(continueAnswer).when(uploadTask).continueWithTask(any(Continuation.class));
@@ -71,7 +71,6 @@ public class FireStorageTest {
         OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
-                System.out.println("HOORAY!");
                 if (task.isSuccessful()) {
                     task.getResult();
                 } else {
