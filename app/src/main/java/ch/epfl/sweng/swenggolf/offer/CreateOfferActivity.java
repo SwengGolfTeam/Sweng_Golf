@@ -64,7 +64,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         preFillFields();
     }
 
-    private void setupSpinner(){
+    private void setupSpinner() {
         categorySpinner = findViewById(R.id.category_spinner);
         categorySpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Category.values()));
     }

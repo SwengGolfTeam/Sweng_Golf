@@ -8,13 +8,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -72,25 +70,22 @@ public class ListOfferActivity extends AppCompatActivity {
         return true;
     }
 
-    private void addAllCategoriesToMenu(int groupId){
+    private void addAllCategoriesToMenu(int groupId) {
         Category[] categoriesEnum = Category.values();
-        for (int i=0; i<categoriesEnum.length; i++) {
-            mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString()).setCheckable(true).setChecked(true);
+        for (int i = 0; i < categoriesEnum.length; i++) {
+            mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
+                    .setCheckable(true).setChecked(true);
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if (item.isChecked()){
-            item.setChecked(false);
-        } else {
-            item.setChecked(true);
-        }
+        item.setChecked(!item.isChecked()); // true <-> false
         List<Category> listCategories = new ArrayList<>();
-        Category[] catEnum = Category.values();
-        for(int i=0; i<catEnum.length; i++){
-            if(mOptionsMenu.getItem(i).isChecked()){
-                listCategories.add(catEnum[i]);
+
+        for (int i = 0; i < Category.values().length; i++) {
+            if (mOptionsMenu.getItem(i).isChecked()) {
+                listCategories.add(Category.values()[i]);
             }
         }
         setRecyclerView(listCategories);
@@ -132,7 +127,7 @@ public class ListOfferActivity extends AppCompatActivity {
             @Override
             public void onDataChange(List<Offer> offers) {
                 findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if (!offers.isEmpty()){
+                if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
                 }

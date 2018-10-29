@@ -59,7 +59,7 @@ public class Offer implements Parcelable {
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid){
-        this(userId, title, description, linkPicture, uuid, Category.Other);
+        this(userId, title, description, linkPicture, uuid, Category.getDefault());
     }
 
     /**
@@ -82,7 +82,7 @@ public class Offer implements Parcelable {
         this.description = "";
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
-        this.tag = Category.Other;
+        this.tag = Category.getDefault();
     }
 
     /**

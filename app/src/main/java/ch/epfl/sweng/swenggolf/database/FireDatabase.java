@@ -116,13 +116,14 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories){
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           final List<Category> categories) {
         final DatabaseReference ref = database.getReference("offers");
 
-        if (categories.isEmpty()){
+        if (categories.isEmpty()) {
             listener.onDataChange(new ArrayList<Offer>());
         }
-        for(int i=0; i<categories.size(); i++){
+        for (int i = 0; i < categories.size(); i++) {
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

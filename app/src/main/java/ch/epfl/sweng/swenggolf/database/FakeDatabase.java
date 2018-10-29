@@ -76,16 +76,16 @@ public class FakeDatabase extends Database {
     }
 
     @Override
-    public void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories) {
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           final List<Category> categories) {
         if (working) {
-            List<Offer> list = new ArrayList<>();
             List<Offer> offers = getList("/offers");
-            for(Offer o : offers){
-                if(categories.contains(o.getTag())){
-                    list.add(o);
+            for (Offer o : offers) {
+                if (!categories.contains(o.getTag())) {
+                    offers.remove(o);
                 }
             }
-            listener.onDataChange(list);
+            listener.onDataChange(offers);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }

@@ -95,11 +95,12 @@ public abstract class Database {
     /**
      * Read the list of offers of specific categories. It return the list using a listener.
      *
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
+     * @param listener   the onDataChange method will be called if we find the value. Otherwise, the
+     *                   onCancelled method will be called
      * @param categories the list of categories that we want
      */
-    public abstract void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories);
+    public abstract void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                                    final List<Category> categories);
 
     /**
      * Read the list of all offers. It return the list using a listener.
