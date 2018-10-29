@@ -77,8 +77,17 @@ public class FakeDatabase extends Database {
 
     @Override
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener, final List<Category> categories) {
-        readList("/offers", listener, Offer.class);
+        //readList("/offers", listener, Offer.class);
         //TODO when not all categories
+
+        if (working) {
+            List<Offer> list = getList("/offers");
+            Category cat = list.get(0).getTag(); //Exception: java.lang.String cannot be cast to ch.epfl.sweng.swenggolf.offer.Offer
+            // modify list in order to only have the offers from the categories we want
+            listener.onDataChange(list);
+        } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
     }
 
     @Nullable
