@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -115,17 +116,14 @@ public class ShowOfferActivity extends AppCompatActivity {
         offer.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write("/offers", offer.getUuid(), offer);
         editText.getText().clear();
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+        mRecyclerView.setFocusable(false);
 
-        mLayoutManager = new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -141,6 +139,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         ListAnswerAdapter.AnswerViewHolder holder = (ListAnswerAdapter.AnswerViewHolder) view.getTag();
         offer.setPositionFavorite(holder.getLayoutPosition());
         Database.getInstance().write("/offers", offer.getUuid(), offer);
+        mAdapter.notifyDataSetChanged();
 
     }
 

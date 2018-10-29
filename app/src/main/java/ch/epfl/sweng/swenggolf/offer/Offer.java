@@ -184,7 +184,7 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        // TODO how can we know the size of the parcel? (without making it more a mess than it already is)
+        // TODO there exists a method readList ?!
         int size = in.readInt();
         String[] data = new String[size];
 
