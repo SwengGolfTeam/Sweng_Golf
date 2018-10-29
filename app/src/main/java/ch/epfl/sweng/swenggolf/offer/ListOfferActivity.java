@@ -56,9 +56,8 @@ public class ListOfferActivity extends FragmentConverter {
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setHasFixedSize(true);
 
         offerList.clear();
         prepareOfferData();
@@ -67,7 +66,7 @@ public class ListOfferActivity extends FragmentConverter {
     }
 
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(getActivity(), mRecyclerView, clickListener);
+        return new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener);
     }
 
     /**
@@ -104,7 +103,7 @@ public class ListOfferActivity extends FragmentConverter {
                 @Override
                 public void onLongItemClick(View view, int position) {
                     // Expands or retract the description
-                    TextView descriptionView = findViewById(R.id.offer_description);
+                    TextView descriptionView = view.findViewById(R.id.offer_description);
                     Offer currentOffer = offerList.get(position);
                     expandOrRetractOffer(descriptionView, currentOffer);
                 }

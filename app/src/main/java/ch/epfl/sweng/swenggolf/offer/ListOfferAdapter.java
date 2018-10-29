@@ -76,7 +76,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
      * @param offers a list of offers
      */
     public void add(@NonNull List<Offer> offers) {
-        if(offers != null){offerList.addAll(offers);}
+        offerList.addAll(offers);
         notifyDataSetChanged();
     }
 }
