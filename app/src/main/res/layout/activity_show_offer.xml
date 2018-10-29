@@ -31,7 +31,8 @@
         android:textColor="@color/offer_list_author"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
+        app:layout_constraintTop_toBottomOf="@+id/show_offer_title"
+        android:onClick="openUserProfile" />
 
     <TextView
         android:id="@+id/show_offer_description"
@@ -92,6 +93,5 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
-
 
 </android.support.constraint.ConstraintLayout>

@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 public class Offer implements Parcelable {
     private static final int DESCRIPTION_LIMIT = 140;
 
@@ -86,6 +85,20 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Copy constructor.
+     *
+     * @param that an offer
+     */
+    public Offer(Offer that) {
+        userId = that.userId;
+        title = that.title;
+        description = that.description;
+        linkPicture = that.linkPicture;
+        uuid = that.uuid;
+        tag = that.tag;
+    }
+
+    /**
      * Returns the offer's title.
      *
      * @return the name of the offer
@@ -150,6 +163,15 @@ public class Offer implements Parcelable {
         return uuid;
     }
 
+    /**
+     * Creates a new offer in the database using the new picture's link given.
+     *
+     * @param newLinkPicture the new picture's link
+     */
+    public Offer updateLinkToPicture(String newLinkPicture) {
+        return new Offer(userId, title, description, newLinkPicture, uuid);
+    }
+
 
     /* Implements Parcelable */
     @Override
@@ -189,4 +211,5 @@ public class Offer implements Parcelable {
         this.uuid = data[4];
         this.tag = Category.valueOf(data[5]);
     }
+
 }

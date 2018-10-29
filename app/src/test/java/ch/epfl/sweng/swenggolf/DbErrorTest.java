@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.util.Log;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -106,7 +104,7 @@ public class DbErrorTest {
     /**
      * Assert that toString from a DbError returns the good value.
      *
-     * @param error DbError under test
+     * @param error    DbError under test
      * @param errorMsg expected error message
      */
     public void toStringAssert(DbError error, String errorMsg) {
@@ -116,7 +114,7 @@ public class DbErrorTest {
 
     @Test
     public void toStringNone() {
-        toStringAssert(DbError.NONE,"Everything went fine");
+        toStringAssert(DbError.NONE, "Everything went fine");
     }
 
     @Test
@@ -126,7 +124,7 @@ public class DbErrorTest {
 
     @Test
     public void toStringDisconected() {
-        toStringAssert(DbError.DISCONNECTED,"Connection interrupted");
+        toStringAssert(DbError.DISCONNECTED, "Connection interrupted");
     }
 
 
