@@ -13,7 +13,7 @@ import java.util.TreeMap;
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     Set<String> workingOnEntry;
-    private  boolean working;
+    private boolean working;
 
     /**
      * Create a new FakeDatabase that can be used to mock the Database.

@@ -26,7 +26,7 @@
             android:background="?attr/colorPrimary"
             android:onClick="editProfile"
             android:src="@android:drawable/ic_menu_edit"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </android.support.v7.widget.Toolbar>
 

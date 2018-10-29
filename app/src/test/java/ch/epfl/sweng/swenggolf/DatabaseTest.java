@@ -1,14 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
@@ -35,7 +29,7 @@ public class DatabaseTest {
 
 
     @Test
-    public void getInstanceAndSetDebugDatabaseNoException(){
+    public void getInstanceAndSetDebugDatabaseNoException() {
         Database db = new FakeDatabase(true);
 
         db.setDebugDatabase(db);
@@ -43,7 +37,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void readOffersReturnsCorrectValues(){
+    public void readOffersReturnsCorrectValues() {
         Database db = new FakeDatabase(true);
 
         db.write(PATH, ID, CONTENT);
