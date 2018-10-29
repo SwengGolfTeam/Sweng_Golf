@@ -112,5 +112,7 @@ public class FireStorageTest {
         StorageReference ref = mock(StorageReference.class);
         when(storage.getReferenceFromUrl(anyString())).thenReturn(ref);
         when(ref.delete()).thenReturn(null);
+        FireStorage s = new FireStorage(storage);
+        s.remove(anyString());
     }
 }
