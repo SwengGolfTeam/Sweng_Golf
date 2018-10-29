@@ -30,6 +30,8 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.storage.Storage;
+
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -143,6 +145,8 @@ public class ShowOfferActivity extends FragmentConverter {
      * Delete the offer in the database.
      */
     private void deleteOfferInDatabase() {
+        Storage storage = Storage.getInstance();
+        storage.remove(offer.getLinkPicture());
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override

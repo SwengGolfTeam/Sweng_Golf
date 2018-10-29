@@ -8,11 +8,13 @@ import com.google.firebase.auth.FirebaseUser;
 public class User implements Parcelable {
 
     private static final String DEFAULT_PREFERENCE = "";
+    public static final String DEFAULT_DESCRIPTION = "Hello, I'm new Here!";
     private String userName;
     private String userId;
     private String email;
     private String photo;
     private String preference;
+    private String description;
 
 
     /**
@@ -24,6 +26,7 @@ public class User implements Parcelable {
         userId = "";
         photo = "";
         preference = "";
+        description = "";
     }
 
 
@@ -37,7 +40,8 @@ public class User implements Parcelable {
         email = fu.getEmail();
         userId = fu.getUid();
         photo = fu.getPhotoUrl().toString();
-        preference = "";
+        preference = DEFAULT_PREFERENCE;
+        description = DEFAULT_DESCRIPTION;
     }
 
     /**
@@ -46,7 +50,7 @@ public class User implements Parcelable {
      * @param u the other user
      */
     public User(User u) {
-        this(u.userName, u.userId, u.email, u.photo, u.preference);
+        this(u.userName, u.userId, u.email, u.photo, u.preference, u.description);
     }
 
     /**
@@ -58,7 +62,7 @@ public class User implements Parcelable {
      * @param photo    user photo
      */
     public User(String username, String userId, String email, String photo) {
-        this(username, userId, email, photo, DEFAULT_PREFERENCE);
+        this(username, userId, email, photo, DEFAULT_PREFERENCE, DEFAULT_DESCRIPTION);
     }
 
     /**
@@ -71,6 +75,20 @@ public class User implements Parcelable {
      * @param preference the user preference
      */
     public User(String username, String userId, String email, String photo, String preference) {
+        this(username, userId, email, photo, preference, DEFAULT_DESCRIPTION);
+    }
+
+    /**
+     * Constructor for a user.
+     *
+     * @param username   the username
+     * @param userId     a unique identifier
+     * @param email      the user mail
+     * @param photo      the user photo
+     * @param preference the user preference
+     */
+    public User(String username, String userId, String email,
+                String photo, String preference, String description) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()
                 || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
@@ -80,6 +98,7 @@ public class User implements Parcelable {
         this.email = email;
         this.photo = photo;
         this.preference = preference;
+        this.description = description;
     }
 
     /**
@@ -134,6 +153,15 @@ public class User implements Parcelable {
     // TODO: check if need Uri for photo in Ugo's part
 
     /**
+     * Get the User description.
+     *
+     * @return the corresponding description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
      * Get the user preference.
      *
      * @return the user preference
@@ -180,6 +208,15 @@ public class User implements Parcelable {
     }
 
     /**
+     * Set the user description.
+     *
+     * @param description the corresponding description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
      * Set the user preference.
      *
      * @param preference the corresponding preference
@@ -204,18 +241,19 @@ public class User implements Parcelable {
      * @param user the user to compare
      * @return true if they have the same info, false otherwise
      */
-    public boolean sameInformations(User user) {
+    public boolean sameInformation(User user) {
         return this.userName.equals(user.userName)
                 && this.email.equals(user.email)
                 && this.photo.equals(user.photo)
-                && this.preference.equals(user.preference);
+                && this.preference.equals(user.preference)
+                && this.description.equals(user.description);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof User) {
             User user = (User) obj;
-            return sameAccount(user) && sameInformations(user);
+            return sameAccount(user) && sameInformation(user);
         }
         return false;
     }
@@ -232,6 +270,7 @@ public class User implements Parcelable {
         dest.writeString(this.email);
         dest.writeString(this.photo);
         dest.writeString(this.preference);
+        dest.writeString(this.description);
     }
 
     /**
@@ -244,6 +283,7 @@ public class User implements Parcelable {
         this.email = in.readString();
         this.photo = in.readString();
         this.preference = in.readString();
+        this.description = in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

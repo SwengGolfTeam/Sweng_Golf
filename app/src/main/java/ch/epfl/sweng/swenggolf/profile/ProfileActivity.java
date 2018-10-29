@@ -50,6 +50,8 @@ public class ProfileActivity extends FragmentConverter {
         displayPicture(imageView, user, this.getContext());
         TextView preference = inflated.findViewById(R.id.preference1);
         preference.setText(user.getPreference());
+        TextView description = inflated.findViewById(R.id.description);
+        description.setText(user.getDescription());
 
         // add back arrow to toolbar
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.profile_activity_name);

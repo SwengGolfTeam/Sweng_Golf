@@ -3,13 +3,11 @@ package ch.epfl.sweng.swenggolf;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
-
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -58,7 +56,7 @@ public class FireDatabaseTest {
         ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER);
 
         FireDatabase d = new FireDatabase(database);
-        d.write(PATH, ID, OFFER,listener);
+        d.write(PATH, ID, OFFER, listener);
         d.read(PATH, ID, listenerOffer, Offer.class);
 
     }
@@ -136,13 +134,13 @@ public class FireDatabaseTest {
             }
         };
         FireDatabase d = new FireDatabase(database);
-        d.readList(PATH, listener,String.class);
+        d.readList(PATH, listener, String.class);
 
     }
 
     private void setUpReadListData(DatabaseReference categoryReference) {
         List<DataSnapshot> data = new ArrayList<>();
-        for(String s : LIST){
+        for (String s : LIST) {
             DataSnapshot snapshot = mock(DataSnapshot.class);
             when(snapshot.getValue(String.class)).thenReturn(s);
             data.add(snapshot);
@@ -152,7 +150,7 @@ public class FireDatabaseTest {
 
         Answer<Void> ans = new Answer<Void>() {
             @Override
-            public Void answer(InvocationOnMock invocation){
+            public Void answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
                 listener.onDataChange(list);
                 return null;
@@ -167,7 +165,7 @@ public class FireDatabaseTest {
         Answer<Void> readAnswer = new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) {
-                ValueEventListener listener1 =invocation.getArgument(0);
+                ValueEventListener listener1 = invocation.getArgument(0);
                 DataSnapshot snapshot = mock(DataSnapshot.class);
                 when(snapshot.getValue(Offer.class)).thenReturn(offer);
                 listener1.onDataChange(snapshot);
@@ -190,12 +188,12 @@ public class FireDatabaseTest {
         };
     }
 
-    private void mockWrite(DatabaseReference idReference,  final Offer offer) {
+    private void mockWrite(DatabaseReference idReference, final Offer offer) {
 
         Answer<Void> writeAnswer = new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) {
-                assertThat( (Offer) invocation.getArgument(0), is(offer));
+                assertThat((Offer) invocation.getArgument(0), is(offer));
                 DatabaseReference.CompletionListener firebaseListener =
                         invocation.getArgument(1);
                 firebaseListener.onComplete(null, null);

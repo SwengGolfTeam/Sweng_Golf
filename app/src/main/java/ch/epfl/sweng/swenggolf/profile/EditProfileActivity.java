@@ -6,18 +6,27 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.storage.Storage;
+
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
-
 
 public class EditProfileActivity extends FragmentConverter {
     private User user;
@@ -42,6 +51,7 @@ public class EditProfileActivity extends FragmentConverter {
         if (user != null) {
             displayElement((EditText) inflated.findViewById(R.id.edit_name), user.getUserName());
             displayElement((EditText) inflated.findViewById(R.id.edit_pref), user.getPreference());
+            displayElement((EditText) inflated.findViewById(R.id.edit_description), user.getDescription());
             ImageView imageView = inflated.findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
@@ -66,6 +76,11 @@ public class EditProfileActivity extends FragmentConverter {
         String pref = editedPref.getText().toString();
         user.setPreference(pref);
 
+        // save new preferences
+        EditText editedDescription = findViewById(R.id.edit_description);
+        String description = editedDescription.getText().toString();
+        user.setDescription(description);
+
         DatabaseUser.addUser(user);
 
         Fragment ProfileActivity = new ProfileActivity();
@@ -86,4 +101,42 @@ public class EditProfileActivity extends FragmentConverter {
         return super.onOptionsItemSelected(item);
     }
 
+    public void changeProfilePicture(View view) {
+        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            Uri filePath = data.getData();
+
+            Storage.getInstance().write(filePath, "images/user/" + user.getUserId(),
+                    getChangePpListener());
+        }
+
+
+    }
+
+    private OnCompleteListener<Uri> getChangePpListener() {
+        return new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    user.setPhoto(link);
+                    DatabaseUser.addUser(user);
+                    updatePicture();
+                } else {
+                    // TODO Handle failures
+                }
+            }
+        };
+    }
+
+    private void updatePicture() {
+        ImageView imageView = findViewById(R.id.ivProfile);
+        ProfileActivity.displayPicture(imageView, user, this.getContext());
+    }
 }

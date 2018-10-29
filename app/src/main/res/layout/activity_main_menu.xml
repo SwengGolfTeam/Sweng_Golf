@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:theme="@style/ToolbarTheme"
-            app:navigationContentDescription="abc_action_bar_home_description"/>
+            app:navigationContentDescription="abc_action_bar_home_description" />
 
         <FrameLayout
             android:id="@+id/centralFragment"
