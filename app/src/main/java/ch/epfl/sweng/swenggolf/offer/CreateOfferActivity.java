@@ -124,7 +124,8 @@ public class CreateOfferActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     String link = task.getResult().toString();
-                    offer.updateLinkToPicture(link);
+                    Offer newOffer = offer.updateLinkToPicture(link);
+                    writeOffer(newOffer, link);
                 } else {
                     // TODO Handle failures
                 }
@@ -151,7 +152,7 @@ public class CreateOfferActivity extends AppCompatActivity {
                 new Offer(Config.getUser().getUserId(), name, description, "", uuid);
 
         if (filePath == null) {
-            writeOffer(newOffer);
+            writeOffer(newOffer, "");
         } else {
             uploadImage(newOffer);
         }
@@ -162,7 +163,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      *
      * @param offer offer to be written
      */
-    private void writeOffer(final Offer offer) {
+    private void writeOffer(final Offer offer, String link) {
         creationAsked = true;
         Database database = Database.getInstance();
         final Intent intent =

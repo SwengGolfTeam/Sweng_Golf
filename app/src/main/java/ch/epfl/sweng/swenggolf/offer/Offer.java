@@ -140,10 +140,8 @@ public class Offer implements Parcelable {
      *
      * @param newLinkPicture the new picture's link
      */
-    public void updateLinkToPicture(String newLinkPicture) {
-        Database database = Database.getInstance();
-        Offer offer = new Offer(userId, title, description, newLinkPicture, uuid);
-        database.write("/offers", offer.getUuid(), offer);
+    public Offer updateLinkToPicture(String newLinkPicture) {
+        return new Offer(userId, title, description, newLinkPicture, uuid);
     }
 
 
