@@ -32,6 +32,8 @@ public class DatabaseTest {
     private static final String CONTENT_2 = "This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string.";
+    private static final Offer OFFER_1 = new Offer("user", "offer1", CONTENT, "", ID);
+    private static final Offer OFFER_2 = new Offer("user", "offer1", CONTENT, "", ID);
 
 
     @Test
@@ -46,15 +48,15 @@ public class DatabaseTest {
     public void readOffersReturnsCorrectValues(){
         Database db = new FakeDatabase(true);
 
-        db.write(PATH, ID, CONTENT);
-        db.write(PATH, ID2, CONTENT_2);
+        db.write(PATH, ID, OFFER_1);
+        db.write(PATH, ID2, OFFER_2);
 
         ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
 
-                assertThat(offers.contains(CONTENT), is(true));
-                assertThat(offers.contains(CONTENT_2), is(true));
+                assertThat(offers.contains(OFFER_1), is(true));
+                assertThat(offers.contains(OFFER_2), is(true));
             }
 
             @Override
