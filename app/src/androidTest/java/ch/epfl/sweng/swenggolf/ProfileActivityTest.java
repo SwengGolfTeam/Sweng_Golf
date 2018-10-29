@@ -1,7 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -16,17 +21,25 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.storage.FakeStorage;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -48,8 +61,10 @@ public class ProfileActivityTest {
         Config.setUser(new User(user));
         newUser = new User(user);
         Database database = new FakeDatabase(true);
+        Storage storage = new FakeStorage(true);
         Database.setDebugDatabase(database);
-        mActivityRule.launchActivity(new Intent());
+        Storage.setDebugStorage(storage);
+        mActivityRule.launchActivity(new Intent().putExtra("ch.epfl.sweng.swenggolf.user", user));
     }
 
     @Test
@@ -64,7 +79,21 @@ public class ProfileActivityTest {
         String newPref = "coffee";
         newUser.setPreference(newPref);
         canEditField(R.id.edit_pref, newUser, newPref);
+    }
 
+    @Test
+    public void canChangeProfilePicture() {
+        onView(withId(R.id.edit)).perform(click());
+        Espresso.closeSoftKeyboard();
+
+        // Answer to gallery intent
+        Intent resultData = new Intent();
+        resultData.setData(Uri.parse("drawable://" + R.drawable.img));
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(not(isInternal())).respondWith(result);
+
+        onView(withId(R.id.photoButton)).perform(click());
     }
 
     @Test
@@ -90,8 +119,9 @@ public class ProfileActivityTest {
 
     private void canEditField(int editTextId, final User newUser, String newText) {
         onView(withId(R.id.edit)).perform(click());
+        Espresso.closeSoftKeyboard();
         onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
-        onView(withId(R.id.saveButton)).perform(click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {

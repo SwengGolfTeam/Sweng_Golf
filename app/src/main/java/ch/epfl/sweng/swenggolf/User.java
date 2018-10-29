@@ -1,9 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.auth.FirebaseUser;
 
-// Just a temporary placeholder class in order to complete the Firebase Implementation
-public class User {
+public class User implements Parcelable {
 
     private static final String DEFAULT_PREFERENCE = "";
     public static final String DEFAULT_DESCRIPTION = "Hello, I'm new Here!";
@@ -254,4 +256,44 @@ public class User {
         }
         return false;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.userName);
+        dest.writeString(this.userId);
+        dest.writeString(this.email);
+        dest.writeString(this.photo);
+        dest.writeString(this.preference);
+        dest.writeString(this.description);
+    }
+
+    /**
+     * Create a User from a Parcel.
+     * @param in the parcel
+     */
+    public User(Parcel in) {
+        this.userName = in.readString();
+        this.userId = in.readString();
+        this.email = in.readString();
+        this.photo = in.readString();
+        this.preference = in.readString();
+        this.description = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

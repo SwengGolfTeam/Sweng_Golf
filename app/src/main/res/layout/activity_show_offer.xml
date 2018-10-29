@@ -31,7 +31,8 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
+        app:layout_constraintTop_toBottomOf="@+id/show_offer_title"
+        android:onClick="openUserProfile" />
 
     <TextView
         android:id="@+id/show_offer_description"
@@ -79,7 +80,6 @@
         app:layout_constraintEnd_toStartOf="@+id/button_modify_offer"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_delete" />
-
 
 
 </android.support.constraint.ConstraintLayout>

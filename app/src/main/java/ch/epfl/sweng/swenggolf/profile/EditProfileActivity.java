@@ -1,21 +1,29 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.storage.Storage;
+
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 
 public class EditProfileActivity extends AppCompatActivity {
-    private User user;
 
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,46 @@ public class EditProfileActivity extends AppCompatActivity {
         DatabaseUser.addUser(user);
 
         Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
         startActivity(intent);
+    }
+
+    public void changeProfilePicture(View view) {
+        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            Uri filePath = data.getData();
+
+            Storage.getInstance().write(filePath, "images/user/" + user.getUserId(),
+                    getChangePpListener());
+        }
+
+
+    }
+
+    private OnCompleteListener<Uri> getChangePpListener() {
+        return new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    user.setPhoto(link);
+                    DatabaseUser.addUser(user);
+                    updatePicture();
+                } else {
+                    // TODO Handle failures
+                }
+            }
+        };
+    }
+
+    private void updatePicture() {
+        ImageView imageView = findViewById(R.id.ivProfile);
+        ProfileActivity.displayPicture(imageView, user, this);
     }
 }

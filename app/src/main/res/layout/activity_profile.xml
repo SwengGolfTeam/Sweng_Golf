@@ -25,7 +25,8 @@
             android:layout_marginRight="16dp"
             android:background="?attr/colorPrimary"
             android:onClick="editProfile"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@android:drawable/ic_menu_edit"
+            android:visibility="gone" />
 
     </android.support.v7.widget.Toolbar>
 

@@ -38,4 +38,5 @@
     <string name="offer_deleted">Offer deleted</string>
     <string name="description">Infos:</string>
     <string name="infos">Infos:</string>
+    <string name="error_load_user">Could not load user profile.</string>
 </resources>

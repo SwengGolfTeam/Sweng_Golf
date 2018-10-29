@@ -12,16 +12,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.StorageConnection;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.storage.Storage;
+
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -46,9 +49,10 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     /**
      * Help to hide a button.
+     *
      * @param button button to hide
      */
-    private void hideButton(ImageView button){
+    private void hideButton(ImageView button) {
         button.setVisibility(View.INVISIBLE);
         button.setClickable(false);
     }
@@ -93,7 +97,7 @@ public class ShowOfferActivity extends AppCompatActivity {
     /**
      * Display the Alert Dialog for the delete.
      */
-    public void showDeleteAlertDialog(){
+    public void showDeleteAlertDialog() {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete entry")
@@ -115,7 +119,9 @@ public class ShowOfferActivity extends AppCompatActivity {
     /**
      * Delete the offer in the database.
      */
-    private void deleteOfferInDatabase(){
+    private void deleteOfferInDatabase() {
+        Storage storage = Storage.getInstance();
+        storage.remove(offer.getLinkPicture());
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override
@@ -130,7 +136,31 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         };
         database.remove("/offers", offer.getUuid(), listener);
-        StorageConnection.deleteImage(offer);
+    }
+
+    /**
+     * Open the user profile when we click on his name.
+     * @param v the view
+     */
+    public void openUserProfile(View v) {
+
+        DatabaseUser.getUser(new ValueListener<User>() {
+                                 @Override
+                                 public void onDataChange(User user) {
+                                     Intent intent = new Intent(ShowOfferActivity.this,
+                                             ProfileActivity.class);
+                                     intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
+                                     startActivity(intent);
+                                 }
+
+                                 @Override
+                                 public void onCancelled(DbError error) {
+                                     Toast.makeText(ShowOfferActivity.this,
+                                             R.string.error_load_user, Toast.LENGTH_LONG).show();
+                                 }
+                             },
+                 offer.getUserId());
+
     }
 
 }

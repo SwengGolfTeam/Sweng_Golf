@@ -6,9 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 public class UserTest {
 
@@ -126,8 +128,15 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
     @Test
     public void getDescription() {
         User user = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE);
-        assertEquals("Default description",User.DEFAULT_DESCRIPTION, user.getDescription());
+        assertEquals("Default description", User.DEFAULT_DESCRIPTION, user.getDescription());
         user.setDescription(DESCRIPTION);
         assertEquals(DESCRIPTION, user.getDescription());
+    }
+
+    @Test
+    public void newArrayHasGoodSize() {
+        int size = 10;
+        assertThat(User.CREATOR.newArray(size).length, is(size));
+
     }
 }
