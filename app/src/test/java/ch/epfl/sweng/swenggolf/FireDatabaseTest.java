@@ -73,14 +73,14 @@ public class FireDatabaseTest {
         return idReference;
     }
 
-    // Markus
+    /*
     private Query setUpQuery(DatabaseReference ref) {
         Query idQuery = mock(Query.class);
         Query tagQuery = mock(Query.class);
         when(ref.orderByChild(anyString())).thenReturn(tagQuery);
         when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
         return idQuery;
-    }
+    }*/
 
     @Test
     public void removeReturnNoError() {
@@ -151,7 +151,8 @@ public class FireDatabaseTest {
 
     }
 
-    @Test // Markus
+    /*
+    @Test
     public void readOffersReturnCorrectValues() {
         FirebaseDatabase database = mock(FirebaseDatabase.class);
         DatabaseReference idReference = setUpPath(database);
@@ -170,9 +171,9 @@ public class FireDatabaseTest {
         FireDatabase d = new FireDatabase(database);
         d.write(PATH, ID, OFFER, listener);
         d.readOffers(offersListener);
-    }
+    }*/
 
-    // Markus
+    /*
     private ValueListener<List<Offer>> mockReadOffers(DatabaseReference idReference, Query query, final Offer offer) {
         Answer<Void> readAnswer = new Answer<Void>() {
             @Override
@@ -197,7 +198,7 @@ public class FireDatabaseTest {
 
             }
         };
-    }
+    }*/
 
 
     private void setUpReadListData(DatabaseReference categoryReference) {
