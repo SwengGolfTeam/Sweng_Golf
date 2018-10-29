@@ -16,13 +16,6 @@
         </activity>
         <activity android:name=".main.MainMenuActivity" />
         <activity android:name=".database.CreateUserActivity" />
-        <activity android:name=".profile.ProfileActivity" />
-        <activity android:name=".profile.EditProfileActivity" />
-        <activity android:name=".offer.CreateOfferActivity" />
-        <activity android:name=".offer.ListOfferActivity" />
-        <activity android:name=".offer.ShowOfferActivity" />
-        <activity android:name=".database.WaitingActivity" />
-        <activity android:name=".preference.ListPreferencesActivity" />
     </application>
 
 </manifest>
