@@ -79,13 +79,13 @@ public class EditProfileActivity extends AppCompatActivity {
             Uri filePath = data.getData();
 
             Storage.getInstance().write(filePath, "images/user/" + user.getUserId(),
-                    getChangePPListener());
+                    getChangePpListener());
         }
 
 
     }
 
-    private OnCompleteListener<Uri> getChangePPListener() {
+    private OnCompleteListener<Uri> getChangePpListener() {
         return new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
