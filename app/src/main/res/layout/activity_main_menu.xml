@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ToolbarTheme"
             app:menu="@menu/menu_toolbar_main"
-            app:navigationContentDescription="abc_action_bar_home_description"/>
+            app:navigationContentDescription="abc_action_bar_home_description" />
 
     </LinearLayout>
 
