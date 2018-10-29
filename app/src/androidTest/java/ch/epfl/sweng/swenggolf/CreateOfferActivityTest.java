@@ -66,6 +66,8 @@ public class CreateOfferActivityTest {
     @Before
     public void setTest() {
         initDatabse();
+        Config.goToTest();
+        intentsTestRule.launchActivity(new Intent());
     }
 
     private void goToCreateOffer(boolean hasOffer) {
@@ -73,11 +75,17 @@ public class CreateOfferActivityTest {
         CreateOfferActivity fragment = new CreateOfferActivity();
         if(hasOffer) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable("offer", new Offer("20","20","20"));
-            DatabaseUser.addUser(new User("20","20","20","20"));
+            Offer offer = new Offer(Config.getUser().getUserId(),"20","20", "20", "20");
+            bundle.putParcelable("offer", offer);
+            Database.getInstance().write("/offers",offer.getUuid(), offer);
             fragment.setArguments(bundle);
         }
-        transaction.replace(R.id.centralFragment, new CreateOfferActivity()).commit();
+        transaction.replace(R.id.centralFragment, fragment).commit();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -124,7 +132,6 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() throws InterruptedException {
-        ListOfferActivityTest.setUpFakeDatabase();
         goToCreateOffer(false);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
@@ -141,25 +148,21 @@ public class CreateOfferActivityTest {
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
         Offer testOffer = new Offer(Config.getUser().getUserId(),"Test","Test");
-        Database.getInstance().write("/offers",UUID.randomUUID().toString(), testOffer);
-        ShowOfferActivity showOfferFragment = new ShowOfferActivity();
-        Bundle offerBundle = new Bundle();
-        offerBundle.putParcelable("offer", testOffer);
-        showOfferFragment.setArguments(offerBundle);
+        Database.getInstance().write("/offers",testOffer.getUuid(), testOffer);
+        Fragment offer = TestUtility.offerFragment(new ShowOfferActivity(), testOffer);
         if(setToOtherThanOwner) {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
-        intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, showOfferFragment).commit();
+        intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, offer).commit();
     }
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
-        assertDisplayedFragment(CreateOfferActivity.class);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }

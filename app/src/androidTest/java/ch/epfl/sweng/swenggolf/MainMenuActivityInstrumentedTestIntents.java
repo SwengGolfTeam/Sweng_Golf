@@ -56,7 +56,7 @@ public class MainMenuActivityInstrumentedTestIntents {
     @Before
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
-        Config.setUser(FilledFakeDatabase.FAKE_USERS[0]);
+        Config.setUser(FilledFakeDatabase.getUser(0));
         intentRule.launchActivity(new Intent());
         Matcher v = withId(R.id.side_menu);
         onView(v).perform(open());

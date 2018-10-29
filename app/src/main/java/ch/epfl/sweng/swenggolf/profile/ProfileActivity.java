@@ -21,7 +21,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-
 public class ProfileActivity extends FragmentConverter {
 
     private User user;
@@ -38,16 +37,13 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = Config.getUser();
-    }
-
-    private void displayUserData(View inflated) {
-
         user = getArguments().getParcelable("ch.epfl.sweng.swenggolf.user");
         if (user == null) {
             throw new NullPointerException("The user given to ProfileActivity can not be null");
         }
+    }
 
+    private void displayUserData(View inflated) {
         TextView name = inflated.findViewById(R.id.name);
         name.setText(user.getUserName());
         ImageView imageView = inflated.findViewById(R.id.ivProfile);

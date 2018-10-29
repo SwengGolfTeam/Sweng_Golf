@@ -147,7 +147,6 @@ public class CreateOfferActivity extends FragmentConverter {
             createOfferObject(name, description, "");
         }
 
-
     }
 
     private void uploadImage(final String name, final String description) {

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.espresso.contrib.NavigationViewActions;
@@ -56,15 +57,16 @@ public class ListOfferActivityTest {
 
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class);
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Configures a fake database and enables TestMode.
      */
     @Before
-    public void init() {
+    public void init() throws InterruptedException {
         setUpFakeDatabase();
         Config.goToTest();
+        mActivityRule.launchActivity(new Intent());
     }
 
     /**
@@ -72,8 +74,8 @@ public class ListOfferActivityTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = new Offer("user_id", "This is a title", LOREM);
-        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM);
+        Offer offer1 = new Offer("user_id", "This is a title", LOREM, "", "idoftheoffer1");
+        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM, "", "idoftheoffer2");
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
