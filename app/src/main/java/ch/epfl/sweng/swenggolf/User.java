@@ -87,7 +87,8 @@ public class User implements Parcelable {
      * @param photo      the user photo
      * @param preference the user preference
      */
-    public User(String username, String userId, String email, String photo, String preference, String description) {
+    public User(String username, String userId, String email,
+                String photo, String preference, String description) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()
                 || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
