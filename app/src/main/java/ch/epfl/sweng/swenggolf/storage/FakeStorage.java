@@ -32,6 +32,7 @@ public final class FakeStorage extends Storage {
 
     @Override
     public void remove(String linkPicture) {
+        // TODO implement when necessary
     }
 
     private final class FakeTask extends Task<Uri> {
@@ -80,19 +81,24 @@ public final class FakeStorage extends Storage {
 
         @NonNull
         @Override
-        public Task<Uri> addOnSuccessListener(@NonNull OnSuccessListener<? super Uri> onSuccessListener) {
+        public Task<Uri> addOnSuccessListener(
+                @NonNull OnSuccessListener<? super Uri> onSuccessListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Uri> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Uri> onSuccessListener) {
+        public Task<Uri> addOnSuccessListener(
+                @NonNull Executor executor,
+                @NonNull OnSuccessListener<? super Uri> onSuccessListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Uri> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super Uri> onSuccessListener) {
+        public Task<Uri> addOnSuccessListener(
+                @NonNull Activity activity,
+                @NonNull OnSuccessListener<? super Uri> onSuccessListener) {
             return null;
         }
 
@@ -104,13 +110,17 @@ public final class FakeStorage extends Storage {
 
         @NonNull
         @Override
-        public Task<Uri> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+        public Task<Uri> addOnFailureListener(
+                @NonNull Executor executor,
+                @NonNull OnFailureListener onFailureListener) {
             return null;
         }
 
         @NonNull
         @Override
-        public Task<Uri> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+        public Task<Uri> addOnFailureListener(
+                @NonNull Activity activity,
+                @NonNull OnFailureListener onFailureListener) {
             return null;
         }
     }

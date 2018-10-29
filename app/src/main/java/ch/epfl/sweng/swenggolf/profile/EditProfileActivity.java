@@ -78,23 +78,27 @@ public class EditProfileActivity extends AppCompatActivity {
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
             Uri filePath = data.getData();
 
-            OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        String link = task.getResult().toString();
-                        user.setPhoto(link);
-                        DatabaseUser.addUser(user);
-                        updatePicture();
-                    } else {
-                        // TODO Handle failures
-                    }
-                }
-            };
-            Storage.getInstance().write(filePath, "images/user/" + user.getUserId(), listener);
+            Storage.getInstance().write(filePath, "images/user/" + user.getUserId(),
+                    getChangePPListener());
         }
 
 
+    }
+
+    private OnCompleteListener<Uri> getChangePPListener() {
+        return new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    user.setPhoto(link);
+                    DatabaseUser.addUser(user);
+                    updatePicture();
+                } else {
+                    // TODO Handle failures
+                }
+            }
+        };
     }
 
     private void updatePicture() {

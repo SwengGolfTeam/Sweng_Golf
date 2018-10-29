@@ -1,10 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -28,7 +25,6 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.storage.Storage;
-import ch.epfl.sweng.swenggolf.storage.StorageConnection;
 
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
@@ -118,22 +114,6 @@ public class CreateOfferActivity extends AppCompatActivity {
 
     }
 
-    private void uploadImage(final Offer offer) {
-        OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    String link = task.getResult().toString();
-                    Offer newOffer = offer.updateLinkToPicture(link);
-                    writeOffer(newOffer, link);
-                } else {
-                    // TODO Handle failures
-                }
-            }
-        };
-        Storage.getInstance().write(filePath, "images/" + offer.getUuid(), listener);
-    }
-
     /**
      * Creates the offer and pushes it to the database.
      *
@@ -152,10 +132,26 @@ public class CreateOfferActivity extends AppCompatActivity {
                 new Offer(Config.getUser().getUserId(), name, description, "", uuid);
 
         if (filePath == null) {
-            writeOffer(newOffer, "");
+            writeOffer(newOffer);
         } else {
             uploadImage(newOffer);
         }
+    }
+
+    private void uploadImage(final Offer offer) {
+        OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    String link = task.getResult().toString();
+                    Offer newOffer = offer.updateLinkToPicture(link);
+                    writeOffer(newOffer);
+                } else {
+                    // TODO Handle failures
+                }
+            }
+        };
+        Storage.getInstance().write(filePath, "images/" + offer.getUuid(), listener);
     }
 
     /**
@@ -163,7 +159,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      *
      * @param offer offer to be written
      */
-    private void writeOffer(final Offer offer, String link) {
+    private void writeOffer(final Offer offer) {
         creationAsked = true;
         Database database = Database.getInstance();
         final Intent intent =
