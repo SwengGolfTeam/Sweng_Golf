@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.database;
+package ch.epfl.sweng.swenggolf.storage;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;

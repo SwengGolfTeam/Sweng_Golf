@@ -14,8 +14,8 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 
 
 public class EditProfileActivity extends AppCompatActivity {
-    private User user;
 
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,5 +57,9 @@ public class EditProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
         startActivity(intent);
+    }
+
+    public void changeProfilePicture(View view) {
+
     }
 }

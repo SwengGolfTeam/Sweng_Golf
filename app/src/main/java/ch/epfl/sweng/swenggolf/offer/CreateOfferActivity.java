@@ -27,7 +27,10 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.StorageConnection;
+import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.storage.StorageConnection;
+
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
  * The activity used to create offers. Note that the intent extras
@@ -39,11 +42,8 @@ public class CreateOfferActivity extends AppCompatActivity {
     private Offer offerToModify;
     private boolean creationAsked;
 
-    private ImageView imageView;
-
     private Uri filePath;
 
-    private static final int PICK_IMAGE_REQUEST = 71;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,25 +79,16 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param view the view
      */
     public void choosePicture(View view) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            filePath = data.getData();
-            imageView = findViewById(R.id.offer_picture);
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+        if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            ImageView imageView = findViewById(R.id.offer_picture);
+            filePath = Storage.showPicture(imageView, data, getContentResolver());
         }
     }
 
@@ -110,6 +101,7 @@ public class CreateOfferActivity extends AppCompatActivity {
         if (creationAsked) {
             return;
         }
+
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
@@ -119,35 +111,15 @@ public class CreateOfferActivity extends AppCompatActivity {
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
-        } else if (filePath != null) {
-            uploadImage(name, description);
         } else {
-            createOfferObject(name, description, "");
+            createOfferObject(name, description);
         }
 
 
     }
 
-    private void uploadImage(final String name, final String description) {
-        StorageConnection storage = StorageConnection.getInstance();
-
-        storage.writeFile(filePath)
-                .addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            String link = task.getResult().toString();
-                            createOfferObject(name, description, link);
-                        } else {
-                            // TODO Handle failures
-                        }
-                    }
-                });
-
-        if (Config.isTest()) {
-            createOfferObject(name, description, "");
-        }
-
+    private void uploadImage(Offer offer) {
+        Storage.getInstance().write(filePath, offer);
     }
 
     /**
@@ -155,19 +127,20 @@ public class CreateOfferActivity extends AppCompatActivity {
      *
      * @param name        the title of the offer
      * @param description the description of the offer
-     * @param link        the link of the offer's picture
      */
-    protected void createOfferObject(String name, String description, String link) {
-        String uuid = UUID.randomUUID().toString();
+    protected void createOfferObject(String name, String description) {
+        String uuid;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
-            if (link.isEmpty()) {
-                link = offerToModify.getLinkPicture();
-            }
+        } else {
+            uuid = UUID.randomUUID().toString();
         }
+
         final Offer newOffer =
-                new Offer(Config.getUser().getUserId(), name, description, link, uuid);
+                new Offer(Config.getUser().getUserId(), name, description, "", uuid);
+
         writeOffer(newOffer);
+        uploadImage(newOffer);
     }
 
     /**

@@ -3,6 +3,8 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ch.epfl.sweng.swenggolf.database.Database;
+
 
 public class Offer implements Parcelable {
 
@@ -66,9 +68,10 @@ public class Offer implements Parcelable {
 
     /**
      * Copy constructor.
+     *
      * @param that an offer
      */
-    public Offer(Offer that){
+    public Offer(Offer that) {
         userId = that.userId;
         title = that.title;
         description = that.description;
@@ -130,6 +133,17 @@ public class Offer implements Parcelable {
      */
     public String getUuid() {
         return uuid;
+    }
+
+    /**
+     * Creates a new offer in the database using the new picture's link given.
+     *
+     * @param newLinkPicture the new picture's link
+     */
+    public void updateLinkToPicture(String newLinkPicture) {
+        Database database = Database.getInstance();
+        Offer offer = new Offer(userId, title, description, newLinkPicture, uuid);
+        database.write("/offers", offer.getUuid(), offer);
     }
 
 
