@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.storage;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,9 +10,11 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static android.app.Activity.RESULT_OK;
@@ -68,28 +71,6 @@ public abstract class Storage {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         return Intent.createChooser(intent, "Select Picture");
-    }
-
-    /**
-     * Updates the given ImageView with what the app has received from the OS, and returns
-     * the local URI to the image.
-     *
-     * @param imageView the ImageView to be updated
-     * @param data the data given by the OS
-     * @param contentRes the ContentResolver
-     * @return the local URI of the image
-     */
-    public static Uri showPicture(ImageView imageView, Intent data, ContentResolver contentRes) {
-        Uri dataUri = data.getData();
-
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentRes, dataUri);
-            imageView.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return dataUri;
     }
 
     public static boolean conditionActivityResult(int requestCode, int resultCode, Intent data) {

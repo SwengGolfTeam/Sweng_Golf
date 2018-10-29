@@ -84,7 +84,8 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
             ImageView imageView = findViewById(R.id.offer_picture);
-            filePath = Storage.showPicture(imageView, data, getContentResolver());
+            filePath = data.getData();
+            Picasso.with(this).load(filePath).into(imageView);
         }
     }
 
