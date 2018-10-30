@@ -51,7 +51,6 @@ public class ProfileActivityOtherUserTest {
      */
     @Before
     public void setUp() {
-        Config.isTest();
         Config.setUser(user);
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
@@ -67,7 +66,7 @@ public class ProfileActivityOtherUserTest {
     }
 
     @Test
-    public void canFollow() {
+    public void canFollow() throws InterruptedException {
         testToast("You are now following ");
 
         ValueListener<String> listener = new ValueListener<String>() {
@@ -100,6 +99,11 @@ public class ProfileActivityOtherUserTest {
     private void testToast(String s) {
         String match = s + otherUser.getUserName();
         onView(withId(R.id.follow)).perform(click());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         TestUtility.testToastShow(mActivityRule, match);
     }
 
