@@ -55,7 +55,7 @@ public class ListPreferenceAdapter
         ValueListener<List<String>> getFollowingList = new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> values) {
-                for(String u : values){
+                for (String u : values) {
                     DatabaseUser.getUser(userListener, u);
                 }
             }

@@ -8,10 +8,8 @@ public class DatabaseUser {
     }
 
 
-
-
     public static void addUser(User user) {
-        Database.getInstance().write("/users", user.getUserId(), user);
+        Database.getInstance().write(Database.USERS_PATH, user.getUserId(), user);
     }
 
 
@@ -20,7 +18,7 @@ public class DatabaseUser {
     }
 
     public static void getUser(final ValueListener<User> listener, String userId) {
-        Database.getInstance().read("/users", userId, listener, User.class);
+        Database.getInstance().read(Database.USERS_PATH, userId, listener, User.class);
     }
 
 }

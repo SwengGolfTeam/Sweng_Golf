@@ -11,7 +11,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 public abstract class Database {
 
     public static final String OFFERS_PATH = "/offers";
-    public static final String USERS_PATH = "/user";
+    public static final String USERS_PATH = "/users";
     public static final String FOLLOWERS_PATH = "/followers";
 
     private static Database database = null;

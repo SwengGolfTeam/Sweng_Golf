@@ -62,12 +62,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        showEditButton();
+        showToolbarButtons();
 
         displayUserData();
     }
 
-    private void showEditButton() {
+    private void showToolbarButtons() {
         if (user.getUserId().equals(Config.getUser().getUserId())) {
             ImageButton button = findViewById(R.id.edit);
             button.setVisibility(View.VISIBLE);

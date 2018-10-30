@@ -71,7 +71,7 @@ public class ProfileActivityOtherUserTest {
             }
         };
 
-        final String path = "/followers/" + user.getUserId();
+        final String path = Database.FOLLOWERS_PATH + "/" + user.getUserId();
 
         final String userId = otherUser.getUserId();
         Database.getInstance().read(path, userId, listener, String.class);

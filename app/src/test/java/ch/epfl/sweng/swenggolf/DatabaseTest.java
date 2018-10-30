@@ -19,7 +19,7 @@ import static org.junit.Assert.fail;
 
 public class DatabaseTest {
 
-    private static final String PATH = "/offers";
+    private static final String PATH = Database.OFFERS_PATH;
     private static final String ID = "123456789";
     private static final String ID2 = "id_test";
     private static final String CONTENT = "Lore Ipsum bla bla bla";
