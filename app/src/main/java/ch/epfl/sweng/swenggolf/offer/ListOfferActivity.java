@@ -45,9 +45,9 @@ public class ListOfferActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
         List<Category> allCategories = Arrays.asList(Category.values()); // by default
-        setRecyclerView(inflated, allCategories);
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
+        setRecyclerView(inflated, allCategories);
         return inflated;
     }
 
@@ -119,13 +119,13 @@ public class ListOfferActivity extends FragmentConverter {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData(View inflated, List<Category> categories) {
+    private void prepareOfferData(final View inflated, List<Category> categories) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
@@ -136,7 +136,7 @@ public class ListOfferActivity extends FragmentConverter {
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
-                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
