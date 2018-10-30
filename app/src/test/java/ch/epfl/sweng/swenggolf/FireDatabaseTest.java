@@ -21,6 +21,7 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FireDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -206,7 +207,8 @@ public class FireDatabaseTest {
         };
 
         FireDatabase d = new FireDatabase(database);
-        d.readOffers(listener);
+        d.readOffers(listener); // test both versions
+        d.readOffers(listener, new ArrayList<Category>());
     }
 
     private Query setUpQuery(DatabaseReference ref) {
