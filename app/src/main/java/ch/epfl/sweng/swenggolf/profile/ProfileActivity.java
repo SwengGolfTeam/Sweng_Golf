@@ -72,34 +72,40 @@ public class ProfileActivity extends AppCompatActivity {
             ImageButton button = findViewById(R.id.edit);
             button.setVisibility(View.VISIBLE);
         } else {
-            final ImageButton button = findViewById(R.id.follow);
-            button.setVisibility(View.VISIBLE);
-            User currentUser = Config.getUser();
-            String uid = user.getUserId();
-            ValueListener<String> listener = new ValueListener<String>() {
-                @Override
-                public void onDataChange(String value) {
-                    if (value != null) {
-                        button.setImageResource(STAR_ON);
-                        button.setTag(STAR_ON);
-                        isFollowing = true;
-                    }
-                    else{
-                        button.setImageResource(STAR_OFF);
-                        button.setTag(STAR_OFF);
-                        isFollowing = false;
-                    }
-                }
-
-                @Override
-                public void onCancelled(DbError error) {
-                    Log.d("DbError", "Could not load the user follow list");
-                }
-            };
-
-            Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId(),
-                     uid, listener, String.class);
+            showFollowButton();
         }
+    }
+
+    private void showFollowButton() {
+        final ImageButton button = findViewById(R.id.follow);
+        button.setVisibility(View.VISIBLE);
+        User currentUser = Config.getUser();
+        String uid = user.getUserId();
+        ValueListener<String> listener = new ValueListener<String>() {
+            @Override
+            public void onDataChange(String value) {
+                if (value != null) {
+                    setStar(button, true);
+                } else {
+                    setStar(button, false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d("DbError", "Could not load the user follow list");
+            }
+        };
+
+        Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId(),
+                uid, listener, String.class);
+    }
+
+    private void setStar(ImageButton button, boolean follow) {
+        int star = follow ? STAR_ON : STAR_OFF;
+        button.setImageResource(star);
+        button.setTag(star);
+        isFollowing = follow;
     }
 
     private void displayUserData() {
@@ -153,9 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onComplete(DbError error) {
                 if (error == NONE) {
                     ImageButton button = findViewById(R.id.follow);
-                    button.setImageResource(STAR_OFF);
-                    button.setTag(STAR_OFF);
-                    isFollowing = false;
+                    setStar(button, false);
                 }
             }
         };
