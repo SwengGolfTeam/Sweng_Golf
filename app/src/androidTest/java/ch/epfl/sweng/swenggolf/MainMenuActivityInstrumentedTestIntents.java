@@ -49,6 +49,9 @@ public class MainMenuActivityInstrumentedTestIntents {
         intended(hasComponent(className));
     }
 
+    /**
+     * Open the drawer, set up the database and the user.
+     */
     @Before
     public void setUp() {
         Matcher v = withId(R.id.side_menu);

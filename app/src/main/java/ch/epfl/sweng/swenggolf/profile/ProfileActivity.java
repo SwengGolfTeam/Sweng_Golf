@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,8 +31,8 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 public class ProfileActivity extends AppCompatActivity {
 
     private User user;
-    private final int STAR_OFF = android.R.drawable.btn_star_big_off;
-    private final int STAR_ON = android.R.drawable.btn_star_big_on;
+    private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
+    private static final int STAR_ON = android.R.drawable.btn_star_big_on;
     private boolean isFollowing = false;
 
     @Override
@@ -87,12 +88,12 @@ public class ProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DbError error) {
-
+                    Log.d("DbError", "Could not load the user follow list");
                 }
             };
 
-            Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId()
-                    , uid, listener, String.class);
+            Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId(),
+                     uid, listener, String.class);
         }
     }
 
@@ -135,42 +136,50 @@ public class ProfileActivity extends AppCompatActivity {
     public void follow(View view) {
         User currentUser = Config.getUser();
         if (!isFollowing) {
-            CompletionListener listener = new CompletionListener() {
-                @Override
-                public void onComplete(DbError error) {
-                    if (error == NONE) {
-                        ImageButton button = findViewById(R.id.follow);
-                        button.setImageResource(STAR_ON);
-                        button.setTag(STAR_ON);
-                        Toast.makeText(ProfileActivity.this, getResources()
-                                        .getString(R.string.now_following) + " " + user.getUserName(),
-                                Toast.LENGTH_SHORT)
-                                .show();
-                        isFollowing = true;
-                    } else {
-                        Toast.makeText(ProfileActivity.this, getResources()
-                                        .getString(R.string.error_following) + " " + user.getUserName(),
-                                Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }
-            };
-            Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(),
-                    user.getUserId(), listener);
+            addFollow(currentUser);
         } else {
-            CompletionListener listener = new CompletionListener() {
-                @Override
-                public void onComplete(DbError error) {
-                    if (error == NONE) {
-                        ImageButton button = findViewById(R.id.follow);
-                        button.setImageResource(STAR_OFF);
-                        button.setTag(STAR_OFF);
-                        isFollowing = false;
-                    }
-                }
-            };
-            Database.getInstance().remove("/followers/" + currentUser.getUserId(),
-                    user.getUserId(), listener);
+            deleteFollow(currentUser);
         }
+    }
+
+    private void deleteFollow(User currentUser) {
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                if (error == NONE) {
+                    ImageButton button = findViewById(R.id.follow);
+                    button.setImageResource(STAR_OFF);
+                    button.setTag(STAR_OFF);
+                    isFollowing = false;
+                }
+            }
+        };
+        Database.getInstance().remove("/followers/" + currentUser.getUserId(),
+                user.getUserId(), listener);
+    }
+
+    private void addFollow(User currentUser) {
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                if (error == NONE) {
+                    ImageButton button = findViewById(R.id.follow);
+                    button.setImageResource(STAR_ON);
+                    button.setTag(STAR_ON);
+                    Toast.makeText(ProfileActivity.this, getResources()
+                                    .getString(R.string.now_following) + " " + user.getUserName(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                    isFollowing = true;
+                } else {
+                    Toast.makeText(ProfileActivity.this, getResources()
+                                    .getString(R.string.error_following) + " " + user.getUserName(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        };
+        Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(),
+                user.getUserId(), listener);
     }
 }

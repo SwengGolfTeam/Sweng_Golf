@@ -70,7 +70,8 @@ public class ProfileActivityOtherUserTest {
             }
         };
 
-        Database.getInstance().read("/followers/" + user.getUserId(), otherUser.getUserId(), listener, String.class);
+        Database.getInstance().read("/followers/" + user.getUserId(), otherUser.getUserId(),
+                listener, String.class);
     }
 
     private void testToast(String s) {

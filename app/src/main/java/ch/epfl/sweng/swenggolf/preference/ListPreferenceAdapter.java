@@ -43,13 +43,12 @@ public class ListPreferenceAdapter
             @Override
             public void onDataChange(User value) {
                 mDataset.add(value);
-                Log.d("DBError", "Load user " + value.getUserName());
                 ListPreferenceAdapter.this.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DbError error) {
-
+                Log.d("DBError", "Failed to load user");
             }
         };
 
@@ -59,7 +58,6 @@ public class ListPreferenceAdapter
                 for(String u : values){
                     DatabaseUser.getUser(userListener, u);
                 }
-                Log.d("DBError", "Load list");
             }
 
             @Override

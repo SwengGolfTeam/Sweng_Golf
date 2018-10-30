@@ -22,6 +22,12 @@ public final class TestUtility {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
+
+    /**
+     * Use this test to check if we can see a Toast.
+     * @param mActivityRule the tested activity
+     * @param toastMessage the message of the Toast
+     */
     public static void testToastShow(ActivityTestRule mActivityRule, String toastMessage) {
         onView(withText(toastMessage)).inRoot(
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
