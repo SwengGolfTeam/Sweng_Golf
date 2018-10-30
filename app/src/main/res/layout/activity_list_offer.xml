@@ -33,4 +33,35 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/no_offers_to_show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_offers"
+            android:textColor="#6d6d6d"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/offer_list_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

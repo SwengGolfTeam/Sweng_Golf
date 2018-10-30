@@ -3,6 +3,7 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">@font/caviar_dreams</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <!-- Base application theme. -->

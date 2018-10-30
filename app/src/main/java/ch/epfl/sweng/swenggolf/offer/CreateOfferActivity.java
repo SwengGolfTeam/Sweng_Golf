@@ -8,8 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ public class CreateOfferActivity extends AppCompatActivity {
     private TextView errorMessage;
     private Offer offerToModify;
     private boolean creationAsked;
+    private Spinner categorySpinner;
 
     private Uri filePath = null;
 
@@ -49,10 +52,18 @@ public class CreateOfferActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupSpinner();
+
         errorMessage = findViewById(R.id.error_message);
 
         offerToModify = getIntent().getParcelableExtra("offer");
         preFillFields();
+    }
+
+    private void setupSpinner() {
+        categorySpinner = findViewById(R.id.category_spinner);
+        categorySpinner.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, Category.values()));
     }
 
     private void preFillFields() {
@@ -104,12 +115,13 @@ public class CreateOfferActivity extends AppCompatActivity {
 
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
+        final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(name, description);
+            createOfferObject(name, description, category);
         }
 
 
@@ -121,7 +133,7 @@ public class CreateOfferActivity extends AppCompatActivity {
      * @param name        the title of the offer
      * @param description the description of the offer
      */
-    protected void createOfferObject(String name, String description) {
+    protected void createOfferObject(String name, String description, Category tag) {
         String uuid;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
@@ -129,8 +141,8 @@ public class CreateOfferActivity extends AppCompatActivity {
             uuid = UUID.randomUUID().toString();
         }
 
-        final Offer newOffer =
-                new Offer(Config.getUser().getUserId(), name, description, "", uuid);
+        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
+                "", uuid, tag);
 
         if (filePath == null) {
             writeOffer(newOffer);
