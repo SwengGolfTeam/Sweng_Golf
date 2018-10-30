@@ -59,6 +59,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         setContents();
         setRecyclerView();
 
+        // fetch answers from database
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
@@ -137,11 +138,15 @@ public class ShowOfferActivity extends AppCompatActivity {
         DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
     }
 
+    /**
+     * Adds a new answer to the list of answers of the offer.
+     * @param view the button that got clicked
+     */
     public void postAnswer(View view) {
         EditText editText = findViewById(R.id.answer_description_);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        Database.getInstance().write("/answers", offer.getUuid(), answers);
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
         editText.getText().clear();
         mAdapter.notifyDataSetChanged();
     }

@@ -13,6 +13,7 @@ public abstract class Database {
     public static final String OFFERS_PATH = "/offers";
     public static final String USERS_PATH = "/users";
     public static final String FOLLOWERS_PATH = "/followers";
+    public static final String ANSWERS_PATH = "/answers";
 
     private static Database database = null;
 

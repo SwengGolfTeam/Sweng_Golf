@@ -33,18 +33,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
         public AnswerViewHolder(View view) {
             super(view, R.id.user_name, R.id.answer_description, R.id.user_pic);
-
-            //TODO test
-            ImageButton favButton = view.findViewById(R.id.favorite);
-            favButton.setTag(this);
-            /*favButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    offer.setPositionFavorite(getLayoutPosition());
-                    Database.getInstance().write("/offers", offer.getUuid(), offer);
-                    //notifyDataSetChanged();
-                }
-            });*/
         }
     }
 
@@ -62,12 +50,19 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         dictionary = new HashMap<>();
     }
 
-    // TODO c'est vraiment super moche...
+    /**
+     * Sets the answers field.
+     * @param answers the new answers
+     */
     public void setAnswers(Answers answers) {
         this.answers = answers;
         notifyDataSetChanged();
     }
 
+    /**
+     * Gets the answers.
+     * @return the answers
+     */
     public Answers getAnswers() {
         return answers;
     }
@@ -119,7 +114,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 } else {
                     answers.setFavoritePos(-1);
                 }
-                Database.getInstance().write("/answers", offer.getUuid(), answers);
+                Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
                 notifyDataSetChanged();
             }
         });
@@ -133,12 +128,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         } else if (isAuthor) {
             favButton.setImageResource(R.drawable.ic_favorite_border);
         }
-
-
-
-
-        Log.d("OFFER", "notify");
-
 
     }
 
