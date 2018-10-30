@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.preference;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +16,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListPreferenceAdapter
@@ -33,12 +37,27 @@ public class ListPreferenceAdapter
      * If debug is set to true, a default list of users is used.
      */
     public ListPreferenceAdapter() {
-        Database d = Database.getInstance();
-        ValueListener<List<User>> getUserList = new ValueListener<List<User>>() {
+        final Database d = Database.getInstance();
+
+        final ValueListener<User> userListener = new ValueListener<User>() {
             @Override
-            public void onDataChange(List<User> value) {
-                mDataset = value;
+            public void onDataChange(User value) {
+                mDataset.add(value);
                 ListPreferenceAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d("DBError", "Failed to load user");
+            }
+        };
+
+        ValueListener<List<String>> getFollowingList = new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> values) {
+                for (String u : values) {
+                    DatabaseUser.getUser(userListener, u);
+                }
             }
 
             @Override
@@ -46,7 +65,7 @@ public class ListPreferenceAdapter
                 Log.d("DBError", "Failed to load users");
             }
         };
-        d.readList("/users", getUserList, User.class);
+        d.readList("/followers/" + Config.getUser().getUserId(), getFollowingList, String.class);
     }
 
     public class PreferenceViewHolder extends ThreeFieldsViewHolder {
@@ -63,11 +82,22 @@ public class ListPreferenceAdapter
 
     @NonNull
     @Override
-    public PreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PreferenceViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         View v = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.preferences_list_quad, parent, false);
-        PreferenceViewHolder preferenceHolder = new PreferenceViewHolder(v);
+        final PreferenceViewHolder preferenceHolder = new PreferenceViewHolder(v);
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = preferenceHolder.getAdapterPosition();
+                User user = mDataset.get(position);
+                Intent intent = new Intent(parent.getContext(), ProfileActivity.class);
+                intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
+                parent.getContext().startActivity(intent);
+            }
+        });
         return preferenceHolder;
     }
 

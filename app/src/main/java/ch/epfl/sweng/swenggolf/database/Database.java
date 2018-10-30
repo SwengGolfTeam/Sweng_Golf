@@ -2,11 +2,17 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 
+import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public abstract class Database {
+
+    public static final String OFFERS_PATH = "/offers";
+    public static final String USERS_PATH = "/users";
+    public static final String FOLLOWERS_PATH = "/followers";
 
     private static Database database = null;
 
@@ -91,6 +97,16 @@ public abstract class Database {
                                 @NonNull CompletionListener listener);
 
     /**
+     * Read the list of offers of specific categories. It return the list using a listener.
+     *
+     * @param listener   the onDataChange method will be called if we find the value. Otherwise, the
+     *                   onCancelled method will be called
+     * @param categories the list of categories that we want
+     */
+    public abstract void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                                    final List<Category> categories);
+
+    /**
      * Read the list of all offers. It return the list using a listener.
      *
      * @param listener the onDataChange method will be called if we find the value. Otherwise, the
@@ -98,6 +114,6 @@ public abstract class Database {
      */
 
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
-        readList("/offers", listener, Offer.class);
+        readOffers(listener, Arrays.asList(Category.values()));
     }
 }

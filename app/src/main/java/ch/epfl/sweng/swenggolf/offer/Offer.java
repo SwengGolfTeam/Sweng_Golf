@@ -3,14 +3,10 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.LinkedList;
-import java.util.List;
-
-
 public class Offer implements Parcelable {
-
     private static final int DESCRIPTION_LIMIT = 140;
 
+    private final Category tag;
     private final String userId;
     private final String title;
     private final String description;
@@ -22,12 +18,13 @@ public class Offer implements Parcelable {
      *
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
-     * @param linkPicture the link of the offer's picture.
+     * @param linkPicture the link of the offer's picture
      * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
+     * @param tag         the category of the offer
      */
     public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid) {
+                 String linkPicture, String uuid, Category tag) {
 
         if (userId.isEmpty()) {
             throw new IllegalArgumentException("UserId of the offer can't be empty.");
@@ -38,11 +35,30 @@ public class Offer implements Parcelable {
         if (description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
+        if (tag == null) {
+            throw new IllegalArgumentException("Tag must be indicated or use other constructor");
+        }
+
+        this.tag = tag;
         this.userId = userId;
         this.title = title;
         this.description = description;
         this.linkPicture = linkPicture;
         this.uuid = uuid;
+    }
+
+    /**
+     * Contains the data of an offer.
+     *
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture
+     * @param userId      the user id. Should not be empty
+     * @param uuid        offer identifier
+     */
+    public Offer(String userId, String title, String description,
+                 String linkPicture, String uuid) {
+        this(userId, title, description, linkPicture, uuid, Category.getDefault());
     }
 
     /**
@@ -65,6 +81,21 @@ public class Offer implements Parcelable {
         this.description = "";
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
+        this.tag = Category.getDefault();
+    }
+
+    /**
+     * Copy constructor.
+     *
+     * @param that an offer
+     */
+    public Offer(Offer that) {
+        userId = that.userId;
+        title = that.title;
+        description = that.description;
+        linkPicture = that.linkPicture;
+        uuid = that.uuid;
+        tag = that.tag;
     }
 
     /**
@@ -92,6 +123,15 @@ public class Offer implements Parcelable {
      */
     public String getUserId() {
         return userId;
+    }
+
+    /**
+     * Returns the offer's tag.
+     *
+     * @return the category of the offer
+     */
+    public Category getTag() {
+        return tag;
     }
 
     /**
@@ -123,6 +163,15 @@ public class Offer implements Parcelable {
         return uuid;
     }
 
+    /**
+     * Creates a new offer in the database using the new picture's link given.
+     *
+     * @param newLinkPicture the new picture's link
+     */
+    public Offer updateLinkToPicture(String newLinkPicture) {
+        return new Offer(userId, title, description, newLinkPicture, uuid, tag);
+    }
+
 
 
     /* Implements Parcelable */
@@ -138,7 +187,8 @@ public class Offer implements Parcelable {
                 this.title,
                 this.description,
                 this.linkPicture,
-                this.uuid});
+                this.uuid,
+                this.tag.toString()});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -152,7 +202,7 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[5];
+        String[] data = new String[6];
 
         in.readStringArray(data);
         this.userId = data[0];
@@ -160,5 +210,7 @@ public class Offer implements Parcelable {
         this.description = data[2];
         this.linkPicture = data[3];
         this.uuid = data[4];
+        this.tag = Category.valueOf(data[5]);
     }
+
 }

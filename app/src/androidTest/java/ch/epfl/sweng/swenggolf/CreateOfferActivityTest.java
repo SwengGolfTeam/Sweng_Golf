@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +20,10 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.database.StorageConnection;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.storage.FakeStorage;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
@@ -24,6 +31,7 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
@@ -35,8 +43,10 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.isInte
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 /**
@@ -50,25 +60,25 @@ public class CreateOfferActivityTest {
             new IntentsTestRule<>(MainActivity.class);
 
     @Before
-    public void setTest(){
+    public void setTest() {
         Config.goToTest();
     }
-    
+
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    private void initDatabse() {
+    private void initDatabase() {
         ListOfferActivityTest.setUpFakeDatabase();
-        StorageConnection.setDebugStorage(FakeFirebaseStorage.firebaseStorage());
+        Storage.setDebugStorage(new FakeStorage(true));
     }
 
 
     @Test
     public void errorMessageDisplayed() {
-
         onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(click());
-        onView(withId(R.id.error_message))
+        onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(scrollTo(),click());
+        onView(withId(R.id.error_message)).perform(scrollTo())
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
@@ -91,7 +101,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() {
-        initDatabse();
+        initDatabase();
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()));
@@ -107,10 +117,10 @@ public class CreateOfferActivityTest {
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        initDatabse();
-        if(setToOtherThanOwner) {
+        initDatabase();
+        if (setToOtherThanOwner) {
             User u = new User("username",
-                    "id" + Config.getUser().getUserId(), "username@example.com","nophoto");
+                    "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
@@ -136,5 +146,40 @@ public class CreateOfferActivityTest {
         goToShowOffer(true);
         onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
+    }
+
+    @Test
+    public void defineOfferOnCreation(){
+        final String cat = Category.values()[1].toString();
+        initDatabase();
+
+        onView(withId(R.id.create_offer_button)).perform(click());
+        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
+        onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
+                .perform(customClick());
+        onView(withText(cat)).perform(click());
+        onView(withText(R.string.offer_name)).perform(scrollTo());
+        fillOffer();
+
+        onView(withText(cat)).check(matches(isDisplayed()));
+    }
+
+    private ViewAction customClick() {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isEnabled(); // requires matches(allOf( isEnabled(), isClickable())
+            }
+
+            @Override
+            public String getDescription() {
+                return "click button without the 90% constraint";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.performClick();
+            }
+        };
     }
 }

@@ -22,10 +22,13 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -33,6 +36,8 @@ import static android.support.test.espresso.contrib.RecyclerViewActions.actionOn
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -77,11 +82,11 @@ public class ListOfferActivityTest {
         Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("user_id", "This is a title", LOREM);
         Offer offer2 = new Offer("user_id", "This is a title 2", LOREM);
-        database.write("/offers", "idoftheoffer1", offer1);
-        database.write("/offers", "idoftheoffer2", offer2);
+        database.write(Database.OFFERS_PATH, "idoftheoffer1", offer1);
+        database.write(Database.OFFERS_PATH, "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
-        database.write("/users", Config.getUser().getUserId(), Config.getUser());
+        database.write(Database.USERS_PATH, Config.getUser().getUserId(), Config.getUser());
     }
 
     /**
@@ -175,5 +180,32 @@ public class ListOfferActivityTest {
     @Test
     public void listShowCorrectly() {
         onView(withId(R.id.show_offers_button)).perform(click());
+    }
+
+    @Test
+    public void allCategoriesUncheckedMessageShown() {
+        openListActivity();
+        for (Category cat : Category.values()) {
+            clickOnCategoryInMenu(cat);
+        }
+        onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void uncheckAndCheckSameCategory() {
+        openListActivity();
+
+        clickOnCategoryInMenu(Category.getDefault());
+        clickOnCategoryInMenu(Category.getDefault());
+
+        Offer offer = ListOfferActivity.offerList.get(0);
+
+        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                .check(matches(hasDescendant(withText(offer.getTitle()))));
+    }
+
+    private void clickOnCategoryInMenu(Category cat){
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText(cat.toString())).perform(click());
     }
 }

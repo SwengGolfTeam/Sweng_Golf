@@ -1,14 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
@@ -25,17 +19,19 @@ import static org.junit.Assert.fail;
 
 public class DatabaseTest {
 
-    private static final String PATH = "/offers";
+    private static final String PATH = Database.OFFERS_PATH;
     private static final String ID = "123456789";
     private static final String ID2 = "id_test";
     private static final String CONTENT = "Lore Ipsum bla bla bla";
     private static final String CONTENT_2 = "This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string.";
+    private static final Offer OFFER_1 = new Offer("user", "offer1", CONTENT, "", ID);
+    private static final Offer OFFER_2 = new Offer("user", "offer1", CONTENT, "", ID);
 
 
     @Test
-    public void getInstanceAndSetDebugDatabaseNoException(){
+    public void getInstanceAndSetDebugDatabaseNoException() {
         Database db = new FakeDatabase(true);
 
         db.setDebugDatabase(db);
@@ -43,18 +39,18 @@ public class DatabaseTest {
     }
 
     @Test
-    public void readOffersReturnsCorrectValues(){
+    public void readOffersReturnsCorrectValues() {
         Database db = new FakeDatabase(true);
 
-        db.write(PATH, ID, CONTENT);
-        db.write(PATH, ID2, CONTENT_2);
+        db.write(PATH, ID, OFFER_1);
+        db.write(PATH, ID2, OFFER_2);
 
         ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
 
-                assertThat(offers.contains(CONTENT), is(true));
-                assertThat(offers.contains(CONTENT_2), is(true));
+                assertThat(offers.contains(OFFER_1), is(true));
+                assertThat(offers.contains(OFFER_2), is(true));
             }
 
             @Override

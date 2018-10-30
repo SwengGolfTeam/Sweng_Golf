@@ -7,20 +7,18 @@ public class DatabaseUser {
     private DatabaseUser() {
     }
 
-    private static Database db = Database.getInstance();
-
 
     public static void addUser(User user) {
-        db.write("/users", user.getUserId(), user);
+        Database.getInstance().write(Database.USERS_PATH, user.getUserId(), user);
     }
 
 
-    public static void getUser(final ValueListener listener, User user) {
+    public static void getUser(final ValueListener<User> listener, User user) {
         getUser(listener, user.getUserId());
     }
 
-    public static void getUser(final ValueListener listener, String userId) {
-        db.read("/users", userId, listener, User.class);
+    public static void getUser(final ValueListener<User> listener, String userId) {
+        Database.getInstance().read(Database.USERS_PATH, userId, listener, User.class);
     }
 
 }
