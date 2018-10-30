@@ -64,8 +64,8 @@ public class DeleteOfferTest {
     protected static void setUpFakeDatabase() {
         Offer offer1 = new Offer("user_id", TITLE1, "Hello");
         Offer offer2 = new Offer("user_id", "This is a title 2", "LOREM");
-        database.write("/offers", ID1, offer1);
-        database.write("/offers", ID2, offer2);
+        database.write(Database.OFFERS_PATH, ID1, offer1);
+        database.write(Database.OFFERS_PATH, ID2, offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
@@ -104,7 +104,7 @@ public class DeleteOfferTest {
                 fail();
             }
         };
-        database.read("/offers", ID1, vl, Offer.class);
+        database.read(Database.OFFERS_PATH, ID1, vl, Offer.class);
     }
 
 }

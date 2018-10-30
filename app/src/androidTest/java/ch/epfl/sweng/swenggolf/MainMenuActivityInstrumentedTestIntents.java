@@ -1,13 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -16,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
@@ -66,6 +63,8 @@ public class MainMenuActivityInstrumentedTestIntents {
         intentRule.launchActivity(new Intent());
         Matcher v = withId(R.id.side_menu);
         onView(v).perform(open());
+        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+        Config.setUser(FilledFakeDatabase.getUser(0));
     }
 
     @Test
@@ -74,7 +73,7 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
-    public void testIntentPreferenceList() throws InterruptedException {
+    public void testIntentPreferenceList() {
         testReplacement(ListPreferencesActivity.class, R.id.preference_activity, true);
     }
 
@@ -84,7 +83,7 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
-    public void testIntentProfile() throws InterruptedException {
+    public void testIntentProfile() {
         testReplacement(ProfileActivity.class, R.id.my_account, true);
     }
 

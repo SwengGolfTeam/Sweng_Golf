@@ -169,7 +169,7 @@ public class Offer implements Parcelable {
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
-        return new Offer(userId, title, description, newLinkPicture, uuid);
+        return new Offer(userId, title, description, newLinkPicture, uuid, tag);
     }
 
 

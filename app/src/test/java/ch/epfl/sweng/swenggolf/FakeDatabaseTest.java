@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 
 public class FakeDatabaseTest {
 
-    private static final String PATH = "/offers";
+    private static final String PATH = Database.OFFERS_PATH;
     private static final String ID = "id1";
     private static final String ID2 = "ID2";
     private static final String CONTENT = "This is a string";

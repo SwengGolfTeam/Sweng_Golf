@@ -207,7 +207,7 @@ public class CreateOfferActivity extends FragmentConverter {
             }
 
         };
-        database.write("/offers", offer.getUuid(), offer, listener);
+        database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
     }
 
     @Override

@@ -48,8 +48,8 @@ public class ShowOfferActivityDbNotWorkingTest {
      */
     @Before
     public void setUp() {
-        database.write("/users", "0", user);
-        database.write("/offers", "0", offer);
+        database.write(Database.USERS_PATH, "0", user);
+        database.write(Database.OFFERS_PATH, "0", offer);
         Database.setDebugDatabase(database);
         Config.setUser(user);
         mActivityRule.launchActivity(new Intent());
@@ -61,7 +61,7 @@ public class ShowOfferActivityDbNotWorkingTest {
     @Test
     public void openProfileFromOfferShowToastOnFail() {
         onView(withId(R.id.show_offer_title)).perform(click());
-        database.setEntryNotWorking("/users", offer.getUserId());
+        database.setEntryNotWorking(Database.USERS_PATH, offer.getUserId());
         onView(withId(R.id.show_offer_author)).perform(click());
         testToastShow(mActivityRule, R.string.error_load_user);
     }

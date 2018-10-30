@@ -67,7 +67,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
         TextView offerDescription = inflated.findViewById(R.id.show_offer_description);
         TextView offerTag = inflated.findViewById(R.id.show_offer_tag);
-        offerTag.setText("Category: " + offer.getTag().toString());
+        offerTag.setText(offer.getTag().toString());
         offerDescription.setText(offer.getDescription());
 
         if (!offer.getLinkPicture().isEmpty()) {
@@ -167,7 +167,7 @@ public class ShowOfferActivity extends FragmentConverter {
             }
 
         };
-        database.remove("/offers", offer.getUuid(), listener);
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
     }
 
     /**

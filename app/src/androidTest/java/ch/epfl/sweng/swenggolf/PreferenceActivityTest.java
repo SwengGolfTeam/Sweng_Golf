@@ -24,10 +24,12 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -45,6 +47,7 @@ public class PreferenceActivityTest {
     public void setUp() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
+        Config.setUser(FilledFakeDatabase.getUser(0));
         preferenceRule.launchActivity(new Intent());
         preferenceRule.getActivity().getSupportFragmentManager()
                 .beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity())
@@ -66,16 +69,24 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberUser()));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberFollowersOfUserZero()));
     }
 
     @Test
     public void showProfileWhenClickOnView() {
         User user = FilledFakeDatabase.getUser(0);
         onView(withId(R.id.preference_list)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(user.getUserName())), click()));
+                withText(user.getUserName())), click()));
         Fragment fragment = preferenceRule.getActivity().getSupportFragmentManager().getFragments().get(0);
         assertThat(fragment.getClass().getName(), is(ProfileActivity.class.getName()));
         assertNotNull(fragment.getArguments().getParcelable("ch.epfl.sweng.swenggolf.user"));
+    }
+
+    @Test
+    public void showLastUserInFollowList() {
+        int last = FilledFakeDatabase.numberFollowersOfUserZero()-1;
+        User user = FilledFakeDatabase.getFollowerOfUserZero(last);
+        onView(new RecyclerViewMatcher(R.id.preference_list).atPosition(last))
+                .check(matches(hasDescendant(withText(user.getUserName()))));
     }
 }

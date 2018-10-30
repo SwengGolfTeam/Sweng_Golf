@@ -92,7 +92,7 @@ public class FakeDatabase extends Database {
     @Override
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
                            final List<Category> categories) {
-        List<Offer> offers = getList("/offers");
+        List<Offer> offers = getList(Database.OFFERS_PATH);
 
         if (working) {
             offers = removeOffersWrongCategories(offers, categories);

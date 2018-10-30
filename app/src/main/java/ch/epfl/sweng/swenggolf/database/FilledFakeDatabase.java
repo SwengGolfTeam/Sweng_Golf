@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FilledFakeDatabase extends FakeDatabase {
@@ -11,10 +12,14 @@ public final class FilledFakeDatabase extends FakeDatabase {
     protected FilledFakeDatabase() {
         super(true);
         for (User user : FAKE_USERS) {
-            write("/users", user.getUserId(), new User(user));
+            write(Database.USERS_PATH, user.getUserId(), new User(user));
         }
         for (Offer offer : FAKE_OFFERS) {
-            write("/offers", offer.getUuid(), new Offer(offer));
+            write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
+        }
+        for (User user : FOLLOWERS_OF_USER_ZERO) {
+            String uid = user.getUserId();
+            write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid, uid);
         }
     }
 
@@ -43,6 +48,16 @@ public final class FilledFakeDatabase extends FakeDatabase {
     }
 
     /**
+     * Return a follower of the user with id 0.
+     *
+     * @param index the index of the follower
+     * @return the follower at this index
+     */
+    public static User getFollowerOfUserZero(int index) {
+        return FOLLOWERS_OF_USER_ZERO[index];
+    }
+
+    /**
      * The number of offers.
      *
      * @return number of offers
@@ -58,6 +73,15 @@ public final class FilledFakeDatabase extends FakeDatabase {
      */
     public static int numberUser() {
         return FAKE_USERS.length;
+    }
+
+    /**
+     * Return the number of followers of user with id zero.
+     *
+     * @return the number of followers of user with id zero
+     */
+    public static int numberFollowersOfUserZero() {
+        return FOLLOWERS_OF_USER_ZERO.length;
     }
 
     private static final User[] FAKE_USERS = {
@@ -154,7 +178,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/f/ff/Sandcrawler.png/"
                             + "revision/latest?cb=20130812001443",
-                    "01"),
+                    "01", Category.values()[0]),
             new Offer("13", "Defense against the droids",
                     "The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
@@ -162,39 +186,39 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     LUMIERE
                             + "databank_battledroid_01_169_1524f145.jpeg?"
                             + "region=0%2C0%2C1560%2C878&width=768",
-                    "02"),
+                    "02", Category.values()[1]),
             new Offer("8", "Chosen one",
                     "Someone out there is the chosen one ?"
                             + " If you are I can train you !"
                             + " Warning, last apprentice got bad burns !",
                     "https://i.redd.it/4zqd4mvkq3n01.jpg",
-                    "03"),
+                    "03", Category.values()[1]),
             new Offer("15", "Great Price to find a friend",
                     "I'm looking for a \"friend\" of mine, a certain Han Solo,"
                             + " I offer a desert spaceship to interested !"
                             + " It's him on the left.",
                     "https://cdn3.whatculture.com/"
                             + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
-                    "04"),
+                    "04", Category.values()[2]),
             new Offer("7", "Defeat Dark Sidious I must",
                     "Defeat Dark Sidious. "
                             + "With me train you shall,"
                             + " If so you want.",
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
-                    "05"),
+                    "05", Category.values()[2]),
             new Offer("4", "Help to get the senate",
                     "I'm looking for an apprentice to show him"
                             + " my unlimited power and take down the senate !",
                     LUMIERE
                             + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342",
-                    "06"),
+                    "06", Category.values()[1]),
             new Offer("5", "Prepare Surprise for a friend",
                     "Someone would like to help me prepare a surprise "
                             + "for a friend ? Create a display with \"NOT YET !\""
                             + " on it. I'll invite you to a beer then.",
                     "",
-                    "07"),
+                    "07", Category.values()[2]),
             new Offer("10", "Take revenge on my apprentice",
                     "Need someone to find my apprentice, some \"bat\" guy. "
                             + "I'll show you the League of Shadows !",
@@ -204,7 +228,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
                     LUMIERE
                             + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                    "09"),
+                    "09", Category.values()[3]),
             new Offer("1", "Nice helmet to build ship",
                     "I must build some star like ship, you can have my helmet then !",
                     LUMIERE
@@ -232,4 +256,6 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "scale-to-width-down/800",
                     "014")
     };
+
+    private static final User[] FOLLOWERS_OF_USER_ZERO = {getUser(0), getUser(1), getUser(2)};
 }

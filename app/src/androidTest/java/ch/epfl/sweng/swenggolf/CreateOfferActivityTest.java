@@ -5,18 +5,21 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import android.view.View;
+
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
@@ -24,6 +27,10 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -40,12 +47,18 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
+
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 /**
@@ -62,10 +75,18 @@ public class CreateOfferActivityTest {
 
     @Before
     public void setTest() {
-        initDatabse();
+        initDatabase();
         Config.goToTest();
         intentsTestRule.launchActivity(new Intent());
         manager = intentsTestRule.getActivity().getSupportFragmentManager();
+    }
+
+    /**
+     * Sets up a fake database and a fake storage, and enables TestMode.
+     */
+    private void initDatabase() {
+        ListOfferActivityTest.setUpFakeDatabase();
+        Storage.setDebugStorage(new FakeStorage(true));
     }
 
     private void goToCreateOffer(boolean hasOffer) {
@@ -85,15 +106,6 @@ public class CreateOfferActivityTest {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Sets up a fake database and a fake storage, and enables TestMode.
-     */
-    private void initDatabse() {
-        ListOfferActivityTest.setUpFakeDatabase();
-        Storage.setDebugStorage(new FakeStorage(true));
-    }
-
 
     @Test
     public void errorMessageDisplayed() {
@@ -129,7 +141,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void createOfferShowOfferWhenValidInput() throws InterruptedException {
+    public void createOfferShowOfferWhenValidInput() {
         goToCreateOffer(false);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
@@ -195,5 +207,40 @@ public class CreateOfferActivityTest {
     @Test
     public void backFromModifyOfferIsShowOffer() {
         assertBackFrom(true, ShowOfferActivity.class);
+    }
+
+    @Test
+    public void defineOfferOnCreation(){
+        final String cat = Category.values()[1].toString();
+
+        goToCreateOffer(false);
+        //onView(withId(R.id.create_offer_button)).perform(click());
+        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
+        onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
+                .perform(customClick());
+        onView(withText(cat)).perform(click());
+        onView(withText(R.string.offer_name)).perform(scrollTo());
+        fillOffer();
+
+        onView(withText(cat)).check(matches(isDisplayed()));
+    }
+
+    private ViewAction customClick() {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isEnabled(); // requires matches(allOf( isEnabled(), isClickable())
+            }
+
+            @Override
+            public String getDescription() {
+                return "click button without the 90% constraint";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.performClick();
+            }
+        };
     }
 }
