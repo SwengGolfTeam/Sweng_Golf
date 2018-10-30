@@ -121,7 +121,6 @@
             android:maxWidth="250dip"
             android:minHeight="30dip"
             android:minWidth="30dip"
-            android:onClick="choosePicture"
             app:layout_constraintStart_toStartOf="@+id/offer_description"
             app:layout_constraintTop_toBottomOf="@+id/offer_description"
             app:srcCompat="@android:drawable/ic_input_add" />
@@ -133,7 +132,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="96dp"
-            android:onClick="createOffer"
             android:text="@string/button_create_offer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/offer_picture" />

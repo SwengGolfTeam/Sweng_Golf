@@ -10,7 +10,6 @@
     android:paddingRight="20dp"
     android:paddingTop="60dp"
     android:background="@drawable/background_menu"
-    android:onClick="loadProfileActivity"
     android:gravity="bottom">
 
     <FrameLayout
