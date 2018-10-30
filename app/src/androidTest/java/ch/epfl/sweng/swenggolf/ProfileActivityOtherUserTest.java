@@ -93,7 +93,8 @@ public class ProfileActivityOtherUserTest {
         ViewInteraction followButton = onView(withId(R.id.follow));
         followButton.perform(click());
         followButton.perform(click());
-        followButton.check(matches(withTagValue(equalTo((Object) android.R.drawable.btn_star_big_off))));
+        followButton.check(matches(withTagValue(
+                equalTo((Object) android.R.drawable.btn_star_big_off))));
 
     }
 
