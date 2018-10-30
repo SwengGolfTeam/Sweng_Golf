@@ -38,6 +38,7 @@
     <string name="modify_offer">modify offer</string>
     <string name="offer_deleted">Offer deleted</string>
     <string name="delete_offer">Delete offer</string>
+    <string name="no_offers">No offers to display\nPlease try with other parameters</string>
     <string name="description">Infos:</string>
     <string name="infos">Infos:</string>
     <string name="error_load_user">Could not load user profile.</string>

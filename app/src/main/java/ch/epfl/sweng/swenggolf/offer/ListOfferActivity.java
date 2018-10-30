@@ -3,23 +3,24 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -32,8 +33,10 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 public class ListOfferActivity extends FragmentConverter {
 
     private ListOfferAdapter mAdapter;
+    private Menu mOptionsMenu;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
+    private TextView noOffers;
     public static final List<Offer> offerList = new ArrayList<>();
 
     @Override
@@ -41,14 +44,58 @@ public class ListOfferActivity extends FragmentConverter {
                              Bundle savedInstance) {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
-        setRecyclerView(inflated);
+        List<Category> allCategories = Arrays.asList(Category.values()); // by default
+        setRecyclerView(inflated, allCategories);
         errorMessage = inflated.findViewById(R.id.error_message);
+        noOffers = inflated.findViewById(R.id.no_offers_to_show);
         return inflated;
     }
 
-    private void setRecyclerView(View inflated) {
-        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        mOptionsMenu = menu;
+        inflater.inflate(R.menu.menu_list_offers, menu);
+        addAllCategoriesToMenu(R.id.menu_offers);
+    }
 
+    private void addAllCategoriesToMenu(int groupId) {
+        Category[] categoriesEnum = Category.values();
+        for (int i = 0; i < categoriesEnum.length; i++) {
+            mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
+                    .setCheckable(true).setChecked(true);
+        }
+    }
+
+    public void onCheck(MenuItem item) {
+        item.setChecked(!item.isChecked()); // true <-> false
+        List<Category> listCategories = new ArrayList<>();
+
+        for (int i = 0; i < Category.values().length; i++) {
+            if (mOptionsMenu.getItem(i).isChecked()) {
+                listCategories.add(Category.values()[i]);
+            }
+        }
+        setRecyclerView(getView() ,listCategories);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home : {
+                openDrawer();
+                break;
+            }
+            default : {
+                onCheck(item);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setRecyclerView(View inflated,List<Category> categories) {
+        noOffers.setVisibility(View.VISIBLE);
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -60,7 +107,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData();
+        prepareOfferData(inflated, categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -72,21 +119,28 @@ public class ListOfferActivity extends FragmentConverter {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData() {
+    private void prepareOfferData(View inflated, List<Category> categories) {
         Database database = Database.getInstance();
-        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+        inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
+        ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-                mAdapter.add(offers);
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                if (!offers.isEmpty()) {
+                    noOffers.setVisibility(View.GONE);
+                    mAdapter.add(offers);
+                }
+
             }
 
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        database.readOffers(listener);
+        database.readOffers(listener, categories);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
@@ -140,24 +194,4 @@ public class ListOfferActivity extends FragmentConverter {
                     }
                 }
             };
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_list_offer, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home : {
-                openDrawer();
-                break;
-            }
-            case R.id.add_offer : {
-                replaceCentralFragment(new CreateOfferActivity());
-                break;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

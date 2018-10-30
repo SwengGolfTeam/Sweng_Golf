@@ -71,6 +71,8 @@ public class ShowOfferActivity extends FragmentConverter {
         });
 
         TextView offerDescription = inflated.findViewById(R.id.show_offer_description);
+        TextView offerTag = inflated.findViewById(R.id.show_offer_tag);
+        offerTag.setText("Category: " + offer.getTag().toString());
         offerDescription.setText(offer.getDescription());
 
         if (!offer.getLinkPicture().isEmpty()) {

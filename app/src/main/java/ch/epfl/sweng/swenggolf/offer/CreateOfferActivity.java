@@ -12,8 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ public class CreateOfferActivity extends FragmentConverter {
     private TextView errorMessage;
     private Offer offerToModify;
     private boolean creationAsked;
+    private Spinner categorySpinner;
 
     private Uri filePath = null;
 
@@ -53,6 +57,7 @@ public class CreateOfferActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
+        setupSpinner(inflated);
         inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,9 +79,14 @@ public class CreateOfferActivity extends FragmentConverter {
         creationAsked = false;
     }
 
+    private void setupSpinner(View v) {
+        categorySpinner = v.findViewById(R.id.category_spinner);
+        categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
+                android.R.layout.simple_list_item_1, Category.values()));
+    }
+
     private void preFillFields(View inflated) {
-        if (getArguments() != null) {
-            offerToModify = getArguments().getParcelable("offer");
+        if (getArguments() != null && (offerToModify = getArguments().getParcelable("offer")) != null) {
             EditText title = inflated.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
             EditText description = inflated.findViewById(R.id.offer_description);
@@ -124,12 +134,13 @@ public class CreateOfferActivity extends FragmentConverter {
 
         final String name = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
+        final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
         if (name.isEmpty() || description.isEmpty()) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(name, description);
+            createOfferObject(name, description, category);
         }
 
     }
@@ -140,7 +151,7 @@ public class CreateOfferActivity extends FragmentConverter {
      * @param name        the title of the offer
      * @param description the description of the offer
      */
-    protected void createOfferObject(String name, String description) {
+    protected void createOfferObject(String name, String description, Category tag) {
         String uuid;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
@@ -148,8 +159,8 @@ public class CreateOfferActivity extends FragmentConverter {
             uuid = UUID.randomUUID().toString();
         }
 
-        final Offer newOffer =
-                new Offer(Config.getUser().getUserId(), name, description, "", uuid);
+        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
+                "", uuid, tag);
 
         if (filePath == null) {
             writeOffer(newOffer);

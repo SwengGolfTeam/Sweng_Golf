@@ -1,9 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.DrawerMatchers;
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -19,18 +17,21 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -161,5 +162,29 @@ public class ListOfferActivityTest {
     public void backFromListIsMenu() {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
+    }
+
+    @Test
+    public void allCategoriesUncheckedMessageShown() {
+        for (Category cat : Category.values()) {
+            clickOnCategoryInMenu(cat);
+        }
+        onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void uncheckAndCheckSameCategory() {
+        clickOnCategoryInMenu(Category.getDefault());
+        clickOnCategoryInMenu(Category.getDefault());
+
+        Offer offer = ListOfferActivity.offerList.get(0);
+
+        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                .check(matches(hasDescendant(withText(offer.getTitle()))));
+    }
+
+    private void clickOnCategoryInMenu(Category cat){
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText(cat.toString())).perform(click());
     }
 }
