@@ -27,6 +27,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -82,17 +83,17 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void deleteElementTest() {
+    public void deleteElementTest() throws InterruptedException {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        //onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
+        onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
             openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
             onView(withContentDescription(R.string.delete_offer)).perform(click());
         }
-        onView(withText(android.R.string.yes)).perform(click());
+        onView(withChild(withText(android.R.string.yes))).perform(click());
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
