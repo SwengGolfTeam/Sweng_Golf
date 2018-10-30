@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.main.MainActivity;
@@ -59,7 +61,7 @@ public class CreateOfferActivityTest {
     /**
      * Sets up a fake database and a fake storage, and enables TestMode.
      */
-    private void initDatabse() {
+    private void initDatabase() {
         ListOfferActivityTest.setUpFakeDatabase();
         Storage.setDebugStorage(new FakeStorage(true));
     }
@@ -93,7 +95,7 @@ public class CreateOfferActivityTest {
 
     @Test
     public void createOfferShowOfferWhenValidInput() {
-        initDatabse();
+        initDatabase();
         onView(withId(R.id.create_offer_button)).perform(click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()));
@@ -109,7 +111,7 @@ public class CreateOfferActivityTest {
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        initDatabse();
+        initDatabase();
         if (setToOtherThanOwner) {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
@@ -138,5 +140,18 @@ public class CreateOfferActivityTest {
         goToShowOffer(true);
         onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
+    }
+
+    @Test
+    public void defineOfferOnCreation(){
+        final String CAT = Category.values()[1].toString();
+        initDatabase();
+
+        onView(withId(R.id.create_offer_button)).perform(click());
+        onView(withId(R.id.category_spinner)).perform(closeSoftKeyboard()).perform(click());
+        onView(withText(CAT)).perform(click());
+        fillOffer();
+
+        onView(withText(CAT)).check(matches(isDisplayed()));
     }
 }

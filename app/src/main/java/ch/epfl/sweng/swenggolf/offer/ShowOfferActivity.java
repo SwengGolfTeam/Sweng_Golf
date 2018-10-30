@@ -65,7 +65,7 @@ public class ShowOfferActivity extends AppCompatActivity {
         ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
 
         TextView offerTag = findViewById(R.id.show_offer_tag);
-        offerTag.setText("Category: " + offer.getTag().toString());
+        offerTag.setText(offer.getTag().toString());
 
 
         TextView offerDescription = findViewById(R.id.show_offer_description);
