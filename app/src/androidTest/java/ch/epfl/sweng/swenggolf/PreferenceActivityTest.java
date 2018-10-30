@@ -57,6 +57,7 @@ public class PreferenceActivityTest {
     public void setUp() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
+        Config.setUser(FilledFakeDatabase.getUser(0));
         preferenceRule.launchActivity(new Intent());
     }
 
@@ -75,7 +76,7 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberUser()));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberFollowersOfUserZero()));
     }
 
     @Test

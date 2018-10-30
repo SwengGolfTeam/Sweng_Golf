@@ -22,4 +22,9 @@ public final class TestUtility {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
+    public static void testToastShow(ActivityTestRule mActivityRule, String toastMessage) {
+        onView(withText(toastMessage)).inRoot(
+                withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
 }

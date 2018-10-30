@@ -21,6 +21,7 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
@@ -29,6 +30,9 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 public class ProfileActivity extends AppCompatActivity {
 
     private User user;
+    private final int STAR_OFF = android.R.drawable.btn_star_big_off;
+    private final int STAR_ON = android.R.drawable.btn_star_big_on;
+    private boolean isFollowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,29 @@ public class ProfileActivity extends AppCompatActivity {
         if (user.getUserId().equals(Config.getUser().getUserId())) {
             ImageButton button = findViewById(R.id.edit);
             button.setVisibility(View.VISIBLE);
+        }
+        else{
+            final ImageButton button = findViewById(R.id.follow);
+            button.setVisibility(View.VISIBLE);
+            User currentUser = Config.getUser();
+            String uid = user.getUserId();
+            ValueListener<String> listener = new ValueListener<String>() {
+                @Override
+                public void onDataChange(String value) {
+                    if(value != null){
+                        button.setImageResource(STAR_ON);
+                        isFollowing = true;
+                    }
+                }
+
+                @Override
+                public void onCancelled(DbError error) {
+
+                }
+            };
+
+            Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId()
+                    ,uid, listener, String.class);
         }
     }
 
@@ -107,23 +134,40 @@ public class ProfileActivity extends AppCompatActivity {
      */
     public void follow(View view) {
         User currentUser = Config.getUser();
-        CompletionListener listener = new CompletionListener() {
-            @Override
-            public void onComplete(DbError error) {
-                if (error == NONE) {
-                    Toast.makeText(ProfileActivity.this, getResources()
-                                    .getString(R.string.now_following) + " " + user.getUserName(),
-                            Toast.LENGTH_SHORT)
-                            .show();
-                } else {
-                    Toast.makeText(ProfileActivity.this, getResources()
-                                    .getString(R.string.error_following) + " " + user.getUserName(),
-                            Toast.LENGTH_SHORT)
-                            .show();
+        if(!isFollowing) {
+            CompletionListener listener = new CompletionListener() {
+                @Override
+                public void onComplete(DbError error) {
+                    if (error == NONE) {
+                        ImageButton button = findViewById(R.id.follow);
+                        button.setImageResource(STAR_ON);
+                        Toast.makeText(ProfileActivity.this, getResources()
+                                        .getString(R.string.now_following) + " " + user.getUserName(),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Toast.makeText(ProfileActivity.this, getResources()
+                                        .getString(R.string.error_following) + " " + user.getUserName(),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
-            }
-        };
-        Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(), user.getUserId(),
-                listener);
+            };
+            Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(),
+                    user.getUserId(), listener);
+        }
+        else {
+            CompletionListener listener = new CompletionListener() {
+                @Override
+                public void onComplete(DbError error) {
+                    if(error == NONE){
+                        ImageButton button = findViewById(R.id.follow);
+                        button.setImageResource(STAR_OFF);
+                    }
+                }
+            };
+            Database.getInstance().remove("/followers/" + currentUser.getUserId(),
+                    user.getUserId(), listener);
+        }
     }
 }

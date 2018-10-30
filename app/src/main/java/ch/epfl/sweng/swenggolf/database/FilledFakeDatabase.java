@@ -16,6 +16,10 @@ public final class FilledFakeDatabase extends FakeDatabase {
         for (Offer offer : FAKE_OFFERS) {
             write("/offers", offer.getUuid(), new Offer(offer));
         }
+        for(User user : FOLLOWERS_OF_USER_ZERO){
+            String uid = user.getUserId();
+            write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid,uid);
+        }
     }
 
     private static final String WIKIA_NO_COOKIE = "https://vignette.wikia.nocookie.net/";
@@ -41,6 +45,15 @@ public final class FilledFakeDatabase extends FakeDatabase {
     }
 
     /**
+     * Return a follower of the user with id 0.
+     * @param index the index of the follower
+     * @return the follower at this index
+     */
+    public static User getFollowerOfUserZero(int index) {
+        return FOLLOWERS_OF_USER_ZERO[index];
+    }
+
+    /**
      * The number of offers.
      * @return number of offers
      */
@@ -54,6 +67,14 @@ public final class FilledFakeDatabase extends FakeDatabase {
      */
     public static int numberUser() {
         return FAKE_USERS.length;
+    }
+
+    /**
+     * Return the number of followers of user with id zero.
+     * @return the number of followers of user with id zero
+     */
+    public static int numberFollowersOfUserZero() {
+        return FOLLOWERS_OF_USER_ZERO.length;
     }
 
     private static final User[] FAKE_USERS = {
@@ -228,4 +249,6 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "scale-to-width-down/800",
                     "014")
     };
+
+    private static final User[] FOLLOWERS_OF_USER_ZERO = {getUser(0), getUser(1), getUser(2)};
 }

@@ -28,6 +28,18 @@
             android:src="@android:drawable/ic_menu_edit"
             android:visibility="gone" />
 
+        <ImageButton
+            android:id="@+id/follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:background="?attr/colorPrimary"
+            android:text="@string/follow"
+            android:src="@android:drawable/btn_star_big_off"
+            android:onClick="follow"
+            android:visibility="gone"/>
+
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.CardView
@@ -151,12 +163,7 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/follow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/follow"
-        android:onClick="follow"/>
+
 
 
 </android.support.constraint.ConstraintLayout>
