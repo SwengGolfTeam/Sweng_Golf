@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,10 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -26,8 +28,10 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 public class ListOfferActivity extends AppCompatActivity {
 
     private ListOfferAdapter mAdapter;
+    private Menu mOptionsMenu;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
+    private TextView noOffers;
     public static final List<Offer> offerList = new ArrayList<>();
 
 
@@ -36,6 +40,7 @@ public class ListOfferActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_offer);
         errorMessage = findViewById(R.id.error_message);
+        noOffers = findViewById(R.id.no_offers_to_show);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,11 +58,43 @@ public class ListOfferActivity extends AppCompatActivity {
                 startActivity(backHome);
             }
         });
-
-        setRecyclerView();
+        List<Category> allCategories = Arrays.asList(Category.values()); // by default
+        setRecyclerView(allCategories);
     }
 
-    private void setRecyclerView() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        mOptionsMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_list_offers, menu);
+        addAllCategoriesToMenu(R.id.menu_offers);
+        return true;
+    }
+
+    private void addAllCategoriesToMenu(int groupId) {
+        Category[] categoriesEnum = Category.values();
+        for (int i = 0; i < categoriesEnum.length; i++) {
+            mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
+                    .setCheckable(true).setChecked(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        item.setChecked(!item.isChecked()); // true <-> false
+        List<Category> listCategories = new ArrayList<>();
+
+        for (int i = 0; i < Category.values().length; i++) {
+            if (mOptionsMenu.getItem(i).isChecked()) {
+                listCategories.add(Category.values()[i]);
+            }
+        }
+        setRecyclerView(listCategories);
+        return false;
+    }
+
+    private void setRecyclerView(List<Category> categories) {
+        noOffers.setVisibility(View.VISIBLE);
+
         RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -71,7 +108,7 @@ public class ListOfferActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData();
+        prepareOfferData(categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -83,21 +120,28 @@ public class ListOfferActivity extends AppCompatActivity {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData() {
+    private void prepareOfferData(List<Category> categories) {
         Database database = Database.getInstance();
+        findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-                mAdapter.add(offers);
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                if (!offers.isEmpty()) {
+                    noOffers.setVisibility(View.GONE);
+                    mAdapter.add(offers);
+                }
+
             }
 
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
+                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        database.readOffers(listener);
+        database.readOffers(listener, categories);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =

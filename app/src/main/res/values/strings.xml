@@ -36,6 +36,7 @@
     <string name="create_offer">Create Offer</string>
     <string name="incorrect_user_creation">\"Please, enter correct info\"</string>
     <string name="offer_deleted">Offer deleted</string>
+    <string name="no_offers">No offers to display\nPlease try with other parameters</string>
     <string name="description">Infos:</string>
     <string name="infos">Infos:</string>
     <string name="error_load_user">Could not load user profile.</string>

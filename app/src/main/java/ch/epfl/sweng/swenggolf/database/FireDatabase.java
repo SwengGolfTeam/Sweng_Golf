@@ -6,10 +6,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
@@ -111,4 +115,33 @@ public final class FireDatabase extends Database {
         };
     }
 
+    @Override
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           final List<Category> categories) {
+        final DatabaseReference ref = database.getReference("offers");
+
+        if (categories.isEmpty()) {
+            listener.onDataChange(new ArrayList<Offer>());
+        }
+        for (int i = 0; i < categories.size(); i++) {
+            Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<Offer> list = new ArrayList<>();
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot offer : dataSnapshot.getChildren()) {
+                            list.add(offer.getValue(Offer.class));
+                        }
+                    }
+                    listener.onDataChange(list); // when no data was found -> return empty list
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    listener.onCancelled(DbError.getError(databaseError));
+                }
+            });
+        }
+    }
 }

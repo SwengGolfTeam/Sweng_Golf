@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     Set<String> workingOnEntry;
@@ -83,6 +86,29 @@ public class FakeDatabase extends Database {
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    @Override
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           final List<Category> categories) {
+        List<Offer> offers = getList("/offers");
+
+        if (working) {
+            offers = removeOffersWrongCategories(offers, categories);
+            listener.onDataChange(offers);
+        } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
+    }
+
+    private List<Offer> removeOffersWrongCategories(List<Offer> offers, List<Category> categories) {
+        List<Offer> list = new ArrayList<>();
+        for (Offer o : offers) {
+            if (categories.contains(o.getTag())) {
+                list.add(o);
+            }
+        }
+        return list;
     }
 
     @Nullable
