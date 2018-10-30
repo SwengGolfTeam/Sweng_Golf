@@ -87,7 +87,7 @@ public class ProfileActivityOtherUserTest {
     }
 
     @Test
-    public void unfollowShowEmptyStar() throws Exception {
+    public void unfollowShowEmptyStar() {
 
         ViewInteraction followButton = onView(withId(R.id.follow));
         followButton.perform(click());

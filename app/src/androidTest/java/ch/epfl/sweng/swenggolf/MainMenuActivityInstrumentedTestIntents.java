@@ -15,6 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -50,6 +53,8 @@ public class MainMenuActivityInstrumentedTestIntents {
     public void setUp() {
         Matcher v = withId(R.id.side_menu);
         onView(v).perform(open());
+        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+        Config.setUser(FilledFakeDatabase.getUser(0));
     }
 
     @Test
