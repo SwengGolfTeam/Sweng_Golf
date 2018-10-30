@@ -3,12 +3,10 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,7 +25,7 @@ public class ProfileActivity extends FragmentConverter {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.profile_activity_name);
         View inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData(inflated);
@@ -70,16 +68,18 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : {
+            case android.R.id.home: {
                 openDrawer();
-                break;
+                return true;
             }
-            case R.id.edit_profile : {
+            case R.id.edit_profile: {
                 replaceCentralFragment(new EditProfileActivity());
-                break;
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
             }
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

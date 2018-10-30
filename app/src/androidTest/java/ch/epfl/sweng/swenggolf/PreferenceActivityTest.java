@@ -30,8 +30,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 public class PreferenceActivityTest {
@@ -48,7 +46,9 @@ public class PreferenceActivityTest {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
         preferenceRule.launchActivity(new Intent());
-        preferenceRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity()).commit();
+        preferenceRule.getActivity().getSupportFragmentManager()
+                .beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity())
+                    .commit();
     }
 
     /**

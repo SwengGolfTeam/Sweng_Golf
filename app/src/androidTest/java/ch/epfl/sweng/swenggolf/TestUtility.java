@@ -28,17 +28,4 @@ public final class TestUtility {
                 .check(matches(isDisplayed()));
     }
 
-    public static Fragment offerFragment(Fragment fragment, Offer offer) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("offer", offer);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static Fragment userFragment(Fragment fragment, User user) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 }

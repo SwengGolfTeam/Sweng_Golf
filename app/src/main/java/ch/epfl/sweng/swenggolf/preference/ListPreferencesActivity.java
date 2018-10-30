@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.preference;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListPreferencesActivity extends FragmentConverter {
@@ -22,7 +20,7 @@ public class ListPreferencesActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_list_preference, container,false);
+        View inflated = inflater.inflate(R.layout.activity_list_preference, container, false);
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.preferences);
         super.onCreate(savedInstanceState);
         mRecyclerView = inflated.findViewById(R.id.preference_list);
@@ -39,12 +37,14 @@ public class ListPreferencesActivity extends FragmentConverter {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : {
+            case android.R.id.home: {
                 openDrawer();
-                break;
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
             }
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

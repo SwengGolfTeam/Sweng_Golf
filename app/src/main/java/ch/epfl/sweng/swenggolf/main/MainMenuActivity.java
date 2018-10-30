@@ -2,11 +2,9 @@ package ch.epfl.sweng.swenggolf.main;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -22,7 +20,6 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
@@ -57,8 +54,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private void launchFragment() {
         Fragment offerList = new ListOfferActivity();
         manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction().add(R.id.centralFragment, offerList, "list_offer");
-        transaction.addToBackStack("list_offer");
+        FragmentTransaction transaction =
+                manager.beginTransaction().add(R.id.centralFragment, offerList);
         transaction.commit();
     }
 
@@ -104,11 +101,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadProfileActivity(MenuItem item) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
-        Fragment profileActivity = new ProfileActivity();
-        profileActivity.setArguments(bundle);
-        replaceCentralFragment(profileActivity);
+        replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
     }
 
     /**

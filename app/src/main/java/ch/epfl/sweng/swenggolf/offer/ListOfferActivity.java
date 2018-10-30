@@ -1,19 +1,15 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
-
 import android.support.annotation.NonNull;
-
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +23,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOfferActivity extends FragmentConverter {
@@ -66,7 +61,7 @@ public class ListOfferActivity extends FragmentConverter {
         }
     }
 
-    public void onCheck(MenuItem item) {
+    private void onCheck(MenuItem item) {
         item.setChecked(!item.isChecked()); // true <-> false
         List<Category> listCategories = new ArrayList<>();
 
@@ -75,17 +70,17 @@ public class ListOfferActivity extends FragmentConverter {
                 listCategories.add(Category.values()[i]);
             }
         }
-        setRecyclerView(getView() ,listCategories);
+        setRecyclerView(getView(), listCategories);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home : {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 openDrawer();
                 break;
             }
-            default : {
+            default: {
                 onCheck(item);
                 break;
             }
@@ -93,7 +88,7 @@ public class ListOfferActivity extends FragmentConverter {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setRecyclerView(View inflated,List<Category> categories) {
+    private void setRecyclerView(View inflated, List<Category> categories) {
         noOffers.setVisibility(View.VISIBLE);
         RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
@@ -151,7 +146,7 @@ public class ListOfferActivity extends FragmentConverter {
                 @Override
                 public void onItemClick(View view, int position) {
                     Offer showOffer = offerList.get(position);
-                    replaceCentralFragment(OfferUtils.createShowOfferWithOffer(showOffer));
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
 
                 @Override

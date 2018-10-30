@@ -24,7 +24,8 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * Return an user from the list.
-     * @param index  the index of the user.
+     *
+     * @param index the index of the user.
      * @return the user at this index
      */
     public static User getUser(int index) {
@@ -33,6 +34,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * Return an offer from the list.
+     *
      * @param index the index of the offer.
      * @return the offer at this index
      */
@@ -42,6 +44,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * The number of offers.
+     *
      * @return number of offers
      */
     public static int numberOffer() {
@@ -50,6 +53,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * The number of users.
+     *
      * @return number of users
      */
     public static int numberUser() {

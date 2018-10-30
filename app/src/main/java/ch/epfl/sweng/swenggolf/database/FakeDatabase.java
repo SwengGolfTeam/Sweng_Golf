@@ -20,6 +20,7 @@ public class FakeDatabase extends Database {
 
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
+     *
      * @param working if the database work or send errors
      */
     public FakeDatabase(boolean working) {
@@ -133,18 +134,20 @@ public class FakeDatabase extends Database {
 
     /**
      * Set the database to a "non-working" mode if false.
+     *
      * @param w working
      */
     public void setWorking(boolean w) {
-        working =w;
+        working = w;
     }
 
 
     /**
      * Allow to disable a specific entry for reading. When reading this entry, there will be an
      * error.
+     *
      * @param path the path of the value
-     * @param id the id of the value
+     * @param id   the id of the value
      */
     public void setEntryNotWorking(String path, String id) {
         workingOnEntry.add(path + "/" + id);

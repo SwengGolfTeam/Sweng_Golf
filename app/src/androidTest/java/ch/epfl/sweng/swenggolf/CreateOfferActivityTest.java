@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
@@ -28,6 +29,7 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -56,22 +58,25 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
+    private static FragmentManager manager;
+
     @Before
     public void setTest() {
         initDatabse();
         Config.goToTest();
         intentsTestRule.launchActivity(new Intent());
+        manager = intentsTestRule.getActivity().getSupportFragmentManager();
     }
 
     private void goToCreateOffer(boolean hasOffer) {
-        FragmentTransaction transaction = intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
         CreateOfferActivity fragment = new CreateOfferActivity();
         if(hasOffer) {
             Bundle bundle = new Bundle();
             Offer offer = new Offer(Config.getUser().getUserId(),"20","20", "20", "20");
             bundle.putParcelable("offer", offer);
-            Database.getInstance().write("/offers",offer.getUuid(), offer);
             fragment.setArguments(bundle);
+            Database.getInstance().write("/offers",offer.getUuid(), offer);
         }
         transaction.replace(R.id.centralFragment, fragment).commit();
         try {
@@ -119,7 +124,7 @@ public class CreateOfferActivityTest {
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
-        String currentFragmentName = intentsTestRule.getActivity().getSupportFragmentManager().getFragments().get(0).getClass().getName();
+        String currentFragmentName = manager.getFragments().get(0).getClass().getName();
         assertThat(currentFragmentName, is(expectedClass.getName()));
     }
 
@@ -142,14 +147,14 @@ public class CreateOfferActivityTest {
     private void goToShowOffer(boolean setToOtherThanOwner) {
         Offer testOffer = new Offer(Config.getUser().getUserId(),"Test","Test");
         Database.getInstance().write("/offers",testOffer.getUuid(), testOffer);
-        Fragment offer = TestUtility.offerFragment(new ShowOfferActivity(), testOffer);
+        Fragment offer = FragmentConverter.createShowOfferWithOffer(testOffer);
         if(setToOtherThanOwner) {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
             DatabaseUser.addUser(u);
         }
-        intentsTestRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, offer).commit();
+        manager.beginTransaction().replace(R.id.centralFragment, offer).commit();
     }
 
     @Test

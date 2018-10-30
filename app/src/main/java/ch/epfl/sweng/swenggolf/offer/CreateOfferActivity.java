@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,11 +30,11 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import ch.epfl.sweng.swenggolf.storage.Storage;
-
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
+
 /**
  * The activity used to create offers. Note that the intent extras
  * must contain a string with key "username".
@@ -86,7 +85,8 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     private void preFillFields(View inflated) {
-        if (getArguments() != null && (offerToModify = getArguments().getParcelable("offer")) != null) {
+        if (getArguments() != null &&
+                (offerToModify = getArguments().getParcelable("offer")) != null) {
             EditText title = inflated.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
             EditText description = inflated.findViewById(R.id.offer_description);
@@ -199,8 +199,8 @@ public class CreateOfferActivity extends FragmentConverter {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             Toast.LENGTH_SHORT).show();
-                    replaceCentralFragment(OfferUtils.createShowOfferWithOffer(offer));
-                }else{
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
+                } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }
@@ -213,19 +213,22 @@ public class CreateOfferActivity extends FragmentConverter {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : {
-                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            case android.R.id.home: {
+                InputMethodManager manager =
+                        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                 Fragment backFrag;
-                if(offerToModify == null){
+                if (offerToModify == null) {
                     backFrag = new ListOfferActivity();
-                }else{
-                    backFrag = OfferUtils.createShowOfferWithOffer(offerToModify);
+                } else {
+                    backFrag = FragmentConverter.createShowOfferWithOffer(offerToModify);
                 }
                 replaceCentralFragment(backFrag);
-                break;
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
             }
         }
-        return super.onOptionsItemSelected(item);
     }
 }

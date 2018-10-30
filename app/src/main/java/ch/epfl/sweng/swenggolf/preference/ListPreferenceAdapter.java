@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.preference;
 
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -83,7 +81,9 @@ public class ListPreferenceAdapter
                 bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
                 ProfileActivity profile = new ProfileActivity();
                 profile.setArguments(bundle);
-                ((AppCompatActivity)(parent.getContext())).getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, profile).commit();
+                ((AppCompatActivity) (parent.getContext()))
+                        .getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.centralFragment, profile).commit();
             }
         });
         return preferenceHolder;

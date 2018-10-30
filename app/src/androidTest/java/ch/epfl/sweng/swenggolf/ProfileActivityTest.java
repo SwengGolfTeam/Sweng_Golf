@@ -22,6 +22,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -62,7 +63,9 @@ public class ProfileActivityTest {
         Database.setDebugDatabase(database);
         Storage.setDebugStorage(storage);
         mActivityRule.launchActivity(new Intent());
-        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, TestUtility.userFragment(new ProfileActivity(), user)).commit();
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, FragmentConverter.createShowProfileWithProfile(user))
+                    .commit();
     }
 
     @Test

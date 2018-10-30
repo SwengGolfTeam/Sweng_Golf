@@ -17,6 +17,7 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
@@ -52,7 +53,9 @@ public class ShowOfferActivityDbNotWorkingTest {
         Database.setDebugDatabase(database);
         Config.setUser(user);
         mActivityRule.launchActivity(new Intent());
-        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, TestUtility.offerFragment(new ShowOfferActivity(), offer)).commit();
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                    .commit();
     }
 
     @Test

@@ -1,15 +1,11 @@
 package ch.epfl.sweng.swenggolf.profile;
 
-import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -23,10 +19,9 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
-
-import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class EditProfileActivity extends FragmentConverter {
     private User user;
@@ -46,12 +41,15 @@ public class EditProfileActivity extends FragmentConverter {
         return inflated;
     }
 
-    public void createUserView(View inflated) {
+    private void createUserView(View inflated) {
         user = Config.getUser();
         if (user != null) {
-            displayElement((EditText) inflated.findViewById(R.id.edit_name), user.getUserName());
-            displayElement((EditText) inflated.findViewById(R.id.edit_pref), user.getPreference());
-            displayElement((EditText) inflated.findViewById(R.id.edit_description), user.getDescription());
+            displayElement((EditText) inflated.findViewById(R.id.edit_name),
+                    user.getUserName());
+            displayElement((EditText) inflated.findViewById(R.id.edit_pref),
+                    user.getPreference());
+            displayElement((EditText) inflated.findViewById(R.id.edit_description),
+                    user.getDescription());
             ImageView imageView = inflated.findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
@@ -95,18 +93,20 @@ public class EditProfileActivity extends FragmentConverter {
 
         DatabaseUser.addUser(user);
 
-        replaceCentralFragment(ProfileUtils.createShowProfileWithProfile(user));
+        replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : {
-                replaceCentralFragment(ProfileUtils.createShowProfileWithProfile(user));
-                break;
+            case android.R.id.home: {
+                replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
             }
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public void changeProfilePicture(View view) {

@@ -31,6 +31,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 
 import static android.support.test.espresso.contrib.DrawerActions.open;
 
+import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -43,7 +44,9 @@ public class MainMenuActivityInstrumentedTestIntents {
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     private void testReplacement(Class expectedClass, int id, boolean click) {
-        if(click){onView(ViewMatchers.withId(R.id.drawer)).perform(NavigationViewActions.navigateTo(id));}
+        if(click){
+            onView(withId(R.id.drawer)).perform(navigateTo(id));
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -53,6 +56,9 @@ public class MainMenuActivityInstrumentedTestIntents {
         assertThat(frags.get(0).getClass().getName(), is(expectedClass.getName()));
     }
 
+    /**
+     * Create a fake database, launches the activity and opens the drawer.
+     */
     @Before
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());

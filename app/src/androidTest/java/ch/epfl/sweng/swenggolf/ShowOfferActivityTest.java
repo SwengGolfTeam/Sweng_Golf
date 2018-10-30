@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +19,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -42,13 +45,18 @@ public class ShowOfferActivityTest {
         Config.setUser(user);
         Offer offer = FilledFakeDatabase.getOffer(0);
         mActivityRule.launchActivity(new Intent());
-        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, TestUtility.offerFragment(new ShowOfferActivity(), offer)).commit();
+        FragmentTransaction transaction = mActivityRule.getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.centralFragment,
+                FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
     }
 
     @Test
     public void canOpenProfileFromOffer() {
         onView(withId(R.id.show_offer_author)).perform(click());
-        assertThat(mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0).getClass().getName(), is(ProfileActivity.class.getName()));
+        Fragment currentFragment = mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+        assertThat(currentFragment.getClass().getName(), is(ProfileActivity.class.getName()));
     }
 
 

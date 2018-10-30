@@ -1,16 +1,14 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.content.DialogInterface;
-
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,17 +19,14 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-
-import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.Storage;
-
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -77,7 +72,8 @@ public class ShowOfferActivity extends FragmentConverter {
 
         if (!offer.getLinkPicture().isEmpty()) {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
-            Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
+            Picasso.with(this.getContext()).
+                    load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
     }
 
@@ -95,7 +91,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(userIsCreator) {
+        if (userIsCreator) {
             inflater.inflate(R.menu.menu_show_offer, menu);
         } else {
             inflater.inflate(R.menu.menu_empty, menu);
@@ -103,23 +99,27 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-                switch (item.getItemId()) {
-                    case android.R.id.home: {
-                        getFragmentManager().beginTransaction().replace(R.id.centralFragment, new ListOfferActivity()).commit();
-                        break;
-                    }
-                    case R.id.button_modify_offer: {
-                        modifyOffer();
-                        break;
-                    }
-                    case R.id.button_delete_offer: {
-                        deleteOffer();
-                        break;
-                    }
-                }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.centralFragment, new ListOfferActivity()).commit();
+                return true;
+            }
+            case R.id.button_modify_offer: {
+                modifyOffer();
+                return true;
+            }
+            case R.id.button_delete_offer: {
+                deleteOffer();
+                return true;
+            }
+            default: {
                 return super.onOptionsItemSelected(item);
             }
+        }
+    }
+
     /**
      * Launches the DeleteOfferActivity using the current offer.
      */
@@ -172,6 +172,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     /**
      * Open the user profile when we click on his name.
+     *
      * @param v the view
      */
     public void openUserProfile(View v) {
@@ -179,11 +180,7 @@ public class ShowOfferActivity extends FragmentConverter {
         DatabaseUser.getUser(new ValueListener<User>() {
                                  @Override
                                  public void onDataChange(User user) {
-                                     Bundle bundle = new Bundle();
-                                     bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
-                                     Fragment profileActivity = new ProfileActivity();
-                                     profileActivity.setArguments(bundle);
-                                     replaceCentralFragment(profileActivity);
+                                     replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
                                  }
 
                                  @Override
@@ -192,7 +189,7 @@ public class ShowOfferActivity extends FragmentConverter {
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
                              },
-                 offer.getUserId());
+                offer.getUserId());
 
     }
 

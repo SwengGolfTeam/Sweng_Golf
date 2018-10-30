@@ -2,23 +2,23 @@ package ch.epfl.sweng.swenggolf.tools;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 public abstract class FragmentConverter extends Fragment {
 
@@ -41,7 +41,7 @@ public abstract class FragmentConverter extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_empty , menu);
+        inflater.inflate(R.menu.menu_empty, menu);
     }
 
     protected void replaceCentralFragment(Fragment fragment) {
@@ -49,7 +49,7 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     protected void setToolbar(int homeIconResId, int titleResId) {
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
         actionBar.setHomeAsUpIndicator(homeIconResId);
         actionBar.setTitle(getResources().getString(titleResId));
@@ -60,4 +60,36 @@ public abstract class FragmentConverter extends Fragment {
         drawer.openDrawer(GravityCompat.START);
     }
 
+    /**
+     * Creates a ProfileActivity wit arguments already set.
+     * @param user the user to pass to the fragment.
+     * @return a new ProfileActivity fragment with user as an argument addressable with "ch.epfl.swenggolf.user".
+     */
+    public static ProfileActivity createShowProfileWithProfile(User user) {
+        return fillFragmentWithParcelable(new ProfileActivity(), "ch.epfl.sweng.swenggolf.user", user);
+    }
+
+    /**
+     * Creates a ShowOfferActivity with arguments already set.
+     * @param offer the offer to pass to the fragment.
+     * @return a new ShowOfferActivity with offer as an argument addressable with "offer"
+     */
+    public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
+        return fillFragmentWithParcelable(new ShowOfferActivity(), "offer", offer);
+    }
+
+    /**
+     * Returns a fragment with a parcelable added as an argument.
+     * @param fragment arguments will be attached to it.
+     * @param key the tag referencing p in the arguments.
+     * @param p the argument to pass.
+     * @param <T> the type of fragment.
+     * @return fragment with p as an argument that can be get with key as key.
+     */
+    public static <T extends Fragment> T fillFragmentWithParcelable(T fragment, String key, Parcelable p) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(key, p);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 }
