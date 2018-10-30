@@ -157,7 +157,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
         onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable()))).perform(customClick());
         onView(withText(cat)).perform(click());
-        onView(withText("Offer name:")).perform(scrollTo());
+        onView(withText(R.string.offer_name)).perform(scrollTo());
         fillOffer();
 
         onView(withText(cat)).check(matches(isDisplayed()));
