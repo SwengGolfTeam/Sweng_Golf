@@ -43,8 +43,7 @@
         android:background="@android:color/white"
         android:layout_marginLeft="24dp"
         android:layout_toRightOf="@id/answer_description"
-        android:layout_centerVertical="true"
-        android:onClick="chooseFavorite"/>
+        android:layout_centerVertical="true" />
 
 
 </RelativeLayout>

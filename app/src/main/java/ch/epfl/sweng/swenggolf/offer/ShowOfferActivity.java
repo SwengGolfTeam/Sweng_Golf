@@ -13,16 +13,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -38,6 +38,7 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 public class ShowOfferActivity extends AppCompatActivity {
 
     private Offer offer;
+    private final static Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -55,7 +56,25 @@ public class ShowOfferActivity extends AppCompatActivity {
 
         setContents();
         setRecyclerView();
-        setAnswer();
+
+        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+            @Override
+            public void onDataChange(Answers value) {
+                if (value != null) {
+                    mAdapter.setAnswers(value);
+                } else {
+                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+
+            }
+        };
+        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+
+        setAnswerToPost();
     }
 
     /**
@@ -84,7 +103,7 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     }
 
-    private void setAnswer() {
+    private void setAnswerToPost() {
         LinearLayout mLayout = findViewById(R.id.list_answers);
 
         LayoutInflater mInflater = getLayoutInflater();
@@ -113,8 +132,9 @@ public class ShowOfferActivity extends AppCompatActivity {
 
     public void postAnswer(View view) {
         EditText editText = findViewById(R.id.answer_description_);
-        offer.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        Database.getInstance().write("/offers", offer.getUuid(), offer);
+        Answers answers = mAdapter.getAnswers();
+        answers.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        Database.getInstance().write("/answers", offer.getUuid(), answers);
         editText.getText().clear();
         mAdapter.notifyDataSetChanged();
     }
@@ -123,28 +143,20 @@ public class ShowOfferActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new ListAnswerAdapter(offer.getAnswers(), offer);
+        mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
-
-    }
-
-    public void chooseFavorite(View view) {
-        ListAnswerAdapter.AnswerViewHolder holder = (ListAnswerAdapter.AnswerViewHolder) view.getTag();
-        int pos = holder.getLayoutPosition();
-        if (offer.getPositionFavorite() != pos) {
-            offer.setPositionFavorite(pos);
-        } else {
-            offer.setPositionFavorite(-1);
-        }
-        Database.getInstance().write("/offers", offer.getUuid(), offer);
-        mAdapter.notifyDataSetChanged();
 
     }
 

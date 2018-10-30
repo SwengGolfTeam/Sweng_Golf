@@ -16,8 +16,6 @@ public class Offer implements Parcelable {
     private final String description;
     private final String linkPicture;
     private final String uuid;
-    private final List<Answer> answers;
-    private int positionFavorite;
 
     /**
      * Contains the data of an offer.
@@ -45,8 +43,6 @@ public class Offer implements Parcelable {
         this.description = description;
         this.linkPicture = linkPicture;
         this.uuid = uuid;
-        this.answers = new LinkedList<>();
-        this.positionFavorite = -1;
     }
 
     /**
@@ -69,8 +65,6 @@ public class Offer implements Parcelable {
         this.description = "";
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
-        this.answers = new LinkedList<>();
-        this.positionFavorite = -1;
     }
 
     /**
@@ -129,22 +123,6 @@ public class Offer implements Parcelable {
         return uuid;
     }
 
-    /**
-     * Returns the offer's list of answers
-     *
-     * @return the answers of the offer
-     */
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public int getPositionFavorite() {
-        return positionFavorite;
-    }
-
-    public void setPositionFavorite(int pos) {
-        positionFavorite = pos;
-    }
 
 
     /* Implements Parcelable */
@@ -153,24 +131,14 @@ public class Offer implements Parcelable {
         return 0;
     }
 
-    // TODO put answers in parcel too
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        int size = 5 + 2*answers.size();
-        dest.writeInt(size);
-        dest.writeInt(positionFavorite);
-        String[] bundle = new String[size];
-        bundle[0] = this.userId;
-        bundle[1] = this.title;
-        bundle[2] = this.description;
-        bundle[3] = this.linkPicture;
-        bundle[4] = this.uuid;
-
-        for (int i = 0; i < answers.size(); ++i) {
-            bundle[2*i+5] = answers.get(i).getUserId();
-            bundle[2*i+6] = answers.get(i).getDescription();
-        }
-        dest.writeStringArray(bundle);
+        dest.writeStringArray(new String[]{
+                this.userId,
+                this.title,
+                this.description,
+                this.linkPicture,
+                this.uuid});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -184,11 +152,7 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        // TODO there exists a method readList ?!
-        int size = in.readInt();
-        String[] data = new String[size];
-
-        this.positionFavorite = in.readInt();
+        String[] data = new String[5];
 
         in.readStringArray(data);
         this.userId = data[0];
@@ -196,10 +160,5 @@ public class Offer implements Parcelable {
         this.description = data[2];
         this.linkPicture = data[3];
         this.uuid = data[4];
-        // TODO change this to ArrayList (?)
-        this.answers = new LinkedList<>();
-        for (int i = 5; i < data.length; i += 2) {
-            answers.add(new Answer(data[i], data[i+1]));
-        }
     }
 }
