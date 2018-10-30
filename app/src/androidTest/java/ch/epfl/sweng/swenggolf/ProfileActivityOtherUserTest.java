@@ -1,10 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import ch.epfl.sweng.swenggolf.R;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,6 +20,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -73,9 +74,9 @@ public class ProfileActivityOtherUserTest {
     }
 
     private void testToast(String s) {
-        String match = s  + otherUser.getUserName();
+        String match = s + otherUser.getUserName();
         onView(withId(R.id.follow)).perform(click());
-        TestUtility.testToastShow(mActivityRule,  match);
+        TestUtility.testToastShow(mActivityRule, match);
     }
 
     @Test
@@ -83,6 +84,16 @@ public class ProfileActivityOtherUserTest {
         database.setWorking(false);
         testToast("Could not follow ");
         database.setWorking(true);
+    }
+
+    @Test
+    public void unfollowShowEmptyStar() throws Exception {
+
+        ViewInteraction followButton = onView(withId(R.id.follow));
+        followButton.perform(click());
+        followButton.perform(click());
+        followButton.check(matches(withTagValue(equalTo((Object) android.R.drawable.btn_star_big_off))));
+
     }
 
 }

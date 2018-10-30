@@ -70,8 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (user.getUserId().equals(Config.getUser().getUserId())) {
             ImageButton button = findViewById(R.id.edit);
             button.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             final ImageButton button = findViewById(R.id.follow);
             button.setVisibility(View.VISIBLE);
             User currentUser = Config.getUser();
@@ -79,8 +78,9 @@ public class ProfileActivity extends AppCompatActivity {
             ValueListener<String> listener = new ValueListener<String>() {
                 @Override
                 public void onDataChange(String value) {
-                    if(value != null){
+                    if (value != null) {
                         button.setImageResource(STAR_ON);
+                        button.setTag(STAR_ON);
                         isFollowing = true;
                     }
                 }
@@ -92,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
             };
 
             Database.getInstance().read(Database.FOLLOWERS_PATH + "/" + currentUser.getUserId()
-                    ,uid, listener, String.class);
+                    , uid, listener, String.class);
         }
     }
 
@@ -134,17 +134,19 @@ public class ProfileActivity extends AppCompatActivity {
      */
     public void follow(View view) {
         User currentUser = Config.getUser();
-        if(!isFollowing) {
+        if (!isFollowing) {
             CompletionListener listener = new CompletionListener() {
                 @Override
                 public void onComplete(DbError error) {
                     if (error == NONE) {
                         ImageButton button = findViewById(R.id.follow);
                         button.setImageResource(STAR_ON);
+                        button.setTag(STAR_ON);
                         Toast.makeText(ProfileActivity.this, getResources()
                                         .getString(R.string.now_following) + " " + user.getUserName(),
                                 Toast.LENGTH_SHORT)
                                 .show();
+                        isFollowing = true;
                     } else {
                         Toast.makeText(ProfileActivity.this, getResources()
                                         .getString(R.string.error_following) + " " + user.getUserName(),
@@ -155,14 +157,15 @@ public class ProfileActivity extends AppCompatActivity {
             };
             Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(),
                     user.getUserId(), listener);
-        }
-        else {
+        } else {
             CompletionListener listener = new CompletionListener() {
                 @Override
                 public void onComplete(DbError error) {
-                    if(error == NONE){
+                    if (error == NONE) {
                         ImageButton button = findViewById(R.id.follow);
                         button.setImageResource(STAR_OFF);
+                        button.setTag(STAR_OFF);
+                        isFollowing = false;
                     }
                 }
             };
