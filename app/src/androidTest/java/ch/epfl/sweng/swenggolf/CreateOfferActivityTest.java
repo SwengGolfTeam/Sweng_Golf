@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,8 +43,10 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.isInte
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 /**
@@ -144,14 +150,35 @@ public class CreateOfferActivityTest {
 
     @Test
     public void defineOfferOnCreation(){
-        final String CAT = Category.values()[1].toString();
+        final String cat = Category.values()[1].toString();
         initDatabase();
 
         onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.category_spinner)).perform(closeSoftKeyboard()).perform(click());
-        onView(withText(CAT)).perform(click());
+        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
+        onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable()))).perform(customClick());
+        onView(withText(cat)).perform(click());
+        onView(withText("Offer name:")).perform(scrollTo());
         fillOffer();
 
-        onView(withText(CAT)).check(matches(isDisplayed()));
+        onView(withText(cat)).check(matches(isDisplayed()));
+    }
+
+    private ViewAction customClick() {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isEnabled(); // requires matches(allOf( isEnabled(), isClickable())
+            }
+
+            @Override
+            public String getDescription() {
+                return "click button without the 90% constraint";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                view.performClick();
+            }
+        };
     }
 }
