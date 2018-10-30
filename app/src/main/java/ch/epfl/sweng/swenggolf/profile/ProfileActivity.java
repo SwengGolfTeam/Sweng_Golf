@@ -84,6 +84,11 @@ public class ProfileActivity extends AppCompatActivity {
                         button.setTag(STAR_ON);
                         isFollowing = true;
                     }
+                    else{
+                        button.setImageResource(STAR_OFF);
+                        button.setTag(STAR_OFF);
+                        isFollowing = false;
+                    }
                 }
 
                 @Override

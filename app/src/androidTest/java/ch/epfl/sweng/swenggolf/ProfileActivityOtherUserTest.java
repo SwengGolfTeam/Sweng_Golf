@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -70,8 +71,19 @@ public class ProfileActivityOtherUserTest {
             }
         };
 
-        Database.getInstance().read("/followers/" + user.getUserId(), otherUser.getUserId(),
-                listener, String.class);
+        final String path = "/followers/" + user.getUserId();
+
+        final String userId = otherUser.getUserId();
+        Database.getInstance().read(path, userId, listener, String.class);
+
+        //Clean up database
+        CompletionListener completionListener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+
+            }
+        };
+        database.remove(path,userId,completionListener);
     }
 
     private void testToast(String s) {
@@ -96,6 +108,12 @@ public class ProfileActivityOtherUserTest {
         followButton.check(matches(withTagValue(
                 equalTo((Object) android.R.drawable.btn_star_big_off))));
 
+    }
+
+    @Test
+    public void showEmptyStarWhenNotFollowing() {
+        onView(withId(R.id.follow)).check(matches(withTagValue(
+                equalTo((Object) android.R.drawable.btn_star_big_off))));
     }
 
 }

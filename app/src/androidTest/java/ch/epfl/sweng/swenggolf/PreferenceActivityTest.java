@@ -87,4 +87,12 @@ public class PreferenceActivityTest {
         intended(allOf(hasComponent(ProfileActivity.class.getName()),
         hasExtra("ch.epfl.sweng.swenggolf.user", user)));
     }
+
+    @Test
+    public void showLastUserInFollowList() {
+        int last = FilledFakeDatabase.numberFollowersOfUserZero()-1;
+        User user = FilledFakeDatabase.getFollowerOfUserZero(last);
+        onView(new RecyclerViewMatcher(R.id.preference_list).atPosition(last))
+                .check(matches(hasDescendant(withText(user.getUserName()))));
+    }
 }
