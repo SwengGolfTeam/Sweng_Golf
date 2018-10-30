@@ -47,11 +47,4 @@ public class ListPreferencesActivity extends FragmentConverter {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Launches the CreateOfferActivity.
-     */
-    public void loadCreateOfferActivity() {
-        replaceCentralFragment(new CreateOfferActivity());
-    }
-
 }

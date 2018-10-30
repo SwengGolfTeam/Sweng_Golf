@@ -51,6 +51,7 @@ public class ShowOfferActivityDbNotWorkingTest {
         database.write("/offers", "0", offer);
         Database.setDebugDatabase(database);
         Config.setUser(user);
+        mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.centralFragment, TestUtility.offerFragment(new ShowOfferActivity(), offer)).commit();
     }
 

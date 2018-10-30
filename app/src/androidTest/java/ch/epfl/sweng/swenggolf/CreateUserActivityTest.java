@@ -15,6 +15,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -55,12 +56,13 @@ public class CreateUserActivityTest {
         Config.goToTest();
         User user1 = new User(NAME, UID, MAIL, PHOTO);
         Config.setUser(new User(user1));
-        Database.setDebugDatabase(new FakeDatabase(true));
+        Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
+        DatabaseUser.addUser(user1);
         mActivityRule.launchActivity(new Intent());
     }
 
     @Test
-    public void canDisplay() throws InterruptedException {
+    public void canDisplay() {
         onView(withId(R.id.mail)).check(matches(withText(MAIL)));
         onView(withId(R.id.mail)).perform(typeText("api"));
         onView(withId(R.id.name)).check(matches(withText(NAME)));

@@ -63,6 +63,12 @@ public class ShowOfferActivity extends FragmentConverter {
 
         final TextView offerAuthor = inflated.findViewById(R.id.show_offer_author);
         ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
+        offerAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserProfile(v);
+            }
+        });
 
         TextView offerDescription = inflated.findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());

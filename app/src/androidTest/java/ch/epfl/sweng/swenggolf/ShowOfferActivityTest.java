@@ -36,7 +36,7 @@ public class ShowOfferActivityTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         User user = FilledFakeDatabase.getUser(0);
         Config.setUser(user);
@@ -46,7 +46,7 @@ public class ShowOfferActivityTest {
     }
 
     @Test
-    public void canOpenProfileFromOffer() throws InterruptedException {
+    public void canOpenProfileFromOffer() {
         onView(withId(R.id.show_offer_author)).perform(click());
         assertThat(mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0).getClass().getName(), is(ProfileActivity.class.getName()));
     }

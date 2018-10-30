@@ -55,6 +55,18 @@ public class EditProfileActivity extends FragmentConverter {
             ImageView imageView = inflated.findViewById(R.id.ivProfile);
             ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
+        inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChangesAndReturn(v);
+            }
+        });
+        inflated.findViewById(R.id.photoButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeProfilePicture(v);
+            }
+        });
     }
 
     private void displayElement(EditText editText, String elem) {
@@ -83,18 +95,14 @@ public class EditProfileActivity extends FragmentConverter {
 
         DatabaseUser.addUser(user);
 
-        Fragment ProfileActivity = new ProfileActivity();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
-        ProfileActivity.setArguments(bundle);
-        replaceCentralFragment(new ProfileActivity());
+        replaceCentralFragment(ProfileUtils.createShowProfileWithProfile(user));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home : {
-                replaceCentralFragment(new ProfileActivity());
+                replaceCentralFragment(ProfileUtils.createShowProfileWithProfile(user));
                 break;
             }
         }

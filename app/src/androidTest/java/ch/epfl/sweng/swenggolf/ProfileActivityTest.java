@@ -57,7 +57,7 @@ public class ProfileActivityTest {
     public void setUp(){
         Config.setUser(new User(user));
         newUser = new User(user);
-        Database database = new FakeDatabase(true);
+        Database database = FakeDatabase.fakeDatabaseCreator();
         Storage storage = new FakeStorage(true);
         Database.setDebugDatabase(database);
         Storage.setDebugStorage(storage);
@@ -99,7 +99,6 @@ public class ProfileActivityTest {
         String newDescription = "Hey!";
         newUser.setDescription(newDescription);
         canEditField(R.id.edit_description, newUser, newDescription);
-
     }
 
     @Test

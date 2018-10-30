@@ -41,7 +41,7 @@ public class MainMenuActivity extends AppCompatActivity {
         nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceCentralFragment(new ProfileActivity());
+                loadProfileActivity(null);
             }
         });
         setUserDisplay();
@@ -104,15 +104,6 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadProfileActivity(MenuItem item) {
-        loadProfileActivity((View)null);
-    }
-
-    /**
-     * Launches the ProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void loadProfileActivity(View view) {
         Bundle bundle = new Bundle();
         bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
         Fragment profileActivity = new ProfileActivity();
