@@ -11,13 +11,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+
+import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -92,5 +98,32 @@ public class ProfileActivity extends AppCompatActivity {
     public void editProfile(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Follow the user showed in the profile.
+     *
+     * @param view the current view
+     */
+    public void follow(View view) {
+        User currentUser = Config.getUser();
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                if (error == NONE) {
+                    Toast.makeText(ProfileActivity.this, getResources()
+                                    .getString(R.string.now_following) + " " + user.getUserName(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(ProfileActivity.this, getResources()
+                                    .getString(R.string.error_following) + " " + user.getUserName(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        };
+        Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(), user.getUserId(),
+                listener);
     }
 }

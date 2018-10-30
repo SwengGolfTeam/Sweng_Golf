@@ -16,9 +16,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -35,12 +37,29 @@ public class ListPreferenceAdapter
      * If debug is set to true, a default list of users is used.
      */
     public ListPreferenceAdapter() {
-        Database d = Database.getInstance();
-        ValueListener<List<User>> getUserList = new ValueListener<List<User>>() {
+        final Database d = Database.getInstance();
+
+        final ValueListener<User> userListener = new ValueListener<User>() {
             @Override
-            public void onDataChange(List<User> value) {
-                mDataset = value;
+            public void onDataChange(User value) {
+                mDataset.add(value);
+                Log.d("DBError", "Load user " + value.getUserName());
                 ListPreferenceAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+
+            }
+        };
+
+        ValueListener<List<String>> getFollowingList = new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> values) {
+                for(String u : values){
+                    DatabaseUser.getUser(userListener, u);
+                }
+                Log.d("DBError", "Load list");
             }
 
             @Override
@@ -48,7 +67,7 @@ public class ListPreferenceAdapter
                 Log.d("DBError", "Failed to load users");
             }
         };
-        d.readList("/users", getUserList, User.class);
+        d.readList("/followers/" + Config.getUser().getUserId(), getFollowingList, String.class);
     }
 
     public class PreferenceViewHolder extends ThreeFieldsViewHolder {
