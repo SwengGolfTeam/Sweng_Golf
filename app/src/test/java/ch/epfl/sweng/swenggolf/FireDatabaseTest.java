@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -27,7 +28,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -70,15 +70,6 @@ public class FireDatabaseTest {
         when(categoryReference.child(anyString())).thenReturn(idReference);
         return idReference;
     }
-
-    /*
-    private Query setUpQuery(DatabaseReference ref) {
-        Query idQuery = mock(Query.class);
-        Query tagQuery = mock(Query.class);
-        when(ref.orderByChild(anyString())).thenReturn(tagQuery);
-        when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
-        return idQuery;
-    }*/
 
     @Test
     public void removeReturnNoError() {
@@ -146,58 +137,7 @@ public class FireDatabaseTest {
         };
         FireDatabase d = new FireDatabase(database);
         d.readList(PATH, listener, String.class);
-
     }
-
-    /*
-    @Test
-    public void readOffersReturnCorrectValues() {
-        FirebaseDatabase database = mock(FirebaseDatabase.class);
-        DatabaseReference idReference = setUpPath(database);
-        Query query = setUpQuery(idReference);
-
-        CompletionListener listener = new CompletionListener() {
-            @Override
-            public void onComplete(DbError error) {
-                assertThat(error, is(DbError.NONE));
-            }
-        };
-
-        mockWrite(idReference, OFFER);
-        ValueListener<List<Offer>> offersListener = mockReadOffers(idReference, query, OFFER);
-
-        FireDatabase d = new FireDatabase(database);
-        d.write(PATH, ID, OFFER, listener);
-        d.readOffers(offersListener);
-    }*/
-
-    /*
-    private ValueListener<List<Offer>> mockReadOffers(DatabaseReference idReference, Query query, final Offer offer) {
-        Answer<Void> readAnswer = new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) {
-                ValueEventListener listener1 = invocation.getArgument(0);
-                DataSnapshot snapshot = mock(DataSnapshot.class);
-                when(snapshot.getValue(Offer.class)).thenReturn(offer);
-                listener1.onDataChange(snapshot);
-                return null;
-            }
-        };
-        doAnswer(readAnswer).when(query).addListenerForSingleValueEvent(any(ValueEventListener.class));
-
-        return new ValueListener<List<Offer>>() {
-            @Override
-            public void onDataChange(List<Offer> offers) {
-                assertThat(offers.get(0), is(offer)); //offers
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-
-            }
-        };
-    }*/
-
 
     private void setUpReadListData(DatabaseReference categoryReference) {
         List<DataSnapshot> data = new ArrayList<>();
@@ -219,6 +159,62 @@ public class FireDatabaseTest {
         };
         doAnswer(ans).when(categoryReference)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    @Test
+    public void readOffersReturnsCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        DatabaseReference ref = mock(DatabaseReference.class);
+        when(database.getReference(anyString())).thenReturn(ref);
+
+        Query query = setUpQuery(ref);
+
+        Answer<Void> queryListener = new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                ValueEventListener valueEventListener = invocation.getArgument(0);
+
+                DataSnapshot dataSnapshot = mock(DataSnapshot.class);
+                when(dataSnapshot.exists()).thenReturn(true);
+                DataSnapshot offer = mock(DataSnapshot.class);
+                List<DataSnapshot> offerList = Arrays.asList(offer);
+                when(dataSnapshot.getChildren()).thenReturn(offerList);
+                Offer offerInd = mock(Offer.class);
+                when(offer.getValue(any(Class.class))).thenReturn(offerInd);
+
+                DatabaseError databaseError = mock(DatabaseError.class);
+                when(databaseError.getCode()).thenReturn(DatabaseError.UNKNOWN_ERROR);
+
+                valueEventListener.onDataChange(dataSnapshot);
+                valueEventListener.onCancelled(databaseError);
+
+                return null;
+            }
+        };
+
+        doAnswer(queryListener).when(query)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> offers) {
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+            }
+        };
+
+        FireDatabase d = new FireDatabase(database);
+        d.readOffers(listener);
+    }
+
+    private Query setUpQuery(DatabaseReference ref) {
+        Query idQuery = mock(Query.class);
+        Query tagQuery = mock(Query.class);
+        when(ref.orderByChild(anyString())).thenReturn(tagQuery);
+        when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
+        return idQuery;
     }
 
     @NonNull
