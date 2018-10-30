@@ -57,7 +57,7 @@ public class Offer implements Parcelable {
      * @param uuid        offer identifier
      */
     public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid){
+                 String linkPicture, String uuid) {
         this(userId, title, description, linkPicture, uuid, Category.getDefault());
     }
 

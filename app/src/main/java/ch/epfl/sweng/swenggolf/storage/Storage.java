@@ -1,21 +1,10 @@
 package ch.epfl.sweng.swenggolf.storage;
 
-import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-
-import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -52,8 +41,8 @@ public abstract class Storage {
     /**
      * Writes an image into the storage. Uses the listener to check if everything worked.
      *
-     * @param uri the local URI of the image
-     * @param path the writing path
+     * @param uri      the local URI of the image
+     * @param path     the writing path
      * @param listener the OnCompleteListener that performs operations when done with the uploading
      */
     public abstract void write(@NonNull Uri uri, String path,

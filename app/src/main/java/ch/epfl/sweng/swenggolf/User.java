@@ -275,6 +275,7 @@ public class User implements Parcelable {
 
     /**
      * Create a User from a Parcel.
+     *
      * @param in the parcel
      */
     public User(Parcel in) {

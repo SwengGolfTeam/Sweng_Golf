@@ -5,9 +5,10 @@ public enum Category {
 
     /**
      * Returns the default value of the enum.
+     *
      * @return the default Category value
      */
-    public static Category getDefault(){
+    public static Category getDefault() {
         return Category.OTHER;
     }
 }

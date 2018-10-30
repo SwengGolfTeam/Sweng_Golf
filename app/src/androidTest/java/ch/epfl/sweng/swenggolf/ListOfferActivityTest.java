@@ -82,11 +82,11 @@ public class ListOfferActivityTest {
         Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("user_id", "This is a title", LOREM);
         Offer offer2 = new Offer("user_id", "This is a title 2", LOREM);
-        database.write("/offers", "idoftheoffer1", offer1);
-        database.write("/offers", "idoftheoffer2", offer2);
+        database.write(Database.OFFERS_PATH, "idoftheoffer1", offer1);
+        database.write(Database.OFFERS_PATH, "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
-        database.write("/users", Config.getUser().getUserId(), Config.getUser());
+        database.write(Database.USERS_PATH, Config.getUser().getUserId(), Config.getUser());
     }
 
     /**

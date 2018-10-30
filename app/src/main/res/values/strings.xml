@@ -40,4 +40,7 @@
     <string name="description">Infos:</string>
     <string name="infos">Infos:</string>
     <string name="error_load_user">Could not load user profile.</string>
+    <string name="follow">Follow</string>
+    <string name="now_following">You are now following </string>
+    <string name="error_following">Could not follow </string>
 </resources>

@@ -12,10 +12,14 @@ public final class FilledFakeDatabase extends FakeDatabase {
     protected FilledFakeDatabase() {
         super(true);
         for (User user : FAKE_USERS) {
-            write("/users", user.getUserId(), new User(user));
+            write(Database.USERS_PATH, user.getUserId(), new User(user));
         }
         for (Offer offer : FAKE_OFFERS) {
-            write("/offers", offer.getUuid(), new Offer(offer));
+            write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
+        }
+        for (User user : FOLLOWERS_OF_USER_ZERO) {
+            String uid = user.getUserId();
+            write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid, uid);
         }
     }
 
@@ -25,7 +29,8 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * Return an user from the list.
-     * @param index  the index of the user.
+     *
+     * @param index the index of the user.
      * @return the user at this index
      */
     public static User getUser(int index) {
@@ -34,6 +39,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * Return an offer from the list.
+     *
      * @param index the index of the offer.
      * @return the offer at this index
      */
@@ -42,7 +48,18 @@ public final class FilledFakeDatabase extends FakeDatabase {
     }
 
     /**
+     * Return a follower of the user with id 0.
+     *
+     * @param index the index of the follower
+     * @return the follower at this index
+     */
+    public static User getFollowerOfUserZero(int index) {
+        return FOLLOWERS_OF_USER_ZERO[index];
+    }
+
+    /**
      * The number of offers.
+     *
      * @return number of offers
      */
     public static int numberOffer() {
@@ -51,10 +68,20 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
     /**
      * The number of users.
+     *
      * @return number of users
      */
     public static int numberUser() {
         return FAKE_USERS.length;
+    }
+
+    /**
+     * Return the number of followers of user with id zero.
+     *
+     * @return the number of followers of user with id zero
+     */
+    public static int numberFollowersOfUserZero() {
+        return FOLLOWERS_OF_USER_ZERO.length;
     }
 
     private static final User[] FAKE_USERS = {
@@ -229,4 +256,6 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "scale-to-width-down/800",
                     "014")
     };
+
+    private static final User[] FOLLOWERS_OF_USER_ZERO = {getUser(0), getUser(1), getUser(2)};
 }

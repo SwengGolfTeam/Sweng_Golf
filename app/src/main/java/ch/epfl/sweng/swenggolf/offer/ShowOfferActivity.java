@@ -24,7 +24,6 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.Storage;
-
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
@@ -139,11 +138,12 @@ public class ShowOfferActivity extends AppCompatActivity {
             }
 
         };
-        database.remove("/offers", offer.getUuid(), listener);
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
     }
 
     /**
      * Open the user profile when we click on his name.
+     *
      * @param v the view
      */
     public void openUserProfile(View v) {
@@ -163,7 +163,7 @@ public class ShowOfferActivity extends AppCompatActivity {
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
                              },
-                 offer.getUserId());
+                offer.getUserId());
 
     }
 

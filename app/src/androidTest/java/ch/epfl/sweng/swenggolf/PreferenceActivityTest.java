@@ -57,6 +57,7 @@ public class PreferenceActivityTest {
     public void setUp() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
+        Config.setUser(FilledFakeDatabase.getUser(0));
         preferenceRule.launchActivity(new Intent());
     }
 
@@ -75,7 +76,7 @@ public class PreferenceActivityTest {
     @Test
     public void testListSize(){
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberUser()));
+        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberFollowersOfUserZero()));
     }
 
     @Test
@@ -85,5 +86,13 @@ public class PreferenceActivityTest {
                 ViewMatchers.withText(user.getUserName())), click()));
         intended(allOf(hasComponent(ProfileActivity.class.getName()),
         hasExtra("ch.epfl.sweng.swenggolf.user", user)));
+    }
+
+    @Test
+    public void showLastUserInFollowList() {
+        int last = FilledFakeDatabase.numberFollowersOfUserZero()-1;
+        User user = FilledFakeDatabase.getFollowerOfUserZero(last);
+        onView(new RecyclerViewMatcher(R.id.preference_list).atPosition(last))
+                .check(matches(hasDescendant(withText(user.getUserName()))));
     }
 }

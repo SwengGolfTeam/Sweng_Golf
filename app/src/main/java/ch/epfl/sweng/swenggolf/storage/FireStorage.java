@@ -10,8 +10,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import ch.epfl.sweng.swenggolf.offer.Offer;
-
 public final class FireStorage extends Storage {
 
     private final FirebaseStorage storage;
