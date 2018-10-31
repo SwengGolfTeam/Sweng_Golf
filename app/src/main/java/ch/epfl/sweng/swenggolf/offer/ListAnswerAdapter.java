@@ -27,7 +27,8 @@ import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
     private Answers answers;
     private Offer offer;
-    private Map<String, User> dictionary; // to limit accesses to the database
+    private static final int HEART_FULL = R.drawable.ic_favorite;
+    private static final int HEART_EMPTY = R.drawable.ic_favorite_border;
 
     public static class AnswerViewHolder extends ThreeFieldsViewHolder {
 
@@ -47,7 +48,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         }
         this.answers = answers;
         this.offer = offer;
-        dictionary = new HashMap<>();
     }
 
     /**
@@ -77,7 +77,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final AnswerViewHolder holder, int position) {
+    public void onBindViewHolder(final AnswerViewHolder holder, final int position) {
         final Answer answer = answers.getAnswers().get(position);
 
         // get the user data from database
@@ -86,11 +86,13 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             public void onDataChange(User value) {
                 TextView userName = (TextView) holder.getFieldOne();
                 userName.setText(value.getUserName());
+                userName.setContentDescription("username"+Integer.toString(position));
                 ImageView userPic = (ImageView) holder.getFieldThree();
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
                         .fit().into(userPic);
+                userPic.setContentDescription("pic"+Integer.toString(position));
             }
 
             @Override
@@ -102,8 +104,10 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
         TextView description = (TextView) holder.getFieldTwo();
         description.setText(answer.getDescription());
+        description.setContentDescription("description"+Integer.toString(position));
 
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
+        favButton.setContentDescription("fav"+Integer.toString(position));
 
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,9 +128,11 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             favButton.setClickable(false);
         }
         if (answers.getFavoritePos() == position) {
-            favButton.setImageResource(R.drawable.ic_favorite);
+            favButton.setImageResource(HEART_FULL);
+            favButton.setTag(HEART_FULL);
         } else if (isAuthor) {
-            favButton.setImageResource(R.drawable.ic_favorite_border);
+            favButton.setImageResource(HEART_EMPTY);
+            favButton.setTag(HEART_EMPTY);
         }
 
     }
