@@ -136,7 +136,7 @@ public class CreateOfferActivityTest {
     @Test
     public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
-        onView(withId(R.id.button_modify_offer)).perform(click());
+        onView(withId(R.id.button_modify_offer)).perform(scrollTo(), click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()), times(2));
     }
