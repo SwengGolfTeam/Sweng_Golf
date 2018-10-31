@@ -148,7 +148,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
     }
 
-    @Test
+    /*@Test
     public void defineOfferOnCreation(){
         final String cat = Category.values()[1].toString();
         initDatabase();
@@ -162,7 +162,7 @@ public class CreateOfferActivityTest {
         fillOffer();
 
         onView(withText(cat)).check(matches(isDisplayed()));
-    }
+    }*/
 
     private ViewAction customClick() {
         return new ViewAction() {
