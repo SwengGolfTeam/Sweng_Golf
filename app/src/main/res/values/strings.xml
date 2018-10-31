@@ -43,4 +43,5 @@
     <string name="follow">Follow</string>
     <string name="now_following">You are now following </string>
     <string name="error_following">Could not follow </string>
+    <string name="category_show_offer">Category:</string>
 </resources>
