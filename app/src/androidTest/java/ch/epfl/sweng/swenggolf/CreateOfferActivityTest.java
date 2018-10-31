@@ -78,7 +78,8 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
         onView(withId(R.id.button)).perform(scrollTo(),click());
-        onView(withId(R.id.error_message)).check(matches(withText(R.string.error_create_offer_invalid)));
+        onView(withId(R.id.error_message))
+                .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
     private void fillOffer() {
