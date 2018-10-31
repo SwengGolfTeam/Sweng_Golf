@@ -115,11 +115,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             @Override
             public void onClick(View v) {
                 int pos = holder.getLayoutPosition();
-                if (answers.getFavoritePos() != pos) {
-                    answers.setFavoritePos(pos);
-                } else {
-                    answers.setFavoritePos(-1);
-                }
+                int newPos = answers.getFavoritePos() != pos ? pos : -1;
+                answers.setFavoritePos(newPos);
                 Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
                 notifyDataSetChanged();
             }
