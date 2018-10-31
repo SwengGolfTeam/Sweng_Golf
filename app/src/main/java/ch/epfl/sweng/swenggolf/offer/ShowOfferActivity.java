@@ -151,13 +151,10 @@ public class ShowOfferActivity extends AppCompatActivity {
     private void setRecyclerView() {
         RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
+        mRecyclerView.setNestedScrollingEnabled(false);
 
-        mLayoutManager = new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
+        mLayoutManager = new LinearLayoutManager(this);
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
