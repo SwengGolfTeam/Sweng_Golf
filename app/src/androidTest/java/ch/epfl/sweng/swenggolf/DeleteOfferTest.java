@@ -77,7 +77,7 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
-        onView(withText(android.R.string.no)).perform(click());
+        onView(withChild(withText(android.R.string.no))).perform(click());
         deleteClick();
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
