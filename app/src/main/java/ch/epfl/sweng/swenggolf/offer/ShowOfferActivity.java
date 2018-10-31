@@ -123,8 +123,10 @@ public class ShowOfferActivity extends AppCompatActivity {
      * Delete the offer in the database.
      */
     private void deleteOfferInDatabase() {
-        Storage storage = Storage.getInstance();
-        storage.remove(offer.getLinkPicture());
+        if (!offer.getLinkPicture().isEmpty()) {
+            Storage storage = Storage.getInstance();
+            storage.remove(offer.getLinkPicture());
+        }
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override
