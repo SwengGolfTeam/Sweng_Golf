@@ -77,7 +77,7 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
-        onView(withChild(withText(android.R.string.no))).perform(click());
+        onView(withText(android.R.string.no)).perform(click());
         deleteClick();
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
@@ -105,7 +105,7 @@ public class DeleteOfferTest {
 
     private void deleteClick() {
         try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
+            onView(withContentDescription(R.string.delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
             openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
             onView(withContentDescription(R.string.delete_offer)).perform(click());
