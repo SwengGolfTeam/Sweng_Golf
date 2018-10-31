@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -18,6 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -80,9 +82,11 @@ public class DeleteOfferTest {
         openListActivity();
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        ViewInteraction buttonDelete = onView(withId(R.id.button_delete_offer));
+
+        buttonDelete.perform(scrollTo(), click());
         onView(withText(android.R.string.no)).perform(click());
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        buttonDelete.perform(scrollTo(), click());
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
 
@@ -92,7 +96,7 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        onView(withId(R.id.button_delete_offer)).perform(scrollTo(), click());
         onView(withText(android.R.string.yes)).perform(click());
         ValueListener vl = new ValueListener() {
             @Override
