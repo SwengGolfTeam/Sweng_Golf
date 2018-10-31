@@ -83,7 +83,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             public void onDataChange(User value) {
                 TextView userName = (TextView) holder.getFieldOne();
                 userName.setText(value.getUserName());
-                userName.setContentDescription("username"+Integer.toString(holder.getAdapterPosition()));
+                userName.setContentDescription(
+                        "username"+Integer.toString(holder.getAdapterPosition()));
                 ImageView userPic = (ImageView) holder.getFieldThree();
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
