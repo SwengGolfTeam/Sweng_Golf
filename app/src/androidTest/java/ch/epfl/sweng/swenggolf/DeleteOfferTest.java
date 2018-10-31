@@ -105,7 +105,7 @@ public class DeleteOfferTest {
 
     private void deleteClick() {
         try {
-            onView(withContentDescription(R.string.delete_offer)).perform(click());
+            onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
             openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
             onView(withContentDescription(R.string.delete_offer)).perform(click());
