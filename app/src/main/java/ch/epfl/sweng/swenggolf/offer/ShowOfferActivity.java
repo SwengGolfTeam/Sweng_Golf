@@ -40,7 +40,7 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 public class ShowOfferActivity extends AppCompatActivity {
 
     private Offer offer;
-    private final static Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -51,14 +51,14 @@ public class ShowOfferActivity extends AppCompatActivity {
         offer = getIntent().getParcelableExtra("offer");
         if (!Config.getUser().getUserId().equals(offer.getUserId())) {
             ImageView buttonModify = findViewById(R.id.button_modify_offer);
-            hideButton(buttonModify);
+            buttonModify.setVisibility(View.INVISIBLE);
+            buttonModify.setClickable(false);
             ImageView buttonDelete = findViewById(R.id.button_delete_offer);
-            hideButton(buttonDelete);
+            buttonDelete.setVisibility(View.INVISIBLE);
+            buttonDelete.setClickable(false);
         }
-
         setContents();
         setRecyclerView();
-
         // fetch answers from database
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
@@ -69,25 +69,13 @@ public class ShowOfferActivity extends AppCompatActivity {
                     mAdapter.setAnswers(DEFAULT_ANSWERS);
                 }
             }
-
             @Override
             public void onCancelled(DbError error) {
-
+                Log.d(error.toString(), "Unable to load answers from database");
             }
         };
         Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
-
         setAnswerToPost();
-    }
-
-    /**
-     * Help to hide a button.
-     *
-     * @param button button to hide
-     */
-    private void hideButton(ImageView button) {
-        button.setVisibility(View.INVISIBLE);
-        button.setClickable(false);
     }
 
     private void setContents() {
@@ -145,7 +133,8 @@ public class ShowOfferActivity extends AppCompatActivity {
     public void postAnswer(View view) {
         EditText editText = findViewById(R.id.answer_description_);
         Answers answers = mAdapter.getAnswers();
-        answers.getAnswers().add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        answers.getAnswerList()
+                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
         editText.getText().clear();
         mAdapter.notifyDataSetChanged();

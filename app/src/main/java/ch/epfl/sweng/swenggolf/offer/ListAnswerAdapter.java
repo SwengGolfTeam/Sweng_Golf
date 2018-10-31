@@ -12,9 +12,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -43,7 +40,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
      * @param answers the objet containing the list of answers to be displayed
      */
     public ListAnswerAdapter(Answers answers, Offer offer) {
-        if (answers == null || answers.getAnswers() == null || offer == null) {
+        if (answers == null || answers.getAnswerList() == null || offer == null) {
             throw new IllegalArgumentException();
         }
         this.answers = answers;
@@ -77,8 +74,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final AnswerViewHolder holder, final int position) {
-        final Answer answer = answers.getAnswers().get(position);
+    public void onBindViewHolder(final AnswerViewHolder holder, int position) {
+        final Answer answer = answers.getAnswerList().get(position);
 
         // get the user data from database
         ValueListener<User> vlUser = new ValueListener<User>() {
@@ -86,13 +83,13 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             public void onDataChange(User value) {
                 TextView userName = (TextView) holder.getFieldOne();
                 userName.setText(value.getUserName());
-                userName.setContentDescription("username"+Integer.toString(position));
+                userName.setContentDescription("username"+Integer.toString(holder.getAdapterPosition()));
                 ImageView userPic = (ImageView) holder.getFieldThree();
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
                         .fit().into(userPic);
-                userPic.setContentDescription("pic"+Integer.toString(position));
+                userPic.setContentDescription("pic"+Integer.toString(holder.getAdapterPosition()));
             }
 
             @Override
@@ -106,6 +103,11 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         description.setText(answer.getDescription());
         description.setContentDescription("description"+Integer.toString(position));
 
+        setupFavorite(holder, position);
+
+    }
+
+    private void setupFavorite(final AnswerViewHolder holder, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
         favButton.setContentDescription("fav"+Integer.toString(position));
 
@@ -134,12 +136,11 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             favButton.setImageResource(HEART_EMPTY);
             favButton.setTag(HEART_EMPTY);
         }
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return answers.getAnswers().size();
+        return answers.getAnswerList().size();
     }
 }

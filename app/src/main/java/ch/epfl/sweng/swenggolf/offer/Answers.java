@@ -5,16 +5,16 @@ import java.util.List;
 
 public class Answers {
     private int favoritePos;
-    private List<Answer> answers;
+    private List<Answer> answerList;
 
-    public Answers(List<Answer> answers, int favoritePos) {
-        this.answers = answers;
+    public Answers(List<Answer> answerList, int favoritePos) {
+        this.answerList = answerList;
         this.favoritePos = favoritePos;
     }
 
-    // for firebase
+    // firebase needs empty constructor
     public Answers() {
-        answers = new ArrayList<>();
+        answerList = new ArrayList<>();
         favoritePos = -1;
     }
 
@@ -26,7 +26,7 @@ public class Answers {
         favoritePos = newPos;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<Answer> getAnswerList() {
+        return answerList;
     }
 }
