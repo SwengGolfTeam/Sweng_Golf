@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
-
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -72,8 +71,9 @@ public class ShowOfferActivity extends FragmentConverter {
 
         if (!offer.getLinkPicture().isEmpty()) {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
-            Picasso.with(this.getContext()).
-                    load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
+            Picasso.with(this.getContext())
+                    .load(Uri.parse(offer.getLinkPicture()))
+                        .into(offerPicture);
         }
     }
 
@@ -180,7 +180,8 @@ public class ShowOfferActivity extends FragmentConverter {
         DatabaseUser.getUser(new ValueListener<User>() {
                                  @Override
                                  public void onDataChange(User user) {
-                                     replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                                     Fragment fragment = FragmentConverter.createShowProfileWithProfile(user);
+                                     replaceCentralFragment(fragment);
                                  }
 
                                  @Override

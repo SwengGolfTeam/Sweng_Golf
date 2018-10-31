@@ -63,19 +63,20 @@ public abstract class FragmentConverter extends Fragment {
     /**
      * Creates a ProfileActivity wit arguments already set.
      * @param user the user to pass to the fragment.
-     * @return a new ProfileActivity fragment with user as an argument addressable with "ch.epfl.swenggolf.user".
+     * @return a new ProfileActivity fragment with user.
      */
     public static ProfileActivity createShowProfileWithProfile(User user) {
-        return fillFragmentWithParcelable(new ProfileActivity(), "ch.epfl.sweng.swenggolf.user", user);
+        String key = "ch.epfl.sweng.swenggolf.user";
+        return fillFragment(new ProfileActivity(), key, user);
     }
 
     /**
      * Creates a ShowOfferActivity with arguments already set.
      * @param offer the offer to pass to the fragment.
-     * @return a new ShowOfferActivity with offer as an argument addressable with "offer"
+     * @return a new ShowOfferActivity with an offer.
      */
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
-        return fillFragmentWithParcelable(new ShowOfferActivity(), "offer", offer);
+        return fillFragment(new ShowOfferActivity(), "offer", offer);
     }
 
     /**
@@ -86,7 +87,7 @@ public abstract class FragmentConverter extends Fragment {
      * @param <T> the type of fragment.
      * @return fragment with p as an argument that can be get with key as key.
      */
-    public static <T extends Fragment> T fillFragmentWithParcelable(T fragment, String key, Parcelable p) {
+    public static <T extends Fragment> T fillFragment(T fragment, String key, Parcelable p) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(key, p);
         fragment.setArguments(bundle);

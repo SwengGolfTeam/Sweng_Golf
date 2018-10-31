@@ -76,14 +76,24 @@ public class DeleteOfferTest {
     public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        try {
+            onView(withId(R.id.button_delete_offer)).perform(click());
+        } catch (NoMatchingViewException e) {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            onView(withContentDescription(R.string.delete_offer)).perform(click());
+        }
         onView(withText(android.R.string.no)).perform(click());
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        try {
+            onView(withId(R.id.button_delete_offer)).perform(click());
+        } catch (NoMatchingViewException e) {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            onView(withContentDescription(R.string.delete_offer)).perform(click());
+        }
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void deleteElementTest() throws InterruptedException {
+    public void deleteElementTest() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));

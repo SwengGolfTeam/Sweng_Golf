@@ -73,20 +73,21 @@ public class CreateOfferActivityTest {
 
     private static FragmentManager manager;
 
+    /**
+     * Sets up a fake database and a fake storage, enables TestMode and launches activity.
+     */
     @Before
     public void setTest() {
-        initDatabase();
+        ListOfferActivityTest.setUpFakeDatabase();
+        Storage.setDebugStorage(new FakeStorage(true));
         Config.goToTest();
         intentsTestRule.launchActivity(new Intent());
         manager = intentsTestRule.getActivity().getSupportFragmentManager();
     }
 
-    /**
-     * Sets up a fake database and a fake storage, and enables TestMode.
-     */
+
     private void initDatabase() {
-        ListOfferActivityTest.setUpFakeDatabase();
-        Storage.setDebugStorage(new FakeStorage(true));
+
     }
 
     private void goToCreateOffer(boolean hasOffer) {

@@ -77,7 +77,8 @@ public class PreferenceActivityTest {
         User user = FilledFakeDatabase.getUser(0);
         onView(withId(R.id.preference_list)).perform(actionOnItem(hasDescendant(
                 withText(user.getUserName())), click()));
-        Fragment fragment = preferenceRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+        Fragment fragment = preferenceRule.getActivity()
+                .getSupportFragmentManager().getFragments().get(0);
         assertThat(fragment.getClass().getName(), is(ProfileActivity.class.getName()));
         assertNotNull(fragment.getArguments().getParcelable("ch.epfl.sweng.swenggolf.user"));
     }

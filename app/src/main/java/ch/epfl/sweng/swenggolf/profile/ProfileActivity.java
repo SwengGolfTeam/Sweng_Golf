@@ -104,7 +104,8 @@ public class ProfileActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        int id = user.getUserId().equals(Config.getUser().getUserId()) ? R.menu.menu_profile : R.menu.menu_other_user;
+        boolean isCurrent = user.getUserId().equals(Config.getUser().getUserId());
+        int id =  isCurrent ? R.menu.menu_profile : R.menu.menu_other_user;
         menuInflater.inflate(id, menu);
         if(id == R.menu.menu_other_user){
             button = menu.findItem(R.id.follow);

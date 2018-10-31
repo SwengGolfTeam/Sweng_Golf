@@ -55,7 +55,8 @@ public class ShowOfferActivityTest {
     @Test
     public void canOpenProfileFromOffer() {
         onView(withId(R.id.show_offer_author)).perform(click());
-        Fragment currentFragment = mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+        Fragment currentFragment = mActivityRule.getActivity()
+                .getSupportFragmentManager().getFragments().get(0);
         assertThat(currentFragment.getClass().getName(), is(ProfileActivity.class.getName()));
     }
 
