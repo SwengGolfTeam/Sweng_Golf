@@ -117,6 +117,11 @@ public class DeleteOfferTest {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
             openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
             onData(hasToString("Delete offer")).perform(ViewActions.click());
         }
     }
