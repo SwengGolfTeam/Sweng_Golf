@@ -76,19 +76,9 @@ public class DeleteOfferTest {
     public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
-        } catch (NoMatchingViewException e) {
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-            onView(withContentDescription(R.string.delete_offer)).perform(click());
-        }
+        deleteClick();
         onView(withText(android.R.string.no)).perform(click());
-        try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
-        } catch (NoMatchingViewException e) {
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-            onView(withContentDescription(R.string.delete_offer)).perform(click());
-        }
+        deleteClick();
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
 
@@ -96,13 +86,8 @@ public class DeleteOfferTest {
     public void deleteElementTest() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
-        try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
-        } catch (NoMatchingViewException e) {
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-            onView(withContentDescription(R.string.delete_offer)).perform(click());
-        }
+        //onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
+        deleteClick();
         onView(withChild(withText(android.R.string.yes))).perform(click());
         ValueListener vl = new ValueListener() {
             @Override
@@ -118,4 +103,12 @@ public class DeleteOfferTest {
         database.read(Database.OFFERS_PATH, ID1, vl, Offer.class);
     }
 
+    private void deleteClick() {
+        try {
+            onView(withId(R.id.button_delete_offer)).perform(click());
+        } catch (NoMatchingViewException e) {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            onView(withContentDescription(R.string.delete_offer)).perform(click());
+        }
+    }
 }

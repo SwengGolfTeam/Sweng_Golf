@@ -85,11 +85,6 @@ public class CreateOfferActivityTest {
         manager = intentsTestRule.getActivity().getSupportFragmentManager();
     }
 
-
-    private void initDatabase() {
-
-    }
-
     private void goToCreateOffer(boolean hasOffer) {
         FragmentTransaction transaction = manager.beginTransaction();
         CreateOfferActivity fragment = new CreateOfferActivity();

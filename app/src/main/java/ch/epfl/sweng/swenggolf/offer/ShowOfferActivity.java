@@ -180,7 +180,8 @@ public class ShowOfferActivity extends FragmentConverter {
         DatabaseUser.getUser(new ValueListener<User>() {
                                  @Override
                                  public void onDataChange(User user) {
-                                     Fragment fragment = FragmentConverter.createShowProfileWithProfile(user);
+                                     Fragment fragment = FragmentConverter
+                                             .createShowProfileWithProfile(user);
                                      replaceCentralFragment(fragment);
                                  }
 
