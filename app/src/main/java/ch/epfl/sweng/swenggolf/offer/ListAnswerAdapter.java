@@ -110,7 +110,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private void setupFavorite(final AnswerViewHolder holder, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
         favButton.setContentDescription("fav"+Integer.toString(position));
-
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

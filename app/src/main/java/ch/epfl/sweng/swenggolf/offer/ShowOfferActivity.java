@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,31 +52,19 @@ public class ShowOfferActivity extends AppCompatActivity {
         offer = getIntent().getParcelableExtra("offer");
         if (!Config.getUser().getUserId().equals(offer.getUserId())) {
             ImageView buttonModify = findViewById(R.id.button_modify_offer);
-            buttonModify.setVisibility(View.INVISIBLE);
-            buttonModify.setClickable(false);
+            hideButton(buttonModify);
             ImageView buttonDelete = findViewById(R.id.button_delete_offer);
-            buttonDelete.setVisibility(View.INVISIBLE);
-            buttonDelete.setClickable(false);
+            hideButton(buttonDelete);
         }
         setContents();
         setRecyclerView();
-        // fetch answers from database
-        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
-            @Override
-            public void onDataChange(Answers value) {
-                if (value != null) {
-                    mAdapter.setAnswers(value);
-                } else {
-                    mAdapter.setAnswers(DEFAULT_ANSWERS);
-                }
-            }
-            @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Unable to load answers from database");
-            }
-        };
-        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+        fetchAnswers();
         setAnswerToPost();
+    }
+
+    private void hideButton(ImageView button) {
+        button.setVisibility(View.INVISIBLE);
+        button.setClickable(false);
     }
 
     private void setContents() {
@@ -97,6 +86,25 @@ public class ShowOfferActivity extends AppCompatActivity {
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
 
+    }
+
+    private void fetchAnswers() {
+        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+            @Override
+            public void onDataChange(Answers value) {
+                if (value != null) {
+                    mAdapter.setAnswers(value);
+                } else {
+                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load answers from database");
+            }
+        };
+        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
     }
 
     private void setAnswerToPost() {

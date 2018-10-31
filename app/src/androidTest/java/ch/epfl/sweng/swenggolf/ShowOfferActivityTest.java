@@ -107,7 +107,8 @@ public class ShowOfferActivityTest {
         Config.setUser(FilledFakeDatabase.getUser(1));
         // user is not author
         addAnswer("hey!");
-        onView(withContentDescription(getContentDescription("fav"))).check(matches(not(isClickable())));
+        onView(withContentDescription(getContentDescription("fav")))
+                .check(matches(not(isClickable())));
         testOrder++;
     }
 
