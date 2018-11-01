@@ -173,6 +173,7 @@ public class Offer implements Parcelable {
     }
 
 
+
     /* Implements Parcelable */
     @Override
     public int describeContents() {

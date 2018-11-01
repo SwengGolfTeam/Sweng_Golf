@@ -7,12 +7,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -30,6 +40,9 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 public class ShowOfferActivity extends AppCompatActivity {
 
     private Offer offer;
+    private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private ListAnswerAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +55,12 @@ public class ShowOfferActivity extends AppCompatActivity {
             ImageView buttonDelete = findViewById(R.id.button_delete_offer);
             hideButton(buttonDelete);
         }
-
         setContents();
+        setRecyclerView();
+        fetchAnswers();
+        setAnswerToPost();
     }
 
-    /**
-     * Help to hide a button.
-     *
-     * @param button button to hide
-     */
     private void hideButton(ImageView button) {
         button.setVisibility(View.INVISIBLE);
         button.setClickable(false);
@@ -74,6 +84,85 @@ public class ShowOfferActivity extends AppCompatActivity {
             ImageView offerPicture = findViewById(R.id.show_offer_picture);
             Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
         }
+
+    }
+
+    private void fetchAnswers() {
+        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+            @Override
+            public void onDataChange(Answers value) {
+                if (value != null) {
+                    mAdapter.setAnswers(value);
+                } else {
+                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load answers from database");
+            }
+        };
+        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+    }
+
+    private void setAnswerToPost() {
+        LinearLayout mLayout = findViewById(R.id.list_answers);
+
+        LayoutInflater mInflater = getLayoutInflater();
+        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mLayout.addView(mView);
+
+        ValueListener<User> vlUser = new ValueListener<User>() {
+            @Override
+            public void onDataChange(User value) {
+                TextView userName = findViewById(R.id.user_name_);
+                userName.setText(value.getUserName());
+                ImageView userPic = findViewById(R.id.user_pic_);
+                Picasso.with(userPic.getContext())
+                        .load(Uri.parse(value.getPhoto()))
+                        .placeholder(R.drawable.gender_neutral_user1)
+                        .fit().into(userPic);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load user from database");
+            }
+        };
+        DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
+    }
+
+    /**
+     * Adds a new answer to the list of answers of the offer.
+     * @param view the button that got clicked
+     */
+    public void postAnswer(View view) {
+        EditText editText = findViewById(R.id.answer_description_);
+        Answers answers = mAdapter.getAnswers();
+        answers.getAnswerList()
+                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+        editText.getText().clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setRecyclerView() {
+        RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+        mRecyclerView.setFocusable(false);
+        mRecyclerView.setNestedScrollingEnabled(false);
+
+        mLayoutManager = new LinearLayoutManager(this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
+        // Add dividing line
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     /**

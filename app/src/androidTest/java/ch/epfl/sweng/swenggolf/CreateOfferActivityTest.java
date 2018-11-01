@@ -78,7 +78,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.create_offer_button)).perform(click());
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
         onView(withId(R.id.button)).perform(scrollTo(),click());
-        onView(withId(R.id.error_message)).perform(scrollTo())
+        onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
@@ -136,7 +136,7 @@ public class CreateOfferActivityTest {
     @Test
     public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
-        onView(withId(R.id.button_modify_offer)).perform(click());
+        onView(withId(R.id.button_modify_offer)).perform(scrollTo(), click());
         fillOffer();
         intended(hasComponent(ShowOfferActivity.class.getName()), times(2));
     }
@@ -146,40 +146,5 @@ public class CreateOfferActivityTest {
         goToShowOffer(true);
         onView(withId(R.id.button_modify_offer)).check(matches(not(isDisplayed())));
         onView(withId(R.id.button_modify_offer)).check(matches(not(isClickable())));
-    }
-
-    @Test
-    public void defineOfferOnCreation(){
-        final String cat = Category.values()[1].toString();
-        initDatabase();
-
-        onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
-        onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
-                .perform(customClick());
-        onView(withText(cat)).perform(click());
-        onView(withText(R.string.offer_name)).perform(scrollTo());
-        fillOffer();
-
-        onView(withText(cat)).check(matches(isDisplayed()));
-    }
-
-    private ViewAction customClick() {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isEnabled(); // requires matches(allOf( isEnabled(), isClickable())
-            }
-
-            @Override
-            public String getDescription() {
-                return "click button without the 90% constraint";
-            }
-
-            @Override
-            public void perform(UiController uiController, View view) {
-                view.performClick();
-            }
-        };
     }
 }

@@ -104,12 +104,12 @@ public class ListPreferenceAdapter
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         User current = mDataset.get(position);
-        Picasso.with(holder.getMainContent().getContext())
+        Picasso.with(holder.getFieldThree().getContext())
                 .load(Uri.parse(current.getPhoto()))
                 .placeholder(DEFAULT_PICTURE)
-                .fit().into((ImageView) holder.getMainContent());
-        ((TextView) holder.getTitle()).setText(current.getUserName());
-        ((TextView) holder.getSubTitle()).setText(current.getPreference());
+                .fit().into((ImageView) holder.getFieldThree());
+        ((TextView) holder.getFieldOne()).setText(current.getUserName());
+        ((TextView) holder.getFieldTwo()).setText(current.getPreference());
     }
 
     @Override
