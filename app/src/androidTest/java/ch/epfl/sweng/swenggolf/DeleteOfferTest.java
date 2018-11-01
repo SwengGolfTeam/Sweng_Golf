@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
@@ -27,12 +28,14 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
+import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -40,6 +43,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.object.HasToString.hasToString;
 import static org.junit.Assert.fail;
 
@@ -117,9 +121,10 @@ public class DeleteOfferTest {
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
-            //onView(withChild(withContentDescription(R.string.delete_offer))).inRoot(isPlatformPopup()).perform(click());
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(ViewActions.click());
+            //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+            Espresso.openContextualActionModeOverflowMenu();
+            onView(anyOf(withText(R.string.delete_offer), withId(R.id.button_delete_offer)))
+                    .perform(click());
         }
     }
 }
