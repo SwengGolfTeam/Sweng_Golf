@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Answers {
@@ -13,10 +12,7 @@ public class Answers {
     }
 
     // firebase needs empty constructor
-    public Answers() {
-        answerList = new ArrayList<>();
-        favoritePos = -1;
-    }
+    public Answers() {}
 
     public int getFavoritePos() {
         return favoritePos;

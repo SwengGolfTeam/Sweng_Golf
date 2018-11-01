@@ -9,7 +9,7 @@ public class Answer {
         this.description = description;
     }
 
-    //TODO need this? But how is data recovered?
+    // firebase needs empty constructor
     public Answer() {
         userId = "";
         description = "";

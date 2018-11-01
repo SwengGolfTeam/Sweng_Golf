@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.offer.Answer;
+import ch.epfl.sweng.swenggolf.offer.Answers;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -55,21 +57,12 @@ public class ShowOfferActivityTest {
         mActivityRule.launchActivity(intent);
     }
 
+
+
     @Test
     public void canOpenProfileFromOffer() {
         onView(withId(R.id.show_offer_author)).perform(click());
         intended(hasComponent(ProfileActivity.class.getName()));
-    }
-
-    private void addAnswer(String answer) {
-        onView(withId(R.id.answer_description_))
-                .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
-        onView(withId(R.id.post_button)).perform(scrollTo(), click());
-
-    }
-
-    private String getContentDescription(String type) {
-        return type + Integer.toString(testOrder);
     }
 
     @Test
@@ -79,6 +72,12 @@ public class ShowOfferActivityTest {
         onView(withContentDescription(getContentDescription("description")))
                 .check(matches(withText(answer)));
         testOrder++;
+    }
+
+    @Test
+    public void answerHasEmptyConstructorForFirebase() {
+        Answer answer = new Answer();
+        Answers answers = new Answers();
     }
 
     @Test
@@ -112,6 +111,14 @@ public class ShowOfferActivityTest {
         testOrder++;
     }
 
+    private void addAnswer(String answer) {
+        onView(withId(R.id.answer_description_))
+                .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
+        onView(withId(R.id.post_button)).perform(scrollTo(), click());
 
+    }
 
+    private String getContentDescription(String type) {
+        return type + Integer.toString(testOrder);
+    }
 }
