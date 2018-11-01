@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/show_offer_menu_content">
+    android:id="@+id/show_offer_menu_content"
+    android:contentDescription="menu_offer_content">
 <item
         android:id="@+id/button_modify_offer"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/modify_offer"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/button_delete_offer"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete_offer"
         android:contentDescription="@string/delete_offer"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 </menu>

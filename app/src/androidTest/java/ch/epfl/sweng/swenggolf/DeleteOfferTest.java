@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.PerformException;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.RootMatchers;
@@ -12,6 +13,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.MenuPopupWindow;
 import android.view.View;
+import android.widget.AdapterView;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -44,6 +46,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.object.HasToString.hasToString;
 import static org.junit.Assert.fail;
 
@@ -123,8 +127,10 @@ public class DeleteOfferTest {
         } catch (NoMatchingViewException e) {
             //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
             Espresso.openContextualActionModeOverflowMenu();
-            onView(anyOf(withText(R.string.delete_offer), withId(R.id.button_delete_offer)))
-                    .perform(click());
+            //onData(is("Delete offer")).inAdapterView(withContentDescription("menu_offer_content")).perform(click());
+            //onData(instanceOf(AdapterView.class)).atPosition(1).perform(click());
+            //onView(anyOf(withText(R.string.delete_offer), withId(R.id.button_delete_offer))).perform(click());
+            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class)).perform(ViewActions.click());
         }
     }
 }
