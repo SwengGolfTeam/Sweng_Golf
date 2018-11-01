@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Answers {
@@ -7,7 +8,7 @@ public class Answers {
     private List<Answer> answerList;
 
     public Answers(List<Answer> answerList, int favoritePos) {
-        this.answerList = answerList;
+        this.answerList = new ArrayList<>(answerList);
         this.favoritePos = favoritePos;
     }
 
