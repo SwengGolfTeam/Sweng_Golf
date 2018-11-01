@@ -56,7 +56,6 @@ public class ShowOfferActivityDbNotWorkingTest {
 
     @Test
     public void openProfileFromOfferShowToastOnFail() {
-        onView(withId(R.id.show_offer_title)).perform(click());
         database.setEntryNotWorking(Database.USERS_PATH, offer.getUserId());
         onView(withId(R.id.show_offer_author)).perform(scrollTo(), click());
         testToastShow(mActivityRule, R.string.error_load_user);
