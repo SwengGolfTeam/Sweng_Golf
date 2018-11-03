@@ -95,16 +95,15 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
+        // TODO vérifier que l'avertissement s'ouvre (?)
         onView(withText(android.R.string.no)).perform(click());
-        deleteClick();
-        onView(withText("Delete entry")).check(matches(isDisplayed()));
+        // TODO vérifier que l'avertissement s'est fermé (?)
     }
 
     @Test
     public void deleteElementTest() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        //onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
         deleteClick();
         onView(withChild(withText(android.R.string.yes))).perform(click());
         ValueListener vl = new ValueListener() {
@@ -122,15 +121,6 @@ public class DeleteOfferTest {
     }
 
     private void deleteClick() {
-        try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
-        } catch (NoMatchingViewException e) {
-            //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-            Espresso.openContextualActionModeOverflowMenu();
-            //onData(is("Delete offer")).inAdapterView(withContentDescription("menu_offer_content")).perform(click());
-            //onData(instanceOf(AdapterView.class)).atPosition(1).perform(click());
-            //onView(anyOf(withText(R.string.delete_offer), withId(R.id.button_delete_offer))).perform(click());
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class)).perform(ViewActions.click());
-        }
+        onView(withId(R.id.button_delete_offer)).perform(click());
     }
 }
