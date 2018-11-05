@@ -1,17 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.PerformException;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.matcher.RootMatchers;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.MenuPopupWindow;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -27,27 +22,20 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.storage.FakeStorage;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-
-import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.object.HasToString.hasToString;
 import static org.junit.Assert.fail;
 
@@ -56,10 +44,6 @@ import static org.junit.Assert.fail;
  */
 @RunWith(AndroidJUnit4.class)
 public class DeleteOfferTest {
-
-    private static final String ID1 = "idoftheoffer1";
-    private static final String ID2 = "idoftheoffer2";
-    private static final String TITLE1 = "This is a title";
 
     @Rule
     public final ActivityTestRule<MainMenuActivity> mActivityRule =
@@ -72,19 +56,23 @@ public class DeleteOfferTest {
     public void init() {
         setUpFakeDatabase();
         Config.goToTest();
+        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+
+        Storage storage = new FakeStorage(true);
+        Storage.setDebugStorage(storage);
+
         mActivityRule.launchActivity(new Intent());
     }
-
-    private static Database database = new FakeDatabase(true);
 
     /**
      * Set up a fake database with two offers.
      */
     protected static void setUpFakeDatabase() {
-        Offer offer1 = new Offer("user_id", TITLE1, "Hello");
-        Offer offer2 = new Offer("user_id", "This is a title 2", "LOREM");
-        database.write(Database.OFFERS_PATH, ID1, offer1);
-        database.write(Database.OFFERS_PATH, ID2, offer2);
+        Database database  = new FakeDatabase(true);
+        Offer offer1 = new Offer("user_id", "This is a title 1", "Hello", "", "id1");
+        Offer offer2 = new Offer("user_id", "This is a title 2", "LOREM", "", "id2");
+        database.write(Database.OFFERS_PATH, "id1", offer1);
+        database.write(Database.OFFERS_PATH, "id2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
@@ -95,8 +83,9 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
-        onView(withText(android.R.string.no)).perform(click());
+        onView(withText(android.R.string.no)).perform(scrollTo(), click());
         deleteClick();
+
         onView(withText("Delete entry")).check(matches(isDisplayed()));
     }
 
@@ -105,8 +94,6 @@ public class DeleteOfferTest {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         //onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
-        deleteClick();
-        onView(withChild(withText(android.R.string.yes))).perform(click());
         ValueListener vl = new ValueListener() {
             @Override
             public void onDataChange(Object value) {
@@ -118,7 +105,9 @@ public class DeleteOfferTest {
                 fail();
             }
         };
-        database.read(Database.OFFERS_PATH, ID1, vl, Offer.class);
+        Database.getInstance().read(Database.OFFERS_PATH, "id1", vl, Offer.class);
+        deleteClick();
+        onView(withChild(withText(android.R.string.yes))).perform(click());
     }
 
     private void deleteClick() {

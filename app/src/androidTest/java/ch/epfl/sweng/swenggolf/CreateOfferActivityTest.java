@@ -110,7 +110,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.error_message));
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
         onView(withId(R.id.button)).perform(scrollTo(),click());
-        onView(withId(R.id.error_message)).perform(scrollTo())
+        onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
@@ -168,7 +168,7 @@ public class CreateOfferActivityTest {
     @Test
     public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
-        onView(withId(R.id.button_modify_offer)).perform(click());
+        onView(withId(R.id.button_modify_offer)).perform(scrollTo(), click());
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }

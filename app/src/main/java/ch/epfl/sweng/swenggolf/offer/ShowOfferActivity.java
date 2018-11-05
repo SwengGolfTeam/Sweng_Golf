@@ -6,16 +6,35 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+<<<<<<< HEAD
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+=======
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+>>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.squareup.picasso.Picasso;
+<<<<<<< HEAD
+=======
+
+import java.util.ArrayList;
+
+>>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -33,8 +52,12 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private boolean userIsCreator;
     private Offer offer;
+    private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private ListAnswerAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
+<<<<<<< HEAD
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
@@ -49,6 +72,27 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offer = getArguments().getParcelable("offer");
+=======
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_show_offer);
+        offer = getIntent().getParcelableExtra("offer");
+        if (!Config.getUser().getUserId().equals(offer.getUserId())) {
+            ImageView buttonModify = findViewById(R.id.button_modify_offer);
+            hideButton(buttonModify);
+            ImageView buttonDelete = findViewById(R.id.button_delete_offer);
+            hideButton(buttonDelete);
+        }
+        setContents();
+        setRecyclerView();
+        fetchAnswers();
+        setAnswerToPost();
+    }
+
+    private void hideButton(ImageView button) {
+        button.setVisibility(View.INVISIBLE);
+        button.setClickable(false);
+>>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
     }
 
     private void setContents(View inflated) {
@@ -75,6 +119,85 @@ public class ShowOfferActivity extends FragmentConverter {
                     .load(Uri.parse(offer.getLinkPicture()))
                         .into(offerPicture);
         }
+
+    }
+
+    private void fetchAnswers() {
+        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+            @Override
+            public void onDataChange(Answers value) {
+                if (value != null) {
+                    mAdapter.setAnswers(value);
+                } else {
+                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load answers from database");
+            }
+        };
+        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+    }
+
+    private void setAnswerToPost() {
+        LinearLayout mLayout = findViewById(R.id.list_answers);
+
+        LayoutInflater mInflater = getLayoutInflater();
+        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mLayout.addView(mView);
+
+        ValueListener<User> vlUser = new ValueListener<User>() {
+            @Override
+            public void onDataChange(User value) {
+                TextView userName = findViewById(R.id.user_name_);
+                userName.setText(value.getUserName());
+                ImageView userPic = findViewById(R.id.user_pic_);
+                Picasso.with(userPic.getContext())
+                        .load(Uri.parse(value.getPhoto()))
+                        .placeholder(R.drawable.gender_neutral_user1)
+                        .fit().into(userPic);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                Log.d(error.toString(), "Unable to load user from database");
+            }
+        };
+        DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
+    }
+
+    /**
+     * Adds a new answer to the list of answers of the offer.
+     * @param view the button that got clicked
+     */
+    public void postAnswer(View view) {
+        EditText editText = findViewById(R.id.answer_description_);
+        Answers answers = mAdapter.getAnswers();
+        answers.getAnswerList()
+                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+        editText.getText().clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void setRecyclerView() {
+        RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+        mRecyclerView.setFocusable(false);
+        mRecyclerView.setNestedScrollingEnabled(false);
+
+        mLayoutManager = new LinearLayoutManager(this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
+        // Add dividing line
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     /**
@@ -153,8 +276,10 @@ public class ShowOfferActivity extends FragmentConverter {
      * Delete the offer in the database.
      */
     private void deleteOfferInDatabase() {
-        Storage storage = Storage.getInstance();
-        storage.remove(offer.getLinkPicture());
+        if (!offer.getLinkPicture().isEmpty()) {
+            Storage storage = Storage.getInstance();
+            storage.remove(offer.getLinkPicture());
+        }
         Database database = Database.getInstance();
         CompletionListener listener = new CompletionListener() {
             @Override
