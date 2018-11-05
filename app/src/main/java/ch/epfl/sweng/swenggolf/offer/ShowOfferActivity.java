@@ -6,35 +6,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-<<<<<<< HEAD
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-=======
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
->>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.squareup.picasso.Picasso;
-<<<<<<< HEAD
-=======
 
 import java.util.ArrayList;
-
->>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -57,7 +49,6 @@ public class ShowOfferActivity extends FragmentConverter {
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
-<<<<<<< HEAD
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
@@ -65,6 +56,9 @@ public class ShowOfferActivity extends FragmentConverter {
         View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
         setContents(inflated);
+        setRecyclerView(inflated);
+        fetchAnswers(inflated);
+        setAnswerToPost(inflated);
         return inflated;
     }
 
@@ -72,27 +66,6 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offer = getArguments().getParcelable("offer");
-=======
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_offer);
-        offer = getIntent().getParcelableExtra("offer");
-        if (!Config.getUser().getUserId().equals(offer.getUserId())) {
-            ImageView buttonModify = findViewById(R.id.button_modify_offer);
-            hideButton(buttonModify);
-            ImageView buttonDelete = findViewById(R.id.button_delete_offer);
-            hideButton(buttonDelete);
-        }
-        setContents();
-        setRecyclerView();
-        fetchAnswers();
-        setAnswerToPost();
-    }
-
-    private void hideButton(ImageView button) {
-        button.setVisibility(View.INVISIBLE);
-        button.setClickable(false);
->>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
     }
 
     private void setContents(View inflated) {
@@ -122,7 +95,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
-    private void fetchAnswers() {
+    private void fetchAnswers(View inflated) {
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
@@ -141,8 +114,8 @@ public class ShowOfferActivity extends FragmentConverter {
         Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
     }
 
-    private void setAnswerToPost() {
-        LinearLayout mLayout = findViewById(R.id.list_answers);
+    private void setAnswerToPost(final View inflated) {
+        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
 
         LayoutInflater mInflater = getLayoutInflater();
         View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
@@ -151,9 +124,9 @@ public class ShowOfferActivity extends FragmentConverter {
         ValueListener<User> vlUser = new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
-                TextView userName = findViewById(R.id.user_name_);
+                TextView userName = inflated.findViewById(R.id.user_name_);
                 userName.setText(value.getUserName());
-                ImageView userPic = findViewById(R.id.user_pic_);
+                ImageView userPic = inflated.findViewById(R.id.user_pic_);
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
@@ -165,6 +138,15 @@ public class ShowOfferActivity extends FragmentConverter {
                 Log.d(error.toString(), "Unable to load user from database");
             }
         };
+
+        Button post = mView.findViewById(R.id.post_button);
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postAnswer(v);
+            }
+        });
+
         DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
     }
 
@@ -182,12 +164,12 @@ public class ShowOfferActivity extends FragmentConverter {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+    private void setRecyclerView(View inflated) {
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this.getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -195,7 +177,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
     }

@@ -20,6 +20,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -54,13 +55,13 @@ public class DeleteOfferTest {
      */
     @Before
     public void init() {
-        setUpFakeDatabase();
-        Config.goToTest();
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
 
         Storage storage = new FakeStorage(true);
         Storage.setDebugStorage(storage);
 
+        Config.setUser(FilledFakeDatabase.getUser(0));
+        Config.goToTest();
         mActivityRule.launchActivity(new Intent());
     }
 
@@ -85,8 +86,8 @@ public class DeleteOfferTest {
         deleteClick();
         onView(withText(android.R.string.no)).perform(scrollTo(), click());
         deleteClick();
-
         onView(withText("Delete entry")).check(matches(isDisplayed()));
+        onView(withText(android.R.string.no)).perform(click());
     }
 
     @Test

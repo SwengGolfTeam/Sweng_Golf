@@ -7,133 +7,107 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:noHistory="true"
-        tools:context=".offer.ShowOfferActivity"
-        android:focusableInTouchMode="true">
-
-    <TextView
-        android:id="@+id/show_offer_author"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
-        android:text="@android:string/untitled"
-        android:textColor="@color/offer_list_author"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
-
-        <TextView
-            android:id="@+id/show_offer_title"
-            android:layout_width="322dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="64dp"
-            android:textColor="@color/offer_list_name"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/show_offer_description"
-            android:layout_width="322dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/show_offer_picture" />
-
-<<<<<<< HEAD
-=======
-        <ImageView
-            android:id="@+id/show_offer_picture"
-            android:layout_width="283dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.386"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/show_offer_author"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-        <ImageView
-            android:id="@+id/button_modify_offer"
+        <android.support.constraint.ConstraintLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:onClick="modifyOffer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+            android:noHistory="true">
 
-        <ImageView
-            android:id="@+id/button_delete_offer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="16dp"
-            android:onClick="deleteOffer"
-            app:layout_constraintEnd_toStartOf="@+id/button_modify_offer"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
->>>>>>> 7f18631982ba7e01bdd174a18b506b2615a3e9bb
-    <TextView
-        android:id="@+id/show_offer_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
-        android:text="@android:string/unknownName"
-        android:textColor="@color/offer_list_author"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
+            <TextView
+                android:id="@+id/show_offer_author"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:text="@android:string/untitled"
+                android:textColor="@color/offer_list_author"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
 
-        <TextView
-            android:id="@+id/reaction_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/reactions"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/show_offer_description" />
+            <TextView
+                android:id="@+id/show_offer_title"
+                android:layout_width="322dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/offer_list_name"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/list_answers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reaction_title">
+            <TextView
+                android:id="@+id/show_offer_description"
+                android:layout_width="322dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_picture" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/answers_recycler_view"
+
+            <ImageView
+                android:id="@+id/show_offer_picture"
+                android:layout_width="283dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.386"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_author"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/show_offer_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                android:text="@android:string/unknownName"
+                android:textColor="@color/offer_list_author"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
+
+            <TextView
+                android:id="@+id/reaction_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/reactions"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/show_offer_description" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/list_answers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reaction_title">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/answers_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
     </HorizontalScrollView>
 </android.support.v4.widget.NestedScrollView>

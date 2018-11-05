@@ -57,7 +57,6 @@ public class ShowOfferActivityTest {
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Config.setUser(user);
-        Offer offer = FilledFakeDatabase.getOffer(0);
         mActivityRule.launchActivity(new Intent());
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
