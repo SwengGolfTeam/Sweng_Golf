@@ -127,8 +127,8 @@ public class CreateOfferActivityTest {
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(not(isInternal())).respondWith(result);
 
-        onView(withId(R.id.offer_picture)).perform(click());
-        onView(withId(R.id.button)).perform(click());
+        onView(withId(R.id.offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.button)).perform(scrollTo(), click());
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -214,10 +214,11 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
         onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
                 .perform(customClick());
-        onView(withText(cat)).perform(click());
+        onView(withText(cat)).perform(scrollTo(), click());
         onView(withText(R.string.offer_name)).perform(scrollTo());
         fillOffer();
 
+        onView(withText(cat)).perform(scrollTo());
         onView(withText(cat)).check(matches(isDisplayed()));
     }
 
