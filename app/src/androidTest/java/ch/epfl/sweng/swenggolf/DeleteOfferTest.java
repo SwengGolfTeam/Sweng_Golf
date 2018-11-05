@@ -7,6 +7,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -24,6 +25,7 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
@@ -33,10 +35,12 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.object.HasToString.hasToString;
 import static org.junit.Assert.fail;
 
@@ -65,29 +69,14 @@ public class DeleteOfferTest {
         mActivityRule.launchActivity(new Intent());
     }
 
-    /**
-     * Set up a fake database with two offers.
-     */
-    protected static void setUpFakeDatabase() {
-        Database database  = new FakeDatabase(true);
-        Offer offer1 = new Offer("user_id", "This is a title 1", "Hello", "", "id1");
-        Offer offer2 = new Offer("user_id", "This is a title 2", "LOREM", "", "id2");
-        database.write(Database.OFFERS_PATH, "id1", offer1);
-        database.write(Database.OFFERS_PATH, "id2", offer2);
-        Database.setDebugDatabase(database);
-        Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
-        DatabaseUser.addUser(Config.getUser());
-    }
-
     @Test
     public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
         onView(withText(android.R.string.no)).perform(scrollTo(), click());
-        deleteClick();
-        onView(withText("Delete entry")).check(matches(isDisplayed()));
-        onView(withText(android.R.string.no)).perform(click());
+        Fragment current = mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+        assertThat(ShowOfferActivity.class.getName(), is(current.getClass().getName()));
     }
 
     @Test
