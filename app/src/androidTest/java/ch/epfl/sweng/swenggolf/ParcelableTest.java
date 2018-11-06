@@ -23,8 +23,8 @@ public class ParcelableTest {
         return parcel;
     }
 
-    private static <T extends Parcelable> void parcelCreator(Parcelable.Creator<T> creator, Parcelable parcelable) {
-        assertEquals(parcelable ,creator.createFromParcel(writeToParcel(parcelable)));
+    private static <T> void parcelCreator(Parcelable.Creator<T> c, Parcelable p) {
+        assertEquals(p ,c.createFromParcel(writeToParcel(p)));
     }
 
     @Test

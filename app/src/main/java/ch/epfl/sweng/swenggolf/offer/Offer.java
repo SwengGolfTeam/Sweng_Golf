@@ -103,12 +103,14 @@ public class Offer implements Parcelable {
     public boolean equals(@Nullable Object obj) {
         if(obj instanceof Offer) {
             Offer other = (Offer) obj;
-            return userId.equals(other.userId) &&
-                    title.equals(other.title) &&
-                    description.equals(other.description) &&
-                    linkPicture.equals(other.linkPicture) &&
-                    uuid.equals(other.uuid) &&
-                    tag.equals(other.tag);
+            boolean userIdEquality = userId.equals(other.userId);
+            boolean titleEquality = title.equals(other.title);
+            boolean descriptionEquality = description.equals(other.description);
+            boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
+            boolean uuidEquality = uuid.equals(other.uuid);
+            boolean tagEquality  = tag.equals(other.tag);
+            return userIdEquality && titleEquality && descriptionEquality
+                    && linkPictureEquality && uuidEquality && tagEquality;
         }
         return false;
     }
