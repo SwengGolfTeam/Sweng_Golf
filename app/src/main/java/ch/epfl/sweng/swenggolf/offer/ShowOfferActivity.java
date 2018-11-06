@@ -44,7 +44,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private boolean userIsCreator;
     private Offer offer;
-    private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
 
     @Override
