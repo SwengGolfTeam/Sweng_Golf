@@ -56,8 +56,7 @@ public class ProfileActivityOtherUserTest {
         mActivityRule.launchActivity(new Intent());
         profile = FragmentConverter.createShowProfileWithProfile(otherUser);
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, profile)
-                    .commit();
+                .replace(R.id.centralFragment, profile).commit();
     }
 
     @Test
