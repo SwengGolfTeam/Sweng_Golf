@@ -44,7 +44,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private boolean userIsCreator;
     private Offer offer;
-    private final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
 
     @Override
@@ -101,7 +101,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 if (value != null) {
                     mAdapter.setAnswers(value);
                 } else {
-                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                    mAdapter.setAnswers(defaultAnswers);
                 }
             }
 
@@ -177,7 +177,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
+        mAdapter = new ListAnswerAdapter(defaultAnswers, offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));

@@ -79,7 +79,7 @@ public class ShowOfferActivityTest {
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
         addAnswer(answer);
-        onView(withContentDescription(getContentDescription("description")))
+        onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
         testOrder++;
     }
@@ -93,7 +93,7 @@ public class ShowOfferActivityTest {
     @Test
     public void authorOfAnswerIsCorrect() {
         addAnswer("I wrote this");
-        onView(withContentDescription(getContentDescription("username")))
+        onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
         testOrder++;
     }
@@ -101,7 +101,7 @@ public class ShowOfferActivityTest {
     @Test
     public void authorCanSelectAndDeselectFavorite() {
         addAnswer("test");
-        ViewInteraction favButton = onView(withContentDescription(getContentDescription("fav")));
+        ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
         favButton.perform(click());
@@ -116,7 +116,7 @@ public class ShowOfferActivityTest {
         Config.setUser(FilledFakeDatabase.getUser(1));
         // user is not author
         addAnswer("hey!");
-        onView(withContentDescription(getContentDescription("fav")))
+        onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
         testOrder++;
     }
@@ -128,7 +128,4 @@ public class ShowOfferActivityTest {
 
     }
 
-    private String getContentDescription(String type) {
-        return type + Integer.toString(testOrder);
-    }
 }
