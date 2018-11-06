@@ -48,7 +48,6 @@ public class ShowOfferActivityTest {
 
     private User user = FilledFakeDatabase.getUser(0);
     private Offer offer = FilledFakeDatabase.getOffer(0);
-    private static int testOrder = 0;
 
     /**
      * Set up a fake database, a fake user and launch activity.
@@ -81,7 +80,6 @@ public class ShowOfferActivityTest {
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
-        testOrder++;
     }
 
     @Test
@@ -95,7 +93,6 @@ public class ShowOfferActivityTest {
         addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
-        testOrder++;
     }
 
     @Test
@@ -108,7 +105,6 @@ public class ShowOfferActivityTest {
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
         favButton.perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite_border))));
-        testOrder++;
     }
 
     @Test
@@ -118,7 +114,6 @@ public class ShowOfferActivityTest {
         addAnswer("hey!");
         onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
-        testOrder++;
     }
 
     private void addAnswer(String answer) {
