@@ -232,7 +232,7 @@ public class User implements Parcelable {
      * @return true if they have the same uid, false otherwise
      */
     public boolean sameAccount(User user) {
-        return this.userId == user.getUserId();
+        return this.userId.equals(user.getUserId());
     }
 
     /**

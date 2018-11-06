@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -28,6 +29,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotNull;
@@ -90,4 +92,11 @@ public class PreferenceActivityTest {
         onView(new RecyclerViewMatcher(R.id.preference_list).atPosition(last))
                 .check(matches(hasDescendant(withText(user.getUserName()))));
     }
+
+    @Test
+    public void backFromPerferenceIsMenu() {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
+    }
+
 }

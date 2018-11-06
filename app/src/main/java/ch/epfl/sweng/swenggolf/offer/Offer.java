@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 public class Offer implements Parcelable {
     private static final int DESCRIPTION_LIMIT = 140;
@@ -96,6 +97,20 @@ public class Offer implements Parcelable {
         linkPicture = that.linkPicture;
         uuid = that.uuid;
         tag = that.tag;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof Offer) {
+            Offer other = (Offer) obj;
+            return userId.equals(other.userId) &&
+                    title.equals(other.title) &&
+                    description.equals(other.description) &&
+                    linkPicture.equals(other.linkPicture) &&
+                    uuid.equals(other.uuid) &&
+                    tag.equals(other.tag);
+        }
+        return false;
     }
 
     /**

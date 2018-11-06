@@ -75,7 +75,8 @@ public class DeleteOfferTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
         onView(withText(android.R.string.no)).perform(scrollTo(), click());
-        Fragment current = mActivityRule.getActivity().getSupportFragmentManager().getFragments().get(0);
+        Fragment current = mActivityRule.getActivity()
+                .getSupportFragmentManager().getFragments().get(0);
         assertThat(ShowOfferActivity.class.getName(), is(current.getClass().getName()));
     }
 
@@ -97,19 +98,17 @@ public class DeleteOfferTest {
         };
         Database.getInstance().read(Database.OFFERS_PATH, "id1", vl, Offer.class);
         deleteClick();
-        onView(withChild(withText(android.R.string.yes))).perform(click());
+        onView(withText(android.R.string.yes)).perform(scrollTo(), click());
     }
 
     private void deleteClick() {
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
-            //openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
             Espresso.openContextualActionModeOverflowMenu();
-            //onData(is("Delete offer")).inAdapterView(withContentDescription("menu_offer_content")).perform(click());
-            //onData(instanceOf(AdapterView.class)).atPosition(1).perform(click());
-            //onView(anyOf(withText(R.string.delete_offer), withId(R.id.button_delete_offer))).perform(click());
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class)).perform(ViewActions.click());
+            onData(hasToString("Delete offer")).inRoot(isPlatformPopup())
+                    .inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class))
+                        .perform(ViewActions.click());
         }
     }
 }

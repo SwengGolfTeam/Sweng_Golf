@@ -46,7 +46,6 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +56,7 @@ public class ShowOfferActivity extends FragmentConverter {
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
         setContents(inflated);
         setRecyclerView(inflated);
-        fetchAnswers(inflated);
+        fetchAnswers();
         setAnswerToPost(inflated);
         return inflated;
     }
@@ -95,7 +94,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
-    private void fetchAnswers(View inflated) {
+    private void fetchAnswers() {
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
@@ -114,14 +113,8 @@ public class ShowOfferActivity extends FragmentConverter {
         Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
     }
 
-    private void setAnswerToPost(final View inflated) {
-        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
-
-        LayoutInflater mInflater = getLayoutInflater();
-        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
-        mLayout.addView(mView);
-
-        ValueListener<User> vlUser = new ValueListener<User>() {
+    private ValueListener<User> createFiller(final View inflated) {
+        return new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
                 TextView userName = inflated.findViewById(R.id.user_name_);
@@ -138,6 +131,16 @@ public class ShowOfferActivity extends FragmentConverter {
                 Log.d(error.toString(), "Unable to load user from database");
             }
         };
+    }
+
+    private void setAnswerToPost(final View inflated) {
+        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
+
+        LayoutInflater mInflater = getLayoutInflater();
+        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mLayout.addView(mView);
+
+        ValueListener<User> vlUser = createFiller(inflated);
 
         Button post = mView.findViewById(R.id.post_button);
         post.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +172,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mLayoutManager = new LinearLayoutManager(this.getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -180,18 +183,6 @@ public class ShowOfferActivity extends FragmentConverter {
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
-    }
-
-    /**
-     * Launches the CreateOfferActivity using the current offer, which will trigger
-     * subsequent parameters that will be used to modify it.
-     */
-    public void modifyOffer() {
-        CreateOfferActivity createFrag = new CreateOfferActivity();
-        Bundle createBundle = new Bundle();
-        createBundle.putParcelable("offer", offer);
-        createFrag.setArguments(createBundle);
-        replaceCentralFragment(createFrag);
     }
 
     @Override
@@ -212,24 +203,17 @@ public class ShowOfferActivity extends FragmentConverter {
                 return true;
             }
             case R.id.button_modify_offer: {
-                modifyOffer();
+                replaceCentralFragment(createOfferActivityWithOffer(offer));
                 return true;
             }
             case R.id.button_delete_offer: {
-                deleteOffer();
+                showDeleteAlertDialog();
                 return true;
             }
             default: {
                 return super.onOptionsItemSelected(item);
             }
         }
-    }
-
-    /**
-     * Launches the DeleteOfferActivity using the current offer.
-     */
-    public void deleteOffer() {
-        showDeleteAlertDialog();
     }
 
     /**
@@ -287,8 +271,8 @@ public class ShowOfferActivity extends FragmentConverter {
         DatabaseUser.getUser(new ValueListener<User>() {
                                  @Override
                                  public void onDataChange(User user) {
-                                     Fragment fragment = FragmentConverter
-                                             .createShowProfileWithProfile(user);
+                                     Fragment fragment =
+                                             createShowProfileWithProfile(user);
                                      replaceCentralFragment(fragment);
                                  }
 

@@ -16,6 +16,7 @@ import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -77,6 +78,15 @@ public abstract class FragmentConverter extends Fragment {
      */
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
         return fillFragment(new ShowOfferActivity(), "offer", offer);
+    }
+
+    /**
+     * Creates a CreateOfferActivity with arguments already set.
+     * @param offer the offer to pass to the fragment.
+     * @return a new CreateOfferActivity with an offer.
+     */
+    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer) {
+        return fillFragment(new CreateOfferActivity(), "offer", offer);
     }
 
     /**
