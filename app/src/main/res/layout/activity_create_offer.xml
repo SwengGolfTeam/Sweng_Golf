@@ -52,7 +52,6 @@
             android:layout_marginTop="8dp"
             android:inputType="text"
             android:labelFor="@string/offer_description"
-            android:maxLength="@integer/offer_name_max_size"
             android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"

@@ -3,9 +3,15 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
     private static final int DESCRIPTION_LIMIT = 140;
+    public static final int TITLE_MIN_LENGTH = 1;
+    public static final int TITLE_MAX_LENGTH = 100;
+    public static final int DESCRIPTION_MIN_LENGTH = 1;
+    public static final int DESCRIPTION_MAX_LENGTH = 1000;
+
 
     private final Category tag;
     private final String userId;
@@ -42,8 +48,9 @@ public class Offer implements Parcelable {
 
         this.tag = tag;
         this.userId = userId;
-        this.title = title;
-        this.description = description;
+        this.title = checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH);
+        this.description = checkString(description, "description", DESCRIPTION_MIN_LENGTH,
+                DESCRIPTION_MAX_LENGTH);
         this.linkPicture = linkPicture;
         this.uuid = uuid;
     }

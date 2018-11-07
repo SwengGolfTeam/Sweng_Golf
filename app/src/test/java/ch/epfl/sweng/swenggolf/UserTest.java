@@ -136,4 +136,9 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
         assertEquals(DESCRIPTION, user.getDescription());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void throwExceptionWithIllegalUsername() {
+        new User("This is a very long username that should not be valid", ID, EMAIL, PHOTO);
+    }
+
 }

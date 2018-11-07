@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +77,16 @@ public class CreateOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        EditText title = findViewById(R.id.offer_name);
+        title.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(Offer.TITLE_MAX_LENGTH)});
+        EditText description = findViewById(R.id.offer_description);
+        description.setFilters( new InputFilter[] {
+                new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
     }
 
     private void setupSpinner(View v) {
