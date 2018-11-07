@@ -3,7 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
+import android.view.MenuItem;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,17 +13,25 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -31,32 +39,33 @@ public class ProfileActivityOtherUserTest {
 
     final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
     final User otherUser = new User("other", "user", "is", "a", "placeholder");
-    private FakeDatabase database = new FakeDatabase(true);
+    private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
+    private ProfileActivity profile;
 
     @Rule
-    public final IntentsTestRule<ProfileActivity> mActivityRule =
-            new IntentsTestRule<>(ProfileActivity.class, false, false);
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Set up a fake database and user.
      */
     @Before
     public void setUp() {
-        Config.isTest();
         Config.setUser(user);
         Database.setDebugDatabase(database);
-        mActivityRule.launchActivity(
-                new Intent().putExtra("ch.epfl.sweng.swenggolf.user", otherUser));
+        mActivityRule.launchActivity(new Intent());
+        profile = FragmentConverter.createShowProfileWithProfile(otherUser);
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, profile).commit();
     }
 
     @Test
     public void editButtonGone() {
-        onView(withId(R.id.edit)).check(matches(withEffectiveVisibility(
-                ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.edit_profile)).check(doesNotExist());
     }
 
     @Test
-    public void canFollow() {
+    public void canFollow() throws InterruptedException {
         testToast("You are now following ");
 
         ValueListener<String> listener = new ValueListener<String>() {
@@ -89,6 +98,11 @@ public class ProfileActivityOtherUserTest {
     private void testToast(String s) {
         String match = s + otherUser.getUserName();
         onView(withId(R.id.follow)).perform(click());
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         TestUtility.testToastShow(mActivityRule, match);
     }
 
@@ -105,15 +119,13 @@ public class ProfileActivityOtherUserTest {
         ViewInteraction followButton = onView(withId(R.id.follow));
         followButton.perform(click());
         followButton.perform(click());
-        followButton.check(matches(withTagValue(
-                equalTo((Object) android.R.drawable.btn_star_big_off))));
+        assertFalse(profile.isFollowing());
 
     }
 
     @Test
     public void showEmptyStarWhenNotFollowing() {
-        onView(withId(R.id.follow)).check(matches(withTagValue(
-                equalTo((Object) android.R.drawable.btn_star_big_off))));
+        assertFalse(profile.isFollowing());
     }
 
 }

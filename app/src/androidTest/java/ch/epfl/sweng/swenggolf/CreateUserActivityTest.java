@@ -1,8 +1,10 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -43,19 +46,19 @@ public class CreateUserActivityTest {
 
     @Rule
     public final ActivityTestRule<CreateUserActivity> mActivityRule =
-            new ActivityTestRule<>(CreateUserActivity.class);
+            new ActivityTestRule<>(CreateUserActivity.class, false, false);
 
     /**
      * Initialise the Config and the Database for tests.
      */
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         Config.goToTest();
         User user1 = new User(NAME, UID, MAIL, PHOTO);
         Config.setUser(new User(user1));
-        Database database = new FakeDatabase(true);
-        Database.setDebugDatabase(database);
-
+        Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
+        DatabaseUser.addUser(user1);
+        mActivityRule.launchActivity(new Intent());
     }
 
     @Test

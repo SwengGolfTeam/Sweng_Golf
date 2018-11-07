@@ -1,29 +1,32 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -32,57 +35,61 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
-public class ShowOfferActivity extends AppCompatActivity {
+public class ShowOfferActivity extends FragmentConverter {
 
+    private boolean userIsCreator;
     private Offer offer;
-    private static final Answers DEFAULT_ANSWERS = new Answers(new ArrayList<Answer>(), -1);
+    private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_offer);
-        offer = getIntent().getParcelableExtra("offer");
-        if (!Config.getUser().getUserId().equals(offer.getUserId())) {
-            ImageView buttonModify = findViewById(R.id.button_modify_offer);
-            hideButton(buttonModify);
-            ImageView buttonDelete = findViewById(R.id.button_delete_offer);
-            hideButton(buttonDelete);
-        }
-        setContents();
-        setRecyclerView();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
+        assert getArguments() != null;
+        View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
+        userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
+        setContents(inflated);
+        setRecyclerView(inflated);
         fetchAnswers();
-        setAnswerToPost();
+        setAnswerToPost(inflated);
+        return inflated;
     }
 
-    private void hideButton(ImageView button) {
-        button.setVisibility(View.INVISIBLE);
-        button.setClickable(false);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        offer = getArguments().getParcelable("offer");
     }
 
-    private void setContents() {
-        TextView offerTitle = findViewById(R.id.show_offer_title);
+    private void setContents(View inflated) {
+        TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
 
-        final TextView offerAuthor = findViewById(R.id.show_offer_author);
+        final TextView offerAuthor = inflated.findViewById(R.id.show_offer_author);
         ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
+        offerAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserProfile(v);
+            }
+        });
 
-        TextView offerTag = findViewById(R.id.show_offer_tag);
+        TextView offerDescription = inflated.findViewById(R.id.show_offer_description);
+        TextView offerTag = inflated.findViewById(R.id.show_offer_tag);
         offerTag.setText(offer.getTag().toString());
-
-
-        TextView offerDescription = findViewById(R.id.show_offer_description);
         offerDescription.setText(offer.getDescription());
 
         if (!offer.getLinkPicture().isEmpty()) {
-            ImageView offerPicture = findViewById(R.id.show_offer_picture);
-            Picasso.with(this).load(Uri.parse(offer.getLinkPicture())).into(offerPicture);
+            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
+            Picasso.with(this.getContext())
+                    .load(Uri.parse(offer.getLinkPicture()))
+                        .into(offerPicture);
         }
 
     }
@@ -94,7 +101,7 @@ public class ShowOfferActivity extends AppCompatActivity {
                 if (value != null) {
                     mAdapter.setAnswers(value);
                 } else {
-                    mAdapter.setAnswers(DEFAULT_ANSWERS);
+                    mAdapter.setAnswers(defaultAnswers);
                 }
             }
 
@@ -106,19 +113,13 @@ public class ShowOfferActivity extends AppCompatActivity {
         Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
     }
 
-    private void setAnswerToPost() {
-        LinearLayout mLayout = findViewById(R.id.list_answers);
-
-        LayoutInflater mInflater = getLayoutInflater();
-        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
-        mLayout.addView(mView);
-
-        ValueListener<User> vlUser = new ValueListener<User>() {
+    private ValueListener<User> createFiller(final View inflated) {
+        return new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
-                TextView userName = findViewById(R.id.user_name_);
+                TextView userName = inflated.findViewById(R.id.user_name_);
                 userName.setText(value.getUserName());
-                ImageView userPic = findViewById(R.id.user_pic_);
+                ImageView userPic = inflated.findViewById(R.id.user_pic_);
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
@@ -130,6 +131,25 @@ public class ShowOfferActivity extends AppCompatActivity {
                 Log.d(error.toString(), "Unable to load user from database");
             }
         };
+    }
+
+    private void setAnswerToPost(final View inflated) {
+        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
+
+        LayoutInflater mInflater = getLayoutInflater();
+        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mLayout.addView(mView);
+
+        ValueListener<User> vlUser = createFiller(inflated);
+
+        Button post = mView.findViewById(R.id.post_button);
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postAnswer(v);
+            }
+        });
+
         DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
     }
 
@@ -147,43 +167,53 @@ public class ShowOfferActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setRecyclerView() {
-        RecyclerView mRecyclerView = findViewById(R.id.answers_recycler_view);
+    private void setRecyclerView(View inflated) {
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new ListAnswerAdapter(DEFAULT_ANSWERS, offer);
+        mAdapter = new ListAnswerAdapter(defaultAnswers, offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
     }
 
-    /**
-     * Launches the CreateOfferActivity using the current offer, which will trigger
-     * subsequent parameters that will be used to modify it.
-     *
-     * @param view the view
-     */
-    public void modifyOffer(View view) {
-        Intent intent = new Intent(this, CreateOfferActivity.class);
-        intent.putExtra("offer", offer);
-        startActivity(intent);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (userIsCreator) {
+            inflater.inflate(R.menu.menu_show_offer, menu);
+        } else {
+            inflater.inflate(R.menu.menu_empty, menu);
+        }
     }
 
-    /**
-     * Launches the DeleteOfferActivity using the current offer.
-     *
-     * @param view the view
-     */
-    public void deleteOffer(View view) {
-        showDeleteAlertDialog();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.centralFragment, new ListOfferActivity()).commit();
+                return true;
+            }
+            case R.id.button_modify_offer: {
+                replaceCentralFragment(createOfferActivityWithOffer(offer));
+                return true;
+            }
+            case R.id.button_delete_offer: {
+                showDeleteAlertDialog();
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     /**
@@ -191,7 +221,7 @@ public class ShowOfferActivity extends AppCompatActivity {
      */
     public void showDeleteAlertDialog() {
         AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -221,10 +251,9 @@ public class ShowOfferActivity extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
-                    Toast.makeText(ShowOfferActivity.this, R.string.offer_deleted,
+                    Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ShowOfferActivity.this, ListOfferActivity.class));
-                    finish();
+                    replaceCentralFragment(new ListOfferActivity());
                 }
             }
 
@@ -242,15 +271,14 @@ public class ShowOfferActivity extends AppCompatActivity {
         DatabaseUser.getUser(new ValueListener<User>() {
                                  @Override
                                  public void onDataChange(User user) {
-                                     Intent intent = new Intent(ShowOfferActivity.this,
-                                             ProfileActivity.class);
-                                     intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
-                                     startActivity(intent);
+                                     Fragment fragment =
+                                             createShowProfileWithProfile(user);
+                                     replaceCentralFragment(fragment);
                                  }
 
                                  @Override
                                  public void onCancelled(DbError error) {
-                                     Toast.makeText(ShowOfferActivity.this,
+                                     Toast.makeText(ShowOfferActivity.this.getContext(),
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
                              },

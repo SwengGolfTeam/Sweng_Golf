@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -17,27 +19,52 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
-
-public class EditProfileActivity extends AppCompatActivity {
-
+public class EditProfileActivity extends FragmentConverter {
     private User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.profile_activity_name);
+        View inflated = inflater.inflate(R.layout.activity_edit_profile, container, false);
+        inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChangesAndReturn(v);
+            }
+        });
+        createUserView(inflated);
+        return inflated;
+    }
 
+    private void createUserView(View inflated) {
         user = Config.getUser();
         if (user != null) {
-            displayElement((EditText) findViewById(R.id.edit_name), user.getUserName());
-            displayElement((EditText) findViewById(R.id.edit_pref), user.getPreference());
-            displayElement((EditText) findViewById(R.id.edit_description), user.getDescription());
-            ImageView imageView = findViewById(R.id.ivProfile);
-            ProfileActivity.displayPicture(imageView, user, this);
+            displayElement((EditText) inflated.findViewById(R.id.edit_name),
+                    user.getUserName());
+            displayElement((EditText) inflated.findViewById(R.id.edit_pref),
+                    user.getPreference());
+            displayElement((EditText) inflated.findViewById(R.id.edit_description),
+                    user.getDescription());
+            ImageView imageView = inflated.findViewById(R.id.ivProfile);
+            ProfileActivity.displayPicture(imageView, user, this.getContext());
         }
+        inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChangesAndReturn(v);
+            }
+        });
+        inflated.findViewById(R.id.photoButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeProfilePicture(v);
+            }
+        });
     }
 
     private void displayElement(EditText editText, String elem) {
@@ -47,8 +74,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     /**
      * Saves the changes and returns to the profile activity.
-     *
-     * @param view the current view
      */
     public void saveChangesAndReturn(View view) {
         // save new name
@@ -68,9 +93,20 @@ public class EditProfileActivity extends AppCompatActivity {
 
         DatabaseUser.addUser(user);
 
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
-        startActivity(intent);
+        replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     public void changeProfilePicture(View view) {
@@ -78,7 +114,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
@@ -109,6 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void updatePicture() {
         ImageView imageView = findViewById(R.id.ivProfile);
-        ProfileActivity.displayPicture(imageView, user, this);
+        ProfileActivity.displayPicture(imageView, user, this.getContext());
     }
 }

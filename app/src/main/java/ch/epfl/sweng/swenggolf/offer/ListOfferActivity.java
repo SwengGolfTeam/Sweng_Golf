@@ -1,18 +1,18 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,9 +23,9 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-public class ListOfferActivity extends AppCompatActivity {
+public class ListOfferActivity extends FragmentConverter {
 
     private ListOfferAdapter mAdapter;
     private Menu mOptionsMenu;
@@ -34,40 +34,23 @@ public class ListOfferActivity extends AppCompatActivity {
     private TextView noOffers;
     public static final List<Offer> offerList = new ArrayList<>();
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_offer);
-        errorMessage = findViewById(R.id.error_message);
-        noOffers = findViewById(R.id.no_offers_to_show);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // add back arrow to toolbar
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-        }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backHome = new Intent(ListOfferActivity.this, MainMenuActivity.class);
-                startActivity(backHome);
-            }
-        });
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstance) {
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
+        View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
         List<Category> allCategories = Arrays.asList(Category.values()); // by default
-        setRecyclerView(allCategories);
+        errorMessage = inflated.findViewById(R.id.error_message);
+        noOffers = inflated.findViewById(R.id.no_offers_to_show);
+        setRecyclerView(inflated, allCategories);
+        return inflated;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         mOptionsMenu = menu;
-        getMenuInflater().inflate(R.menu.menu_list_offers, menu);
+        inflater.inflate(R.menu.menu_list_offers, menu);
         addAllCategoriesToMenu(R.id.menu_offers);
-        return true;
     }
 
     private void addAllCategoriesToMenu(int groupId) {
@@ -78,8 +61,7 @@ public class ListOfferActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private void onCheck(MenuItem item) {
         item.setChecked(!item.isChecked()); // true <-> false
         List<Category> listCategories = new ArrayList<>();
 
@@ -88,45 +70,57 @@ public class ListOfferActivity extends AppCompatActivity {
                 listCategories.add(Category.values()[i]);
             }
         }
-        setRecyclerView(listCategories);
-        return false;
+        setRecyclerView(getView(), listCategories);
     }
 
-    private void setRecyclerView(List<Category> categories) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                openDrawer();
+                break;
+            }
+            default: {
+                onCheck(item);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setRecyclerView(View inflated, List<Category> categories) {
         noOffers.setVisibility(View.VISIBLE);
-
-        RecyclerView mRecyclerView = findViewById(R.id.offers_recycler_view);
-
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
+        mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData(categories);
+        prepareOfferData(inflated, categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
 
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(this, mRecyclerView, clickListener);
+        return new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener);
     }
 
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData(List<Category> categories) {
+    private void prepareOfferData(final View inflated, List<Category> categories) {
         Database database = Database.getInstance();
-        findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
+        inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
@@ -137,7 +131,7 @@ public class ListOfferActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
-                findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
@@ -151,12 +145,8 @@ public class ListOfferActivity extends AppCompatActivity {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    Intent intent =
-                            new Intent(ListOfferActivity.this,
-                                    ShowOfferActivity.class);
-                    Offer offer = offerList.get(position);
-                    intent.putExtra("offer", offer);
-                    startActivity(intent);
+                    Offer showOffer = offerList.get(position);
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
 
                 @Override

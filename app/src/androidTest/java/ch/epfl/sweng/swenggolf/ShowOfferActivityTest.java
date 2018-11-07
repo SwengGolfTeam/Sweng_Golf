@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,11 +15,12 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Answer;
 import ch.epfl.sweng.swenggolf.offer.Answers;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -25,11 +28,13 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.is;
+
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.equalTo;
@@ -38,12 +43,11 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityTest {
     @Rule
-    public final IntentsTestRule<ShowOfferActivity> mActivityRule =
-            new IntentsTestRule<>(ShowOfferActivity.class, false, false);
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     private User user = FilledFakeDatabase.getUser(0);
     private Offer offer = FilledFakeDatabase.getOffer(0);
-    private static int testOrder = 0;
 
     /**
      * Set up a fake database, a fake user and launch activity.
@@ -52,9 +56,12 @@ public class ShowOfferActivityTest {
     public void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Config.setUser(user);
-        Intent intent = new Intent();
-        intent.putExtra("offer", offer);
-        mActivityRule.launchActivity(intent);
+        mActivityRule.launchActivity(new Intent());
+        FragmentTransaction transaction = mActivityRule.getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.centralFragment,
+                FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
     }
 
 
@@ -62,16 +69,17 @@ public class ShowOfferActivityTest {
     @Test
     public void canOpenProfileFromOffer() {
         onView(withId(R.id.show_offer_author)).perform(click());
-        intended(hasComponent(ProfileActivity.class.getName()));
+        Fragment currentFragment = mActivityRule.getActivity()
+                .getSupportFragmentManager().getFragments().get(0);
+        assertThat(currentFragment.getClass().getName(), is(ProfileActivity.class.getName()));
     }
 
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
         addAnswer(answer);
-        onView(withContentDescription(getContentDescription("description")))
+        onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
-        testOrder++;
     }
 
     @Test
@@ -83,22 +91,20 @@ public class ShowOfferActivityTest {
     @Test
     public void authorOfAnswerIsCorrect() {
         addAnswer("I wrote this");
-        onView(withContentDescription(getContentDescription("username")))
+        onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
-        testOrder++;
     }
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
         addAnswer("test");
-        ViewInteraction favButton = onView(withContentDescription(getContentDescription("fav")));
+        ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
         favButton.perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
         favButton.perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite_border))));
-        testOrder++;
     }
 
     @Test
@@ -106,9 +112,8 @@ public class ShowOfferActivityTest {
         Config.setUser(FilledFakeDatabase.getUser(1));
         // user is not author
         addAnswer("hey!");
-        onView(withContentDescription(getContentDescription("fav")))
+        onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
-        testOrder++;
     }
 
     private void addAnswer(String answer) {
@@ -118,7 +123,4 @@ public class ShowOfferActivityTest {
 
     }
 
-    private String getContentDescription(String type) {
-        return type + Integer.toString(testOrder);
-    }
 }

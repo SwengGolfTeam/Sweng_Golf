@@ -1,15 +1,17 @@
 package ch.epfl.sweng.swenggolf.profile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.view.MenuItemCompat;
+import android.view.ActionProvider;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,71 +25,57 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-
-public class ProfileActivity extends AppCompatActivity {
-
+public class ProfileActivity extends FragmentConverter {
     private User user;
     private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
     private static final int STAR_ON = android.R.drawable.btn_star_big_on;
     private boolean isFollowing = false;
+    private View inflated;
+    private MenuItem button;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.profile_activity_name);
+        inflated = inflater.inflate(R.layout.activity_profile, container, false);
+        displayUserData();
+        return inflated;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_profile);
-
-        user = getIntent().getParcelableExtra("ch.epfl.sweng.swenggolf.user");
+        user = getArguments().getParcelable("ch.epfl.sweng.swenggolf.user");
         if (user == null) {
             throw new NullPointerException("The user given to ProfileActivity can not be null");
         }
-        Toolbar toolbar = findViewById(R.id.profileToolbar);
-        setSupportActionBar(toolbar);
-
-        // add back arrow to toolbar
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
-        }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent backHome = new Intent(ProfileActivity.this, MainMenuActivity.class);
-                startActivity(backHome);
-            }
-        });
-
-        showToolbarButtons();
-
-        displayUserData();
     }
 
-    private void showToolbarButtons() {
-        if (user.getUserId().equals(Config.getUser().getUserId())) {
-            ImageButton button = findViewById(R.id.edit);
-            button.setVisibility(View.VISIBLE);
-        } else {
-            showFollowButton();
-        }
+    private void displayUserData() {
+        TextView name = inflated.findViewById(R.id.name);
+        name.setText(user.getUserName());
+        ImageView imageView = inflated.findViewById(R.id.ivProfile);
+        displayPicture(imageView, user, this.getContext());
+        TextView preference = inflated.findViewById(R.id.preference1);
+        preference.setText(user.getPreference());
+        TextView description = inflated.findViewById(R.id.description);
+        description.setText(user.getDescription());
     }
 
     private void showFollowButton() {
-        final ImageButton button = findViewById(R.id.follow);
-        button.setVisibility(View.VISIBLE);
         User currentUser = Config.getUser();
         String uid = user.getUserId();
         ValueListener<String> listener = new ValueListener<String>() {
             @Override
             public void onDataChange(String value) {
                 if (value != null) {
-                    setStar(button, true);
+                    setStar(true);
                 } else {
-                    setStar(button, false);
+                    setStar(false);
                 }
             }
 
@@ -101,24 +89,10 @@ public class ProfileActivity extends AppCompatActivity {
                 uid, listener, String.class);
     }
 
-    private void setStar(ImageButton button, boolean follow) {
+    private void setStar(boolean follow) {
         int star = follow ? STAR_ON : STAR_OFF;
-        button.setImageResource(star);
-        button.setTag(star);
+        button.setIcon(star);
         isFollowing = follow;
-    }
-
-    private void displayUserData() {
-        TextView name = findViewById(R.id.name);
-        name.setText(user.getUserName());
-        ImageView imageView = findViewById(R.id.ivProfile);
-        displayPicture(imageView, user, this);
-
-        TextView preference = findViewById(R.id.preference1);
-        preference.setText(user.getPreference());
-        TextView description = findViewById(R.id.description);
-        description.setText(user.getDescription());
-
     }
 
     protected static void displayPicture(ImageView imageView, User user, Context context) {
@@ -128,23 +102,43 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        boolean isCurrent = user.getUserId().equals(Config.getUser().getUserId());
+        int id =  isCurrent ? R.menu.menu_profile : R.menu.menu_other_user;
+        menuInflater.inflate(id, menu);
+        if(id == R.menu.menu_other_user){
+            button = menu.findItem(R.id.follow);
+            showFollowButton();
+        }
+    }
 
-    /**
-     * Launches the EditProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void editProfile(View view) {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                openDrawer();
+                return true;
+            }
+            case R.id.edit_profile: {
+                replaceCentralFragment(new EditProfileActivity());
+                return true;
+            }
+            case R.id.follow: {
+                follow();
+                return true;
+            }
+
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     /**
      * Follow the user showed in the profile.
-     *
-     * @param view the current view
      */
-    public void follow(View view) {
+    public void follow() {
         User currentUser = Config.getUser();
         if (!isFollowing) {
             addFollow(currentUser);
@@ -158,8 +152,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
-                    ImageButton button = findViewById(R.id.follow);
-                    setStar(button, false);
+                    setStar(false);
                 }
             }
         };
@@ -172,16 +165,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
-                    ImageButton button = findViewById(R.id.follow);
-                    button.setImageResource(STAR_ON);
-                    button.setTag(STAR_ON);
-                    Toast.makeText(ProfileActivity.this, getResources()
+                    button.setIcon(STAR_ON);
+                    isFollowing = true;
+                    Toast.makeText(ProfileActivity.this.getContext(), getResources()
                                     .getString(R.string.now_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)
                             .show();
-                    isFollowing = true;
                 } else {
-                    Toast.makeText(ProfileActivity.this, getResources()
+                    Toast.makeText(ProfileActivity.this.getContext(), getResources()
                                     .getString(R.string.error_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)
                             .show();
@@ -190,5 +181,9 @@ public class ProfileActivity extends AppCompatActivity {
         };
         Database.getInstance().write("/followers/" + currentUser.getUserId(), user.getUserId(),
                 user.getUserId(), listener);
+    }
+
+    public boolean isFollowing() {
+        return isFollowing;
     }
 }

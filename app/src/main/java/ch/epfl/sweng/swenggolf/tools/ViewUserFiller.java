@@ -24,7 +24,7 @@ public abstract class ViewUserFiller {
         DatabaseUser.getUser(new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
-                view.setText(value.getUserName());
+                view.setText(value == null ? "" : value.getUserName());
             }
 
             @Override

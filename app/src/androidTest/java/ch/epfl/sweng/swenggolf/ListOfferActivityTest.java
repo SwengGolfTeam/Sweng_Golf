@@ -1,26 +1,21 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
+import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.TestTimedOutException;
-
-import java.net.ConnectException;
-import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.main.MainActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -33,11 +28,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
+
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -63,16 +57,17 @@ public class ListOfferActivityTest {
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
 
     @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Configures a fake database and enables TestMode.
      */
     @Before
-    public void init() {
+    public void init() throws InterruptedException {
         setUpFakeDatabase();
         Config.goToTest();
+        mActivityRule.launchActivity(new Intent());
     }
 
     /**
@@ -80,26 +75,17 @@ public class ListOfferActivityTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = new Offer("user_id", "This is a title", LOREM);
-        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM);
-        database.write(Database.OFFERS_PATH, "idoftheoffer1", offer1);
-        database.write(Database.OFFERS_PATH, "idoftheoffer2", offer2);
+        Offer offer1 = new Offer("user_id", "This is a title", LOREM, "", "idoftheoffer1");
+        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM, "", "idoftheoffer2");
+        database.write("/offers", "idoftheoffer1", offer1);
+        database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
-        database.write(Database.USERS_PATH, Config.getUser().getUserId(), Config.getUser());
-    }
-
-    /**
-     * Opens the list activity.
-     */
-    public void openListActivity() {
-        onView(withId(R.id.show_offers_button)).perform(click());
+        DatabaseUser.addUser(Config.getUser());
     }
 
     @Test
     public void offerCorrectlyDisplayedInTheList() {
-        openListActivity();
-
         Offer offer = ListOfferActivity.offerList.get(0);
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
@@ -122,24 +108,19 @@ public class ListOfferActivityTest {
    }
 
     @Test
-    public void canGoToMenu() {
-        openListActivity();
-        onView(withContentDescription("abc_action_bar_up_description")).perform(click());
-        intended(hasComponent(MainMenuActivity.class.getName()));
+    public void canOpenMenu() {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
 
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
-        openListActivity();
-
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
                 ViewMatchers.withText(ListOfferActivity.offerList.get(0).getTitle())), click()));
     }
 
     @Test
     public void offerCorrectlyExpandedAndRetractedAfterLongPressOnList() {
-        openListActivity();
-
         Offer offerToTest = ListOfferActivity.offerList.get(0);
         Offer otherOffer = ListOfferActivity.offerList.get(1);
 
@@ -178,13 +159,13 @@ public class ListOfferActivityTest {
     }
 
     @Test
-    public void listShowCorrectly() {
-        onView(withId(R.id.show_offers_button)).perform(click());
+    public void backFromListIsMenu() {
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
 
     @Test
     public void allCategoriesUncheckedMessageShown() {
-        openListActivity();
         for (Category cat : Category.values()) {
             clickOnCategoryInMenu(cat);
         }
@@ -193,8 +174,6 @@ public class ListOfferActivityTest {
 
     @Test
     public void uncheckAndCheckSameCategory() {
-        openListActivity();
-
         clickOnCategoryInMenu(Category.getDefault());
         clickOnCategoryInMenu(Category.getDefault());
 

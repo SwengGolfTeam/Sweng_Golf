@@ -1,6 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
+import android.support.v4.app.Fragment;
+
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -33,4 +38,5 @@ public final class TestUtility {
                 withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
+
 }

@@ -18,8 +18,12 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:theme="@style/ToolbarTheme"
-            app:menu="@menu/menu_toolbar_main"
             app:navigationContentDescription="abc_action_bar_home_description" />
+
+        <FrameLayout
+            android:id="@+id/centralFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 
@@ -30,6 +34,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/layout_header"
-        app:menu="@menu/menu_drawer"></android.support.design.widget.NavigationView>
+        app:menu="@menu/menu_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>

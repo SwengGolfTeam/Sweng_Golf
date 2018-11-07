@@ -21,7 +21,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public static class MyViewHolder extends ThreeFieldsViewHolder {
 
         public MyViewHolder(View view) {
-            super(view, R.id.show_offer_title, R.id.offer_author, R.id.offer_description);
+            super(view, R.id.offer_title, R.id.offer_author, R.id.offer_description);
         }
     }
 

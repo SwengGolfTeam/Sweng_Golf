@@ -1,13 +1,12 @@
 package ch.epfl.sweng.swenggolf.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,36 +20,43 @@ import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
 public class MainMenuActivity extends AppCompatActivity {
+
+    private FragmentManager manager;
     private final User user = Config.getUser();
     private View nav;
-    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_main_menu);
-        mDrawerLayout = findViewById(R.id.side_menu);
-
-        android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-        }
-
+        setToolBar();
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
         nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadProfileActivity(v);
+                loadProfileActivity(null);
             }
         });
         setUserDisplay();
+        launchFragment();
+    }
+
+    private void setToolBar() {
+        android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void launchFragment() {
+        Fragment offerList = new ListOfferActivity();
+        manager = getSupportFragmentManager();
+        FragmentTransaction transaction =
+                manager.beginTransaction().add(R.id.centralFragment, offerList);
+        transaction.commit();
     }
 
     private void setUserDisplay() {
@@ -83,21 +89,10 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void replaceCentralFragment(Fragment fragment) {
+        manager.beginTransaction().replace(R.id.centralFragment, fragment).commit();
+        DrawerLayout drawerLayout = findViewById(R.id.side_menu);
+        drawerLayout.closeDrawers();
     }
 
     /**
@@ -106,30 +101,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadProfileActivity(MenuItem item) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
-        startActivity(intent);
-    }
-
-    /**
-     * Launches the ProfileActivity.
-     *
-     * @param view the current view
-     */
-    public void loadProfileActivity(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("ch.epfl.sweng.swenggolf.user", user);
-        startActivity(intent);
-    }
-
-    /**
-     * Launches the CreateOfferActivity.
-     *
-     * @param item the menu item that triggers the activity
-     */
-    public void loadCreateOfferActivity(MenuItem item) {
-        Intent intent = new Intent(this, CreateOfferActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
     }
 
     /**
@@ -138,8 +110,7 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadShowOffersActivity(MenuItem item) {
-        Intent intent = new Intent(this, ListOfferActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new ListOfferActivity());
     }
 
     /**
@@ -148,7 +119,15 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadPreferenceListActivity(MenuItem item) {
-        Intent intent = new Intent(this, ListPreferencesActivity.class);
-        startActivity(intent);
+        replaceCentralFragment(new ListPreferencesActivity());
+    }
+
+    /**
+     * Launches the createOfferActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void createOfferActivity(MenuItem item) {
+        replaceCentralFragment(new CreateOfferActivity());
     }
 }

@@ -7,7 +7,6 @@ public class DatabaseUser {
     private DatabaseUser() {
     }
 
-
     public static void addUser(User user) {
         Database.getInstance().write(Database.USERS_PATH, user.getUserId(), user);
     }

@@ -1,5 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
@@ -133,10 +136,4 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
         assertEquals(DESCRIPTION, user.getDescription());
     }
 
-    @Test
-    public void newArrayHasGoodSize() {
-        int size = 10;
-        assertThat(User.CREATOR.newArray(size).length, is(size));
-
-    }
 }

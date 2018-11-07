@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,8 +14,10 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
@@ -33,8 +36,8 @@ import static org.hamcrest.CoreMatchers.not;
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityDbNotWorkingTest {
     @Rule
-    public final IntentsTestRule<ShowOfferActivity> mActivityRule =
-            new IntentsTestRule<>(ShowOfferActivity.class, false, false);
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     private static final FakeDatabase database = new FakeDatabase(true);
     private static final User user = new User("patrick", "0", "email", "photo", "preference");
@@ -49,9 +52,10 @@ public class ShowOfferActivityDbNotWorkingTest {
         database.write(Database.OFFERS_PATH, "0", offer);
         Database.setDebugDatabase(database);
         Config.setUser(user);
-        Intent intent = new Intent();
-        intent.putExtra("offer", offer);
-        mActivityRule.launchActivity(intent);
+        mActivityRule.launchActivity(new Intent());
+        mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                    .commit();
     }
 
     @Test
