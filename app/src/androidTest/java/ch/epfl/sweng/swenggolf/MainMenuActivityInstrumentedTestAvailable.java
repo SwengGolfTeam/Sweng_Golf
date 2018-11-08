@@ -1,8 +1,10 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.widget.TextView;
 
@@ -11,6 +13,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
@@ -58,6 +62,18 @@ public class MainMenuActivityInstrumentedTestAvailable {
         onView(v).check(matches(isOpen(Gravity.LEFT)));
         onView(v).perform(close());
         onView(v).check(matches(isClosed(Gravity.LEFT)));
+    }
+
+    @Test
+    public void rotationDoesntYieldANewFragment() throws InterruptedException {
+        List<Fragment> currents = mMenuRule.getActivity().getSupportFragmentManager().getFragments();
+        int sizeBefore = currents.size();
+        mMenuRule.getActivity()
+                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        Thread.sleep(500);
+        List<Fragment> after = mMenuRule.getActivity().getSupportFragmentManager().getFragments();
+        int sizeAfter = after.size();
+        assertThat(sizeAfter, is(sizeBefore));
     }
 }
 
