@@ -66,7 +66,8 @@ public class MainMenuActivityInstrumentedTestAvailable {
 
     @Test
     public void rotationDoesntYieldANewFragment() throws InterruptedException {
-        List<Fragment> currents = mMenuRule.getActivity().getSupportFragmentManager().getFragments();
+        List<Fragment> currents = mMenuRule.getActivity()
+                .getSupportFragmentManager().getFragments();
         int sizeBefore = currents.size();
         mMenuRule.getActivity()
                 .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
