@@ -48,4 +48,5 @@
     <string name="reactions">Reactions:</string>
     <string name="category_show_offer">Category:</string>
     <string name="post">post</string>
+    <string name="location_show_offer">Location:</string>
 </resources>

@@ -2,6 +2,8 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
@@ -30,9 +33,11 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
@@ -47,6 +52,7 @@ public class CreateOfferActivity extends FragmentConverter {
     private Spinner categorySpinner;
 
     private Uri filePath = null;
+    private Location location = new Location("default");
 
 
     @Override
@@ -69,6 +75,12 @@ public class CreateOfferActivity extends FragmentConverter {
                 createOffer(v);
             }
         });
+        inflated.findViewById(R.id.location_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attachLocation();
+            }
+        });
         return inflated;
     }
 
@@ -87,12 +99,16 @@ public class CreateOfferActivity extends FragmentConverter {
     private void preFillFields(View inflated) {
         if (getArguments() != null
                 && (offerToModify = getArguments().getParcelable("offer")) != null) {
+
             EditText title = inflated.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
+
             EditText description = inflated.findViewById(R.id.offer_description);
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
+
             ImageView picture = inflated.findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
+
             if (!link.isEmpty() && !Config.isTest()) {
                 Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
             }
@@ -160,7 +176,7 @@ public class CreateOfferActivity extends FragmentConverter {
         }
 
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                "", uuid, tag);
+                "", uuid, tag, location);
 
         if (filePath == null) {
             writeOffer(newOffer);
@@ -229,6 +245,34 @@ public class CreateOfferActivity extends FragmentConverter {
             }
             default: {
                 return super.onOptionsItemSelected(item);
+            }
+        }
+    }
+
+    public void attachLocation() {
+        // FIXME doesn't work
+        if (Config.checkLocationPermission(getActivity())) {
+            AppLocation currentLocation = AppLocation.getInstance(getActivity());
+            currentLocation.getLocation(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location l) {
+                    location = l;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    attachLocation();
+                }
+                return;
             }
         }
     }

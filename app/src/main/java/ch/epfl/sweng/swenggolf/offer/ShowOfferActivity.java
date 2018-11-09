@@ -1,8 +1,11 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,9 +40,12 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
+
+import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
 
 
 public class ShowOfferActivity extends FragmentConverter {
@@ -46,6 +54,8 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
+
+    private static final int KILOMETER_SIZE = 1000;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +102,51 @@ public class ShowOfferActivity extends FragmentConverter {
                         .into(offerPicture);
         }
 
+        if (offer.getLongitude() != 0.0 && offer.getLatitude() != 0.0) {
+            setLocation();
+        }
+
+    }
+
+    private void setLocation() {
+        if (Config.checkLocationPermission(getActivity())) {
+            AppLocation currentLocation = AppLocation.getInstance(getActivity());
+            final Location offerLocation = new Location("default");
+            final TextView distanceText = getActivity().findViewById(R.id.saved_location_offer);
+            offerLocation.setLatitude(offer.getLatitude());
+            offerLocation.setLongitude(offer.getLongitude());
+
+            currentLocation.getLocation(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    int distance = (int) offerLocation.distanceTo(location) % 100;
+                    String toPrompt;
+                    if (distance >= KILOMETER_SIZE) {
+                        distance /= KILOMETER_SIZE;
+                        toPrompt = distance + " km";
+                    } else {
+                        toPrompt = distance + " m";
+                    }
+                    distanceText.setText(toPrompt);
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setLocation();
+                }
+                return;
+            }
+        }
     }
 
     private void fetchAnswers() {

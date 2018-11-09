@@ -1,11 +1,18 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * Class Used to know if we are running a test or not.
  */
 public class Config {
+
+    public static final int PERMISSION_FINE_LOCATION = 66;
 
     private Config() {
     }
@@ -103,4 +110,31 @@ public class Config {
         return Config.activityCallback;
     }
 
+    public static boolean checkLocationPermission(Activity activity) {
+        if (isAuthorizedToCheckLocation(activity)) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSION_FINE_LOCATION);
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isAuthorizedToCheckLocation(Activity activity) {
+        boolean isFineLocationGranted = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED;
+        boolean isCoarseLocationGranted = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED;
+        return isFineLocationGranted && isCoarseLocationGranted;
+
+    }
 }
