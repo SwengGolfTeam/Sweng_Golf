@@ -3,9 +3,11 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +48,7 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
+    private View mView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +68,15 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         offer = getArguments().getParcelable("offer");
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        EditText comment = mView.findViewById(R.id.answer_description);
+        comment.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
     }
 
     private void setContents(View inflated) {
@@ -137,7 +149,7 @@ public class ShowOfferActivity extends FragmentConverter {
         LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
 
         LayoutInflater mInflater = getLayoutInflater();
-        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+        mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         mLayout.addView(mView);
 
         ValueListener<User> vlUser = createFiller(inflated);
@@ -158,7 +170,7 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {
-        EditText editText = findViewById(R.id.answer_description_);
+        EditText editText = findViewById(R.id.answer_description);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));

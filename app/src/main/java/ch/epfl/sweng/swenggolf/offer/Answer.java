@@ -1,12 +1,18 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import ch.epfl.sweng.swenggolf.tools.Check;
+
 public class Answer {
     private final String userId;
     private final String description;
 
+    public static final int COMMENT_MAX_LENGTH = 200;
+    public static final int COMMENT_MIN_LENGTH = 4;
+
     public Answer(String userId, String description) {
         this.userId = userId;
-        this.description = description;
+        this.description = Check.checkString(description, "description",
+                COMMENT_MIN_LENGTH, COMMENT_MAX_LENGTH);
     }
 
     // firebase needs empty constructor

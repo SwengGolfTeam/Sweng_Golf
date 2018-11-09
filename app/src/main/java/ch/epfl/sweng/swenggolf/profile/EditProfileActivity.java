@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +41,21 @@ public class EditProfileActivity extends FragmentConverter {
         });
         createUserView(inflated);
         return inflated;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        EditText username = findViewById(R.id.edit_name);
+        username.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(User.USERNAME_MAX_LENGTH)});
+        EditText preferences = findViewById(R.id.edit_pref);
+        preferences.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(User.PREFERENCES_MAX_LENGTH)});
+        EditText infos = findViewById(R.id.edit_description);
+        infos.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(User.INFOS_MAX_LENGTH)});
+
     }
 
     private void createUserView(View inflated) {
