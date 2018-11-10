@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -220,8 +221,8 @@ public class ShowOfferActivity extends FragmentConverter {
      * Display the Alert Dialog for the delete.
      */
     public void showDeleteAlertDialog() {
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         builder.setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -231,11 +232,34 @@ public class ShowOfferActivity extends FragmentConverter {
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+                        // user cancelled the dialog
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Displays an Alert Dialog to accept an answer
+     */
+    public void showAcceptAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Accept answer")
+                .setMessage("Do you want to accept this answer?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // how ?!
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                });
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**
