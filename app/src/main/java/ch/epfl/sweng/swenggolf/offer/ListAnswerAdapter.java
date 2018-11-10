@@ -2,12 +2,10 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,6 +49,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
     /**
      * Sets the answers field.
+     *
      * @param answers the new answers
      */
     public void setAnswers(Answers answers) {
@@ -60,6 +59,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
     /**
      * Gets the answers.
+     *
      * @return the answers
      */
     public Answers getAnswers() {
@@ -86,13 +86,13 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 TextView userName = (TextView) holder.getFieldOne();
                 userName.setText(value.getUserName());
                 userName.setContentDescription(
-                        "username"+Integer.toString(holder.getAdapterPosition()));
+                        "username" + Integer.toString(holder.getAdapterPosition()));
                 ImageView userPic = (ImageView) holder.getFieldThree();
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
                         .fit().into(userPic);
-                userPic.setContentDescription("pic"+Integer.toString(holder.getAdapterPosition()));
+                userPic.setContentDescription("pic" + Integer.toString(holder.getAdapterPosition()));
             }
 
             @Override
@@ -104,7 +104,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
         TextView description = (TextView) holder.getFieldTwo();
         description.setText(answer.getDescription());
-        description.setContentDescription("description"+Integer.toString(position));
+        description.setContentDescription("description" + Integer.toString(position));
 
         setupFavorite(holder, position);
 
@@ -112,7 +112,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
     private void setupFavorite(final AnswerViewHolder holder, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
-        favButton.setContentDescription("fav"+Integer.toString(position));
+        favButton.setContentDescription("fav" + Integer.toString(position));
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

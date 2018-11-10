@@ -82,10 +82,10 @@ public class CreateOfferActivity extends FragmentConverter {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         EditText title = findViewById(R.id.offer_name);
-        title.setFilters(new InputFilter[] {
+        title.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(Offer.TITLE_MAX_LENGTH)});
         EditText description = findViewById(R.id.offer_description);
-        description.setFilters( new InputFilter[] {
+        description.setFilters(new InputFilter[]{
                 new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
     }
 

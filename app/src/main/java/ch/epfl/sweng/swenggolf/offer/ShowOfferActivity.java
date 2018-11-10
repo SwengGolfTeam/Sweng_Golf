@@ -7,28 +7,29 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -101,7 +102,7 @@ public class ShowOfferActivity extends FragmentConverter {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
             Picasso.with(this.getContext())
                     .load(Uri.parse(offer.getLinkPicture()))
-                        .into(offerPicture);
+                    .into(offerPicture);
         }
 
     }
@@ -167,6 +168,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     /**
      * Adds a new answer to the list of answers of the offer.
+     *
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {

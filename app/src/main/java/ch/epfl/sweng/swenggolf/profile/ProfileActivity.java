@@ -3,13 +3,11 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.view.ActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,9 +23,9 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
-import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ProfileActivity extends FragmentConverter {
     private User user;
@@ -105,9 +103,9 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         boolean isCurrent = user.getUserId().equals(Config.getUser().getUserId());
-        int id =  isCurrent ? R.menu.menu_profile : R.menu.menu_other_user;
+        int id = isCurrent ? R.menu.menu_profile : R.menu.menu_other_user;
         menuInflater.inflate(id, menu);
-        if(id == R.menu.menu_other_user){
+        if (id == R.menu.menu_other_user) {
             button = menu.findItem(R.id.follow);
             showFollowButton();
         }

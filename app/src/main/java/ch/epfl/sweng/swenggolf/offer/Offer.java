@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
@@ -108,14 +109,14 @@ public class Offer implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if(obj instanceof Offer) {
+        if (obj instanceof Offer) {
             Offer other = (Offer) obj;
             boolean userIdEquality = userId.equals(other.userId);
             boolean titleEquality = title.equals(other.title);
             boolean descriptionEquality = description.equals(other.description);
             boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
             boolean uuidEquality = uuid.equals(other.uuid);
-            boolean tagEquality  = tag.equals(other.tag);
+            boolean tagEquality = tag.equals(other.tag);
             return userIdEquality && titleEquality && descriptionEquality
                     && linkPictureEquality && uuidEquality && tagEquality;
         }
@@ -195,7 +196,6 @@ public class Offer implements Parcelable {
     public Offer updateLinkToPicture(String newLinkPicture) {
         return new Offer(userId, title, description, newLinkPicture, uuid, tag);
     }
-
 
 
     /* Implements Parcelable */
