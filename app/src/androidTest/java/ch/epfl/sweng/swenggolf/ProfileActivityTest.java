@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -34,6 +35,7 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -135,5 +137,16 @@ public class ProfileActivityTest {
         };
         DatabaseUser.getUser(vl, user);
 
+    }
+
+    @Test
+    public void showErrorMessageWhenUsernameIsTooShort() {
+        onView(withId(R.id.edit_profile)).perform(click());
+        Espresso.closeSoftKeyboard();
+        final ViewInteraction editName = onView(withId(R.id.edit_name));
+        editName.perform(replaceText("")).perform(closeSoftKeyboard());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
+        editName.check(matches(hasErrorText("The username should have at least "
+                + User.USERNAME_MIN_LENGTH + " characters.")));
     }
 }

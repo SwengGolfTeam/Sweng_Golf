@@ -48,4 +48,6 @@
     <string name="reactions">Reactions:</string>
     <string name="category_show_offer">Category:</string>
     <string name="post">post</string>
+    <string name="username_min_length_1">"The username should have at least "</string>
+    <string name="username_min_length_2">" characters."</string>
 </resources>
