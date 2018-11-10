@@ -17,9 +17,14 @@ public final class Check {
         int length = inputText.length();
         if (length > maxLength
                 || length < minLength) {
-            throw new IllegalArgumentException("The " + fieldName + " has not the good length. It" +
-                    " should be between " + minLength + " and " + maxLength + ", but was" + length + ".");
+            throw new IllegalArgumentException("The " + fieldName + " has not the good length. It"
+                    + " should be between " + minLength + " and " + maxLength + ", but was"
+                    + length + ".");
         }
         return inputText;
+    }
+
+    private Check() {
+
     }
 }

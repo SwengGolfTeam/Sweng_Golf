@@ -92,7 +92,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
                         .fit().into(userPic);
-                userPic.setContentDescription("pic" + Integer.toString(holder.getAdapterPosition()));
+                userPic.setContentDescription("pic" +
+                        Integer.toString(holder.getAdapterPosition()));
             }
 
             @Override

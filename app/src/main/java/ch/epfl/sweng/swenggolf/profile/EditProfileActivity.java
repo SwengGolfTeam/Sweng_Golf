@@ -102,7 +102,8 @@ public class EditProfileActivity extends FragmentConverter {
         String description = editedDescription.getText().toString();
         if (name.length() < User.USERNAME_MIN_LENGTH) {
             editedName.setError(getResources().getString(R.string.username_min_length_1)
-                    + User.USERNAME_MIN_LENGTH + getResources().getString(R.string.username_min_length_2)
+                    + User.USERNAME_MIN_LENGTH + getResources().
+                    getString(R.string.username_min_length_2)
             );
         } else { //update user data
             user.setDescription(description);
