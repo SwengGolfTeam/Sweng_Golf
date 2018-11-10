@@ -143,15 +143,16 @@ public class CreateOfferActivity extends FragmentConverter {
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
-        final String name = nameText.getText().toString();
+        final String title = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
         final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
-        if (name.isEmpty() || description.isEmpty()) {
+        if (title.length() < Offer.TITLE_MIN_LENGTH || description.length()
+                < Offer.DESCRIPTION_MIN_LENGTH) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(name, description, category);
+            createOfferObject(title, description, category);
         }
 
     }

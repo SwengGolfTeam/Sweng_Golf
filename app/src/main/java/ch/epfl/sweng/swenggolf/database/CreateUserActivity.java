@@ -75,7 +75,8 @@ public class CreateUserActivity extends AppCompatActivity {
         String userMail = mail.getText().toString();
 
         // Handle the exception if the EditText fields are null
-        if (!userName.isEmpty() && !userMail.isEmpty() && isEmailValid(userMail)) {
+        if (userName.length() < User.USERNAME_MIN_LENGTH && !userMail.isEmpty()
+                && isEmailValid(userMail)) {
             User u = User.userChanged(user, userName, userMail);
             DatabaseUser.addUser(u);
             Config.setUser(u);

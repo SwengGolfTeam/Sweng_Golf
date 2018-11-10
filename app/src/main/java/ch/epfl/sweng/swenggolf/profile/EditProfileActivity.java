@@ -93,24 +93,25 @@ public class EditProfileActivity extends FragmentConverter {
      * Saves the changes and returns to the profile activity.
      */
     public void saveChangesAndReturn(View view) {
-        // save new name
+        // Get new user data
         EditText editedName = findViewById(R.id.edit_name);
         String name = editedName.getText().toString();
-        user.setUserName(name);
-
-        // save new preferences
         EditText editedPref = findViewById(R.id.edit_pref);
         String pref = editedPref.getText().toString();
-        user.setPreference(pref);
-
-        // save new preferences
         EditText editedDescription = findViewById(R.id.edit_description);
         String description = editedDescription.getText().toString();
-        user.setDescription(description);
+        if(name.length() < User.USERNAME_MIN_LENGTH) {
+            editedName.setError("The username should have at least " + User.USERNAME_MIN_LENGTH +
+            " characters.");
+        }
+        else { //update user data
+            user.setDescription(description);
+            user.setUserName(name);
+            user.setPreference(pref);
+            DatabaseUser.addUser(user);
 
-        DatabaseUser.addUser(user);
-
-        replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+            replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+        }
     }
 
     @Override
