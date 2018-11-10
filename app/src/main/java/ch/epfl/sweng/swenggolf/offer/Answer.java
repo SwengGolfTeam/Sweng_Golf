@@ -9,6 +9,11 @@ public class Answer {
     public static final int COMMENT_MAX_LENGTH = 200;
     public static final int COMMENT_MIN_LENGTH = 4;
 
+    /**
+     * Create a new Answer to an offer.
+     * @param userId the id of the user who answers
+     * @param description the message of the answer
+     */
     public Answer(String userId, String description) {
         this.userId = userId;
         this.description = Check.checkString(description, "description",
