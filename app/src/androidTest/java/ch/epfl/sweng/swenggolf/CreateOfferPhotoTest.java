@@ -55,7 +55,6 @@ public class CreateOfferPhotoTest {
         mActivitiyRule.launchActivity(new Intent());
         FragmentManager manager = mActivitiyRule.getActivity().getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.centralFragment, new CreateOfferActivity()).commit();
-        Thread.sleep(500);
     }
 
     @Test

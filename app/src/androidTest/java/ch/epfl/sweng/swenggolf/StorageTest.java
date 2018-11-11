@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class StorageTest {
     @Rule
-    private ActivityTestRule<MainMenuActivity> mActivityTestRule = new ActivityTestRule<>(MainMenuActivity.class);
+    public ActivityTestRule<MainMenuActivity> mActivityTestRule = new ActivityTestRule<>(MainMenuActivity.class);
 
     @Test
     public void conditionActivityResultFalseOnPickRequestWithNullIntent() {
@@ -64,7 +64,7 @@ public class StorageTest {
     public void intentTakePictureCreatesFile() throws IOException {
         Intent uriIntent = Storage.takePicture(mActivityTestRule.getActivity());
         Uri photoUri = (Uri) uriIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
-        File photoFile = new File(photoUri.getPath());
-        assertTrue(photoFile.exists());
+        File photoFile = new File(mActivityTestRule.getActivity().getCacheDir(), photoUri.getLastPathSegment());
+        assertTrue(photoFile.delete());
     }
 }
