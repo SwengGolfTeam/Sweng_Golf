@@ -1,8 +1,12 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -111,27 +115,50 @@ public class ShowOfferActivity extends FragmentConverter {
     private void setLocation() {
         if (Config.checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
-            final Location offerLocation = new Location("default");
-            final TextView distanceText = getActivity().findViewById(R.id.saved_location_offer);
-            offerLocation.setLatitude(offer.getLatitude());
-            offerLocation.setLongitude(offer.getLongitude());
 
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    int distance = (int) offerLocation.distanceTo(location) % 100;
-                    String toPrompt;
-                    if (distance >= KILOMETER_SIZE) {
-                        distance /= KILOMETER_SIZE;
-                        toPrompt = distance + " km";
-                    } else {
-                        toPrompt = distance + " m";
+                    if (location != null) {
+                        Location offerLocation = new Location(LocationManager.GPS_PROVIDER);
+                        offerLocation.setLatitude(offer.getLatitude());
+                        offerLocation.setLongitude(offer.getLongitude());
+
+                        int distance = (int) offerLocation.distanceTo(location) / 100 * 100;
+                        String toPrompt;
+                        if (distance >= KILOMETER_SIZE) {
+                            distance /= KILOMETER_SIZE;
+                            toPrompt = distance + " km";
+                        } else if (distance == 0) {
+                            toPrompt = "In the neighbourhood";
+                        } else {
+                            toPrompt = distance + " m";
+                        }
+                        writeLocationToPage(toPrompt, offerLocation);
                     }
-                    distanceText.setText(toPrompt);
                 }
             });
 
         }
+    }
+
+    private void writeLocationToPage(String toWrite, Location location) {
+        TextView distanceText = getActivity().findViewById(R.id.saved_location_offer);
+        distanceText.setText(toWrite);
+        final Context context = getActivity();
+        distanceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + offer.getLatitude()
+                        + "," + offer.getLongitude() + "(" + offer.getTitle() + ")");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+
+            }
+        });
     }
 
     @Override

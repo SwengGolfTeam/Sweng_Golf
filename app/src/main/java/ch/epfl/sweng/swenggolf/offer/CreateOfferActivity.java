@@ -250,16 +250,19 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     public void attachLocation() {
-        // FIXME doesn't work
         if (Config.checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location l) {
-                    location = l;
+                    saveLocation(l);
                 }
             });
         }
+    }
+
+    private void saveLocation(Location location) {
+        this.location = location;
     }
 
     @Override
