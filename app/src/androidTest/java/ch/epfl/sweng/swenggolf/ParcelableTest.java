@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ParcelableTest {
-    private static final Offer parceledOffer = new Offer("a","b","c","d","e", Category.TEST);
+    private static final Offer parceledOffer = new Offer("a","b","c","d","e", Category.TEST,0,1);
     private static final User parceledUser = new User("a","b","c","d","e","f");
 
     private static Parcel writeToParcel(Parcelable parcelable) {
