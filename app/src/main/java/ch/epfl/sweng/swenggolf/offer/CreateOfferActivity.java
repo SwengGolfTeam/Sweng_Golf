@@ -8,7 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,6 +99,16 @@ public class CreateOfferActivity extends FragmentConverter {
         creationAsked = false;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        EditText title = findViewById(R.id.offer_name);
+        title.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(Offer.TITLE_MAX_LENGTH)});
+        EditText description = findViewById(R.id.offer_description);
+        description.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
+    }
+
     private void setupSpinner(View v) {
         categorySpinner = v.findViewById(R.id.category_spinner);
         categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
@@ -163,15 +173,16 @@ public class CreateOfferActivity extends FragmentConverter {
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
-        final String name = nameText.getText().toString();
+        final String title = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
         final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
-        if (name.isEmpty() || description.isEmpty()) {
+        if (title.length() < Offer.TITLE_MIN_LENGTH || description.length()
+                < Offer.DESCRIPTION_MIN_LENGTH) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(name, description, category);
+            createOfferObject(title, description, category);
         }
 
     }

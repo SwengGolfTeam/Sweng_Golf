@@ -4,8 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
+
 public class Offer implements Parcelable {
     private static final int DESCRIPTION_LIMIT = 140;
+    public static final int TITLE_MIN_LENGTH = 1;
+    public static final int TITLE_MAX_LENGTH = 100;
+    public static final int DESCRIPTION_MIN_LENGTH = 1;
+    public static final int DESCRIPTION_MAX_LENGTH = 1000;
+
 
     private final Category tag;
     private final String userId;
@@ -42,8 +49,9 @@ public class Offer implements Parcelable {
 
         this.tag = tag;
         this.userId = userId;
-        this.title = title;
-        this.description = description;
+        this.title = checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH);
+        this.description = checkString(description, "description", DESCRIPTION_MIN_LENGTH,
+                DESCRIPTION_MAX_LENGTH);
         this.linkPicture = linkPicture;
         this.uuid = uuid;
     }
@@ -101,14 +109,14 @@ public class Offer implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if(obj instanceof Offer) {
+        if (obj instanceof Offer) {
             Offer other = (Offer) obj;
             boolean userIdEquality = userId.equals(other.userId);
             boolean titleEquality = title.equals(other.title);
             boolean descriptionEquality = description.equals(other.description);
             boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
             boolean uuidEquality = uuid.equals(other.uuid);
-            boolean tagEquality  = tag.equals(other.tag);
+            boolean tagEquality = tag.equals(other.tag);
             return userIdEquality && titleEquality && descriptionEquality
                     && linkPictureEquality && uuidEquality && tagEquality;
         }
@@ -188,7 +196,6 @@ public class Offer implements Parcelable {
     public Offer updateLinkToPicture(String newLinkPicture) {
         return new Offer(userId, title, description, newLinkPicture, uuid, tag);
     }
-
 
 
     /* Implements Parcelable */
