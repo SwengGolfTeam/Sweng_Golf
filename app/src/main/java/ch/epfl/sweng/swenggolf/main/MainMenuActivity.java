@@ -42,7 +42,9 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
         setUserDisplay();
-        if(savedInstances == null){launchFragment();}
+        if (savedInstances == null) {
+            launchFragment();
+        }
     }
 
     private void setToolBar() {
