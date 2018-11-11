@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -33,6 +35,7 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
@@ -45,8 +48,8 @@ public class CreateOfferActivity extends FragmentConverter {
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
-
     private Uri filePath = null;
+    private Uri takePictureDestination = null;
 
 
     @Override
@@ -57,10 +60,22 @@ public class CreateOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
         setupSpinner(inflated);
-        inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosePicture(v);
+                startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
+            }
+        });
+        inflated.findViewById(R.id.take_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = Storage.takePicture(getActivity());
+                if(takePictureIntent != null && takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
+                } else {
+                    Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         inflated.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
@@ -99,23 +114,33 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     }
 
-    /**
-     * Allows the user to choose a picture from his gallery.
-     *
-     * @param view the view
-     */
-    public void choosePicture(View view) {
-        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            removeStalledPicture();
+            switch (requestCode) {
+                case CAPTURE_IMAGE_REQUEST : {
+                    filePath = takePictureDestination;
+                    takePictureDestination = null;
+                    break;
+                }
+                case PICK_IMAGE_REQUEST : {
+                    filePath = data.getData();
+                    break;
+                }
+            }
             ImageView imageView = findViewById(R.id.offer_picture);
-            filePath = data.getData();
-            Picasso.with(this.getContext()).load(filePath).into(imageView);
+            Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
+        }
+    }
+
+    private void removeStalledPicture() {
+        if(takePictureDestination != null) {
+            File previous = new File(takePictureDestination.getPath());
+            if(previous.exists() && !previous.delete()) {
+                Toast.makeText(this.getContext(), "Previous picture couldn't be removed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -232,4 +257,11 @@ public class CreateOfferActivity extends FragmentConverter {
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeStalledPicture();
+    }
+
 }
