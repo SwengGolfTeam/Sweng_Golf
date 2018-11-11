@@ -87,6 +87,18 @@ public abstract class Database {
                                       @NonNull Class<T> c);
 
     /**
+     * Read a list of value in a given path. It return the value using a listener.
+     *
+     * @param path     the path where we want to read the value
+     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
+     *                 onCancelled method will be called
+     * @param c        the class of the value
+     */
+    public abstract <T> void readList(@NonNull String path,
+                                      @NonNull ValueListener<List<T>> listener,
+                                      @NonNull Class<T> c, String attribute, String value);
+
+    /**
      * Remove the value in path with the given id.
      *
      * @param path     the path where is the value we want to remove

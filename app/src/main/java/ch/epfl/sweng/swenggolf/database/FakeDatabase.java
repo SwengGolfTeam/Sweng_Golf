@@ -79,6 +79,11 @@ public class FakeDatabase extends Database {
     }
 
     @Override
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c, String attribute, String value) {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         if (working) {

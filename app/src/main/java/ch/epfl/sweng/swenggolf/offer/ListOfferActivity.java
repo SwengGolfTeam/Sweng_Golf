@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.common.util.BiConsumer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,7 +90,7 @@ public class ListOfferActivity extends FragmentConverter {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setRecyclerView(View inflated, List<Category> categories) {
+    private void setRecyclerView(View inflated, final List<Category> categories) {
         noOffers.setVisibility(View.VISIBLE);
         RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
@@ -102,7 +104,15 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData(inflated, categories);
+
+        BiConsumer<Database, ValueListener<List<Offer>>> dbConsumer =
+                new BiConsumer<Database, ValueListener<List<Offer>>>() {
+                    @Override
+                    public void accept(Database database, ValueListener<List<Offer>> listValueListener) {
+                        database.readOffers(listValueListener, categories);
+                    }
+                };
+        prepareOfferData(inflated, dbConsumer);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -114,7 +124,8 @@ public class ListOfferActivity extends FragmentConverter {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData(final View inflated, List<Category> categories) {
+    protected void prepareOfferData(final View inflated,
+                                    BiConsumer<Database, ValueListener<List<Offer>>> dbConsumer) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
@@ -135,7 +146,7 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        database.readOffers(listener, categories);
+        dbConsumer.accept(database, listener);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
