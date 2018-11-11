@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -69,12 +71,16 @@ public class CreateOfferActivity extends FragmentConverter {
         inflated.findViewById(R.id.take_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = Storage.takePicture(getActivity());
-                if(takePictureIntent != null && takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
-                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
-                } else {
-                    Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
+                try {
+                    Intent takePictureIntent = Storage.takePicture(getActivity());
+                    if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
+                    } else {
+                        Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getContext(), "Unable to create picture", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -137,8 +143,8 @@ public class CreateOfferActivity extends FragmentConverter {
 
     private void removeStalledPicture() {
         if(takePictureDestination != null) {
-            File previous = new File(takePictureDestination.getPath());
-            if(previous.exists() && !previous.delete()) {
+            File previous = new File(getContext().getCacheDir(), takePictureDestination.getLastPathSegment());
+            if(!previous.delete()) {
                 Toast.makeText(this.getContext(), "Previous picture couldn't be removed", Toast.LENGTH_LONG).show();
             }
         }

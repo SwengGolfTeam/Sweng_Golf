@@ -106,10 +106,10 @@ public class CreateOfferActivityTest {
     @Test
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
-        onView(withId(R.id.button)).perform(click());
+        onView(withId(R.id.button)).perform(scrollTo(), click());
         onView(withId(R.id.error_message));
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(scrollTo(),click());
+        onView(withId(R.id.button)).perform(scrollTo(), click());
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }

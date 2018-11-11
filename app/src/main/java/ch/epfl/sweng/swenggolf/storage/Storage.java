@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -78,7 +79,7 @@ public abstract class Storage {
      * @param activity the activity in which the intent is created.
      * @return an intent with the file Uri.
      */
-    public static Intent takePicture(FragmentActivity activity) {
+    public static Intent takePicture(FragmentActivity activity) throws IOException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = takePictureCreateFile(activity);
         Uri takePicUri = FileProvider.getUriForFile(activity, "ch.epfl.sweng.swenggolf.fileprovider", photoFile);
@@ -86,11 +87,10 @@ public abstract class Storage {
         return takePictureIntent;
     }
 
-    private static File takePictureCreateFile(FragmentActivity activity) {
+    private static File takePictureCreateFile(FragmentActivity activity) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = activity.getFilesDir();
-        return new File(storageDir, imageFileName);
+        return File.createTempFile(imageFileName, null, activity.getCacheDir());
     }
 
     public static boolean conditionActivityResult(int requestCode, int resultCode, Intent data) {
