@@ -90,7 +90,6 @@
             android:gravity="top|left"
             android:inputType="textMultiLine"
             android:lines="5"
-            android:maxLength="@integer/offer_description_max_size"
             android:maxLines="30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"

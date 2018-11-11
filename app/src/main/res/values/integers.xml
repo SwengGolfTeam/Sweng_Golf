@@ -1,11 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="offer_name_max_size">50</integer>
-    <integer name="offer_description_max_size">1000</integer>
-    <integer name="username_min_length">1</integer>
-    <integer name="username_max_length">25</integer>
-    <integer name="user_infos_min_length">0</integer>
-    <integer name="user_infos_max_length">200</integer>
-    <integer name="user_preferences_min_length">0</integer>
-    <integer name="user_preferences_max_length">100</integer>
 </resources>

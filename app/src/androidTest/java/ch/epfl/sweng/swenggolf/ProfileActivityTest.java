@@ -26,6 +26,7 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -144,7 +145,7 @@ public class ProfileActivityTest {
         onView(withId(R.id.edit_profile)).perform(click());
         Espresso.closeSoftKeyboard();
         final ViewInteraction editName = onView(withId(R.id.edit_name));
-        editName.perform(replaceText("")).perform(closeSoftKeyboard());
+        editName.perform(clearText()).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         editName.check(matches(hasErrorText("The username should have at least "
                 + User.USERNAME_MIN_LENGTH + " characters.")));

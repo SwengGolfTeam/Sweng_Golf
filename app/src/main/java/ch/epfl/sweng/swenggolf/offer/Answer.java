@@ -11,7 +11,8 @@ public class Answer {
 
     /**
      * Create a new Answer to an offer.
-     * @param userId the id of the user who answers
+     *
+     * @param userId      the id of the user who answers
      * @param description the message of the answer
      */
     public Answer(String userId, String description) {
