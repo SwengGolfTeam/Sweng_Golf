@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -58,9 +59,10 @@ public class CreateOfferActivity extends FragmentConverter implements DatePicker
     private boolean creationAsked;
     private Spinner categorySpinner;
     private Uri filePath = null;
-    private long creationDate = Calendar.getInstance().getTimeInMillis();
-    private long endDate = Calendar.getInstance().getTimeInMillis();
-    private final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    private long creationDate;
+    private Calendar now = Calendar.getInstance();
+    private long endDate;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 
 
 
@@ -71,12 +73,15 @@ public class CreateOfferActivity extends FragmentConverter implements DatePicker
         View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
+        now = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DATE));
+        creationDate = now.getTimeInMillis();
+        endDate = now.getTimeInMillis();
         preFillFields(inflated);
         setupSpinner(inflated);
         date_text = inflated.findViewById(R.id.showDate);
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(endDate);
-        date_text.setText(dateFormat.format(endCalendar.getTime()));
+        date_text.setText(DATE_FORMAT.format(endCalendar.getTime()));
 
         inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,6 +286,7 @@ public class CreateOfferActivity extends FragmentConverter implements DatePicker
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
+
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(this.getActivity(), (DatePickerDialog.OnDateSetListener) getVisibleFragment(), year, month, day);
         }
@@ -305,7 +311,7 @@ public class CreateOfferActivity extends FragmentConverter implements DatePicker
      */
     private void setDate(final Calendar calendar) {
         this.endDate = calendar.getTimeInMillis();
-        date_text.setText(dateFormat.format(calendar.getTime()));
+        date_text.setText(DATE_FORMAT.format(calendar.getTime()));
 
     }
 
@@ -319,7 +325,13 @@ public class CreateOfferActivity extends FragmentConverter implements DatePicker
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
-        setDate(cal);
+        if (cal.before(now)){
+
+            Toast.makeText(CreateOfferActivity.this.getContext(),
+                    getString(R.string.valid_date), Toast.LENGTH_LONG).show();
+        } else {
+            setDate(cal);
+        }
     }
 
 

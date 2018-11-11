@@ -219,18 +219,6 @@ public class Offer implements Parcelable {
         return endDate;
     }
 
-
-
-    public void setEndDate(long endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setCreationDate(long creationDate) {
-        this.creationDate = creationDate;
-    }
-
-
-
     /**
      * Creates a new offer in the database using the new picture's link given.
      *
