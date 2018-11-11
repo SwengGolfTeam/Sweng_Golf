@@ -130,7 +130,7 @@ public final class FireDatabase extends Database {
     @Override
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
                            final List<Category> categories) {
-        final DatabaseReference ref = database.getReference("offers");
+        final DatabaseReference ref = database.getReference(OFFERS_PATH);
 
         if (categories.isEmpty()) {
             listener.onDataChange(new ArrayList<Offer>());

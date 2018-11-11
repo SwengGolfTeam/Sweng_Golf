@@ -2,8 +2,6 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.view.View;
 
-import com.google.android.gms.common.util.BiConsumer;
-
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -13,13 +11,13 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 public class ListOwnOfferActivity extends ListOfferActivity {
     @Override
     protected void prepareOfferData(View inflated,
-                                    BiConsumer<Database, ValueListener<List<Offer>>> dbConsumer) {
-        super.prepareOfferData(inflated, new BiConsumer<Database, ValueListener<List<Offer>>>() {
+                                    DatabaseOfferConsumer dbConsumer, List<Category> categories) {
+        super.prepareOfferData(inflated, new DatabaseOfferConsumer() {
             @Override
-            public void accept(Database database, ValueListener<List<Offer>> listener) {
-                database.readList(Database.OFFERS_PATH, listener, Offer.class, "userId",
-                        Config.getUser().getUserId());
+            public void accept(Database db, List<Category> categories, ValueListener<List<Offer>> listener) {
+                db.readOffers(listener, categories, Config.getUser().getUserId());
             }
-        });
+        }, categories);
     }
 }
+

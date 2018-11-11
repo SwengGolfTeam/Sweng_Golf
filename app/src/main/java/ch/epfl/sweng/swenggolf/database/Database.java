@@ -2,8 +2,11 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -128,5 +131,31 @@ public abstract class Database {
 
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
+    }
+
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           @NonNull final List<Category> categories, @NonNull String offerCreator) {
+        ValueListener<List<Offer>> listenerFilterCategories = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> value) {
+                List<Offer> list = new ArrayList<>();
+                //Use set for efficiency of comparison
+                Set<Category> s = new HashSet<>();
+                s.addAll(categories);
+                for (Offer offer : value) {
+                    if (s.contains(offer.getTag())) {
+                        list.add(offer);
+                    }
+                }
+                listener.onDataChange(list);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                listener.onCancelled(error);
+            }
+        };
+        readList(OFFERS_PATH, listenerFilterCategories, Offer.class, "userId", offerCreator);
+
     }
 }

@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.common.util.BiConsumer;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,14 +103,13 @@ public class ListOfferActivity extends FragmentConverter {
 
         offerList.clear();
 
-        BiConsumer<Database, ValueListener<List<Offer>>> dbConsumer =
-                new BiConsumer<Database, ValueListener<List<Offer>>>() {
-                    @Override
-                    public void accept(Database database, ValueListener<List<Offer>> listValueListener) {
-                        database.readOffers(listValueListener, categories);
-                    }
-                };
-        prepareOfferData(inflated, dbConsumer);
+        DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
+            @Override
+            public void accept(Database db, List<Category> categories, ValueListener<List<Offer>> listener) {
+                db.readOffers(listener, categories);
+            }
+        };
+        prepareOfferData(inflated, dbConsumer, categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -125,7 +122,7 @@ public class ListOfferActivity extends FragmentConverter {
      * Get the offers from the database.
      */
     protected void prepareOfferData(final View inflated,
-                                    BiConsumer<Database, ValueListener<List<Offer>>> dbConsumer) {
+                                    DatabaseOfferConsumer dbConsumer, List<Category> categories) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
@@ -146,7 +143,7 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        dbConsumer.accept(database, listener);
+        dbConsumer.accept(database, categories, listener);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
