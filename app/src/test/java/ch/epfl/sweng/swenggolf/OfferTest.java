@@ -2,6 +2,8 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
+import java.util.Calendar;
+
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.junit.Assert.assertEquals;
@@ -11,6 +13,7 @@ public class OfferTest {
 
     private final String id = "id_Patrick", title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
+    private static Calendar DATE = Calendar.getInstance();
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyId() {
@@ -26,6 +29,7 @@ public class OfferTest {
     public void testEmptyDescription() {
         new Offer(id, title, "");
     }
+
 
 
     @Test

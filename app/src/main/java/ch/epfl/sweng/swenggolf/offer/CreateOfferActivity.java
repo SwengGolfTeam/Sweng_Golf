@@ -1,18 +1,25 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -23,6 +30,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -39,14 +50,19 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
  * The activity used to create offers. Note that the intent extras
  * must contain a string with key "username".
  */
-public class CreateOfferActivity extends FragmentConverter {
+public class CreateOfferActivity extends FragmentConverter implements DatePickerDialog.OnDateSetListener {
 
     private TextView errorMessage;
+    private  TextView date_text;
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
-
     private Uri filePath = null;
+    private long creationDate = Calendar.getInstance().getTimeInMillis();
+    private long endDate = Calendar.getInstance().getTimeInMillis();
+    private final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+
+
 
 
     @Override
@@ -57,6 +73,11 @@ public class CreateOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
         setupSpinner(inflated);
+        date_text = inflated.findViewById(R.id.showDate);
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endDate);
+        date_text.setText(dateFormat.format(endCalendar.getTime()));
+
         inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +88,12 @@ public class CreateOfferActivity extends FragmentConverter {
             @Override
             public void onClick(View v) {
                 createOffer(v);
+            }
+        });
+        inflated.findViewById(R.id.pick_date).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
             }
         });
         return inflated;
@@ -155,12 +182,13 @@ public class CreateOfferActivity extends FragmentConverter {
         String uuid;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
+            creationDate = offerToModify.getCreationDate();
         } else {
             uuid = UUID.randomUUID().toString();
         }
 
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                "", uuid, tag);
+                "", uuid, tag, creationDate, endDate);
 
         if (filePath == null) {
             writeOffer(newOffer);
@@ -231,5 +259,74 @@ public class CreateOfferActivity extends FragmentConverter {
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+
+    public static class DatePickerFragment extends DialogFragment {
+
+        private final Calendar c;
+
+        @SuppressLint("ValidFragment")
+        public DatePickerFragment(Calendar c) {
+            super();
+            this.c = c;
+        }
+
+        public DatePickerFragment(){
+            this(Calendar.getInstance());
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(this.getActivity(), (DatePickerDialog.OnDateSetListener) getVisibleFragment(), year, month, day);
+        }
+
+
+        private Fragment getVisibleFragment() {
+            FragmentManager fragmentManager = this.getFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+            return null;
+        }
+    }
+
+
+
+    /**
+     * To set date on TextView
+     * @param calendar
+     */
+    private void setDate(final Calendar calendar) {
+        this.endDate = calendar.getTimeInMillis();
+        date_text.setText(dateFormat.format(calendar.getTime()));
+
+    }
+
+    /**
+     * To receive a callback when the user sets the date.
+     * @param view
+     * @param year
+     * @param month
+     * @param day
+     */
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = new GregorianCalendar(year, month, day);
+        setDate(cal);
+    }
+
+
+    public void showDatePickerDialog(View v) {
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endDate);
+        DialogFragment newFragment = new DatePickerFragment(endCalendar);
+        newFragment.show(this.getFragmentManager(), "DatePicker");
     }
 }
