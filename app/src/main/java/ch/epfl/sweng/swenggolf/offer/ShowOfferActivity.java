@@ -134,7 +134,7 @@ public class ShowOfferActivity extends FragmentConverter {
                         } else {
                             toPrompt = distance + " m";
                         }
-                        writeLocationToPage(toPrompt, offerLocation);
+                        writeLocationToPage(toPrompt);
                     }
                 }
             });
@@ -142,7 +142,7 @@ public class ShowOfferActivity extends FragmentConverter {
         }
     }
 
-    private void writeLocationToPage(String toWrite, Location location) {
+    private void writeLocationToPage(String toWrite) {
         TextView distanceText = getActivity().findViewById(R.id.saved_location_offer);
         distanceText.setText(toWrite);
         final Context context = getActivity();

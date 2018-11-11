@@ -27,6 +27,9 @@ android {
             testCoverageEnabled true
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
