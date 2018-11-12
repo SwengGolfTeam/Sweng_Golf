@@ -82,13 +82,15 @@ public abstract class Storage {
     public static Intent takePicture(FragmentActivity activity) throws IOException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = takePictureCreateFile(activity);
-        Uri takePicUri = FileProvider.getUriForFile(activity, "ch.epfl.sweng.swenggolf.fileprovider", photoFile);
+        Uri takePicUri = FileProvider.getUriForFile(activity,
+                "ch.epfl.sweng.swenggolf.fileprovider", photoFile);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, takePicUri);
         return takePictureIntent;
     }
 
     private static File takePictureCreateFile(FragmentActivity activity) throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
+                .format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         return File.createTempFile(imageFileName, null, activity.getCacheDir());
     }

@@ -6,21 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.provider.MediaStore;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.ActivityResultFunction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.FileProvider;
-import android.view.animation.Animation;
-import android.widget.ImageView;
 
-import com.android.dx.command.Main;
-import com.squareup.picasso.Picasso;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,37 +38,47 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferPhotoTest {
 
     @Rule
-    public IntentsTestRule<MainMenuActivity> mActivitiyRule = new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    public IntentsTestRule<MainMenuActivity> mActivitiyRule =
+            new IntentsTestRule<>(MainMenuActivity.class);
 
+    /**
+     * Set up the environnement to work with CreateOfferActivity.
+     */
     @Before
-    public void setUp() throws InterruptedException {
-        mActivitiyRule.launchActivity(new Intent());
+    public void setUp() {
         FragmentManager manager = mActivitiyRule.getActivity().getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.centralFragment, new CreateOfferActivity()).commit();
+        manager.beginTransaction()
+                .replace(R.id.centralFragment, new CreateOfferActivity()).commit();
     }
 
     @Test
     public void takePictureButtonTriggersIntent() {
-        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWithFunction(new ActivityResultFunction() {
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
+                .respondWithFunction(new ActivityResultFunction() {
             @Override
             public Instrumentation.ActivityResult apply(Intent intent) {
                 assertThat(intent.getExtras(), not(is((Bundle)null)));
-                assertThat((Uri)intent.getExtras().get(MediaStore.EXTRA_OUTPUT), not(is((Uri) null)));
+                assertThat((Uri)intent.getExtras()
+                        .get(MediaStore.EXTRA_OUTPUT), not(is((Uri) null)));
                 return new Instrumentation.ActivityResult(RESULT_OK, null);
             }
         });
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());
     }
 
-    private static void setUpOnActivityResultAnswer(final IntentsTestRule<MainMenuActivity> activity, final Parcel parcel) {
-        final Instrumentation.ActivityResult pictureResult = new Instrumentation.ActivityResult(RESULT_OK, null);
-        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWithFunction(new ActivityResultFunction() {
+    private static void onActivityResultAnswer(
+            final IntentsTestRule<MainMenuActivity> rule, final Parcel parcel) {
+        final Instrumentation.ActivityResult pictureResult =
+                new Instrumentation.ActivityResult(RESULT_OK, null);
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWithFunction(
+                new ActivityResultFunction() {
             @Override
             public Instrumentation.ActivityResult apply(Intent intent) {
                 Uri photoUri = (Uri) intent.getExtras().get(MediaStore.EXTRA_OUTPUT);
                 Uri.writeToParcel(parcel, photoUri);
                 parcel.setDataPosition(0);
-                File photoFile = new File(activity.getActivity().getCacheDir(), photoUri.getLastPathSegment());
+                File cacheDirectory = rule.getActivity().getCacheDir();
+                File photoFile = new File(cacheDirectory, photoUri.getLastPathSegment());
                 assertThat(photoFile.exists(), is(true));
                 return pictureResult;
             }
@@ -87,14 +87,14 @@ public class CreateOfferPhotoTest {
 
     @Test
     public void onActivityResultCorrectlyDisplayPicture() {
-        setUpOnActivityResultAnswer(mActivitiyRule, Parcel.obtain());
+        onActivityResultAnswer(mActivitiyRule, Parcel.obtain());
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());
     }
 
     @Test
     public void onActivityResultCorrectlyRemovesPreviousPicture() {
         Parcel parcel = Parcel.obtain();
-        setUpOnActivityResultAnswer(mActivitiyRule, parcel);
+        onActivityResultAnswer(mActivitiyRule, parcel);
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());
         Uri firstUri = Uri.CREATOR.createFromParcel(parcel);
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());

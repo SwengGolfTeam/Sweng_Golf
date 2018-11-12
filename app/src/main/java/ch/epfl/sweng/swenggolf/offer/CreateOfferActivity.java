@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,6 +36,9 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static android.provider.MediaStore.*;
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
@@ -59,13 +61,13 @@ public class CreateOfferActivity extends FragmentConverter {
             try {
                 Intent takePictureIntent = Storage.takePicture(getActivity());
                 if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
                     startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
                 } else {
-                    Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Cannot take a picture", LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
-                Toast.makeText(getContext(), "Unable to create picture", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Unable to create picture", LENGTH_LONG).show();
             }
         }
     };
@@ -80,7 +82,8 @@ public class CreateOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
+        View inflated = inflater.inflate(R.layout.activity_create_offer,
+                            container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
@@ -148,6 +151,9 @@ public class CreateOfferActivity extends FragmentConverter {
                     filePath = data.getData();
                     break;
                 }
+                default: {
+                    return;
+                }
             }
             ImageView imageView = findViewById(R.id.offer_picture);
             Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
@@ -156,9 +162,11 @@ public class CreateOfferActivity extends FragmentConverter {
 
     private void removeStalledPicture() {
         if(takePictureDestination != null) {
-            File previous = new File(getContext().getCacheDir(), takePictureDestination.getLastPathSegment());
+            File previous = new File(getContext().getCacheDir(),
+                        takePictureDestination.getLastPathSegment());
             if(!previous.delete()) {
-                Toast.makeText(this.getContext(), "Previous picture couldn't be removed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(),
+                        "Previous picture couldn't be removed", LENGTH_LONG).show();
             }
         }
     }
@@ -243,7 +251,7 @@ public class CreateOfferActivity extends FragmentConverter {
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
-                            Toast.LENGTH_SHORT).show();
+                            LENGTH_SHORT).show();
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
