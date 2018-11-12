@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 
 import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.setUpFakeDatabase;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,7 +30,7 @@ public class LocalDatabaseTest {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
-    public void init() {
+    public void init(){
         setUpFakeDatabase();
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
@@ -38,13 +39,13 @@ public class LocalDatabaseTest {
 
     @Test
     public void writeAndReadAllCategoriesTest(){
-        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity().getBaseContext(), null, 1);
+        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity().getApplicationContext(), null, 1);
 
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
 
         List<Category> recoverCategories = localDb.readCategories();
 
-        assertThat(recoverCategories, is(allCategories));
+        assertEquals(allCategories, recoverCategories);
     }
 }
