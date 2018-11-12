@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
@@ -53,7 +55,9 @@ public class Offer implements Parcelable {
         if (tag == null) {
             throw new IllegalArgumentException("Tag must be indicated or use other constructor");
         }
-
+        if (creationDate > endDate) {
+            throw new IllegalArgumentException("Creation date must be before the end date");
+        }
 
         this.tag = tag;
         this.userId = userId;
@@ -294,6 +298,14 @@ public class Offer implements Parcelable {
         this.tag = Category.valueOf(data[5]);
         this.creationDate = Long.parseLong(data[6]);
         this.endDate = Long.parseLong(data[7]);
+    }
+
+    /**
+     * Creates the format for the Date.
+     * @return the date format
+     */
+    public static DateFormat dateFormat() {
+        return new SimpleDateFormat("EEEE, dd/MM/yyyy");
     }
 
 }

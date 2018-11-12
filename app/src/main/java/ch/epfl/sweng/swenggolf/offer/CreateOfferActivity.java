@@ -63,7 +63,6 @@ public class CreateOfferActivity extends FragmentConverter
     private long creationDate;
     private Calendar now = Calendar.getInstance();
     private long endDate;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 
 
 
@@ -81,9 +80,7 @@ public class CreateOfferActivity extends FragmentConverter
         preFillFields(inflated);
         setupSpinner(inflated);
         dateText = inflated.findViewById(R.id.showDate);
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTimeInMillis(endDate);
-        dateText.setText(dateFormat.format(endCalendar.getTime()));
+        dateText.setText(Offer.dateFormat().format(endDate));
         initializeLayout(inflated);
         return inflated;
     }
@@ -335,7 +332,7 @@ public class CreateOfferActivity extends FragmentConverter
      */
     private void setDate(final Calendar calendar) {
         this.endDate = calendar.getTimeInMillis();
-        dateText.setText(dateFormat.format(calendar.getTime()));
+        dateText.setText(Offer.dateFormat().format(calendar.getTime()));
 
     }
 
