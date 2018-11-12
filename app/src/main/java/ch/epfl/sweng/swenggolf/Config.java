@@ -3,9 +3,13 @@ package ch.epfl.sweng.swenggolf;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
 /**
  * Class Used to know if we are running a test or not.
@@ -110,6 +114,12 @@ public class Config {
         return Config.activityCallback;
     }
 
+    /**
+     * Checks if the app is allowed to check the location. If not, requests it to Android.
+     *
+     * @param activity the current activity in which we ask for the permission
+     * @return whether we are authorized or not
+     */
     public static boolean checkLocationPermission(Activity activity) {
         if (isAuthorizedToCheckLocation(activity)) {
             ActivityCompat.requestPermissions(activity,
@@ -130,5 +140,26 @@ public class Config {
                 != PackageManager.PERMISSION_GRANTED;
         return isFineLocationGranted && isCoarseLocationGranted;
 
+    }
+
+    /**
+     * Parses the answer from Android regarding the permission to give a simple output to the
+     * activity.
+     *
+     * @param requestCode the request code
+     * @param grantResults the results granted
+     * @return which Permission was given
+     */
+    public static Permission onRequestPermissionsResult(int requestCode,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_FINE_LOCATION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                }
+                return GPS;
+            default:
+                return NONE;
+        }
     }
 }

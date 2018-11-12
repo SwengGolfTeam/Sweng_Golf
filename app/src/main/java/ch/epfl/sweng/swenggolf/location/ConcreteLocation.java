@@ -11,6 +11,16 @@ public class ConcreteLocation extends AppLocation {
 
     private final FusedLocationProviderClient location;
 
+    /**
+     * Set the database to use. This should only be used when testing ConcreteLocaiton. If you just
+     * want a test Database to use, you should use FakeDatabase instead.
+     *
+     * @param location the database
+     */
+    public ConcreteLocation(FusedLocationProviderClient location) {
+        this.location = location;
+    }
+
     protected ConcreteLocation(Activity activity) {
         this.location = LocationServices.getFusedLocationProviderClient(activity);
     }

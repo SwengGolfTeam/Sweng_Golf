@@ -62,13 +62,6 @@ public class Offer implements Parcelable {
         this.longitude = location.getLongitude();
     }
 
-    private Offer(String userId, String title, String description, String linkPicture,
-                  String uuid, Category tag, double latitude, double longitude) {
-        this(userId, title, description, linkPicture, uuid, tag);
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-
     /**
      * Contains the data of an offer.
      *
@@ -242,8 +235,11 @@ public class Offer implements Parcelable {
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
+        Location location = new Location("");
+        location.setLatitude(getLatitude());
+        location.setLongitude(getLongitude());
         return new Offer(getUserId(), getTitle(), getDescription(), newLinkPicture,
-                getUuid(), getTag(), getLatitude(), getLongitude());
+                getUuid(), getTag(), location);
     }
 
     public void setLocation(double latitude, double longitude) {

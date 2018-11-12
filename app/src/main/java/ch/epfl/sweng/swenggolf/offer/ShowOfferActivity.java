@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +52,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
 
 
 public class ShowOfferActivity extends FragmentConverter {
@@ -174,16 +176,10 @@ public class ShowOfferActivity extends FragmentConverter {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
+                                           @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_FINE_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setLocation();
-                }
-                return;
-            }
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+            setLocation();
         }
     }
 
@@ -252,7 +248,7 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {
-        EditText editText = findViewById(R.id.answer_description);
+        @SuppressLint("WrongViewCast") EditText editText = findViewById(R.id.answer_description);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));

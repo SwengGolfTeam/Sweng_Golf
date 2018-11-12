@@ -39,6 +39,7 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
@@ -261,7 +262,7 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     }
 
-    public void attachLocation() {
+    private void attachLocation() {
         if (Config.checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
@@ -279,16 +280,10 @@ public class CreateOfferActivity extends FragmentConverter {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
+                                           @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_FINE_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    attachLocation();
-                }
-                return;
-            }
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+            attachLocation();
         }
     }
 }
