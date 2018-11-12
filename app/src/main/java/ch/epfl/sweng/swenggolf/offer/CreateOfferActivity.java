@@ -93,8 +93,8 @@ public class CreateOfferActivity extends FragmentConverter {
                 container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
-        preFillFields(inflated);
         setupSpinner(inflated);
+        preFillFields(inflated);
         inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +146,13 @@ public class CreateOfferActivity extends FragmentConverter {
 
             ImageView picture = inflated.findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
+
+            Spinner categorySpinner = inflated.findViewById(R.id.category_spinner);
+            categorySpinner.setSelection(offerToModify.getTag().toInt());
+
+            location = new Location("");
+            location.setLatitude(offerToModify.getLatitude());
+            location.setLongitude(offerToModify.getLongitude());
 
             if (!link.isEmpty() && !Config.isTest()) {
                 Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
@@ -230,7 +237,7 @@ public class CreateOfferActivity extends FragmentConverter {
         }
 
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                "", uuid, tag, location);
+                offerToModify.getLinkPicture(), uuid, tag, location);
 
         if (filePath == null) {
             writeOffer(newOffer);
