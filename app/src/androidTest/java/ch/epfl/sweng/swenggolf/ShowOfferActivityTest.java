@@ -102,8 +102,10 @@ public class ShowOfferActivityTest {
         // user is author
         favButton.check(matches(isClickable()));
         favButton.perform(click());
+        onView(withText(android.R.string.yes)).perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
         favButton.perform(click());
+        onView(withText(android.R.string.yes)).perform(scrollTo(), click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite_border))));
     }
 
