@@ -103,6 +103,9 @@ public class ShowOfferActivity extends FragmentConverter {
             Picasso.with(this.getContext())
                     .load(Uri.parse(offer.getLinkPicture()))
                     .into(offerPicture);
+        } else {
+            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
+            offerPicture.getLayoutParams().height = 0;
         }
 
     }
