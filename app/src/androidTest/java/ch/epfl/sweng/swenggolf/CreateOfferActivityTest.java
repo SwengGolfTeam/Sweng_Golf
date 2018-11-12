@@ -74,7 +74,7 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferActivityTest {
 
     private final long beginingTime = 1515625200000L;
-    private final static long TIME_DIFF = 10_000;
+    private final static long TIME_DIFF = 10L;
 
     @Rule
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
@@ -99,7 +99,9 @@ public class CreateOfferActivityTest {
         CreateOfferActivity fragment = new CreateOfferActivity();
         if(hasOffer) {
             Bundle bundle = new Bundle();
-            Offer offer = new Offer(Config.getUser().getUserId(),"20","20", "20", "20",Category.FOOD,beginingTime,beginingTime+TIME_DIFF);
+            Offer offer = new Offer(Config.getUser().getUserId(),"20",
+                    "20", "20", "20",Category.FOOD,beginingTime,
+                    beginingTime+TIME_DIFF);
             bundle.putParcelable("offer", offer);
             fragment.setArguments(bundle);
             Database.getInstance().write("/offers",offer.getUuid(), offer);
@@ -250,9 +252,10 @@ public class CreateOfferActivityTest {
         };
     }
 
-    public static void setDate(int year, int monthOfYear, int dayOfMonth) {
+    private void setDate(int year, int monthOfYear, int dayOfMonth) {
         onView(withId(R.id.pick_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
+                .perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
     }
 
