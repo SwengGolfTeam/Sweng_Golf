@@ -92,6 +92,15 @@ public class ShowOfferActivity extends FragmentConverter {
                 new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+            setLocation();
+        }
+    }
+
     private void setContents() {
         TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
@@ -173,15 +182,6 @@ public class ShowOfferActivity extends FragmentConverter {
 
             }
         });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
-            setLocation();
-        }
     }
 
     private void fetchAnswers() {

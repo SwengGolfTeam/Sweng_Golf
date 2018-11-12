@@ -94,11 +94,8 @@ public class SignInActivity extends AppCompatActivity {
      */
     private GoogleSignInClient setGoogleSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("515318437233-vsola1ge0locvd4ft2jsc9i5"
-                        + "esma30ro.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken("515318437233-vsola1ge"
+                + "0locvd4ft2jsc9i5esma30ro.apps.googleusercontent.com").requestEmail().build();
 
         return GoogleSignIn.getClient(this, gso);
     }
