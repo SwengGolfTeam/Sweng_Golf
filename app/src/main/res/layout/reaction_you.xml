@@ -26,7 +26,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/answer_description_"
+        android:id="@+id/answer_description"
         android:layout_width="200dp"
         android:layout_height="@dimen/user_info_width"
         android:ems="10"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/post"
-        android:layout_toRightOf="@id/answer_description_"
+        android:layout_toRightOf="@id/answer_description"
         android:layout_marginTop="16dp"/>
 
 </RelativeLayout>

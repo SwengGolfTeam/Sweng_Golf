@@ -21,7 +21,7 @@ public class ListPreferencesActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.activity_list_preference, container, false);
-        setToolbar(R.drawable.ic_menu_black_24dp, R.string.preferences);
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.following);
         super.onCreate(savedInstanceState);
         mRecyclerView = inflated.findViewById(R.id.preference_list);
         mRecyclerView.setHasFixedSize(true);

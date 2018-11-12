@@ -5,10 +5,18 @@ import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
+
 public class User implements Parcelable {
 
     private static final String DEFAULT_PREFERENCE = "";
     public static final String DEFAULT_DESCRIPTION = "Hello, I'm new Here!";
+    public static final int USERNAME_MIN_LENGTH = 1;
+    public static final int USERNAME_MAX_LENGTH = 25;
+    public static final int INFOS_MIN_LENGTH = 0;
+    public static final int INFOS_MAX_LENGTH = 200;
+    public static final int PREFERENCES_MIN_LENGTH = 0;
+    public static final int PREFERENCES_MAX_LENGTH = 100;
     private String userName;
     private String userId;
     private String email;
@@ -93,6 +101,9 @@ public class User implements Parcelable {
                 || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
+        checkUsername(username);
+        checkPreference(preference);
+        checkDescription(description);
         this.userName = username;
         this.userId = userId;
         this.email = email;
@@ -100,6 +111,21 @@ public class User implements Parcelable {
         this.preference = preference;
         this.description = description;
     }
+
+    private String checkUsername(String username) {
+        return checkString(username, "username", USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH);
+    }
+
+    private String checkDescription(String description) {
+        return checkString(description, "description", INFOS_MIN_LENGTH,
+                INFOS_MAX_LENGTH);
+    }
+
+    private String checkPreference(String preference) {
+        return checkString(preference, "preference", PREFERENCES_MIN_LENGTH,
+                PREFERENCES_MAX_LENGTH);
+    }
+
 
     /**
      * Create an user with an existed user but with different name and different mail.
@@ -176,7 +202,7 @@ public class User implements Parcelable {
      * @param userName the corresponding username
      */
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.userName = checkUsername(userName);
     }
 
     /**
@@ -213,7 +239,7 @@ public class User implements Parcelable {
      * @param description the corresponding description
      */
     public void setDescription(String description) {
-        this.description = description;
+        this.description = checkDescription(description);
     }
 
     /**
@@ -222,7 +248,7 @@ public class User implements Parcelable {
      * @param preference the corresponding preference
      */
     public void setPreference(String preference) {
-        this.preference = preference;
+        this.preference = checkPreference(preference);
     }
 
     /**

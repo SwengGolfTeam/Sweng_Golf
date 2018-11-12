@@ -29,8 +29,10 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -105,10 +107,10 @@ public class DeleteOfferTest {
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
-            Espresso.openContextualActionModeOverflowMenu();
+            openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
             onData(hasToString("Delete offer")).inRoot(isPlatformPopup())
                     .inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class))
-                        .perform(ViewActions.click());
+                        .perform(scrollTo(), ViewActions.click());
         }
     }
 }
