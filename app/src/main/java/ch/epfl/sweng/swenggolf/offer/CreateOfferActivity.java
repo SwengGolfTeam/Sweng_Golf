@@ -230,14 +230,17 @@ public class CreateOfferActivity extends FragmentConverter {
      */
     protected void createOfferObject(String name, String description, Category tag) {
         String uuid;
+        String link;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
+            link = offerToModify.getLinkPicture();
         } else {
             uuid = UUID.randomUUID().toString();
+            link = "";
         }
 
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                offerToModify.getLinkPicture(), uuid, tag, location);
+                link, uuid, tag, location);
 
         if (filePath == null) {
             writeOffer(newOffer);

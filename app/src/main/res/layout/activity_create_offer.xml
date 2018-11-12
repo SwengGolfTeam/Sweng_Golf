@@ -148,12 +148,15 @@
                 android:id="@+id/button"
                 android:layout_width="156dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="21dp"
-                android:layout_marginRight="21dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginBottom="12dp"
                 android:text="@string/button_create_offer"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/offer_picture"
+                app:layout_constraintStart_toStartOf="@+id/location_button" />
 
             <TextView
                 android:id="@+id/textView5"
