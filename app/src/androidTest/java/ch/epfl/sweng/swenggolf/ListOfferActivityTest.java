@@ -11,10 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -68,6 +72,9 @@ public class ListOfferActivityTest {
         setUpFakeDatabase();
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
+        // reinit local database to default values just in case test are not independent of each other
+        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
+        localDb.writeCategories(Arrays.asList(Category.values()));
     }
 
     /**
