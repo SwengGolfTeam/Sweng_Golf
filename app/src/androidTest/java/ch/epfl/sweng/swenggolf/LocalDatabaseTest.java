@@ -30,7 +30,7 @@ public class LocalDatabaseTest {
 
 
     @Test
-    public void WriteAndReadTest() {
+    public void writeAndReadTest() {
         LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
