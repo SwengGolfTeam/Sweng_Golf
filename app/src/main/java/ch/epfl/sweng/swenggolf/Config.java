@@ -156,8 +156,9 @@ public class Config {
             case PERMISSION_FINE_LOCATION:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    return GPS;
                 }
-                return GPS;
+                return NONE;
             default:
                 return NONE;
         }
