@@ -112,8 +112,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
         if (!offer.getLinkPicture().isEmpty()) {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
-            Picasso.with(this.getContext())
-                    .load(Uri.parse(offer.getLinkPicture()))
+            Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture()))
                     .into(offerPicture);
         } else {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
@@ -180,7 +179,6 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        Log.d("T01", "Result received");
         if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
             setLocation();
         }

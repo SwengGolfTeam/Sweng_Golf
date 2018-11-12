@@ -144,15 +144,14 @@ public class CreateOfferActivity extends FragmentConverter {
             EditText description = inflated.findViewById(R.id.offer_description);
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
 
-            ImageView picture = inflated.findViewById(R.id.offer_picture);
-            String link = offerToModify.getLinkPicture();
-
-            Spinner categorySpinner = inflated.findViewById(R.id.category_spinner);
             categorySpinner.setSelection(offerToModify.getTag().toInt());
 
             location = new Location("");
             location.setLatitude(offerToModify.getLatitude());
             location.setLongitude(offerToModify.getLongitude());
+
+            ImageView picture = inflated.findViewById(R.id.offer_picture);
+            String link = offerToModify.getLinkPicture();
 
             if (!link.isEmpty() && !Config.isTest()) {
                 Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
