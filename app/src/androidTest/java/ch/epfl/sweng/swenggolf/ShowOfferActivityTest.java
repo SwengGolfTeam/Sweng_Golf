@@ -152,12 +152,13 @@ public class ShowOfferActivityTest {
         // We assume that the distance is larger than 1 km
         String expectedDistance = distance + " km";
 
-        onView(withId(R.id.saved_location_offer)).perform(scrollTo()).check(matches(withText(expectedDistance)));
+        onView(withId(R.id.saved_location_offer)).perform(scrollTo())
+                .check(matches(withText(expectedDistance)));
     }
 
     @Test
     public void correctIntentSentWhenClickedOnDistance() {
-        onView(withId(R.id.saved_location_offer)).perform(click());
+        onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
         intended(hasPackage("com.google.android.apps.maps"));
     }
 

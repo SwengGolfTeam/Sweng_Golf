@@ -8,6 +8,9 @@ import android.support.v4.app.ActivityCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
@@ -121,20 +124,13 @@ public class Config {
      * @return whether we are authorized or not
      */
     public static boolean checkLocationPermission(Activity activity) {
-        if (isNotAuthorizedToCheckLocation(activity)) {
+        if (checkSelfPermission(activity, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{ACCESS_FINE_LOCATION},
                     PERMISSION_FINE_LOCATION);
             return false;
         }
         return true;
-    }
-
-    private static boolean isNotAuthorizedToCheckLocation(Activity activity) {
-        return ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED;
-
     }
 
     /**
@@ -150,7 +146,7 @@ public class Config {
         switch (requestCode) {
             case PERMISSION_FINE_LOCATION:
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        && grantResults[0] == PERMISSION_GRANTED) {
                     return GPS;
                 }
                 return NONE;
