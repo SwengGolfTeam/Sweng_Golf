@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.annotation.NonNull;
+
 import org.junit.Test;
 
 import java.util.List;
@@ -9,6 +11,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -101,6 +104,12 @@ public class FakeDatabaseTest {
         d.readList(PATH, listener, String.class);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void readListThrowExceptionOnInvalidAttribute() {
+        FakeDatabase database = new FakeDatabase(true);
+        database.readList(PATH, null, Offer.class, "invalid attribute", "random");
+    }
+
     private void writeListenerError(boolean working, DbError error) {
         Database d = new FakeDatabase(working);
         CompletionListener listener = new CompletionListener() {
@@ -146,19 +155,32 @@ public class FakeDatabaseTest {
     public void readListenerListHasError() {
         Database d = new FakeDatabase(false);
 
-        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
-            @Override
-            public void onDataChange(List<String> value) {
-
-                fail();
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                assertThat(error, is(DbError.UNKNOWN_ERROR));
-            }
-        };
+        ValueListener<List<String>> listener = getListValueListener();
         d.readList(PATH, listener, String.class);
+    }
+
+    @Test
+    public void readListenerListWithAttributeHasError() {
+        Database d = new FakeDatabase(false);
+
+        ValueListener<List<String>> listener = getListValueListener();
+        d.readList(PATH, listener, String.class,"","");
+    }
+
+    @NonNull
+    private ValueListener<List<String>> getListValueListener() {
+        return new ValueListener<List<String>>() {
+                @Override
+                public void onDataChange(List<String> value) {
+
+                    fail();
+                }
+
+                @Override
+                public void onCancelled(DbError error) {
+                    assertThat(error, is(DbError.UNKNOWN_ERROR));
+                }
+            };
     }
 
 

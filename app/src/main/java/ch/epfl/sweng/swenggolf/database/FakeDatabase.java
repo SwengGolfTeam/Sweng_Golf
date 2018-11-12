@@ -85,6 +85,7 @@ public class FakeDatabase extends Database {
 
             List<T> list = getList(path);
             try {
+                //Use reflection to check the attribute
                 Field field = c.getDeclaredField(attribute);
                 field.setAccessible(true);
                 List<T> newList = new ArrayList<>();
@@ -96,9 +97,9 @@ public class FakeDatabase extends Database {
                 field.setAccessible(false);
                 listener.onDataChange(newList);
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("The attribute " + attribute + " doesn't exist");
+                throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
             } catch (IllegalAccessException e) {
-                throw new RuntimeException();
+                throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
             }
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
