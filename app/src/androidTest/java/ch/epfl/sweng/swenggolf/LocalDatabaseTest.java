@@ -1,7 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -23,22 +25,16 @@ import static org.junit.Assert.assertEquals;
 public class LocalDatabaseTest {
 
     @Rule
-    public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
-    @Before
-    public void init() {
-        mActivityRule.launchActivity(new Intent());
-    }
+    public final ActivityTestRule<MainMenuActivity> activityRule =
+            new ActivityTestRule<>(MainMenuActivity.class, false, true);
 
 
     @Test
-    public void noExceptionWithWriteAndRead() {
-        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
+    public void WriteAndReadTest() {
+        LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
         String read = localDb.readCategories();
-
         assertEquals(allCategories, Category.singleStringToCategories(read));
     }
 

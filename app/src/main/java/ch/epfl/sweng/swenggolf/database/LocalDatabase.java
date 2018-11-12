@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +15,7 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 
 public class LocalDatabase extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "categories.db";
+    private static final String DATABASE_NAME = "local.db";
     private static final String TABLE_NAME = "filters";
     private static final String COLUMN_ID = "_id";
     public static final String COLUMN_CATEGORIES = "categories";
@@ -24,8 +26,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID
-                +" INTEGER PRIMARY KEY," + COLUMN_CATEGORIES + "TEXT )";
+        String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID
+                +" INTEGER PRIMARY KEY, " + COLUMN_CATEGORIES + " TEXT NOT NULL);";
         db.execSQL(sqlQueryForCreation);
     }
 
@@ -41,12 +43,13 @@ public class LocalDatabase extends SQLiteOpenHelper {
      * @param categories A List of categories
      */
     public void writeCategories(List<Category> categories) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_CATEGORIES, Category.categoriesToSingleString(categories));
 
-        db.insert(TABLE_NAME, null, values);
-        db.close();
+        database.insert(TABLE_NAME, null, values);
+        database.close();
     }
 
     /**
@@ -55,7 +58,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
      * @return A String in the form "true,true,[...],false,true"
      */
     public String readCategories() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "Select * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
         Cursor cursor = db.rawQuery(query, null);

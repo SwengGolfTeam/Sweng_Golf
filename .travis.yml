@@ -1,6 +1,4 @@
 language: android
-env:
-  - DB=sqlite
 android:
   components:
     # The BuildTools version used by your project
