@@ -2,6 +2,11 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.Permission.NONE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -44,5 +49,14 @@ public class ConfigTest {
         Config.getActivityCallback().isDone();
         Config.resetActivityCallback();
         Config.getActivityCallback();
+    }
+
+    @Test
+    public void testOnRequestPermissionsResult() {
+        assertEquals(GPS, Config.onRequestPermissionsResult(PERMISSION_FINE_LOCATION,
+                new int[]{PERMISSION_GRANTED}));
+        assertEquals(NONE, Config.onRequestPermissionsResult(PERMISSION_FINE_LOCATION,
+                new int[]{PERMISSION_DENIED}));
+        assertEquals(NONE, Config.onRequestPermissionsResult(0, null));
     }
 }
