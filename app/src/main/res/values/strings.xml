@@ -48,4 +48,6 @@
     <string name="reactions">Reactions:</string>
     <string name="category_show_offer">Category:</string>
     <string name="post">post</string>
+    <string name="answer_load_error">The answers of this offer could not be loaded.
+        \nPlease verify your internet connection</string>
 </resources>

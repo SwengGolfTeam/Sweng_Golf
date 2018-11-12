@@ -65,5 +65,11 @@ public class ShowOfferActivityDbNotWorkingTest {
         testToastShow(mActivityRule, R.string.error_load_user);
     }
 
+    @Test
+    public void displaysErrorMessageWhenAnswersCannotBeLoaded() {
+        database.setEntryNotWorking(Database.ANSWERS_PATH, offer.getUuid());
+        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
+    }
+
 
 }

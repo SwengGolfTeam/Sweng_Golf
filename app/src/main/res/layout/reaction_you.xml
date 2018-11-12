@@ -27,19 +27,19 @@
 
     <EditText
         android:id="@+id/answer_description_"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="@dimen/user_info_width"
-        android:ems="10"
-        android:inputType="textMultiLine"
         android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@id/user_info"/>
+        android:layout_toRightOf="@id/user_info"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/post_button"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="@string/post"
+        android:layout_marginTop="16dp"
         android:layout_toRightOf="@id/answer_description_"
-        android:layout_marginTop="16dp"/>
+        android:text="@string/post" />
 
 </RelativeLayout>

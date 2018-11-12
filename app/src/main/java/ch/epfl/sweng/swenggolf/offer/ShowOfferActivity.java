@@ -47,6 +47,7 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
+    private TextView errorMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,7 @@ public class ShowOfferActivity extends FragmentConverter {
         assert getArguments() != null;
         View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
+        errorMessage = inflated.findViewById(R.id.error_message);
         setContents(inflated);
         setRecyclerView(inflated);
         fetchAnswers();
@@ -108,7 +110,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Unable to load answers from database");
+                errorMessage.setVisibility(View.VISIBLE);
             }
         };
         Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
@@ -236,28 +238,6 @@ public class ShowOfferActivity extends FragmentConverter {
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert);
-        Dialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    /**
-     * Displays an Alert Dialog to accept an answer
-     */
-    public void showAcceptAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle("Accept answer")
-                .setMessage("Do you want to accept this answer?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // how ?!
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // user cancelled the dialog
-                    }
-                });
         Dialog alertDialog = builder.create();
         alertDialog.show();
     }
