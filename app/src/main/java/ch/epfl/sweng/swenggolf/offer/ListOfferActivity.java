@@ -28,13 +28,14 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOfferActivity extends FragmentConverter {
 
+    private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
     private ListOfferAdapter mAdapter;
     private Menu mOptionsMenu;
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     private TextView noOffers;
     public static final List<Offer> offerList = new ArrayList<>();
-    private static LocalDatabase localDb;
+    private LocalDatabase localDb;
     private List<Category> checkedCategories = Arrays.asList(Category.values());
 
     @Override
@@ -45,11 +46,11 @@ public class ListOfferActivity extends FragmentConverter {
 
         localDb = new LocalDatabase(this.getContext(), null, 1);
         try {
-            Log.d("LOCAL DATABASE", "Recover from database");
+            Log.d(LOG_LOCAL_DB, "Recover from database");
             checkedCategories = Category.singleStringToCategories(localDb.readCategories());
-            Log.d("LOCAL DATABASE", "Recovered " + checkedCategories.toString());
+            Log.d(LOG_LOCAL_DB, "Recovered " + checkedCategories.toString());
         } catch (Exception e) {
-            Log.d("LOCAL DATABASE", "Initial write with allCategories");
+            Log.d(LOG_LOCAL_DB, "Initial write with allCategories");
             localDb.writeCategories(checkedCategories); // by default is allCategories
         }
 
@@ -69,12 +70,14 @@ public class ListOfferActivity extends FragmentConverter {
     private void addAllCategoriesToMenu(int groupId) {
         Category[] categoriesEnum = Category.values();
         for (int i = 0; i < categoriesEnum.length; i++) {
-            if (checkedCategories.contains(categoriesEnum[i]))
+            if (checkedCategories.contains(categoriesEnum[i])) {
                 mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
                         .setCheckable(true).setChecked(true);
-            else
+            }
+            else {
                 mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
                         .setCheckable(true).setChecked(false);
+            }
         }
     }
 
@@ -89,7 +92,7 @@ public class ListOfferActivity extends FragmentConverter {
         }
 
         localDb.writeCategories(listCategories);
-        Log.d("LOCAL DATABASE", "write "+ listCategories.toString());
+        Log.d(LOG_LOCAL_DB, "write "+ listCategories.toString());
         setRecyclerView(getView(), listCategories);
     }
 

@@ -24,8 +24,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID +" INTEGER PRIMARY KEY," + COLUMN_CATEGORIES + "TEXT )";
-        db.execSQL(SQL_CREATE_ENTRIES);
+        final String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID +" INTEGER PRIMARY KEY," + COLUMN_CATEGORIES + "TEXT )";
+        db.execSQL(sqlQueryForCreation);
     }
 
     @Override
@@ -34,6 +34,11 @@ public class LocalDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Writes a List of Categories into the local SQLite database.
+     *
+     * @param categories A List of categories
+     */
     public void writeCategories(List<Category> categories) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -43,6 +48,11 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Reads the saved List of categories from the Database and returns it in a String format.
+     *
+     * @return A String in the form "true,true,[...],false,true"
+     */
     public String readCategories() {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -58,9 +68,5 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.close();
 
         return categories;
-    }
-
-    public void setDebug(){
-        writeCategories(Arrays.asList(Category.values())); // default value
     }
 }
