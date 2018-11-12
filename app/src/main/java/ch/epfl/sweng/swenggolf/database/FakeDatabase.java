@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +81,28 @@ public class FakeDatabase extends Database {
 
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c, String attribute, String value) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (working) {
+
+            List<T> list = getList(path);
+            try {
+                Field field = c.getDeclaredField(attribute);
+                field.setAccessible(true);
+                List<T> newList = new ArrayList<>();
+                for (T object : list) {
+                    if (!field.get(object).equals(value)) {
+                        newList.add(object);
+                    }
+                }
+                field.setAccessible(false);
+                listener.onDataChange(newList);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException("The attribute " + attribute + " doesn't exist");
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException();
+            }
+        } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
     }
 
     @Override
