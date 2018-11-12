@@ -121,7 +121,7 @@ public class Config {
      * @return whether we are authorized or not
      */
     public static boolean checkLocationPermission(Activity activity) {
-        if (isAuthorizedToCheckLocation(activity)) {
+        if (isNotAuthorizedToCheckLocation(activity)) {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -131,14 +131,14 @@ public class Config {
         return true;
     }
 
-    private static boolean isAuthorizedToCheckLocation(Activity activity) {
-        boolean isFineLocationGranted = ActivityCompat.checkSelfPermission(activity,
+    private static boolean isNotAuthorizedToCheckLocation(Activity activity) {
+        boolean isFineLocationNotGranted = ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED;
-        boolean isCoarseLocationGranted = ActivityCompat.checkSelfPermission(activity,
+        boolean isCoarseLocationNotGranted = ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED;
-        return isFineLocationGranted && isCoarseLocationGranted;
+        return isFineLocationNotGranted || isCoarseLocationNotGranted;
 
     }
 

@@ -127,6 +127,8 @@ public class Offer implements Parcelable {
         linkPicture = that.linkPicture;
         uuid = that.uuid;
         tag = that.tag;
+        latitude = that.latitude;
+        longitude = that.longitude;
     }
 
     @Override

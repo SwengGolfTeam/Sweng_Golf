@@ -12,7 +12,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -24,18 +23,14 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
-
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.Offer;
-
-import ch.epfl.sweng.swenggolf.storage.FakeStorage;
-import ch.epfl.sweng.swenggolf.storage.Storage;
+import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.storage.FakeStorage;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -47,17 +42,14 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
-
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 

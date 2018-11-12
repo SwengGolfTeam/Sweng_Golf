@@ -8,6 +8,9 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 public final class FilledFakeDatabase extends FakeDatabase {
 
+    public static final double FAKE_LATITUDE = 44.34;
+    public static final double FAKE_LONGITUDE = 1.21;
+
     /**
      * Returns a prefilled FakeDatabase.
      */
@@ -173,9 +176,15 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     "Lightsabers")
     };
 
-    private static final Location location;
     private static Location getLocation() {
+        return getLocation(FAKE_LATITUDE, FAKE_LONGITUDE);
+    }
 
+    private static Location getLocation(double latitude, double longitude) {
+        Location location = new Location("");
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
     }
 
     private static final Offer[] FAKE_OFFERS = {
@@ -186,7 +195,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/f/ff/Sandcrawler.png/"
                             + "revision/latest?cb=20130812001443",
-                    "01", Category.values()[0]),
+                    "01", Category.values()[0], getLocation()),
             new Offer("13", "Defense against the droids",
                     "The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
@@ -194,39 +203,39 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     LUMIERE
                             + "databank_battledroid_01_169_1524f145.jpeg?"
                             + "region=0%2C0%2C1560%2C878&width=768",
-                    "02", Category.values()[1]),
+                    "02", Category.values()[1], getLocation()),
             new Offer("8", "Chosen one",
                     "Someone out there is the chosen one ?"
                             + " If you are I can train you !"
                             + " Warning, last apprentice got bad burns !",
                     "https://i.redd.it/4zqd4mvkq3n01.jpg",
-                    "03", Category.values()[1]),
+                    "03", Category.values()[1], getLocation()),
             new Offer("15", "Great Price to find a friend",
                     "I'm looking for a \"friend\" of mine, a certain Han Solo,"
                             + " I offer a desert spaceship to interested !"
                             + " It's him on the left.",
                     "https://cdn3.whatculture.com/"
                             + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
-                    "04", Category.values()[2]),
+                    "04", Category.values()[2], getLocation()),
             new Offer("7", "Defeat Dark Sidious I must",
                     "Defeat Dark Sidious. "
                             + "With me train you shall,"
                             + " If so you want.",
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
-                    "05", Category.values()[2]),
+                    "05", Category.values()[2], getLocation()),
             new Offer("4", "Help to get the senate",
                     "I'm looking for an apprentice to show him"
                             + " my unlimited power and take down the senate !",
                     LUMIERE
                             + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342",
-                    "06", Category.values()[1]),
+                    "06", Category.values()[1], getLocation()),
             new Offer("5", "Prepare Surprise for a friend",
                     "Someone would like to help me prepare a surprise "
                             + "for a friend ? Create a display with \"NOT YET !\""
                             + " on it. I'll invite you to a beer then.",
                     "",
-                    "07", Category.values()[2]),
+                    "07", Category.values()[2], getLocation()),
             new Offer("10", "Take revenge on my apprentice",
                     "Need someone to find my apprentice, some \"bat\" guy. "
                             + "I'll show you the League of Shadows !",
@@ -236,7 +245,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
                     LUMIERE
                             + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                    "09", Category.values()[3]),
+                    "09", Category.values()[3], getLocation()),
             new Offer("1", "Nice helmet to build ship",
                     "I must build some star like ship, you can have my helmet then !",
                     LUMIERE

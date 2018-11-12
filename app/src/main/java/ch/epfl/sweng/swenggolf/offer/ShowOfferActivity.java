@@ -1,11 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -51,7 +48,6 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
-import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 
 
@@ -62,20 +58,22 @@ public class ShowOfferActivity extends FragmentConverter {
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
     private View mView;
+    private View inflated;
 
     private static final int KILOMETER_SIZE = 1000;
+    public static final int DISTANCE_GRANULARITY = 100;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
         assert getArguments() != null;
-        View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
+        inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
-        setContents(inflated);
-        setRecyclerView(inflated);
+        setContents();
+        setRecyclerView();
         fetchAnswers();
-        setAnswerToPost(inflated);
+        setAnswerToPost();
         return inflated;
     }
 
@@ -94,7 +92,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
     }
 
-    private void setContents(View inflated) {
+    private void setContents() {
         TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
 
@@ -119,7 +117,8 @@ public class ShowOfferActivity extends FragmentConverter {
                     .into(offerPicture);
         }
 
-        if (offer.getLongitude() != 0.0 && offer.getLatitude() != 0.0) {
+
+        if (offer.getLongitude() != 0.0 || offer.getLatitude() != 0.0) {
             setLocation();
         }
 
@@ -137,7 +136,8 @@ public class ShowOfferActivity extends FragmentConverter {
                         offerLocation.setLatitude(offer.getLatitude());
                         offerLocation.setLongitude(offer.getLongitude());
 
-                        int distance = (int) offerLocation.distanceTo(location) / 100 * 100;
+                        int distance = (int) offerLocation.distanceTo(location)
+                                / DISTANCE_GRANULARITY * DISTANCE_GRANULARITY;
                         String toPrompt;
                         if (distance >= KILOMETER_SIZE) {
                             distance /= KILOMETER_SIZE;
@@ -156,7 +156,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void writeLocationToPage(String toWrite) {
-        TextView distanceText = getActivity().findViewById(R.id.saved_location_offer);
+        TextView distanceText = inflated.findViewById(R.id.saved_location_offer);
         distanceText.setText(toWrite);
         final Context context = getActivity();
         distanceText.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +222,7 @@ public class ShowOfferActivity extends FragmentConverter {
         };
     }
 
-    private void setAnswerToPost(final View inflated) {
+    private void setAnswerToPost() {
         LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
 
         LayoutInflater mInflater = getLayoutInflater();
@@ -257,7 +257,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setRecyclerView(View inflated) {
+    private void setRecyclerView() {
         RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);
