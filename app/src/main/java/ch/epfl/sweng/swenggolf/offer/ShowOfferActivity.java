@@ -85,8 +85,8 @@ public class ShowOfferActivity extends FragmentConverter {
         offerTitle.setText(offer.getTitle());
 
         TextView offerDate = inflated.findViewById(R.id.offer_date);
-        offerDate.setText("Valid until : " + Offer.dateFormat().
-                format(offer.getEndDate()));
+        offerDate.setText("Valid until : " + Offer.dateFormat()
+                .format(offer.getEndDate()));
 
         final TextView offerAuthor = inflated.findViewById(R.id.show_offer_author);
         ViewUserFiller.fillWithUsername(offerAuthor, offer.getUserId());
