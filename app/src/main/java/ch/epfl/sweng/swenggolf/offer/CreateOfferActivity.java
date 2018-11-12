@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -60,15 +61,17 @@ public class CreateOfferActivity extends FragmentConverter {
 
     private Location location = new Location("default");
 
-    private Uri takePictureDestination = null;
+    private Uri photoDestination = null;
+    private Uri tempPicturePath = null;
 
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
                 Intent takePictureIntent = Storage.takePicture(getActivity());
+
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
+                    tempPicturePath = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
                     startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
                 } else {
                     Toast.makeText(getContext(), "Cannot take a picture", LENGTH_SHORT).show();
@@ -166,8 +169,12 @@ public class CreateOfferActivity extends FragmentConverter {
             removeStalledPicture();
             switch (requestCode) {
                 case CAPTURE_IMAGE_REQUEST: {
-                    filePath = takePictureDestination;
-                    takePictureDestination = null;
+                    photoDestination = tempPicturePath;
+                    File cacheDirectory = getActivity().getCacheDir();
+                    File photo = new File(cacheDirectory, photoDestination.getLastPathSegment());
+                    filePath = FileProvider.getUriForFile(getContext(),
+                            "ch.epfl.sweng.swenggolf.fileprovider", photo);
+                    photoDestination = null;
                     break;
                 }
                 case PICK_IMAGE_REQUEST: {
@@ -184,9 +191,9 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     private void removeStalledPicture() {
-        if (takePictureDestination != null) {
+        if (photoDestination != null) {
             File previous = new File(getContext().getCacheDir(),
-                    takePictureDestination.getLastPathSegment());
+                    photoDestination.getLastPathSegment());
             if (!previous.delete()) {
                 Toast.makeText(this.getContext(),
                         "Previous picture couldn't be removed", LENGTH_LONG).show();
@@ -338,8 +345,8 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         removeStalledPicture();
     }
 }
