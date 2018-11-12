@@ -41,7 +41,7 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
- * The activity used to create offers. Note that the intent extras
+ * The fragment used to create offers. Note that the extras
  * must contain a string with key "username".
  */
 public class CreateOfferActivity extends FragmentConverter {
@@ -53,6 +53,29 @@ public class CreateOfferActivity extends FragmentConverter {
     private Uri filePath = null;
     private Uri takePictureDestination = null;
 
+    private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                Intent takePictureIntent = Storage.takePicture(getActivity());
+                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
+                } else {
+                    Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                Toast.makeText(getContext(), "Unable to create picture", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            createOffer(v);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,28 +91,8 @@ public class CreateOfferActivity extends FragmentConverter {
                 startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
-        inflated.findViewById(R.id.take_picture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent takePictureIntent = Storage.takePicture(getActivity());
-                    if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        takePictureDestination = (Uri) takePictureIntent.getExtras().get(MediaStore.EXTRA_OUTPUT);
-                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
-                    } else {
-                        Toast.makeText(getContext(), "Cannot take a picture", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(getContext(), "Unable to create picture", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        inflated.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createOffer(v);
-            }
-        });
+        inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
+        inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
         return inflated;
     }
 
