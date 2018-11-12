@@ -146,8 +146,10 @@ public class CreateOfferActivity extends FragmentConverter {
             switch (requestCode) {
                 case CAPTURE_IMAGE_REQUEST : {
                     photoDestination = tempPicturePath;
-                    File photo = new File(getActivity().getCacheDir(),photoDestination.getLastPathSegment());
-                    filePath = FileProvider.getUriForFile(getContext(),"ch.epfl.sweng.swenggolf.fileprovider", photo);
+                    File cacheDirectory = getActivity().getCacheDir();
+                    File photo = new File(cacheDirectory,photoDestination.getLastPathSegment());
+                    filePath = FileProvider.getUriForFile(getContext(),
+                            "ch.epfl.sweng.swenggolf.fileprovider", photo);
                     photoDestination = null;
                     break;
                 }
@@ -291,8 +293,8 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         removeStalledPicture();
     }
 
