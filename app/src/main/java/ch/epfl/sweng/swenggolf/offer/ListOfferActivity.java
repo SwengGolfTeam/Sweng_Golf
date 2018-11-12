@@ -44,7 +44,6 @@ public class ListOfferActivity extends FragmentConverter {
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
         localDb = new LocalDatabase(this.getContext(), null, 1);
-
         try {
             Log.d("LOCAL DATABASE", "Recover from database");
             checkedCategories = localDb.readCategories();

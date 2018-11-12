@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -57,5 +58,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.close();
 
         return Category.singleStringToCategories(categories);
+    }
+
+    public void setDebug(){
+        writeCategories(Arrays.asList(Category.values())); // default value
     }
 }
