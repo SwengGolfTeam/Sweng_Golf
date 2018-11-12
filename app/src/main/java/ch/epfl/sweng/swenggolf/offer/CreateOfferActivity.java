@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +26,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -38,12 +39,15 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
+import static android.provider.MediaStore.EXTRA_OUTPUT;
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
- * The activity used to create offers. Note that the intent extras
+ * The fragment used to create offers. Note that the extras
  * must contain a string with key "username".
  */
 public class CreateOfferActivity extends FragmentConverter {
@@ -52,29 +56,49 @@ public class CreateOfferActivity extends FragmentConverter {
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
-
     private Uri filePath = null;
+
     private Location location = new Location("default");
 
+    private Uri takePictureDestination = null;
+
+    private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                Intent takePictureIntent = Storage.takePicture(getActivity());
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    takePictureDestination = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
+                } else {
+                    Toast.makeText(getContext(), "Cannot take a picture", LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                Toast.makeText(getContext(), "Unable to create picture", LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            createOffer(v);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
+        View inflated = inflater.inflate(R.layout.activity_create_offer,
+                container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
         setupSpinner(inflated);
-        inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosePicture(v);
-            }
-        });
-        inflated.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createOffer(v);
+                startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
         inflated.findViewById(R.id.location_button).setOnClickListener(new View.OnClickListener() {
@@ -83,6 +107,8 @@ public class CreateOfferActivity extends FragmentConverter {
                 attachLocation();
             }
         });
+        inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
+        inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
         return inflated;
     }
 
@@ -127,23 +153,38 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     }
 
-    /**
-     * Allows the user to choose a picture from his gallery.
-     *
-     * @param view the view
-     */
-    public void choosePicture(View view) {
-        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            removeStalledPicture();
+            switch (requestCode) {
+                case CAPTURE_IMAGE_REQUEST: {
+                    filePath = takePictureDestination;
+                    takePictureDestination = null;
+                    break;
+                }
+                case PICK_IMAGE_REQUEST: {
+                    filePath = data.getData();
+                    break;
+                }
+                default: {
+                    return;
+                }
+            }
             ImageView imageView = findViewById(R.id.offer_picture);
-            filePath = data.getData();
-            Picasso.with(this.getContext()).load(filePath).into(imageView);
+            Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
+        }
+    }
+
+    private void removeStalledPicture() {
+        if (takePictureDestination != null) {
+            File previous = new File(getContext().getCacheDir(),
+                    takePictureDestination.getLastPathSegment());
+            if (!previous.delete()) {
+                Toast.makeText(this.getContext(),
+                        "Previous picture couldn't be removed", LENGTH_LONG).show();
+            }
         }
     }
 
@@ -227,7 +268,7 @@ public class CreateOfferActivity extends FragmentConverter {
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
-                            Toast.LENGTH_SHORT).show();
+                            LENGTH_SHORT).show();
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
@@ -285,5 +326,11 @@ public class CreateOfferActivity extends FragmentConverter {
         if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
             attachLocation();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeStalledPicture();
     }
 }

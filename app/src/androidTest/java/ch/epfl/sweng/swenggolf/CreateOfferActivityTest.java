@@ -109,7 +109,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button)).perform(scrollTo(), click());
         onView(withId(R.id.error_message));
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(scrollTo(),click());
+        onView(withId(R.id.button)).perform(scrollTo(), click());
         onView(withId(R.id.error_message))
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
@@ -128,6 +128,7 @@ public class CreateOfferActivityTest {
         intending(not(isInternal())).respondWith(result);
 
         onView(withId(R.id.offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.fetch_picture)).perform(scrollTo(), click());
         onView(withId(R.id.location_button)).perform(scrollTo(), click());
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
