@@ -24,8 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Calendar;
-
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -57,7 +55,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -74,7 +71,7 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferActivityTest {
 
     private final long beginingTime = 1515625200000L;
-    private final static long TIME_DIFF = 10L;
+    private final long timeDiff = 10L;
 
     @Rule
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
@@ -101,7 +98,7 @@ public class CreateOfferActivityTest {
             Bundle bundle = new Bundle();
             Offer offer = new Offer(Config.getUser().getUserId(),"20",
                     "20", "20", "20",Category.FOOD,beginingTime,
-                    beginingTime+TIME_DIFF);
+                    beginingTime+ timeDiff);
             bundle.putParcelable("offer", offer);
             fragment.setArguments(bundle);
             Database.getInstance().write("/offers",offer.getUuid(), offer);

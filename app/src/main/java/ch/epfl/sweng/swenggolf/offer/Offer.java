@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import java.util.Calendar;
+
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
@@ -13,7 +14,6 @@ public class Offer implements Parcelable {
     public static final int TITLE_MAX_LENGTH = 100;
     public static final int DESCRIPTION_MIN_LENGTH = 1;
     public static final int DESCRIPTION_MAX_LENGTH = 1000;
-
 
     private final Category tag;
     private final String userId;
@@ -34,6 +34,8 @@ public class Offer implements Parcelable {
      * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
      * @param tag         the category of the offer
+     * @param creationDate the creation date in ms
+     * @param endDate   the offers's end date in ms
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid, Category tag,
@@ -64,6 +66,17 @@ public class Offer implements Parcelable {
         this.endDate = endDate;
     }
 
+    /**
+     * Contains the data of an offer.
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture
+     * @param userId      the user id. Should not be empty
+     * @param uuid        offer identifier
+     * @param tag         the category of the offer
+     * @param creationDate the creation date in with Calendar notation
+     * @param endDate   the offers's end date in with Calendar notation
+     */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid, Category tag,
                  Calendar creationDate, Calendar endDate) {
@@ -71,6 +84,8 @@ public class Offer implements Parcelable {
                 creationDate.getTimeInMillis(),
                 endDate.getTimeInMillis());
     }
+
+
     /**
      * Contains the data of an offer.
      *
@@ -82,7 +97,8 @@ public class Offer implements Parcelable {
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid) {
-        this(userId, title, description, linkPicture, uuid, Category.getDefault(), Calendar.getInstance(), Calendar.getInstance());
+        this(userId, title, description, linkPicture, uuid,
+                Category.getDefault(), Calendar.getInstance(), Calendar.getInstance());
     }
 
     /**
@@ -232,7 +248,8 @@ public class Offer implements Parcelable {
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
-        return new Offer(userId, title, description, newLinkPicture, uuid, tag, Calendar.getInstance(), Calendar.getInstance());
+        return new Offer(userId, title, description, newLinkPicture,
+                uuid, tag, Calendar.getInstance(), Calendar.getInstance());
     }
 
 
