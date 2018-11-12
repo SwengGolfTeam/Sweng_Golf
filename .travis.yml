@@ -24,8 +24,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - ./graldew build installDebug
-  - ./gradlew test connectedCheck jacocoTestReport -i
+  - travis_wait 45 ./graldew connectedCheck installDebug
 after_script:
   # Report test coverage to Code Climate
   - export JACOCO_SOURCE_PATH=app/src/main/java/
