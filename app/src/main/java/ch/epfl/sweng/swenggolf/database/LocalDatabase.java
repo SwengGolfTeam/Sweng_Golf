@@ -43,7 +43,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<Category> readCategories() {
+    public String readCategories() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "Select * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
@@ -57,7 +57,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         }
         db.close();
 
-        return Category.singleStringToCategories(categories);
+        return categories;
     }
 
     public void setDebug(){

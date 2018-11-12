@@ -46,7 +46,7 @@ public class ListOfferActivity extends FragmentConverter {
         localDb = new LocalDatabase(this.getContext(), null, 1);
         try {
             Log.d("LOCAL DATABASE", "Recover from database");
-            checkedCategories = localDb.readCategories();
+            checkedCategories = Category.singleStringToCategories(localDb.readCategories());
             Log.d("LOCAL DATABASE", "Recovered " + checkedCategories.toString());
         } catch (Exception e) {
             Log.d("LOCAL DATABASE", "Initial write with allCategories");
