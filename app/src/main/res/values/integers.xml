@@ -1,5 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="offer_name_max_size">50</integer>
-    <integer name="offer_description_max_size">1000</integer>
 </resources>

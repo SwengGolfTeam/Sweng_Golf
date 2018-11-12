@@ -13,7 +13,8 @@ public class Answers {
     }
 
     // firebase needs empty constructor
-    public Answers() {}
+    public Answers() {
+    }
 
     public int getFavoritePos() {
         return favoritePos;
