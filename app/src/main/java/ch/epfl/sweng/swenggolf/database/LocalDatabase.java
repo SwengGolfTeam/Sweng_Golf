@@ -24,7 +24,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID +" INTEGER PRIMARY KEY," + COLUMN_CATEGORIES + "TEXT )";
+        final String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID
+                +" INTEGER PRIMARY KEY," + COLUMN_CATEGORIES + "TEXT )";
         db.execSQL(sqlQueryForCreation);
     }
 
