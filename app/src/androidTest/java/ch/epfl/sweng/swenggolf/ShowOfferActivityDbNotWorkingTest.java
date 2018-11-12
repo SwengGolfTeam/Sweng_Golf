@@ -68,7 +68,7 @@ public class ShowOfferActivityDbNotWorkingTest {
     @Test
     public void displaysErrorMessageWhenAnswersCannotBeLoaded() {
         database.setEntryNotWorking(Database.ANSWERS_PATH, offer.getUuid());
-        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
+        onView(withId(R.id.error_message)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
 
