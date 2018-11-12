@@ -150,8 +150,9 @@ public class ShowOfferActivityTest {
     }
 
     @Test
-    public void correctIntentSentWhenClickedOnDistance() {
+    public void correctIntentSentWhenClickedOnDistance() throws InterruptedException {
         onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
+        Thread.sleep(1000);
         intended(hasPackage("com.google.android.apps.maps"));
     }
 

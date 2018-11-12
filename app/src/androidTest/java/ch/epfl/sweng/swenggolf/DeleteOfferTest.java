@@ -72,7 +72,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void cancelDialog() throws InterruptedException {
+    public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         deleteClick();
@@ -83,7 +83,7 @@ public class DeleteOfferTest {
     }
 
     @Test
-    public void deleteElementTest() throws InterruptedException {
+    public void deleteElementTest() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         //onView(withId(R.id.show_offer_title)).check(matches(withText(TITLE1)));
@@ -103,12 +103,11 @@ public class DeleteOfferTest {
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
     }
 
-    private void deleteClick() throws InterruptedException {
+    private void deleteClick() {
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException e) {
             openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-            Thread.sleep(1000);
             onData(hasToString("Delete offer")).inRoot(isPlatformPopup())
                     .inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class))
                         .perform(scrollTo(), ViewActions.click());
