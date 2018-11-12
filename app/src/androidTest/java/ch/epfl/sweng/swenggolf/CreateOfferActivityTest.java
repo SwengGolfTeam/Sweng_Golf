@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,8 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
@@ -63,6 +66,10 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
+    @Rule
+    public GrantPermissionRule permissionFineGpsRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
     private static FragmentManager manager;
 
     /**
@@ -72,6 +79,7 @@ public class CreateOfferActivityTest {
     public void setTest() {
         ListOfferActivityTest.setUpFakeDatabase();
         Storage.setDebugStorage(new FakeStorage(true));
+        AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
         Config.goToTest();
         intentsTestRule.launchActivity(new Intent());
         manager = intentsTestRule.getActivity().getSupportFragmentManager();
@@ -120,6 +128,7 @@ public class CreateOfferActivityTest {
         intending(not(isInternal())).respondWith(result);
 
         onView(withId(R.id.offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.location_button)).perform(scrollTo(), click());
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
 
