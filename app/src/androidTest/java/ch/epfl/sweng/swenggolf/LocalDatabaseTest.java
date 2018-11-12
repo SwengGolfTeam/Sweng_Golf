@@ -37,7 +37,9 @@ public class LocalDatabaseTest {
         LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
-        localDb.readCategories();
+        String read = localDb.readCategories();
+
+        assertEquals(allCategories, Category.singleStringToCategories(read));
     }
 
     @Test
