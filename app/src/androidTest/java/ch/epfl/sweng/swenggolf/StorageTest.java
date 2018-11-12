@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.content.FileProvider;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,13 +14,13 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.swenggolf.storage.Storage.*;
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.conditionActivityResult;
+import static ch.epfl.sweng.swenggolf.storage.Storage.takePicture;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

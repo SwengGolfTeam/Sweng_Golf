@@ -95,6 +95,13 @@ public abstract class Storage {
         return File.createTempFile(imageFileName, null, activity.getCacheDir());
     }
 
+    /**
+     * Check that the result is valid and is handled by the storage.
+     * @param requestCode specifies the request type and is checked for handling.
+     * @param resultCode specifies wether the result is broken or not.
+     * @param data the result that is checked for validity.
+     * @return wether the result is handled and is valid for the given request.
+     */
     public static boolean conditionActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
