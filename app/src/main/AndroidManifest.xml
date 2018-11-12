@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.epfl.sweng.swenggolf">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -17,6 +20,16 @@
         <activity android:name=".main.MainMenuActivity" />
         <activity android:name=".database.CreateUserActivity" />
         <activity android:name=".database.WaitingActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ch.epfl.sweng.swenggolf.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
