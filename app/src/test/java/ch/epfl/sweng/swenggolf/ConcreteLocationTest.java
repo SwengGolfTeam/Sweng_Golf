@@ -21,6 +21,7 @@ import org.mockito.stubbing.Answer;
 import ch.epfl.sweng.swenggolf.location.ConcreteLocation;
 import ch.epfl.sweng.swenggolf.storage.FireStorage;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -35,9 +36,17 @@ public class ConcreteLocationTest {
     @Test
     public void givesCorrectLocation() {
         ConcreteLocation l = setupLocation();
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lon);
+        final Location expectedLocation = new Location("");
+        expectedLocation.setLatitude(lat);
+        expectedLocation.setLongitude(lon);
+
+        l.getLocation(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                assertEquals(expectedLocation.getLatitude(), location.getLatitude(), 1e-10);
+                assertEquals(expectedLocation.getLongitude(), location.getLatitude(), 1e-10);
+            }
+        });
     }
 
     private ConcreteLocation setupLocation() {
