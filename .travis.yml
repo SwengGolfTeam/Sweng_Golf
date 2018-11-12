@@ -1,5 +1,4 @@
 language: android
-sudo: required
 android:
   components:
     # The BuildTools version used by your project
@@ -24,7 +23,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - travis_wait 45 ./graldew connectedCheck installDebug
+  - travis_wait 60 ./graldew connectedCheck installDebug
 after_script:
   # Report test coverage to Code Climate
   - export JACOCO_SOURCE_PATH=app/src/main/java/
