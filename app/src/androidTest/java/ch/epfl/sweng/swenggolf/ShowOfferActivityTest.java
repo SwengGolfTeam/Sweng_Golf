@@ -1,9 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -34,13 +37,16 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasPackage;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -54,9 +60,6 @@ public class ShowOfferActivityTest {
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-    @Rule
-    public GrantPermissionRule permissionCoarseGpsRule =
-            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
 
     private User user = FilledFakeDatabase.getUser(0);
     private Offer offer = FilledFakeDatabase.getOffer(0);
@@ -135,7 +138,7 @@ public class ShowOfferActivityTest {
     }
 
     @Test
-    public void correctDistanceShowed() {
+    public void correctDistanceShowed() throws InterruptedException {
         Location l1 = new Location("");
         Location l2 = new Location("");
 
@@ -149,7 +152,7 @@ public class ShowOfferActivityTest {
         // We assume that the distance is larger than 1 km
         String expectedDistance = distance + " km";
 
-        onView(withId(R.id.saved_location_offer)).check(matches(withText(expectedDistance)));
+        onView(withId(R.id.saved_location_offer)).perform(scrollTo()).check(matches(withText(expectedDistance)));
     }
 
     @Test

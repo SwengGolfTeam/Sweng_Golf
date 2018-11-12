@@ -117,7 +117,6 @@ public class ShowOfferActivity extends FragmentConverter {
                     .into(offerPicture);
         }
 
-
         if (offer.getLongitude() != 0.0 || offer.getLatitude() != 0.0) {
             setLocation();
         }
@@ -143,7 +142,7 @@ public class ShowOfferActivity extends FragmentConverter {
                             distance /= KILOMETER_SIZE;
                             toPrompt = distance + " km";
                         } else if (distance == 0) {
-                            toPrompt = "In the neighbourhood";
+                            toPrompt = "Near";
                         } else {
                             toPrompt = distance + " m";
                         }
@@ -178,6 +177,7 @@ public class ShowOfferActivity extends FragmentConverter {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        Log.d("T01", "Result received");
         if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
             setLocation();
         }
