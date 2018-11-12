@@ -137,23 +137,30 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setAnswerToPost(final View inflated) {
-        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
-
-        LayoutInflater mInflater = getLayoutInflater();
-        View mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
-        mLayout.addView(mView);
-
-        ValueListener<User> vlUser = createFiller(inflated);
-
-        Button post = mView.findViewById(R.id.post_button);
-        post.setOnClickListener(new View.OnClickListener() {
+        final Button reactButton = inflated.findViewById(R.id.react_button);
+        reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postAnswer(v);
+                LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
+                LayoutInflater mInflater = getLayoutInflater();
+                View newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+                mLayout.removeView(reactButton);
+                mLayout.addView(newReaction);
+
+                ValueListener<User> vlUser = createFiller(inflated);
+
+                Button post = newReaction.findViewById(R.id.post_button);
+                post.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        postAnswer(v);
+                    }
+                });
+
+                DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
+
             }
         });
-
-        DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
     }
 
     /**
