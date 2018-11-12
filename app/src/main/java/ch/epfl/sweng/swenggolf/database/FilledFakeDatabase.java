@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf.database;
 
+import android.location.Location;
+
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -170,6 +172,12 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "region=0%2C0%2C1200%2C675&width=768",
                     "Lightsabers")
     };
+
+    private static final Location location;
+    private static Location getLocation() {
+
+    }
+
     private static final Offer[] FAKE_OFFERS = {
             new Offer("0", "Little Droid for ride",
                     "I have a little droid with informations"

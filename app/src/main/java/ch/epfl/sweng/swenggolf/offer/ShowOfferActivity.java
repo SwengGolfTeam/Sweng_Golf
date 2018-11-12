@@ -248,7 +248,7 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {
-        @SuppressLint("WrongViewCast") EditText editText = findViewById(R.id.answer_description);
+        EditText editText = findViewById(R.id.answer_description);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
