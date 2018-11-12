@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.tools;
 
-import android.content.ContentResolver;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -55,6 +53,7 @@ public abstract class FragmentConverter extends Fragment {
 
     /**
      * Creates a ProfileActivity wit arguments already set.
+     *
      * @param user the user to pass to the fragment.
      * @return a new ProfileActivity fragment with user.
      */
@@ -65,6 +64,7 @@ public abstract class FragmentConverter extends Fragment {
 
     /**
      * Creates a ShowOfferActivity with arguments already set.
+     *
      * @param offer the offer to pass to the fragment.
      * @return a new ShowOfferActivity with an offer.
      */
@@ -74,6 +74,7 @@ public abstract class FragmentConverter extends Fragment {
 
     /**
      * Creates a CreateOfferActivity with arguments already set.
+     *
      * @param offer the offer to pass to the fragment.
      * @return a new CreateOfferActivity with an offer.
      */
@@ -83,10 +84,11 @@ public abstract class FragmentConverter extends Fragment {
 
     /**
      * Returns a fragment with a parcelable added as an argument.
+     *
      * @param fragment arguments will be attached to it.
-     * @param key the tag referencing p in the arguments.
-     * @param p the argument to pass.
-     * @param <T> the type of fragment.
+     * @param key      the tag referencing p in the arguments.
+     * @param p        the argument to pass.
+     * @param <T>      the type of fragment.
      * @return fragment with p as an argument that can be get with key as key.
      */
     public static <T extends Fragment> T fillFragment(T fragment, String key, Parcelable p) {
