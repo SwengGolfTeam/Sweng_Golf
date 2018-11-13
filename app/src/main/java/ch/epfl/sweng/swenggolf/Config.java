@@ -116,22 +116,6 @@ public class Config {
     }
 
     /**
-     * Checks if the app is allowed to check the location. If not, requests it to Android.
-     *
-     * @param activity the current activity in which we ask for the permission
-     * @return whether we are authorized or not
-     */
-    public static boolean checkLocationPermission(Activity activity) {
-        if (checkSelfPermission(activity, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{ACCESS_FINE_LOCATION},
-                    PERMISSION_FINE_LOCATION);
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Parses the answer from Android regarding the permission to give a simple output to the
      * activity.
      *

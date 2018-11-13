@@ -45,6 +45,7 @@ import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
@@ -358,7 +359,7 @@ public class CreateOfferActivity extends FragmentConverter {
             return;
         }
 
-        if (Config.checkLocationPermission(getActivity())) {
+        if (checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override

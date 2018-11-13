@@ -49,6 +49,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 
 
 public class ShowOfferActivity extends FragmentConverter {
@@ -135,7 +136,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setLocation() {
-        if (Config.checkLocationPermission(getActivity())) {
+        if (checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
 
             currentLocation.getLocation(new OnSuccessListener<Location>() {
