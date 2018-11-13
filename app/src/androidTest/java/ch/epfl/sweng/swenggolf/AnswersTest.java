@@ -87,11 +87,11 @@ public class AnswersTest {
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
-        favButton.perform(click());
+        favButton.perform(scrollTo(), click());
         onView(withText("Accept answer")).check(matches(isDisplayed()));
         onView(withText(android.R.string.yes)).perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
-        favButton.perform(click());
+        favButton.perform(scrollTo(), click());
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite_border))));
     }
