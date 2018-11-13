@@ -50,12 +50,12 @@ public class AnswersTest {
      */
     @Before
     public void setUp() {
-        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Config.setUser(author);
+        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
-        FragmentTransaction transaction = mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment,
+        mActivityRule.getActivity()
+                .getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
     }

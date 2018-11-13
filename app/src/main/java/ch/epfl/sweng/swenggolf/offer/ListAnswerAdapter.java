@@ -128,8 +128,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
 
                 Context context = holder.getContainer().getContext();
                 int pos = holder.getAdapterPosition();
-                Dialog alertDialog = answers.getFavoritePos() != pos ?
-                        acceptAnswerDialog(context, pos) : stepBackDialog(context);
+                Dialog alertDialog = answers.getFavoritePos() != pos
+                        ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
 
 

@@ -130,7 +130,8 @@ public class ShowOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        Database.getInstance().read(Database.ANSWERS_PATH, offer.getUuid(), answerListener, Answers.class);
+        Database.getInstance().read(Database.ANSWERS_PATH, offer.getUuid(),
+                answerListener, Answers.class);
     }
 
     private ValueListener<User> createFiller(final View inflated) {
@@ -193,7 +194,8 @@ public class ShowOfferActivity extends FragmentConverter {
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
         mLayout.removeView(newReaction);
         mAdapter.notifyDataSetChanged();
