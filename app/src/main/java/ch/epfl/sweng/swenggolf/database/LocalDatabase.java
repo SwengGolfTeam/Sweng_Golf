@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,13 +17,17 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 
 public class LocalDatabase extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "local.db";
+    private static final String DEFAULT_DATABASE_NAME = "local.db";
     private static final String TABLE_NAME = "filters";
     private static final String COLUMN_ID = "_id";
     public static final String COLUMN_CATEGORIES = "categories";
 
-    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion) {
-        super(context, DATABASE_NAME, factory, dbVersion);
+    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion, String DatabaseName) {
+        super(context, DatabaseName, factory, dbVersion);
+    }
+
+    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion){
+        this(context, factory, dbVersion, DEFAULT_DATABASE_NAME);
     }
 
     @Override
