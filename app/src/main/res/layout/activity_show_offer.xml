@@ -31,16 +31,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
 
-            <TextView
-                android:id="@+id/show_offer_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/offer_list_author"
-                android:text="@android:string/untitled"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/show_offer_picture"
-                app:layout_constraintTop_toBottomOf="@+id/show_offer_picture" />
+
 
             <TextView
                 android:id="@+id/show_offer_title"
@@ -65,7 +56,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/show_offer_date" />
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_picture" />
 
 
             <ImageView
