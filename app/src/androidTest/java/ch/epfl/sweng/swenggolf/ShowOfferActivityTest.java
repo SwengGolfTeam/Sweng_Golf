@@ -117,7 +117,7 @@ public class ShowOfferActivityTest {
     }
 
     private void addAnswer(String answer) {
-        onView(withId(R.id.answer_description_))
+        onView(withId(R.id.answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
 

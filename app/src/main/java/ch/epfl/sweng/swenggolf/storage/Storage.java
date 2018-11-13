@@ -2,15 +2,25 @@ package ch.epfl.sweng.swenggolf.storage;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
 public abstract class Storage {
 
     public static final int PICK_IMAGE_REQUEST = 71;
+    public static final int CAPTURE_IMAGE_REQUEST = 1;
 
     private static Storage storage = null;
 
@@ -51,7 +61,7 @@ public abstract class Storage {
     public abstract void remove(@NonNull String linkPicture);
 
     /**
-     * Creates an intent that ask Android to fetch an image.
+     * Creates an intent that asks Android to fetch an image.
      *
      * @return the mentioned intent
      */
@@ -62,9 +72,51 @@ public abstract class Storage {
         return Intent.createChooser(intent, "Select Picture");
     }
 
+    /**
+     * Creates an intent to take a photo and put it into the app storage.
+     *
+     * @param activity the activity in which the intent is created.
+     * @return an intent with the file Uri.
+     */
+    public static Intent takePicture(FragmentActivity activity) throws IOException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = takePictureCreateFile(activity);
+        Uri takePicUri = FileProvider.getUriForFile(activity,
+                "ch.epfl.sweng.swenggolf.fileprovider", photoFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, takePicUri);
+        return takePictureIntent;
+    }
+
+    private static File takePictureCreateFile(FragmentActivity activity) throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
+                .format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        return File.createTempFile(imageFileName, null, activity.getCacheDir());
+    }
+
+    /**
+     * Check that the result is valid and is handled by the storage.
+     *
+     * @param requestCode specifies the request type and is checked for handling.
+     * @param resultCode  specifies wether the result is broken or not.
+     * @param data        the result that is checked for validity.
+     * @return wether the result is handled and is valid for the given request.
+     */
     public static boolean conditionActivityResult(int requestCode, int resultCode, Intent data) {
-        return requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case CAPTURE_IMAGE_REQUEST: {
+                    return true;
+                }
+                case PICK_IMAGE_REQUEST: {
+                    return data != null && (data.getData() != null);
+                }
+                default: {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
 }

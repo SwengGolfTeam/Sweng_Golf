@@ -111,7 +111,7 @@ public class ListOfferActivity extends FragmentConverter {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setRecyclerView(View inflated, List<Category> categories) {
+    private void setRecyclerView(View inflated, final List<Category> categories) {
         noOffers.setVisibility(View.VISIBLE);
         RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
@@ -125,7 +125,15 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
 
         offerList.clear();
-        prepareOfferData(inflated, categories);
+
+        DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
+            @Override
+            public void accept(Database db, List<Category> categories,
+                               ValueListener<List<Offer>> listener) {
+                db.readOffers(listener, categories);
+            }
+        };
+        prepareOfferData(inflated, dbConsumer, categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
     }
@@ -137,7 +145,8 @@ public class ListOfferActivity extends FragmentConverter {
     /**
      * Get the offers from the database.
      */
-    private void prepareOfferData(final View inflated, List<Category> categories) {
+    protected void prepareOfferData(final View inflated,
+                                    DatabaseOfferConsumer dbConsumer, List<Category> categories) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
         ValueListener listener = new ValueListener<List<Offer>>() {
@@ -158,7 +167,7 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        database.readOffers(listener, categories);
+        dbConsumer.accept(database, categories, listener);
     }
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =

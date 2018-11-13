@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -42,7 +43,9 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
         setUserDisplay();
-        if(savedInstances == null){launchFragment();}
+        if (savedInstances == null) {
+            launchFragment();
+        }
     }
 
     private void setToolBar() {
@@ -111,6 +114,10 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadShowOffersActivity(MenuItem item) {
         replaceCentralFragment(new ListOfferActivity());
+    }
+
+    public void loadListOwnOfferActivity(MenuItem item) {
+        replaceCentralFragment(new ListOwnOfferActivity());
     }
 
     /**

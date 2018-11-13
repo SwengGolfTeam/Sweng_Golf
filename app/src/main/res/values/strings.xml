@@ -31,7 +31,7 @@
     <string name="error_create_offer_invalid">The name and the description can\'t be empty.</string>
     <string name="error_create_offer_database">Impossible to create the offer.</string>
     <string name="list_offer_error_database">Could not retrieve the offers.</string>
-    <string name="preferences">What others need</string>
+    <string name="following">Following</string>
     <string name="offers">Offers</string>
     <string name="create_offer">Create Offer</string>
     <string name="incorrect_user_creation">\"Please, enter correct info\"</string>
@@ -48,4 +48,7 @@
     <string name="reactions">Reactions:</string>
     <string name="category_show_offer">Category:</string>
     <string name="post">post</string>
+    <string name="username_min_length_1">"The username should have at least "</string>
+    <string name="username_min_length_2">" characters."</string>
+    <string name="my_offers">My offers</string>
 </resources>
