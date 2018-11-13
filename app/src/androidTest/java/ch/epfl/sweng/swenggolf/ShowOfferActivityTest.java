@@ -40,6 +40,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.Tools.allowPermissionsIfNeeded;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -50,9 +51,10 @@ public class ShowOfferActivityTest {
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
-    @Rule
+    /*@Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+    */
 
     private User user = FilledFakeDatabase.getUser(0);
     private Offer offer = FilledFakeDatabase.getOffer(0);
@@ -61,7 +63,7 @@ public class ShowOfferActivityTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
         Config.setUser(user);
@@ -71,6 +73,7 @@ public class ShowOfferActivityTest {
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+        allowPermissionsIfNeeded();
     }
 
     @Test

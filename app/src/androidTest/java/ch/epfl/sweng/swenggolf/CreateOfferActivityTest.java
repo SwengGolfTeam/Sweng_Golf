@@ -2,13 +2,9 @@ package ch.epfl.sweng.swenggolf;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -16,7 +12,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -40,7 +35,6 @@ import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -57,10 +51,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
+import static ch.epfl.sweng.swenggolf.Tools.allowPermissionsIfNeeded;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
@@ -160,35 +151,6 @@ public class CreateOfferActivityTest {
 
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
-
-    private static final int PERMISSIONS_DIALOG_DELAY = 3000;
-    private static final int GRANT_BUTTON_INDEX = 1;
-
-    private static void allowPermissionsIfNeeded() throws InterruptedException {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    !hasNeededPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-                sleep(PERMISSIONS_DIALOG_DELAY);
-                UiDevice device = UiDevice.getInstance(getInstrumentation());
-                UiObject allowPermissions = device.findObject(new UiSelector()
-                        .clickable(true)
-                        .checkable(false)
-                        .index(GRANT_BUTTON_INDEX));
-                if (allowPermissions.exists()) {
-                    allowPermissions.click();
-                }
-            }
-        } catch (UiObjectNotFoundException e) {
-            System.out.println("There is no permissions dialog to interact with");
-        }
-    }
-
-    private static boolean hasNeededPermission(String permissionNeeded) {
-        Context context = InstrumentationRegistry.getTargetContext();
-        int permissionStatus = ContextCompat.checkSelfPermission(context, permissionNeeded);
-        return permissionStatus == PackageManager.PERMISSION_GRANTED;
-    }
-
     private void assertDisplayedFragment(Class expectedClass) {
         String currentFragmentName = manager.getFragments().get(0).getClass().getName();
         assertThat(currentFragmentName, is(expectedClass.getName()));
