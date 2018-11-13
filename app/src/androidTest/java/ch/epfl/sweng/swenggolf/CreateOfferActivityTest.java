@@ -124,9 +124,9 @@ public class CreateOfferActivityTest {
     }
 
     private void fillOffer() {
-        onView(withId(R.id.offer_name)).perform( typeText("title test"))
+        onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform( typeText("description test"))
+        onView(withId(R.id.offer_description)).perform(typeText("description test"))
                 .perform(closeSoftKeyboard());
 
         // Answer to gallery intent
@@ -135,6 +135,7 @@ public class CreateOfferActivityTest {
         Instrumentation.ActivityResult result =
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(not(isInternal())).respondWith(result);
+
         onView(withId(R.id.fetch_picture)).perform(scrollTo(), click());
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }

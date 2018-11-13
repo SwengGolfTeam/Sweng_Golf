@@ -67,12 +67,17 @@ public class CreateOfferActivity extends FragmentConverter
     private boolean creationAsked;
     private Spinner categorySpinner;
     private Uri filePath = null;
-
+    /*
+    creation date is the creation date if it already exist,
+    otherwise it takes the actual date at 00:00
+     */
     private long creationDate;
     private Calendar now = Calendar.getInstance();
+
     private long endDate;
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
+    private final static long SEPERATION = 86220000L;
 
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
@@ -107,16 +112,32 @@ public class CreateOfferActivity extends FragmentConverter
                 container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
-        now = new GregorianCalendar(now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH), now.get(Calendar.DATE));
-        creationDate = now.getTimeInMillis();
-        endDate = now.getTimeInMillis();
+        if (getArguments() != null) {
+            offerToModify = getArguments().getParcelable("offer");
+        } else {
+            offerToModify = null;
+        }
         preFillFields(inflated);
         setupSpinner(inflated);
+        initializeDates();
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
         initializeLayout(inflated);
         return inflated;
+    }
+
+    /**
+     * Initialize the creation and the end date of the offer.
+     */
+    private void initializeDates(){
+        now = new GregorianCalendar(now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH), now.get(Calendar.DATE));
+        if(offerToModify != null){
+            creationDate = offerToModify.getCreationDate();
+            endDate = offerToModify.getCreationDate();
+        }
+        creationDate = now.getTimeInMillis();
+        endDate = now.getTimeInMillis() + SEPERATION;
     }
 
     /**
@@ -141,7 +162,7 @@ public class CreateOfferActivity extends FragmentConverter
         });
         inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
         inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
-        return inflated;
+
     }
 
     @Override
@@ -167,8 +188,7 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
     private void preFillFields(View inflated) {
-        if (getArguments() != null
-                && (offerToModify = getArguments().getParcelable("offer")) != null) {
+        if ((offerToModify) != null) {
             EditText title = inflated.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
             EditText description = inflated.findViewById(R.id.offer_description);
@@ -258,7 +278,6 @@ public class CreateOfferActivity extends FragmentConverter
         String uuid;
         if (offerToModify != null) {
             uuid = offerToModify.getUuid();
-            creationDate = offerToModify.getCreationDate();
         } else {
             uuid = UUID.randomUUID().toString();
         }
@@ -385,7 +404,7 @@ public class CreateOfferActivity extends FragmentConverter
      * @param calendar the corresponding calendar
      */
     private void setDate(final Calendar calendar) {
-        this.endDate = calendar.getTimeInMillis();
+        this.endDate = calendar.getTimeInMillis() + SEPERATION;
         dateText.setText(Offer.dateFormat().format(calendar.getTime()));
 
     }

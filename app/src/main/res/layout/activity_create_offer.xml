@@ -143,19 +143,16 @@
             android:layout_marginEnd="76dp"
             android:layout_marginRight="76dp"
             app:layout_constraintEnd_toStartOf="@+id/fetch_picture"
-            app:layout_constraintTop_toBottomOf="@+id/category_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/date_linear_layout"
             app:srcCompat="@android:drawable/ic_menu_camera" />
-
-
-
 
 
         <LinearLayout
             android:id="@+id/date_linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_height="49dp"
             android:layout_marginTop="16dp"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
 
@@ -163,11 +160,11 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:text="@string/date"
                 android:textSize="18sp"
 
@@ -177,11 +174,11 @@
                 android:id="@+id/showDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:textSize="18dp"
 
@@ -191,9 +188,8 @@
                 android:id="@+id/pick_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pick_date"
                 android:layout_gravity="right"
-                />
+                android:text="@string/pick_date" />
 
         </LinearLayout>
 
