@@ -105,7 +105,8 @@ public class ListOfferActivity extends FragmentConverter {
 
         DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
             @Override
-            public void accept(Database db, List<Category> categories, ValueListener<List<Offer>> listener) {
+            public void accept(Database db, List<Category> categories,
+                               ValueListener<List<Offer>> listener) {
                 db.readOffers(listener, categories);
             }
         };

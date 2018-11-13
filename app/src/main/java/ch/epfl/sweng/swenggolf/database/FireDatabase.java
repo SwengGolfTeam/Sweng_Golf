@@ -79,14 +79,15 @@ public final class FireDatabase extends Database {
 
     @Override
     public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
-                             @NonNull final Class<T> c, String attribute, String value) {
+                             @NonNull final Class<T> c, AttributeFilter filter) {
         final DatabaseReference ref = database.getReference(path);
-        Query query = ref.orderByChild(attribute).equalTo(value);
+        Query query = ref.orderByChild(filter.getAttribute()).equalTo(filter.getValue());
         readListQuery(listener, query, c);
     }
 
     @NonNull
-    private static <T> ValueEventListener getListValueListener(@NonNull final ValueListener<List<T>> listener, @NonNull final Class<T> c) {
+    private static <T> ValueEventListener getListValueListener(
+            @NonNull final ValueListener<List<T>> listener, @NonNull final Class<T> c) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

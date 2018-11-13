@@ -19,14 +19,16 @@ public class ListOwnOfferActivity extends ListOfferActivity {
                                     DatabaseOfferConsumer dbConsumer, List<Category> categories) {
         super.prepareOfferData(inflated, new DatabaseOfferConsumer() {
             @Override
-            public void accept(Database db, List<Category> categories, ValueListener<List<Offer>> listener) {
+            public void accept(Database db, List<Category> categories,
+                               ValueListener<List<Offer>> listener) {
                 db.readOffers(listener, categories, Config.getUser().getUserId());
             }
         }, categories);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstance) {
         View view = super.onCreateView(inflater, container, savedInstance);
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.my_offers);
         return view;

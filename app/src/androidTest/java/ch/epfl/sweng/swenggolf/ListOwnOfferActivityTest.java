@@ -30,6 +30,9 @@ public class ListOwnOfferActivityTest {
     private final User user = FilledFakeDatabase.getUser(0);
     private final Offer offer = FilledFakeDatabase.getOffer(0);
 
+    /**
+     * Set up a fake database, a fake user and launch the fragment.
+     */
     @Before
     public void setup() {
         Database.setDebugDatabase(database);

@@ -80,30 +80,45 @@ public class FakeDatabase extends Database {
     }
 
     @Override
-    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c, String attribute, String value) {
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                             @NonNull Class<T> c, AttributeFilter filter) {
         if (working) {
 
             List<T> list = getList(path);
-            try {
-                //Use reflection to check the attribute
-                Field field = c.getDeclaredField(attribute);
-                field.setAccessible(true);
-                List<T> newList = new ArrayList<>();
-                for (T object : list) {
-                    if (!field.get(object).equals(value)) {
-                        newList.add(object);
-                    }
-                }
-                field.setAccessible(false);
-                listener.onDataChange(newList);
-            } catch (NoSuchFieldException e) {
-                throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
-            } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
-            }
+
+            List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), list);
+            listener.onDataChange(newList);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
+                                   List<T> list) {
+        List<T> newList = new ArrayList<>();
+        try {
+
+            //Use reflection to check the attribute
+            Field field = c.getDeclaredField(attribute);
+            field.setAccessible(true);
+
+            for (T object : list) {
+                if (!field.get(object).equals(value)) {
+                    newList.add(object);
+                }
+            }
+            field.setAccessible(false);
+
+        } catch (NoSuchFieldException e) {
+            handleError(attribute);
+        } catch (IllegalAccessException e) {
+            handleError(attribute);
+        }
+        return newList;
+    }
+
+    private static void handleError(String attribute) {
+        throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
     }
 
     @Override

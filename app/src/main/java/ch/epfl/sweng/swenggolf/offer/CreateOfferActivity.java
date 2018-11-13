@@ -60,7 +60,7 @@ public class CreateOfferActivity extends FragmentConverter {
         public void onClick(View v) {
             try {
                 Intent takePictureIntent = Storage.takePicture(getActivity());
-                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     takePictureDestination = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
                     startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
                 } else {
@@ -83,7 +83,7 @@ public class CreateOfferActivity extends FragmentConverter {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.activity_create_offer,
-                            container, false);
+                container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
@@ -142,12 +142,12 @@ public class CreateOfferActivity extends FragmentConverter {
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
             removeStalledPicture();
             switch (requestCode) {
-                case CAPTURE_IMAGE_REQUEST : {
+                case CAPTURE_IMAGE_REQUEST: {
                     filePath = takePictureDestination;
                     takePictureDestination = null;
                     break;
                 }
-                case PICK_IMAGE_REQUEST : {
+                case PICK_IMAGE_REQUEST: {
                     filePath = data.getData();
                     break;
                 }
@@ -161,10 +161,10 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     private void removeStalledPicture() {
-        if(takePictureDestination != null) {
+        if (takePictureDestination != null) {
             File previous = new File(getContext().getCacheDir(),
-                        takePictureDestination.getLastPathSegment());
-            if(!previous.delete()) {
+                    takePictureDestination.getLastPathSegment());
+            if (!previous.delete()) {
                 Toast.makeText(this.getContext(),
                         "Previous picture couldn't be removed", LENGTH_LONG).show();
             }

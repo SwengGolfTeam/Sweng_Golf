@@ -99,7 +99,7 @@ public abstract class Database {
      */
     public abstract <T> void readList(@NonNull String path,
                                       @NonNull ValueListener<List<T>> listener,
-                                      @NonNull Class<T> c, String attribute, String value);
+                                      @NonNull Class<T> c, AttributeFilter filter);
 
     /**
      * Remove the value in path with the given id.
@@ -138,15 +138,7 @@ public abstract class Database {
         ValueListener<List<Offer>> listenerFilterCategories = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> value) {
-                List<Offer> list = new ArrayList<>();
-                //Use set for efficiency of comparison
-                Set<Category> s = new HashSet<>();
-                s.addAll(categories);
-                for (Offer offer : value) {
-                    if (s.contains(offer.getTag())) {
-                        list.add(offer);
-                    }
-                }
+                List<Offer> list = filterOffers(value, categories);
                 listener.onDataChange(list);
             }
 
@@ -155,7 +147,22 @@ public abstract class Database {
                 listener.onCancelled(error);
             }
         };
-        readList(OFFERS_PATH, listenerFilterCategories, Offer.class, "userId", offerCreator);
+        readList(OFFERS_PATH, listenerFilterCategories, Offer.class,
+                new AttributeFilter("userId", offerCreator));
 
+    }
+
+    @NonNull
+    private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {
+        List<Offer> list = new ArrayList<>();
+        //Use set for efficiency of comparison
+        Set<Category> s = new HashSet<>();
+        s.addAll(categories);
+        for (Offer offer : value) {
+            if (s.contains(offer.getTag())) {
+                list.add(offer);
+            }
+        }
+        return list;
     }
 }
