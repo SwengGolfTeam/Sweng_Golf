@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,6 +52,8 @@ public class ShowOfferActivity extends FragmentConverter {
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
     private TextView errorMessage;
+    private LinearLayout mLayout;
+    private View newReaction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +63,9 @@ public class ShowOfferActivity extends FragmentConverter {
         View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
         errorMessage = inflated.findViewById(R.id.error_message);
+        mLayout = inflated.findViewById(R.id.list_answers);
+        LayoutInflater mInflater = getLayoutInflater();
+        newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents(inflated);
         setRecyclerView(inflated);
         fetchAnswers();
@@ -151,9 +158,7 @@ public class ShowOfferActivity extends FragmentConverter {
         reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
-                LayoutInflater mInflater = getLayoutInflater();
-                View newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
+
                 mLayout.removeView(reactButton);
                 mLayout.addView(newReaction);
 
@@ -188,7 +193,9 @@ public class ShowOfferActivity extends FragmentConverter {
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-        editText.getText().clear();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
+        mLayout.removeView(newReaction);
         mAdapter.notifyDataSetChanged();
     }
 
