@@ -71,4 +71,16 @@ public class OfferTest {
                         + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
                 "09", Category.values()[3], 123123123, 234234234);
     }
+
+    @Test
+    public void testUpdateLink() {
+        Offer offer =         new Offer("9", "bipbupbap",
+                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
+                LUMIERE
+                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
+                "09", Category.values()[3], 123123123, 123123123);
+        String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
+        offer = offer.updateLinkToPicture(newLink);
+        assertEquals(newLink, offer.getLinkPicture());
+    }
 }

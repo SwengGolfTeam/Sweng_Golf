@@ -270,4 +270,5 @@ public class CreateOfferActivityTest {
         setDate( 2000, 1, 1);
 
     }
+
 }

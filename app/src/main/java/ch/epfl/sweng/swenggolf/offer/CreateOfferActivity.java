@@ -377,23 +377,11 @@ public class CreateOfferActivity extends FragmentConverter
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-
+            Fragment fragment = this.getFragmentManager().getFragments().get(0);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(this.getActivity(),
-                    (DatePickerDialog.OnDateSetListener) getVisibleFragment(),
+                    (DatePickerDialog.OnDateSetListener) fragment,
                     year, month, day);
-        }
-
-
-        private Fragment getVisibleFragment() {
-            FragmentManager fragmentManager = this.getFragmentManager();
-            List<Fragment> fragments = fragmentManager.getFragments();
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment.isVisible()) {
-                    return fragment;
-                }
-            }
-            return null;
         }
     }
 
