@@ -1,7 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
 public final class AttributeFilter {
-    private final String attribute, value;
+    private final String attribute;
+    private final String value;
 
     /**
      * This is used to compare an attribute of a class with it's value.

@@ -90,12 +90,14 @@ public abstract class Database {
                                       @NonNull Class<T> c);
 
     /**
-     * Read a list of value in a given path. It return the value using a listener.
+     * Read a list of value in a given path. It return the value using a listener. It only return
+     * value with an attribute equals to the value given in the filter.
      *
      * @param path     the path where we want to read the value
      * @param listener the onDataChange method will be called if we find the value. Otherwise, the
      *                 onCancelled method will be called
      * @param c        the class of the value
+     * @param filter   must contains the attribute to filter on and the value to filter.
      */
     public abstract <T> void readList(@NonNull String path,
                                       @NonNull ValueListener<List<T>> listener,
