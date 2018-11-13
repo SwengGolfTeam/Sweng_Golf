@@ -63,7 +63,7 @@ public class AnswersTest {
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
-        addAnswer(answer);
+        addAnswer(answer, true);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
     }
@@ -76,14 +76,14 @@ public class AnswersTest {
 
     @Test
     public void authorOfAnswerIsCorrect() {
-        addAnswer("I wrote this");
+        addAnswer("I wrote this", true);
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
     }
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
-        addAnswer("test");
+        addAnswer("test",true);
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
@@ -100,13 +100,23 @@ public class AnswersTest {
     public void onlyAuthorCanChooseFavorite() {
         Config.setUser(otherUser);
         // user is not author
-        addAnswer("hey!");
+        addAnswer("hey!", true);
         onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
     }
 
-    private void addAnswer(String answer) {
-        onView(withId(R.id.react_button)).perform(scrollTo(), click());
+    @Test
+    public void canPostMultipleAnswers() {
+        addAnswer("first answer", true);
+        Config.setUser(otherUser);
+        addAnswer("second answer", false);
+        onView(withContentDescription("description1")).check(matches(isDisplayed()));
+    }
+
+    private void addAnswer(String answer, boolean firstReac) {
+        if (firstReac) {
+            onView(withId(R.id.react_button)).perform(scrollTo(), click());
+        }
         onView(withId(R.id.your_answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
