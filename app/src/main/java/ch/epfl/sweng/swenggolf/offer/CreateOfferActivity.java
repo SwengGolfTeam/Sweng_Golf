@@ -108,12 +108,13 @@ public class CreateOfferActivity extends FragmentConverter {
                 startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
-        inflated.findViewById(R.id.offer_position_status).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attachLocation();
-            }
-        });
+        inflated.findViewById(R.id.offer_position_status)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        attachLocation();
+                    }
+                });
         inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
         inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
         return inflated;
