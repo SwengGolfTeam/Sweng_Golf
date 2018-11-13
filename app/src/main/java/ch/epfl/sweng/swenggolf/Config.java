@@ -1,15 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -141,12 +135,12 @@ public class Config {
      * Parses the answer from Android regarding the permission to give a simple output to the
      * activity.
      *
-     * @param requestCode the request code
+     * @param requestCode  the request code
      * @param grantResults the results granted
      * @return which Permission was given
      */
     public static Permission onRequestPermissionsResult(int requestCode,
-                                           @NonNull int[] grantResults) {
+                                                        @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_FINE_LOCATION:
                 if (grantResults.length > 0

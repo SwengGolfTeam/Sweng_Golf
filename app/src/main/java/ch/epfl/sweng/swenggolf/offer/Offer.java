@@ -140,7 +140,7 @@ public class Offer implements Parcelable {
             boolean descriptionEquality = description.equals(other.description);
             boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
             boolean uuidEquality = uuid.equals(other.uuid);
-            boolean tagEquality  = tag.equals(other.tag);
+            boolean tagEquality = tag.equals(other.tag);
             boolean locationEquality = longitude == other.longitude && latitude == other.latitude;
             return userIdEquality && titleEquality && descriptionEquality
                     && linkPictureEquality && uuidEquality && tagEquality && locationEquality;
