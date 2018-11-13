@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,12 +47,13 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
 public class ShowOfferActivity extends FragmentConverter {
-
     private boolean userIsCreator;
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
-    private View mView;
+    private TextView errorMessage;
+    private LinearLayout mLayout;
+    private View newReaction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +62,10 @@ public class ShowOfferActivity extends FragmentConverter {
         assert getArguments() != null;
         View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
+        errorMessage = inflated.findViewById(R.id.error_message);
+        mLayout = inflated.findViewById(R.id.list_answers);
+        LayoutInflater mInflater = getLayoutInflater();
+        newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents(inflated);
         setRecyclerView(inflated);
         fetchAnswers();
@@ -74,10 +82,6 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        EditText comment = mView.findViewById(R.id.answer_description);
-        comment.setFilters(new InputFilter[]{
-                new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
     }
 
     private void setContents(View inflated) {
@@ -125,19 +129,20 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Unable to load answers from database");
+                errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+        Database.getInstance().read(Database.ANSWERS_PATH, offer.getUuid(),
+                answerListener, Answers.class);
     }
 
     private ValueListener<User> createFiller(final View inflated) {
         return new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
-                TextView userName = inflated.findViewById(R.id.user_name_);
+                TextView userName = inflated.findViewById(R.id.your_user_name);
                 userName.setText(value.getUserName());
-                ImageView userPic = inflated.findViewById(R.id.user_pic_);
+                ImageView userPic = inflated.findViewById(R.id.your_user_pic);
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
@@ -152,23 +157,32 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setAnswerToPost(final View inflated) {
-        LinearLayout mLayout = inflated.findViewById(R.id.list_answers);
-
-        LayoutInflater mInflater = getLayoutInflater();
-        mView = mInflater.inflate(R.layout.reaction_you, mLayout, false);
-        mLayout.addView(mView);
-
-        ValueListener<User> vlUser = createFiller(inflated);
-
-        Button post = mView.findViewById(R.id.post_button);
-        post.setOnClickListener(new View.OnClickListener() {
+        final Button reactButton = inflated.findViewById(R.id.react_button);
+        reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postAnswer(v);
+
+                mLayout.removeView(reactButton);
+                mLayout.addView(newReaction);
+
+                ValueListener<User> vlUser = createFiller(inflated);
+
+                Button post = newReaction.findViewById(R.id.post_button);
+                post.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        postAnswer(v);
+                    }
+                });
+
+                EditText comment = newReaction.findViewById(R.id.your_answer_description);
+                comment.setFilters(new InputFilter[]{
+                        new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
+
+                DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
+
             }
         });
-
-        DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
     }
 
     /**
@@ -177,12 +191,15 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {
-        EditText editText = findViewById(R.id.answer_description);
+        EditText editText = findViewById(R.id.your_answer_description);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-        editText.getText().clear();
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
+        mLayout.removeView(newReaction);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -239,8 +256,8 @@ public class ShowOfferActivity extends FragmentConverter {
      * Display the Alert Dialog for the delete.
      */
     public void showDeleteAlertDialog() {
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         builder.setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -250,11 +267,12 @@ public class ShowOfferActivity extends FragmentConverter {
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
+                        // user cancelled the dialog
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**
@@ -266,10 +284,16 @@ public class ShowOfferActivity extends FragmentConverter {
             storage.remove(offer.getLinkPicture());
         }
         Database database = Database.getInstance();
-        CompletionListener listener = new CompletionListener() {
+
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
+        database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
+    }
+
+    private CompletionListener getRemoveOfferListerner(final boolean showToast) {
+        return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE) {
+                if (databaseError == DbError.NONE && showToast) {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     replaceCentralFragment(new ListOfferActivity());
@@ -277,7 +301,6 @@ public class ShowOfferActivity extends FragmentConverter {
             }
 
         };
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
     }
 
     /**

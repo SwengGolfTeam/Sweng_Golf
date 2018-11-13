@@ -11,10 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -68,6 +72,9 @@ public class ListOfferActivityTest {
         setUpFakeDatabase();
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
+        // reinit local database to default values just in case test are not independent
+        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
+        localDb.writeCategories(Arrays.asList(Category.values()));
     }
 
     /**
@@ -170,17 +177,6 @@ public class ListOfferActivityTest {
             clickOnCategoryInMenu(cat);
         }
         onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void uncheckAndCheckSameCategory() {
-        clickOnCategoryInMenu(Category.getDefault());
-        clickOnCategoryInMenu(Category.getDefault());
-
-        Offer offer = ListOfferActivity.offerList.get(0);
-
-        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                .check(matches(hasDescendant(withText(offer.getTitle()))));
     }
 
     private void clickOnCategoryInMenu(Category cat){
