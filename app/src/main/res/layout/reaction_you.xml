@@ -12,13 +12,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/user_pic_"
+            android:id="@+id/your_user_pic"
             android:layout_width="@dimen/user_picture_small_diameter"
             android:layout_height="@dimen/user_picture_small_diameter"
             android:contentDescription="@string/userpicture" />
 
         <TextView
-            android:id="@+id/user_name_"
+            android:id="@+id/your_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -26,7 +26,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/answer_description_"
+        android:id="@+id/your_answer_description"
         android:layout_width="150dp"
         android:layout_height="@dimen/user_info_width"
         android:layout_marginLeft="8dp"
@@ -39,7 +39,7 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_toRightOf="@id/answer_description_"
+        android:layout_toRightOf="@id/your_answer_description"
         android:text="@string/post" />
 
 </RelativeLayout>

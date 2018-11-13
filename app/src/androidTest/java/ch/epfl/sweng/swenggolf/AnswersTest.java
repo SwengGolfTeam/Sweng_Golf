@@ -107,7 +107,7 @@ public class AnswersTest {
 
     private void addAnswer(String answer) {
         onView(withId(R.id.react_button)).perform(scrollTo(), click());
-        onView(withId(R.id.answer_description_))
+        onView(withId(R.id.your_answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
 

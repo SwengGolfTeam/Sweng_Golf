@@ -120,9 +120,9 @@ public class ShowOfferActivity extends FragmentConverter {
         return new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
-                TextView userName = inflated.findViewById(R.id.user_name_);
+                TextView userName = inflated.findViewById(R.id.your_user_name);
                 userName.setText(value.getUserName());
-                ImageView userPic = inflated.findViewById(R.id.user_pic_);
+                ImageView userPic = inflated.findViewById(R.id.your_user_pic);
                 Picasso.with(userPic.getContext())
                         .load(Uri.parse(value.getPhoto()))
                         .placeholder(R.drawable.gender_neutral_user1)
@@ -168,7 +168,7 @@ public class ShowOfferActivity extends FragmentConverter {
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {
-        EditText editText = findViewById(R.id.answer_description_);
+        EditText editText = findViewById(R.id.your_answer_description);
         Answers answers = mAdapter.getAnswers();
         answers.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
