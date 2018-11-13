@@ -59,6 +59,7 @@ public class CreateOfferActivity extends FragmentConverter {
     private boolean creationAsked;
     private Spinner categorySpinner;
     private Uri filePath = null;
+    private View inflated;
 
     private Location location = new Location("default");
 
@@ -96,12 +97,12 @@ public class CreateOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_create_offer,
+        inflated = inflater.inflate(R.layout.activity_create_offer,
                 container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
-        setupSpinner(inflated);
-        preFillFields(inflated);
+        setupSpinner();
+        preFillFields();
         inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,13 +137,13 @@ public class CreateOfferActivity extends FragmentConverter {
                 new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
     }
 
-    private void setupSpinner(View v) {
-        categorySpinner = v.findViewById(R.id.category_spinner);
+    private void setupSpinner() {
+        categorySpinner = inflated.findViewById(R.id.category_spinner);
         categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
                 android.R.layout.simple_list_item_1, Category.values()));
     }
 
-    private void preFillFields(View inflated) {
+    private void preFillFields() {
         if (getArguments() != null
                 && (offerToModify = getArguments().getParcelable("offer")) != null) {
 
@@ -152,7 +153,7 @@ public class CreateOfferActivity extends FragmentConverter {
             EditText description = inflated.findViewById(R.id.offer_description);
             description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
 
-            categorySpinner.setSelection(offerToModify.getTag().toInt());
+            categorySpinner.setSelection(offerToModify.getTag().ordinal());
 
             location = new Location("");
             location.setLatitude(offerToModify.getLatitude());
@@ -378,7 +379,7 @@ public class CreateOfferActivity extends FragmentConverter {
                 : "@android:drawable/checkbox_off_background";
         int uncheckResource = getResources().getIdentifier(uri, null,
                 getActivity().getPackageName());
-        ImageView check = findViewById(R.id.offer_position_status);
+        ImageView check = inflated.findViewById(R.id.offer_position_status);
         Drawable uncheck = getResources().getDrawable(uncheckResource);
         check.setImageDrawable(uncheck);
     }
