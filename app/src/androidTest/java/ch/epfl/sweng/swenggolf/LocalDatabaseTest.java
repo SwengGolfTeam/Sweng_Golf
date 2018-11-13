@@ -39,6 +39,17 @@ public class LocalDatabaseTest {
     }
 
     @Test
+    public void upgradeDatabaseDoesWorkTest(){
+        LocalDatabase localDb1 = new LocalDatabase(activityRule.getActivity(), null, 1);
+        LocalDatabase localDb2 = new LocalDatabase(activityRule.getActivity(), null, 2);
+        List<Category> allCategories = Arrays.asList(Category.values());
+        localDb2.writeCategories(allCategories);
+        List<Category> readCategories = localDb2.readCategories();
+        assertEquals(allCategories, readCategories);
+        //We never use it in this project but it is a good idea to test anyway
+    }
+
+    @Test
     public void transformationFunctionsOnCategories() {
         //All categories
         List<Category> allCategories = Arrays.asList(Category.values());
