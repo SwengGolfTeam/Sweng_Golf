@@ -123,9 +123,9 @@ public class CreateOfferActivityTest {
     }
 
     private void fillOffer() {
-        onView(withId(R.id.offer_name)).perform(scrollTo(), typeText("title test"))
+        onView(withId(R.id.offer_name)).perform( typeText("title test"))
                 .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform(scrollTo(), typeText("description test"))
+        onView(withId(R.id.offer_description)).perform( typeText("description test"))
                 .perform(closeSoftKeyboard());
 
         // Answer to gallery intent
