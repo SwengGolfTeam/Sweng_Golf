@@ -1,14 +1,20 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.annotation.NonNull;
+
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.AttributeFilter;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -101,6 +107,13 @@ public class FakeDatabaseTest {
         d.readList(PATH, listener, String.class);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void readListThrowExceptionOnInvalidAttribute() {
+        FakeDatabase database = new FakeDatabase(true);
+        database.readList(PATH, null, Offer.class,
+                new AttributeFilter("invalid attribute", "random"));
+    }
+
     private void writeListenerError(boolean working, DbError error) {
         Database d = new FakeDatabase(working);
         CompletionListener listener = new CompletionListener() {
@@ -146,19 +159,40 @@ public class FakeDatabaseTest {
     public void readListenerListHasError() {
         Database d = new FakeDatabase(false);
 
-        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
-            @Override
-            public void onDataChange(List<String> value) {
+        ValueListener<List<Offer>> listener = getListValueListener();
+        d.readList(PATH, listener, Offer.class);
+    }
 
-                fail();
-            }
+    @Test
+    public void readListenerListWithAttributeHasError() {
+        Database d = new FakeDatabase(false);
 
-            @Override
-            public void onCancelled(DbError error) {
-                assertThat(error, is(DbError.UNKNOWN_ERROR));
-            }
-        };
-        d.readList(PATH, listener, String.class);
+        ValueListener<List<Offer>> listener = getListValueListener();
+        d.readList(PATH, listener, Offer.class,new AttributeFilter("s1", "s2"));
+    }
+
+    @Test
+    public void readOffersOfUserHasError() {
+        Database d = new FakeDatabase(false);
+
+        ValueListener<List<Offer>> listener = getListValueListener();
+        d.readOffers(listener, new ArrayList<Category>(), "user");
+    }
+
+    @NonNull
+    private ValueListener<List<Offer>> getListValueListener() {
+        return new ValueListener<List<Offer>>() {
+                @Override
+                public void onDataChange(List<Offer> value) {
+
+                    fail();
+                }
+
+                @Override
+                public void onCancelled(DbError error) {
+                    assertThat(error, is(DbError.UNKNOWN_ERROR));
+                }
+            };
     }
 
 
