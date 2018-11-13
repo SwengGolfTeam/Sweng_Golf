@@ -51,7 +51,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.Tools.allowPermissionsIfNeeded;
+import static ch.epfl.sweng.swenggolf.TestUtility.allowPermissionsIfNeeded;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
@@ -151,6 +151,7 @@ public class CreateOfferActivityTest {
 
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
+
     private void assertDisplayedFragment(Class expectedClass) {
         String currentFragmentName = manager.getFragments().get(0).getClass().getName();
         assertThat(currentFragmentName, is(expectedClass.getName()));
