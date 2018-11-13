@@ -2,8 +2,11 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -87,6 +90,20 @@ public abstract class Database {
                                       @NonNull Class<T> c);
 
     /**
+     * Read a list of value in a given path. It return the value using a listener. It only return
+     * value with an attribute equals to the value given in the filter.
+     *
+     * @param path     the path where we want to read the value
+     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
+     *                 onCancelled method will be called
+     * @param c        the class of the value
+     * @param filter   must contains the attribute to filter on and the value to filter.
+     */
+    public abstract <T> void readList(@NonNull String path,
+                                      @NonNull ValueListener<List<T>> listener,
+                                      @NonNull Class<T> c, AttributeFilter filter);
+
+    /**
      * Remove the value in path with the given id.
      *
      * @param path     the path where is the value we want to remove
@@ -116,5 +133,46 @@ public abstract class Database {
 
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
+    }
+
+    /**
+     * Read the list of all offers of an user in the given categories. It return the list using a
+     * listener.
+     * @param listener  the onDataChange method will be called if we find the value. Otherwise, the
+     *                 onCancelled method will be called
+     * @param categories the list of categories that we want
+     * @param offerCreator the creator of the use
+     */
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
+                           @NonNull final List<Category> categories, @NonNull String offerCreator) {
+        ValueListener<List<Offer>> listenerFilterCategories = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> value) {
+                List<Offer> list = filterOffers(value, categories);
+                listener.onDataChange(list);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                listener.onCancelled(error);
+            }
+        };
+        readList(OFFERS_PATH, listenerFilterCategories, Offer.class,
+                new AttributeFilter("userId", offerCreator));
+
+    }
+
+    @NonNull
+    private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {
+        List<Offer> list = new ArrayList<>();
+        //Use set for efficiency of comparison
+        Set<Category> s = new HashSet<>();
+        s.addAll(categories);
+        for (Offer offer : value) {
+            if (s.contains(offer.getTag())) {
+                list.add(offer);
+            }
+        }
+        return list;
     }
 }
