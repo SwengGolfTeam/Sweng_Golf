@@ -128,7 +128,7 @@ public class CreateOfferActivityTest {
         intending(not(isInternal())).respondWith(result);
 
         onView(withId(R.id.fetch_picture)).perform(scrollTo(), click());
-        onView(withId(R.id.location_button)).perform(scrollTo(), click());
+        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
 

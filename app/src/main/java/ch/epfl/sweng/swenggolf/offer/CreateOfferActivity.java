@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,9 @@ public class CreateOfferActivity extends FragmentConverter {
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
 
+    private static final boolean ON = true;
+    private static final boolean OFF = false;
+
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -104,7 +108,7 @@ public class CreateOfferActivity extends FragmentConverter {
                 startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
-        inflated.findViewById(R.id.location_button).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.offer_position_status).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attachLocation();
@@ -188,6 +192,21 @@ public class CreateOfferActivity extends FragmentConverter {
             ImageView imageView = findViewById(R.id.offer_picture);
             Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+            attachLocation();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        removeStalledPicture();
     }
 
     private void removeStalledPicture() {
@@ -320,6 +339,15 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     private void attachLocation() {
+
+        if (location.getLatitude() != 0.0 || location.getLongitude() != 0.0) {
+
+            location = new Location("");
+            setCheckbox(OFF);
+
+            return;
+        }
+
         if (Config.checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
@@ -333,20 +361,17 @@ public class CreateOfferActivity extends FragmentConverter {
 
     private void saveLocation(Location location) {
         this.location = location;
+        setCheckbox(ON);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
-            attachLocation();
-        }
+    private void setCheckbox(boolean on) {
+        String uri = on ? "@android:drawable/checkbox_on_background"
+                : "@android:drawable/checkbox_off_background";
+        int uncheckResource = getResources().getIdentifier(uri, null,
+                getActivity().getPackageName());
+        ImageView check = findViewById(R.id.offer_position_status);
+        Drawable uncheck = getResources().getDrawable(uncheckResource);
+        check.setImageDrawable(uncheck);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        removeStalledPicture();
-    }
 }
