@@ -63,7 +63,7 @@ public class AnswersTest {
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
-        addAnswer(answer, true);
+        addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
     }
@@ -76,14 +76,14 @@ public class AnswersTest {
 
     @Test
     public void authorOfAnswerIsCorrect() {
-        addAnswer("I wrote this", true);
+        addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
     }
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
-        addAnswer("test",true);
+        addAnswer("test");
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
@@ -100,23 +100,29 @@ public class AnswersTest {
     public void onlyAuthorCanChooseFavorite() {
         Config.setUser(otherUser);
         // user is not author
-        addAnswer("hey!", true);
+        addAnswer("hey!");
         onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
     }
 
     @Test
     public void canPostMultipleAnswers() {
-        addAnswer("first answer", true);
+        addAnswer("first answer");
+        // change user and reload offer
         Config.setUser(otherUser);
-        addAnswer("second answer", false);
+        FragmentTransaction transaction = mActivityRule.getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.centralFragment,
+                FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
+        addAnswer("second answer");
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
     }
 
-    private void addAnswer(String answer, boolean firstReac) {
-        if (firstReac) {
-            onView(withId(R.id.react_button)).perform(scrollTo(), click());
-        }
+    private void addAnswer(String answer) {
+
+        onView(withId(R.id.react_button)).perform(scrollTo(), click());
+
         onView(withId(R.id.your_answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
