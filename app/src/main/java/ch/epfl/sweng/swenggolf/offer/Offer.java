@@ -56,7 +56,7 @@ public class Offer implements Parcelable {
             throw new IllegalArgumentException("Tag must be indicated or use other constructor");
         }
         if (creationDate > endDate) {
-            throw new IllegalArgumentException("Creation date must be before the end date : " + creationDate + " > " + endDate);
+            throw new IllegalArgumentException("Creation date must be before the end date");
         }
 
         this.tag = tag;

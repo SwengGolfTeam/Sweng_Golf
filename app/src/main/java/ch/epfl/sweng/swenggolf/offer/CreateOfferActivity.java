@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -32,10 +31,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -77,7 +74,7 @@ public class CreateOfferActivity extends FragmentConverter
     private long endDate;
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
-    private final static long SEPERATION = 86220000L;
+    private final long separation = 86220000L;
 
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
@@ -137,7 +134,7 @@ public class CreateOfferActivity extends FragmentConverter
             endDate = offerToModify.getCreationDate();
         }
         creationDate = now.getTimeInMillis();
-        endDate = now.getTimeInMillis() + SEPERATION;
+        endDate = now.getTimeInMillis() + separation;
     }
 
     /**
@@ -392,7 +389,7 @@ public class CreateOfferActivity extends FragmentConverter
      * @param calendar the corresponding calendar
      */
     private void setDate(final Calendar calendar) {
-        this.endDate = calendar.getTimeInMillis() + SEPERATION;
+        this.endDate = calendar.getTimeInMillis() + separation;
         dateText.setText(Offer.dateFormat().format(calendar.getTime()));
 
     }

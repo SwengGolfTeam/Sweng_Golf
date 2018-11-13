@@ -101,14 +101,12 @@ public class ShowOfferActivity extends FragmentConverter {
         TextView offerTag = inflated.findViewById(R.id.show_offer_tag);
         offerTag.setText(offer.getTag().toString());
         offerDescription.setText(offer.getDescription());
-
+        ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
         if (!offer.getLinkPicture().isEmpty()) {
-            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
             Picasso.with(this.getContext())
                     .load(Uri.parse(offer.getLinkPicture()))
                     .into(offerPicture);
         } else {
-            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
             offerPicture.getLayoutParams().height = 0;
         }
 
