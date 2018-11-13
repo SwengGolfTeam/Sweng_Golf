@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -19,8 +19,8 @@
                 android:id="@+id/show_offer_author"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="20dp"
                 android:text="@android:string/untitled"
                 android:textColor="@color/offer_list_author"
@@ -32,9 +32,11 @@
                 android:id="@+id/show_offer_title"
                 android:layout_width="322dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/offer_list_name"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,9 +47,11 @@
                 android:id="@+id/show_offer_description"
                 android:layout_width="322dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,41 +73,60 @@
                 android:id="@+id/show_offer_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="50dp"
                 android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
                 android:text="@android:string/unknownName"
                 android:textColor="@color/offer_list_author"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
 
-            <TextView
-                android:id="@+id/reaction_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+            <View
+                android:id="@+id/line"
+                android:layout_width="200dp"
+                android:layout_height="2dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/reactions"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:background="?attr/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/show_offer_description" />
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_description" />
 
             <LinearLayout
                 android:id="@+id/list_answers"
-                android:layout_width="match_parent"
+                android:layout_width="380dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reaction_title">
+                app:layout_constraintTop_toBottomOf="@id/line">
+
+                <TextView
+                    android:id="@+id/error_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/answer_load_error"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/answers_recycler_view"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/react_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/add_answer"
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 
