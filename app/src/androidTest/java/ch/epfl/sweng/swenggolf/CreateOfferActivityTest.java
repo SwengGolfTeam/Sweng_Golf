@@ -104,6 +104,13 @@ public class CreateOfferActivityTest {
     }
 
     @Test
+    public void canCreateSimpleOffer() {
+        goToCreateOffer(false);
+        fillNameAndDescription();
+        onView(withId(R.id.button)).perform(scrollTo(), click());
+    }
+
+    @Test
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
         onView(withId(R.id.button)).perform(scrollTo(), click());
@@ -114,11 +121,15 @@ public class CreateOfferActivityTest {
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
-    private void fillOffer() {
+    private void fillNameAndDescription() {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
                 .perform(closeSoftKeyboard());
+    }
+
+    private void fillOffer() {
+        fillNameAndDescription();
 
         // Answer to gallery intent
         Intent resultData = new Intent();
