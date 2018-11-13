@@ -273,10 +273,16 @@ public class ShowOfferActivity extends FragmentConverter {
             storage.remove(offer.getLinkPicture());
         }
         Database database = Database.getInstance();
-        CompletionListener listener = new CompletionListener() {
+
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
+        database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
+    }
+
+    private CompletionListener getRemoveOfferListerner(final boolean showToast) {
+        return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE) {
+                if (databaseError == DbError.NONE && showToast) {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     replaceCentralFragment(new ListOfferActivity());
@@ -284,7 +290,6 @@ public class ShowOfferActivity extends FragmentConverter {
             }
 
         };
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
     }
 
     /**
