@@ -72,7 +72,7 @@ public class ListOfferActivityTest {
         setUpFakeDatabase();
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
-        // reinit local database to default values just in case test are not independent of each other
+        // reinit local database to default values just in case test are not independent
         LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
         localDb.writeCategories(Arrays.asList(Category.values()));
     }
@@ -177,17 +177,6 @@ public class ListOfferActivityTest {
             clickOnCategoryInMenu(cat);
         }
         onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void uncheckAndCheckSameCategory() {
-        clickOnCategoryInMenu(Category.getDefault());
-        clickOnCategoryInMenu(Category.getDefault());
-
-        Offer offer = ListOfferActivity.offerList.get(0);
-
-        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                .check(matches(hasDescendant(withText(offer.getTitle()))));
     }
 
     private void clickOnCategoryInMenu(Category cat){
