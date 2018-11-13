@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -33,10 +37,14 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static android.provider.MediaStore.EXTRA_OUTPUT;
+import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
+import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
- * The activity used to create offers. Note that the intent extras
+ * The fragment used to create offers. Note that the extras
  * must contain a string with key "username".
  */
 public class CreateOfferActivity extends FragmentConverter {
@@ -45,30 +53,51 @@ public class CreateOfferActivity extends FragmentConverter {
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
-
     private Uri filePath = null;
+    private Uri photoDestination = null;
+    private Uri tempPicturePath = null;
 
+    private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                Intent takePictureIntent = Storage.takePicture(getActivity());
+                if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    tempPicturePath = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
+                } else {
+                    Toast.makeText(getContext(), "Cannot take a picture", LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                Toast.makeText(getContext(), "Unable to create picture", LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            createOffer(v);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_create_offer, container, false);
+        View inflated = inflater.inflate(R.layout.activity_create_offer,
+                            container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         preFillFields(inflated);
         setupSpinner(inflated);
-        inflated.findViewById(R.id.offer_picture).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosePicture(v);
+                startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
-        inflated.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createOffer(v);
-            }
-        });
+        inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
+        inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
         return inflated;
     }
 
@@ -76,6 +105,16 @@ public class CreateOfferActivity extends FragmentConverter {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        EditText title = findViewById(R.id.offer_name);
+        title.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(Offer.TITLE_MAX_LENGTH)});
+        EditText description = findViewById(R.id.offer_description);
+        description.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
     }
 
     private void setupSpinner(View v) {
@@ -99,23 +138,42 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     }
 
-    /**
-     * Allows the user to choose a picture from his gallery.
-     *
-     * @param view the view
-     */
-    public void choosePicture(View view) {
-        startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (Storage.conditionActivityResult(requestCode, resultCode, data)) {
+            removeStalledPicture();
+            switch (requestCode) {
+                case CAPTURE_IMAGE_REQUEST : {
+                    photoDestination = tempPicturePath;
+                    File cacheDirectory = getActivity().getCacheDir();
+                    File photo = new File(cacheDirectory,photoDestination.getLastPathSegment());
+                    filePath = FileProvider.getUriForFile(getContext(),
+                            "ch.epfl.sweng.swenggolf.fileprovider", photo);
+                    photoDestination = null;
+                    break;
+                }
+                case PICK_IMAGE_REQUEST : {
+                    filePath = data.getData();
+                    break;
+                }
+                default: {
+                    return;
+                }
+            }
             ImageView imageView = findViewById(R.id.offer_picture);
-            filePath = data.getData();
-            Picasso.with(this.getContext()).load(filePath).into(imageView);
+            Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
+        }
+    }
+
+    private void removeStalledPicture() {
+        if(photoDestination != null) {
+            File previous = new File(getContext().getCacheDir(),
+                        photoDestination.getLastPathSegment());
+            if(!previous.delete()) {
+                Toast.makeText(this.getContext(),
+                        "Previous picture couldn't be removed", LENGTH_LONG).show();
+            }
         }
     }
 
@@ -132,15 +190,16 @@ public class CreateOfferActivity extends FragmentConverter {
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
 
-        final String name = nameText.getText().toString();
+        final String title = nameText.getText().toString();
         final String description = descriptionText.getText().toString();
         final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
 
-        if (name.isEmpty() || description.isEmpty()) {
+        if (title.length() < Offer.TITLE_MIN_LENGTH || description.length()
+                < Offer.DESCRIPTION_MIN_LENGTH) {
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(name, description, category);
+            createOfferObject(title, description, category);
         }
 
     }
@@ -198,7 +257,7 @@ public class CreateOfferActivity extends FragmentConverter {
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
-                            Toast.LENGTH_SHORT).show();
+                            LENGTH_SHORT).show();
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
@@ -232,4 +291,11 @@ public class CreateOfferActivity extends FragmentConverter {
             }
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        removeStalledPicture();
+    }
+
 }

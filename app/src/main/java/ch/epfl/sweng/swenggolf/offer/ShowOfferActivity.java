@@ -4,30 +4,33 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.User;
@@ -42,7 +45,6 @@ import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
 public class ShowOfferActivity extends FragmentConverter {
-
     private boolean userIsCreator;
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
@@ -70,6 +72,11 @@ public class ShowOfferActivity extends FragmentConverter {
         offer = getArguments().getParcelable("offer");
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     private void setContents(View inflated) {
         TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
@@ -92,7 +99,10 @@ public class ShowOfferActivity extends FragmentConverter {
             ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
             Picasso.with(this.getContext())
                     .load(Uri.parse(offer.getLinkPicture()))
-                        .into(offerPicture);
+                    .into(offerPicture);
+        } else {
+            ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
+            offerPicture.getLayoutParams().height = 0;
         }
 
     }
@@ -113,7 +123,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        Database.getInstance().read("/answers", offer.getUuid(), answerListener, Answers.class);
+        Database.getInstance().read(Database.ANSWERS_PATH, offer.getUuid(), answerListener, Answers.class);
     }
 
     private ValueListener<User> createFiller(final View inflated) {
@@ -157,6 +167,10 @@ public class ShowOfferActivity extends FragmentConverter {
                     }
                 });
 
+                EditText comment = newReaction.findViewById(R.id.your_answer_description);
+                comment.setFilters(new InputFilter[]{
+                        new InputFilter.LengthFilter(Answer.COMMENT_MAX_LENGTH)});
+
                 DatabaseUser.getUser(vlUser, Config.getUser().getUserId());
 
             }
@@ -165,6 +179,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     /**
      * Adds a new answer to the list of answers of the offer.
+     *
      * @param view the button that got clicked
      */
     public void postAnswer(View view) {

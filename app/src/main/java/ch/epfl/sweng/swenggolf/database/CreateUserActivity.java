@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ public class CreateUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_create_user);
         name = findViewById(ch.epfl.sweng.swenggolf.R.id.name);
+        name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(User.USERNAME_MAX_LENGTH)});
         mail = findViewById(ch.epfl.sweng.swenggolf.R.id.mail);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         user = Config.getUser();
@@ -73,7 +75,8 @@ public class CreateUserActivity extends AppCompatActivity {
         String userMail = mail.getText().toString();
 
         // Handle the exception if the EditText fields are null
-        if (!userName.isEmpty() && !userMail.isEmpty() && isEmailValid(userMail)) {
+        if (!(userName.length() < User.USERNAME_MIN_LENGTH) && !userMail.isEmpty()
+                && isEmailValid(userMail)) {
             User u = User.userChanged(user, userName, userMail);
             DatabaseUser.addUser(u);
             Config.setUser(u);
