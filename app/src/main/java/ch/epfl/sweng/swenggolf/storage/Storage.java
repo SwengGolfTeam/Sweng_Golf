@@ -6,7 +6,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 
@@ -97,9 +96,10 @@ public abstract class Storage {
 
     /**
      * Check that the result is valid and is handled by the storage.
+     *
      * @param requestCode specifies the request type and is checked for handling.
-     * @param resultCode specifies wether the result is broken or not.
-     * @param data the result that is checked for validity.
+     * @param resultCode  specifies wether the result is broken or not.
+     * @param data        the result that is checked for validity.
      * @return wether the result is handled and is valid for the given request.
      */
     public static boolean conditionActivityResult(int requestCode, int resultCode, Intent data) {
