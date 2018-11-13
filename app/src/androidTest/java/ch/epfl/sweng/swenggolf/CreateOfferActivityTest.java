@@ -2,17 +2,21 @@ package ch.epfl.sweng.swenggolf;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -36,6 +40,7 @@ import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -52,6 +57,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
@@ -66,9 +76,11 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
+    /*
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+    */
 
     private static FragmentManager manager;
 
@@ -88,16 +100,16 @@ public class CreateOfferActivityTest {
     private void goToCreateOffer(boolean hasOffer) {
         FragmentTransaction transaction = manager.beginTransaction();
         CreateOfferActivity fragment = new CreateOfferActivity();
-        if(hasOffer) {
+        if (hasOffer) {
             Bundle bundle = new Bundle();
-            Offer offer = new Offer(Config.getUser().getUserId(),"20","20", "20", "20");
+            Offer offer = new Offer(Config.getUser().getUserId(), "20", "20", "20", "20");
             bundle.putParcelable("offer", offer);
             fragment.setArguments(bundle);
-            Database.getInstance().write("/offers",offer.getUuid(), offer);
+            Database.getInstance().write("/offers", offer.getUuid(), offer);
         }
         transaction.replace(R.id.centralFragment, fragment).commit();
         try {
-            Thread.sleep(500);
+            sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -128,7 +140,7 @@ public class CreateOfferActivityTest {
                 .perform(closeSoftKeyboard());
     }
 
-    private void fillOffer() {
+    private void fillOffer() throws InterruptedException {
         fillNameAndDescription();
 
         // Answer to gallery intent
@@ -142,10 +154,39 @@ public class CreateOfferActivityTest {
 
         // We ensure that the unchecking works
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
+        allowPermissionsIfNeeded();
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
 
         onView(withId(R.id.button)).perform(scrollTo(), click());
+    }
+
+    private static final int PERMISSIONS_DIALOG_DELAY = 3000;
+    private static final int GRANT_BUTTON_INDEX = 1;
+
+    private static void allowPermissionsIfNeeded() throws InterruptedException {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    !hasNeededPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                sleep(PERMISSIONS_DIALOG_DELAY);
+                UiDevice device = UiDevice.getInstance(getInstrumentation());
+                UiObject allowPermissions = device.findObject(new UiSelector()
+                        .clickable(true)
+                        .checkable(false)
+                        .index(GRANT_BUTTON_INDEX));
+                if (allowPermissions.exists()) {
+                    allowPermissions.click();
+                }
+            }
+        } catch (UiObjectNotFoundException e) {
+            System.out.println("There is no permissions dialog to interact with");
+        }
+    }
+
+    private static boolean hasNeededPermission(String permissionNeeded) {
+        Context context = InstrumentationRegistry.getTargetContext();
+        int permissionStatus = ContextCompat.checkSelfPermission(context, permissionNeeded);
+        return permissionStatus == PackageManager.PERMISSION_GRANTED;
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -154,14 +195,14 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void createOfferShowOfferWhenValidInput() {
+    public void createOfferShowOfferWhenValidInput() throws InterruptedException {
         goToCreateOffer(false);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }
 
     @Test
-    public void showMessageErrorWhenCantCreateOffer() {
+    public void showMessageErrorWhenCantCreateOffer() throws InterruptedException {
         Database.setDebugDatabase(new FakeDatabase(false));
         goToCreateOffer(false);
         fillOffer();
@@ -170,10 +211,10 @@ public class CreateOfferActivityTest {
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        Offer testOffer = new Offer(Config.getUser().getUserId(),"Test","Test");
-        Database.getInstance().write("/offers",testOffer.getUuid(), testOffer);
+        Offer testOffer = new Offer(Config.getUser().getUserId(), "Test", "Test");
+        Database.getInstance().write("/offers", testOffer.getUuid(), testOffer);
         Fragment offer = FragmentConverter.createShowOfferWithOffer(testOffer);
-        if(setToOtherThanOwner) {
+        if (setToOtherThanOwner) {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
@@ -183,7 +224,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void modifyingOfferViaShowOfferWorks() {
+    public void modifyingOfferViaShowOfferWorks() throws InterruptedException {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
         fillOffer();
@@ -223,7 +264,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void defineOfferOnCreation(){
+    public void defineOfferOnCreation() throws InterruptedException {
         final String cat = Category.values()[1].toString();
 
         goToCreateOffer(false);
