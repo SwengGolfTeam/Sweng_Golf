@@ -158,6 +158,10 @@ public class CreateOfferActivity extends FragmentConverter {
             location.setLatitude(offerToModify.getLatitude());
             location.setLongitude(offerToModify.getLongitude());
 
+            if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
+                setCheckbox(ON);
+            }
+
             ImageView picture = inflated.findViewById(R.id.offer_picture);
             String link = offerToModify.getLinkPicture();
 
