@@ -158,16 +158,20 @@ public class CreateOfferActivity extends FragmentConverter {
             location.setLatitude(offerToModify.getLatitude());
             location.setLongitude(offerToModify.getLongitude());
 
-            if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
-                setCheckbox(ON);
-            }
+            checkFillConditions(inflated);
+        }
+    }
 
-            ImageView picture = inflated.findViewById(R.id.offer_picture);
-            String link = offerToModify.getLinkPicture();
+    private void checkFillConditions(View inflated) {
+        if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
+            setCheckbox(ON);
+        }
 
-            if (!link.isEmpty() && !Config.isTest()) {
-                Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
-            }
+        ImageView picture = inflated.findViewById(R.id.offer_picture);
+        String link = offerToModify.getLinkPicture();
+
+        if (!link.isEmpty() && !Config.isTest()) {
+            Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
         }
     }
 
