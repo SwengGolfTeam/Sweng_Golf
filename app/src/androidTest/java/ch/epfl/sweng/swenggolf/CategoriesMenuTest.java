@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.List;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
@@ -31,50 +32,35 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class CategoriesMenuTest {
 
+    public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+    @Rule
+    public final IntentsTestRule<MainMenuActivity> activityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
+
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
     }
 
-    public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
-            + "Curabitur ut nunc nec est feugiat commodo. Nulla vel porttitor justo."
-            + "Suspendisse potenti. Morbi vehicula ante nibh,"
-            + " at tristique tortor dignissim non."
-            + "In sit amet ligula tempus, mattis massa dictum, mollis sem."
-            + "Mauris convallis sed mauris ut sodales."
-            + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
-            + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
-            + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
-
-    @Rule
-    public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
-    /**
-     * Configures a fake database and enables TestMode.
-     */
-    @Before
-    public void init() throws InterruptedException {
-        setUpFakeDatabase();
-        Config.goToTest();
-        mActivityRule.launchActivity(new Intent());
-        // reinit local database to default values just in case test are not independent
-        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
-        localDb.writeCategories(Arrays.asList(Category.values()));
-    }
-
-    protected static void setUpFakeDatabase() {
+    private static void initFakeDatabase() {
         Database database = new FakeDatabase(true);
         Offer offer1 = new Offer("user_id", "This is a title", LOREM, "", "idoftheoffer1");
-        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM, "", "idoftheoffer2");
         database.write("/offers", "idoftheoffer1", offer1);
-        database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
     }
 
-
+    /**
+     * Configures a fake database and enables TestMode.
+     */
+    @Before
+    public void init() {
+        initFakeDatabase();
+        Config.goToTest();
+        activityRule.launchActivity(new Intent());
+        initLocalDatabase();
+    }
 
     @Test
     public void uncheckAndCheckSameCategory() {
@@ -87,8 +73,14 @@ public class CategoriesMenuTest {
                 .check(matches(hasDescendant(withText(offer.getTitle()))));
     }
 
-    private void clickOnCategoryInMenu(Category cat){
+    private void clickOnCategoryInMenu(Category cat) {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(cat.toString())).perform(click());
+    }
+
+    private void initLocalDatabase(){
+        LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
+        List<Category> allCategories = Arrays.asList(Category.values());
+        localDb.writeCategories(allCategories);
     }
 }
