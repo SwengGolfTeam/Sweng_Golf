@@ -168,7 +168,7 @@ public class FakeDatabaseTest {
         Database d = new FakeDatabase(false);
 
         ValueListener<List<Offer>> listener = getListValueListener();
-        d.readList(PATH, listener, Offer.class,new AttributeFilter("s1", "s2"));
+        d.readList(PATH, listener, Offer.class, new AttributeFilter("s1", "s2"));
     }
 
     @Test
@@ -182,17 +182,17 @@ public class FakeDatabaseTest {
     @NonNull
     private ValueListener<List<Offer>> getListValueListener() {
         return new ValueListener<List<Offer>>() {
-                @Override
-                public void onDataChange(List<Offer> value) {
+            @Override
+            public void onDataChange(List<Offer> value) {
 
-                    fail();
-                }
+                fail();
+            }
 
-                @Override
-                public void onCancelled(DbError error) {
-                    assertThat(error, is(DbError.UNKNOWN_ERROR));
-                }
-            };
+            @Override
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.UNKNOWN_ERROR));
+            }
+        };
     }
 
 
