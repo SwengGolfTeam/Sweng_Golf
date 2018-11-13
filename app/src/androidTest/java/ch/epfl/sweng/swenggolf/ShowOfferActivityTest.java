@@ -30,6 +30,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -116,11 +117,22 @@ public class ShowOfferActivityTest {
                 .check(matches(not(isClickable())));
     }
 
+    @Test
+    public void errorMessageWhenAnswerIsTooShort() {
+        addAnswer("NO");
+        final MainMenuActivity activity = mActivityRule.getActivity();
+        onView(withId(R.id.answer_description)).check(matches(
+                hasErrorText(activity.getString(R.string.answer_limit_1)
+                        + Answer.COMMENT_MIN_LENGTH
+                        + activity.getString(R.string.answer_limit_2))));
+    }
+
     private void addAnswer(String answer) {
         onView(withId(R.id.answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
 
     }
+
 
 }

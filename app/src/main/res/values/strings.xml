@@ -51,4 +51,6 @@
     <string name="username_min_length_1">"The username should have at least "</string>
     <string name="username_min_length_2">" characters."</string>
     <string name="my_offers">My offers</string>
+    <string name="answer_limit_1">"The answer should be at least "</string>
+    <string name="answer_limit_2">" characters."</string>
 </resources>

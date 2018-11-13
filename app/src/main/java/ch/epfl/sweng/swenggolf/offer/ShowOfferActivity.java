@@ -176,12 +176,18 @@ public class ShowOfferActivity extends FragmentConverter {
      */
     public void postAnswer(View view) {
         EditText editText = findViewById(R.id.answer_description);
-        Answers answers = mAdapter.getAnswers();
-        answers.getAnswerList()
-                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-        editText.getText().clear();
-        mAdapter.notifyDataSetChanged();
+        if(editText.length() < Answer.COMMENT_MIN_LENGTH) {
+            editText.setError(getString(R.string.answer_limit_1) + Answer.COMMENT_MIN_LENGTH
+                    + getString(R.string.answer_limit_2));
+        }
+        else {
+            Answers answers = mAdapter.getAnswers();
+            answers.getAnswerList()
+                    .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+            Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+            editText.getText().clear();
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setRecyclerView(View inflated) {
