@@ -5,10 +5,8 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,10 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -44,10 +40,7 @@ import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -57,7 +50,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 
-import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -71,7 +63,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.object.HasToString.hasToString;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -184,17 +175,8 @@ public class CreateOfferActivityTest {
 
     @Test
     public void modifyingOfferViaShowOfferWorks() {
-
         goToShowOffer(false);
-        try {
-            onView(withId(R.id.button_modify_offer)).perform(click());
-        } catch (NoMatchingViewException e) {
-            openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-            onData(hasToString("modify offer")).inRoot(isPlatformPopup())
-                    .inAdapterView(CoreMatchers.<View>instanceOf(AdapterView.class))
-                    .perform(scrollTo(), ViewActions.click());
-        }
-
+        onView(withId(R.id.button_modify_offer)).perform(click());
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }

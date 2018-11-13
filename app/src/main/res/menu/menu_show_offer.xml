@@ -7,7 +7,6 @@
         android:id="@+id/button_modify_offer"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/modify_offer"
-        android:contentDescription="@string/modify_offer"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/button_delete_offer"
