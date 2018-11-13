@@ -13,17 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ToolbarTheme"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/create_new_offer" />
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -72,14 +61,18 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginLeft="8dp"
+            android:layout_height="28dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="@string/offer_picture"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/offer_picture"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/offer_picture" />
+            app:layout_constraintBottom_toBottomOf="@+id/take_picture"
+            app:layout_constraintEnd_toStartOf="@+id/take_picture"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="@+id/take_picture" />
 
         <EditText
             android:id="@+id/offer_description"
@@ -114,17 +107,45 @@
 
         <ImageView
             android:id="@+id/offer_picture"
+            android:layout_width="185dp"
+            android:layout_height="147dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:maxWidth="250dip"
+            android:maxHeight="250dip"
+            android:minWidth="30dip"
+            android:minHeight="30dip"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="@+id/fetch_picture"
+            app:layout_constraintStart_toStartOf="@+id/take_picture"
+            app:layout_constraintTop_toBottomOf="@+id/fetch_picture" />
+
+        <ImageButton
+            android:id="@+id/fetch_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:maxHeight="250dip"
-            android:maxWidth="250dip"
-            android:minHeight="30dip"
-            android:minWidth="30dip"
-            app:layout_constraintStart_toStartOf="@+id/offer_description"
-            app:layout_constraintTop_toBottomOf="@+id/error_message"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            app:layout_constraintBottom_toBottomOf="@+id/take_picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+        <ImageButton
+            android:id="@+id/take_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="76dp"
+            android:layout_marginRight="76dp"
+            app:layout_constraintEnd_toStartOf="@+id/fetch_picture"
+            app:layout_constraintTop_toBottomOf="@+id/category_spinner"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
 
 
 
@@ -182,12 +203,12 @@
             android:id="@+id/button"
             android:layout_width="156dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="44dp"
             android:text="@string/button_create_offer"
-            app:layout_constraintTop_toBottomOf="@+id/date_linear_layout"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/offer_picture"
+            app:layout_constraintStart_toStartOf="@+id/offer_picture" />
+
 
         <TextView
             android:id="@+id/textView5"
@@ -205,16 +226,15 @@
             android:id="@+id/category_spinner"
             android:layout_width="214dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="41dp"
-            android:layout_marginLeft="43dp"
-            android:layout_marginRight="41dp"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toBottomOf="@+id/offer_picture" />
+            app:layout_constraintTop_toBottomOf="@+id/offer_description" />
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>

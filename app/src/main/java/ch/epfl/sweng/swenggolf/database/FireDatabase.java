@@ -72,11 +72,26 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
-        final ArrayList<T> list = new ArrayList<>();
+        ValueEventListener firebaseListener = getListValueListener(listener, c);
+        ref.addListenerForSingleValueEvent(firebaseListener);
 
-        ValueEventListener firebaseListener = new ValueEventListener() {
+    }
+
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
+                             @NonNull final Class<T> c, AttributeFilter filter) {
+        final DatabaseReference ref = database.getReference(path);
+        Query query = ref.orderByChild(filter.getAttribute()).equalTo(filter.getValue());
+        readListQuery(listener, query, c);
+    }
+
+    @NonNull
+    private static <T> ValueEventListener getListValueListener(
+            @NonNull final ValueListener<List<T>> listener, @NonNull final Class<T> c) {
+        return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<T> list = new ArrayList<>();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     list.add(data.getValue(c));
                 }
@@ -84,12 +99,10 @@ public final class FireDatabase extends Database {
             }
 
             @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
                 listener.onCancelled(DbError.getError(databaseError));
             }
         };
-        ref.addListenerForSingleValueEvent(firebaseListener);
-
     }
 
     @Override
@@ -118,30 +131,35 @@ public final class FireDatabase extends Database {
     @Override
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
                            final List<Category> categories) {
-        final DatabaseReference ref = database.getReference("offers");
+        final DatabaseReference ref = database.getReference(OFFERS_PATH);
 
         if (categories.isEmpty()) {
             listener.onDataChange(new ArrayList<Offer>());
         }
-        for (int i = 0; i < categories.size(); i++) {
+        for (int i = 0; i < categories.size(); ++i) {
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<Offer> list = new ArrayList<>();
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot offer : dataSnapshot.getChildren()) {
-                            list.add(offer.getValue(Offer.class));
-                        }
-                    }
-                    listener.onDataChange(list); // when no data was found -> return empty list
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    listener.onCancelled(DbError.getError(databaseError));
-                }
-            });
+            readListQuery(listener, query, Offer.class);
         }
+    }
+
+    private <T> void readListQuery(@NonNull final ValueListener<List<T>> listener, Query query,
+                                   final Class<T> c) {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<T> list = new ArrayList<>();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot offer : dataSnapshot.getChildren()) {
+                        list.add(offer.getValue(c));
+                    }
+                }
+                listener.onDataChange(list); // when no data was found -> return empty list
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onCancelled(DbError.getError(databaseError));
+            }
+        });
     }
 }
