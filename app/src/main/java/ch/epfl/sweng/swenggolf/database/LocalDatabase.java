@@ -22,8 +22,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "_id";
     public static final String COLUMN_CATEGORIES = "categories";
 
-    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion, String DatabaseName) {
-        super(context, DatabaseName, factory, dbVersion);
+    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory,
+                         int dbVersion, String databaseName) {
+        super(context, databaseName, factory, dbVersion);
     }
 
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion){

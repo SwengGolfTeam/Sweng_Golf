@@ -41,8 +41,10 @@ public class LocalDatabaseTest {
     @Test
     public void upgradeDatabaseDoesWorkTest(){
         String upgradeDatabaseName = "TEST_DATABASE.db";
-        LocalDatabase localDb1 = new LocalDatabase(activityRule.getActivity(), null, 1, upgradeDatabaseName);
-        LocalDatabase localDb2 = new LocalDatabase(activityRule.getActivity(), null, 2, upgradeDatabaseName);
+        LocalDatabase localDb1 = new LocalDatabase(activityRule.getActivity(), null,
+                1, upgradeDatabaseName);
+        LocalDatabase localDb2 = new LocalDatabase(activityRule.getActivity(), null,
+                2, upgradeDatabaseName);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb2.writeCategories(allCategories);
         List<Category> readCategories = localDb2.readCategories();
