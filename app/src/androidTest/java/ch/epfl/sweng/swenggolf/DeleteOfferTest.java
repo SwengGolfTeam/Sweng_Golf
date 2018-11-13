@@ -64,7 +64,7 @@ public class DeleteOfferTest {
         mActivityRule.launchActivity(new Intent());
     }
 
-    @Test
+    /*@Test
     public void cancelDialog() {
         onView(withId(R.id.offers_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -73,7 +73,7 @@ public class DeleteOfferTest {
         Fragment current = mActivityRule.getActivity()
                 .getSupportFragmentManager().getFragments().get(0);
         assertThat(ShowOfferActivity.class.getName(), is(current.getClass().getName()));
-    }
+    }*/
 
     @Test
     public void deleteElementTest() {

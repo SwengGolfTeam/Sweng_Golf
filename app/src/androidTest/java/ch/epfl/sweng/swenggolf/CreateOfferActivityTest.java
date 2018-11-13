@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +52,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.TestUtility.allowPermissionsIfNeeded;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
@@ -67,11 +67,10 @@ public class CreateOfferActivityTest {
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
-    /*
+
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-    */
 
     private static FragmentManager manager;
 
@@ -145,7 +144,6 @@ public class CreateOfferActivityTest {
 
         // We ensure that the unchecking works
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
-        allowPermissionsIfNeeded();
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
 
