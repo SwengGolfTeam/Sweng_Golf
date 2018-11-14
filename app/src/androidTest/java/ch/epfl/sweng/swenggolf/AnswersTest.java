@@ -33,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
@@ -55,7 +56,7 @@ public class AnswersTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
@@ -64,6 +65,7 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+        sleep(1000);
     }
 
     @Test
@@ -80,12 +82,12 @@ public class AnswersTest {
         Answers answers = new Answers();
     }
 
-    /*@Test
+    @Test
     public void authorOfAnswerIsCorrect() {
         addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
-    }*/
+    }
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
