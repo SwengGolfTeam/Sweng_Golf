@@ -1,23 +1,18 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 
 public class UserTest {
 
-private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
+    private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
 
 
     @Before
@@ -95,7 +90,7 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
 
     @Test
     public void testEquals() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE,DESCRIPTION);
+        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
         User user2 = new User(user1);
         assertTrue(user1.equals(user2));
         assertFalse(user1.equals(null));

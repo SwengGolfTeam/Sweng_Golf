@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.location.Location;
+
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -82,5 +84,18 @@ public class OfferTest {
         String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
         offer = offer.updateLinkToPicture(newLink);
         assertEquals(newLink, offer.getLinkPicture());
+    }
+
+    @Test
+    public void testSetOffer() {
+        Offer offer =         new Offer("9", "bipbupbap",
+                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
+                LUMIERE
+                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
+                "09", Category.values()[3], 123123123, 123123123);
+        String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
+        offer.setLocation(1,2);
+        assertEquals(1, offer.getLatitude(),0.05);
+        assertEquals(1, offer.getLongitude(), 0.05);
     }
 }

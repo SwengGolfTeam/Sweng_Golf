@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import ch.epfl.sweng.swenggolf.database.AttributeFilter;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 
 public class AttributeFilterTest {
@@ -21,7 +20,7 @@ public class AttributeFilterTest {
     @Test
     public void getValueWork() {
         AttributeFilter filter = new AttributeFilter(attribute, value);
-        assertEquals(filter.getValue(),value);
+        assertEquals(filter.getValue(), value);
     }
 
     @Test(expected = IllegalArgumentException.class)

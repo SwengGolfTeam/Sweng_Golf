@@ -2,7 +2,11 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,9 +46,13 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
+
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 
 
 public class ShowOfferActivity extends FragmentConverter {
@@ -51,6 +60,12 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
+
+    private View inflated;
+
+    private static final int KILOMETER_SIZE = 1000;
+    public static final int DISTANCE_GRANULARITY = 100;
+
     private TextView errorMessage;
     private LinearLayout mLayout;
     private View newReaction;
@@ -60,16 +75,17 @@ public class ShowOfferActivity extends FragmentConverter {
                              Bundle savedInstanceState) {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
         assert getArguments() != null;
-        View inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
+        inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
+
         errorMessage = inflated.findViewById(R.id.error_message);
         mLayout = inflated.findViewById(R.id.list_answers);
         LayoutInflater mInflater = getLayoutInflater();
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
-        setContents(inflated);
-        setRecyclerView(inflated);
+        setContents();
+        setRecyclerView();
         fetchAnswers();
-        setAnswerToPost(inflated);
+        setAnswerToPost();
         return inflated;
     }
 
@@ -84,7 +100,16 @@ public class ShowOfferActivity extends FragmentConverter {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void setContents(View inflated) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+            setLocation();
+        }
+    }
+
+    private void setContents() {
         TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
         offerTitle.setText(offer.getTitle());
 
@@ -107,13 +132,68 @@ public class ShowOfferActivity extends FragmentConverter {
         offerDescription.setText(offer.getDescription());
         ImageView offerPicture = inflated.findViewById(R.id.show_offer_picture);
         if (!offer.getLinkPicture().isEmpty()) {
-            Picasso.with(this.getContext())
-                    .load(Uri.parse(offer.getLinkPicture()))
+
+            Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture()))
+
                     .into(offerPicture);
         } else {
             offerPicture.getLayoutParams().height = 0;
         }
 
+        if (offer.getLongitude() != 0.0 || offer.getLatitude() != 0.0) {
+            setLocation();
+        }
+
+    }
+
+    private void setLocation() {
+        if (checkLocationPermission(getActivity())) {
+            AppLocation currentLocation = AppLocation.getInstance(getActivity());
+
+            currentLocation.getLocation(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Location offerLocation = new Location(LocationManager.GPS_PROVIDER);
+                        offerLocation.setLatitude(offer.getLatitude());
+                        offerLocation.setLongitude(offer.getLongitude());
+
+                        int distance = (int) offerLocation.distanceTo(location)
+                                / DISTANCE_GRANULARITY * DISTANCE_GRANULARITY;
+                        String toPrompt;
+                        if (distance >= KILOMETER_SIZE) {
+                            distance /= KILOMETER_SIZE;
+                            toPrompt = distance + " km";
+                        } else if (distance == 0) {
+                            toPrompt = "Near";
+                        } else {
+                            toPrompt = distance + " m";
+                        }
+                        writeLocationToPage(toPrompt);
+                    }
+                }
+            });
+
+        }
+    }
+
+    private void writeLocationToPage(String toWrite) {
+        TextView distanceText = inflated.findViewById(R.id.saved_location_offer);
+        distanceText.setText(toWrite);
+        final Context context = getActivity();
+        distanceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + offer.getLatitude()
+                        + "," + offer.getLongitude() + "(" + offer.getTitle() + ")");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+
+            }
+        });
     }
 
     private void fetchAnswers() {
@@ -156,7 +236,7 @@ public class ShowOfferActivity extends FragmentConverter {
         };
     }
 
-    private void setAnswerToPost(final View inflated) {
+    private void setAnswerToPost() {
         final Button reactButton = inflated.findViewById(R.id.react_button);
         reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +283,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mAdapter.notifyDataSetChanged();
     }
 
-    private void setRecyclerView(View inflated) {
+    private void setRecyclerView() {
         RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);

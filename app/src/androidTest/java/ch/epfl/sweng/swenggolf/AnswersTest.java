@@ -1,15 +1,20 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingRootException;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -32,14 +37,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AnswersTest {
+
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+
+    @Rule
+    public GrantPermissionRule permissionFineGpsRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     private Offer offer = FilledFakeDatabase.getOffer(0);
     private User author = FilledFakeDatabase.getUser(Integer.parseInt(offer.getUserId()));
@@ -49,14 +61,14 @@ public class AnswersTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
+                        FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
     }
 

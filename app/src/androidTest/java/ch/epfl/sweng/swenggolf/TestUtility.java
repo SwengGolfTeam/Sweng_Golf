@@ -1,11 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
-import android.support.v4.app.Fragment;
-
-import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -19,8 +14,9 @@ public final class TestUtility {
 
     /**
      * Use this test to check if we can see a Toast.
+     *
      * @param mActivityRule the tested activity
-     * @param toastMessage the message of the Toast
+     * @param toastMessage  the message of the Toast
      */
     public static void testToastShow(ActivityTestRule mActivityRule, int toastMessage) {
         onView(withText(toastMessage)).inRoot(
@@ -30,8 +26,9 @@ public final class TestUtility {
 
     /**
      * Use this test to check if we can see a Toast.
+     *
      * @param mActivityRule the tested activity
-     * @param toastMessage the message of the Toast
+     * @param toastMessage  the message of the Toast
      */
     public static void testToastShow(ActivityTestRule mActivityRule, String toastMessage) {
         onView(withText(toastMessage)).inRoot(
