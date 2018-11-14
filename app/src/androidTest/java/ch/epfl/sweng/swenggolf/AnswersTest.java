@@ -8,9 +8,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -38,6 +40,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AnswersTest {
 
     @Rule
@@ -65,7 +68,6 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        sleep(1000);
     }
 
     @Test
@@ -74,6 +76,11 @@ public class AnswersTest {
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
+    }
+
+    @Test
+    public void aEmptyTest() {
+
     }
 
     @Test
