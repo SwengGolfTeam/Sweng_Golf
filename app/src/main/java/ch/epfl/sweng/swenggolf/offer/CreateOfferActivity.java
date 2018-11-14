@@ -396,12 +396,12 @@ public class CreateOfferActivity extends FragmentConverter
 
     public static class DatePickerFragment extends DialogFragment {
 
-        private final Calendar c;
+        private final Calendar calendar;
 
         @SuppressLint("ValidFragment")
-        public DatePickerFragment(Calendar c) {
+        public DatePickerFragment(Calendar calendar) {
             super();
-            this.c = c;
+            this.calendar = calendar;
         }
 
         public DatePickerFragment(){
@@ -411,9 +411,9 @@ public class CreateOfferActivity extends FragmentConverter
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             Fragment fragment = this.getFragmentManager().getFragments().get(0);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(this.getActivity(),

@@ -307,6 +307,12 @@ public class Offer implements Parcelable {
                 getUuid(), getTag(), getCreationDate(), getEndDate(), location);
     }
 
+    /**
+     * Sets the location of the offer.
+     *
+     * @param latitude the latitude
+     * @param longitude the longitude
+     */
     public void setLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
