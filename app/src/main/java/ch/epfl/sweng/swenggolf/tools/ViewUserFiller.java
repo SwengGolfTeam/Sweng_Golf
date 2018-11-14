@@ -3,7 +3,7 @@ package ch.epfl.sweng.swenggolf.tools;
 import android.util.Log;
 import android.widget.TextView;
 
-import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;

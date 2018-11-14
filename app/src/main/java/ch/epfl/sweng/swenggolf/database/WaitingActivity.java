@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 public class WaitingActivity extends AppCompatActivity {

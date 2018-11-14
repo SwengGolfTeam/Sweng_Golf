@@ -1,14 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import ch.epfl.sweng.swenggolf.profile.User;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
