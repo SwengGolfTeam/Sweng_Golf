@@ -16,9 +16,6 @@
             android:focusableInTouchMode="true"
             android:noHistory="true">
 
-
-
-
             <TextView
                 android:id="@+id/show_offer_author"
                 android:layout_width="wrap_content"
@@ -56,6 +53,19 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/saved_location_offer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="72dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/show_offer_tag"
+                app:layout_constraintStart_toEndOf="@+id/show_offer_author"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -144,19 +154,6 @@
                     android:textAllCaps="false" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/saved_location_offer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="72dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
         </android.support.constraint.ConstraintLayout>

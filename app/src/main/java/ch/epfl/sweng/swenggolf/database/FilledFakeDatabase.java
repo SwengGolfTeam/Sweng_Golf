@@ -196,7 +196,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     WIKIA_NO_COOKIE + STARWARS
                             + "images/f/ff/Sandcrawler.png/"
                             + "revision/latest?cb=20130812001443",
-                    "01", Category.values()[0], DATE, DATE),
+                    "01", Category.values()[0], DATE, DATE, getLocation()),
 
             new Offer("13", "Defense against the droids",
                     "The Trade Federation is attacking my planet,"

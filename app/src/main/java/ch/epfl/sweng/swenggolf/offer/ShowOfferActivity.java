@@ -134,7 +134,6 @@ public class ShowOfferActivity extends FragmentConverter {
         if (!offer.getLinkPicture().isEmpty()) {
 
             Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture()))
-
                     .into(offerPicture);
         } else {
             offerPicture.getLayoutParams().height = 0;
