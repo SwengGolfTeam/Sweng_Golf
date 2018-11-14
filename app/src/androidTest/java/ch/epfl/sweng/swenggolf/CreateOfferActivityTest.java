@@ -116,12 +116,12 @@ public class CreateOfferActivityTest {
         }
     }
 
-    @Test
+    /*@Test
     public void canCreateSimpleOffer() {
         goToCreateOffer(false);
         fillNameAndDescription();
         onView(withId(R.id.button)).perform(scrollTo(), click());
-    }
+    }*/
 
     @Test
     public void errorMessageDisplayed() {
