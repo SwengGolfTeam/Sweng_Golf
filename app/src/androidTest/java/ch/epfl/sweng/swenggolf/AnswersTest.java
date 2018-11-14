@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
 
@@ -37,9 +38,14 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class AnswersTest {
+
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+
+    @Rule
+    public GrantPermissionRule permissionFineGpsRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     private Offer offer = FilledFakeDatabase.getOffer(0);
     private User author = FilledFakeDatabase.getUser(Integer.parseInt(offer.getUserId()));
