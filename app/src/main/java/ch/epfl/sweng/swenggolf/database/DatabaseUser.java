@@ -1,6 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
-import ch.epfl.sweng.swenggolf.User;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 public class DatabaseUser {
 

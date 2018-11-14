@@ -1,6 +1,10 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +18,11 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
@@ -121,11 +125,14 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = holder.getLayoutPosition();
-                int newPos = answers.getFavoritePos() != pos ? pos : -1;
-                answers.setFavoritePos(newPos);
-                Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-                notifyDataSetChanged();
+
+                Context context = holder.getContainer().getContext();
+                int pos = holder.getAdapterPosition();
+                Dialog alertDialog = answers.getFavoritePos() != pos
+                        ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
+                alertDialog.show();
+
+
             }
         });
 
@@ -140,6 +147,48 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             favButton.setImageResource(HEART_EMPTY);
             favButton.setTag(HEART_EMPTY);
         }
+    }
+
+    private Dialog acceptAnswerDialog(Context context, final int pos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Accept answer")
+                .setMessage("Do you want to accept this answer?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        writeFavPos(pos);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                });
+        return builder.create();
+    }
+
+    private Dialog stepBackDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Did you change your mind?")
+                .setMessage("Do you really want to remove your approval?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        writeFavPos(-1);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                });
+        return builder.create();
+    }
+
+    private void writeFavPos(int pos) {
+        answers.setFavoritePos(pos);
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+        notifyDataSetChanged();
     }
 
     // Return the size of your dataset (invoked by the layout manager)

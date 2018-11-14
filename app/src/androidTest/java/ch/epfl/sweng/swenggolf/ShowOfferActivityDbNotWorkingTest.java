@@ -1,8 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.test.annotation.UiThreadTest;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,20 +9,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -63,6 +58,12 @@ public class ShowOfferActivityDbNotWorkingTest {
         database.setEntryNotWorking(Database.USERS_PATH, offer.getUserId());
         onView(withId(R.id.show_offer_author)).perform(scrollTo(), click());
         testToastShow(mActivityRule, R.string.error_load_user);
+    }
+
+    @Test
+    public void displaysErrorMessageWhenAnswersCannotBeLoaded() {
+        database.setEntryNotWorking(Database.ANSWERS_PATH, offer.getUuid());
+        onView(withId(R.id.error_message)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
 

@@ -16,8 +16,7 @@
             android:id="@+id/my_offers"
             android:icon="@drawable/baseline_library_books_24"
             android:title="@string/my_offers"
-            android:onClick="loadListOwnOfferActivity"
-            />
+            android:onClick="loadListOwnOfferActivity" />
         <item
             android:id="@+id/create_offer"
             android:icon="@android:drawable/ic_menu_add"

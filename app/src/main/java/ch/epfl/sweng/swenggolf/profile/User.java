@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.profile;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,12 +17,14 @@ public class User implements Parcelable {
     public static final int INFOS_MAX_LENGTH = 200;
     public static final int PREFERENCES_MIN_LENGTH = 0;
     public static final int PREFERENCES_MAX_LENGTH = 100;
+    public static final int DEFAULT_POINTS = 0;
     private String userName;
     private String userId;
     private String email;
     private String photo;
     private String preference;
     private String description;
+    private int points;
 
 
     /**
@@ -35,6 +37,7 @@ public class User implements Parcelable {
         photo = "";
         preference = "";
         description = "";
+        points = DEFAULT_POINTS;
     }
 
 
@@ -50,6 +53,7 @@ public class User implements Parcelable {
         photo = fu.getPhotoUrl().toString();
         preference = DEFAULT_PREFERENCE;
         description = DEFAULT_DESCRIPTION;
+        points = DEFAULT_POINTS;
     }
 
     /**
@@ -58,7 +62,7 @@ public class User implements Parcelable {
      * @param u the other user
      */
     public User(User u) {
-        this(u.userName, u.userId, u.email, u.photo, u.preference, u.description);
+        this(u.userName, u.userId, u.email, u.photo, u.preference, u.description, u.points);
     }
 
     /**
@@ -70,7 +74,8 @@ public class User implements Parcelable {
      * @param photo    user photo
      */
     public User(String username, String userId, String email, String photo) {
-        this(username, userId, email, photo, DEFAULT_PREFERENCE, DEFAULT_DESCRIPTION);
+        this(username, userId, email, photo, DEFAULT_PREFERENCE,
+                DEFAULT_DESCRIPTION, DEFAULT_POINTS);
     }
 
     /**
@@ -83,7 +88,7 @@ public class User implements Parcelable {
      * @param preference the user preference
      */
     public User(String username, String userId, String email, String photo, String preference) {
-        this(username, userId, email, photo, preference, DEFAULT_DESCRIPTION);
+        this(username, userId, email, photo, preference, DEFAULT_DESCRIPTION, DEFAULT_POINTS);
     }
 
     /**
@@ -96,10 +101,15 @@ public class User implements Parcelable {
      * @param preference the user preference
      */
     public User(String username, String userId, String email,
-                String photo, String preference, String description) {
+                String photo, String preference, String description,
+                int points) {
         if (username.isEmpty() || userId.isEmpty() || email.isEmpty()
                 || photo == null || preference == null) {
             throw new IllegalArgumentException("Invalid arguments for User");
+        }
+        if (points < 0) {
+            throw new IllegalArgumentException("The number"
+                    + " of points is not valid");
         }
         checkUsername(username);
         checkPreference(preference);
@@ -110,6 +120,7 @@ public class User implements Parcelable {
         this.photo = photo;
         this.preference = preference;
         this.description = description;
+        this.points = points;
     }
 
     private String checkUsername(String username) {
@@ -136,7 +147,8 @@ public class User implements Parcelable {
      * @return the changed user
      */
     public static User userChanged(User user, String username, String email) {
-        return new User(username, user.getUserId(), email, user.getPhoto());
+        return new User(username, user.getUserId(), email, user.getPhoto(),
+                user.getPreference(), user.getDescription(), user.getPoints());
     }
 
 
@@ -197,6 +209,16 @@ public class User implements Parcelable {
     }
 
     /**
+     * Get the user points.
+     *
+     * @return the points of the user
+     */
+    public int getPoints() {
+        return points;
+    }
+
+
+    /**
      * Set the userName.
      *
      * @param userName the corresponding username
@@ -243,6 +265,15 @@ public class User implements Parcelable {
     }
 
     /**
+     * Add points to the User.
+     *
+     * @param pointType the type of point to add
+     */
+    public void addPoints(PointType pointType) {
+        points += pointType.getValue();
+    }
+
+    /**
      * Set the user preference.
      *
      * @param preference the corresponding preference
@@ -272,7 +303,8 @@ public class User implements Parcelable {
                 && this.email.equals(user.email)
                 && this.photo.equals(user.photo)
                 && this.preference.equals(user.preference)
-                && this.description.equals(user.description);
+                && this.description.equals(user.description)
+                && this.points == user.points;
     }
 
     @Override
@@ -297,6 +329,7 @@ public class User implements Parcelable {
         dest.writeString(this.photo);
         dest.writeString(this.preference);
         dest.writeString(this.description);
+        dest.writeString(Integer.toString(this.points));
     }
 
     /**
@@ -311,6 +344,7 @@ public class User implements Parcelable {
         this.photo = in.readString();
         this.preference = in.readString();
         this.description = in.readString();
+        this.points = Integer.parseInt(in.readString());
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

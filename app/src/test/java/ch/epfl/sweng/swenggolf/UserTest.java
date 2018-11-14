@@ -1,28 +1,34 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.profile.PointType;
+import ch.epfl.sweng.swenggolf.profile.User;
+
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 
 public class UserTest {
 
-private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHOTO = "Picsou", PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
+    private static final String USERNAME = "Bob", ID = "1234",
+            EMAIL = "Google", PHOTO = "Picsou",
+            PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
 
+    private static final int POINTS = PointType.CLOSE_OFFER.getValue()
+            + PointType.RESPOND_OFFER.getValue()
+            + PointType.POST_OFFER.getValue();
+
+    private User user1;
 
     @Before
     public void setUp() {
         Config.goToTest();
+        user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE, DESCRIPTION, POINTS);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -46,8 +52,13 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullPreference() {
-        User user = new User(USERNAME, ID, EMAIL, null);
+    public void testNullPreference() {  new User(USERNAME, ID, EMAIL, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativePoints() {
+       new User(USERNAME, ID, EMAIL, PHOTO,
+                PREFERENCE, DESCRIPTION, -POINTS);
     }
 
     @Test
@@ -72,7 +83,6 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
 
     @Test
     public void testSetters() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
         User user2 = new User();
         user2.setEmail(EMAIL);
         user2.setUserName(USERNAME);
@@ -80,12 +90,14 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
         user2.setUserId(ID);
         user2.setPreference(PREFERENCE);
         user2.setDescription(DESCRIPTION);
+        user2.addPoints(PointType.POST_OFFER);
+        user2.addPoints(PointType.RESPOND_OFFER);
+        user2.addPoints(PointType.CLOSE_OFFER);
         assertEquals("Failed to set preference", user1, user2);
     }
 
     @Test
     public void testUserChanged() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = User.userChanged(user1, "USERNAME", "EMAIL");
         assertFalse(user1.equals(user2));
         user1.setUserName("USERNAME");
@@ -95,7 +107,6 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
 
     @Test
     public void testEquals() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE,DESCRIPTION);
         User user2 = new User(user1);
         assertTrue(user1.equals(user2));
         assertFalse(user1.equals(null));
@@ -104,15 +115,13 @@ private static final String USERNAME = "Bob", ID = "1234", EMAIL = "Google", PHO
 
     @Test
     public void sameAccount() {
-        User user1 = new User(USERNAME, ID, EMAIL, PHOTO);
         User user2 = new User("hello", ID, "taupe@poulpe.com", "PHOTO");
         assertTrue(user1.sameAccount(user2));
     }
 
     @Test
     public void sameInformations() {
-        User user1 = new User(USERNAME, "67890", EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
-        User user2 = new User(USERNAME, "12345", EMAIL, PHOTO, PREFERENCE, DESCRIPTION);
+        User user2 = new User(USERNAME, "12345", EMAIL, PHOTO, PREFERENCE, DESCRIPTION, POINTS);
         assertTrue(user1.sameInformation(user2));
     }
 

@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.mockito.Mockito;
 
+import ch.epfl.sweng.swenggolf.profile.User;
+
 
 public class TestHelper {
 
