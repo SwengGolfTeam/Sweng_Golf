@@ -5,6 +5,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
@@ -13,7 +17,6 @@ public class Offer implements Parcelable {
     public static final int TITLE_MAX_LENGTH = 100;
     public static final int DESCRIPTION_MIN_LENGTH = 1;
     public static final int DESCRIPTION_MAX_LENGTH = 1000;
-
 
     private final Category tag;
     private final String userId;
@@ -24,6 +27,9 @@ public class Offer implements Parcelable {
     private double latitude;
     private double longitude;
 
+    private  long creationDate;
+    private  long endDate;
+
     /**
      * Contains the data of an offer.
      *
@@ -33,10 +39,13 @@ public class Offer implements Parcelable {
      * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
      * @param tag         the category of the offer
+     * @param creationDate the creation date in ms
+     * @param endDate   the offers's end date in ms
      * @param location    the location of the creation of the offer
      */
     public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag, Location location) {
+                 String linkPicture, String uuid, Category tag,
+                 long creationDate, long endDate, Location location) {
 
         if (userId.isEmpty()) {
             throw new IllegalArgumentException("UserId of the offer can't be empty.");
@@ -50,6 +59,9 @@ public class Offer implements Parcelable {
         if (tag == null) {
             throw new IllegalArgumentException("Tag must be indicated or use other constructor");
         }
+        if (creationDate > endDate) {
+            throw new IllegalArgumentException("Creation date must be before the end date");
+        }
 
         this.tag = tag;
         this.userId = userId;
@@ -58,6 +70,8 @@ public class Offer implements Parcelable {
                 DESCRIPTION_MAX_LENGTH);
         this.linkPicture = linkPicture;
         this.uuid = uuid;
+        this.creationDate = creationDate;
+        this.endDate = endDate;
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
     }
@@ -73,10 +87,34 @@ public class Offer implements Parcelable {
      * @param tag         the category of the offer
      */
     public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag) {
+                 String linkPicture, String uuid, Category tag, long creationDate, long endDate) {
 
-        this(userId, title, description, linkPicture, uuid, tag, new Location("default"));
+        this(userId, title, description, linkPicture, uuid, tag,
+                creationDate,
+                endDate,
+                new Location("default"));
+
     }
+
+    /**
+     * Contains the data of an offer.
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture
+     * @param userId      the user id. Should not be empty
+     * @param uuid        offer identifier
+     * @param tag         the category of the offer
+     * @param creationDate the creation date in with Calendar notation
+     * @param endDate   the offers's end date in with Calendar notation
+     */
+    public Offer(String userId, String title, String description,
+                 String linkPicture, String uuid, Category tag,
+                 Calendar creationDate, Calendar endDate) {
+        this(userId,title,description,linkPicture,uuid,tag,
+                creationDate.getTimeInMillis(),
+                endDate.getTimeInMillis());
+    }
+
 
     /**
      * Contains the data of an offer.
@@ -89,7 +127,8 @@ public class Offer implements Parcelable {
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid) {
-        this(userId, title, description, linkPicture, uuid, Category.getDefault());
+        this(userId, title, description, linkPicture, uuid,
+                Category.getDefault(), Calendar.getInstance(), Calendar.getInstance());
     }
 
     /**
@@ -113,6 +152,8 @@ public class Offer implements Parcelable {
         this.linkPicture = "";
         this.uuid = "createdByEmptyConstructor";
         this.tag = Category.getDefault();
+        creationDate = Calendar.getInstance().getTimeInMillis();
+        endDate = Calendar.getInstance().getTimeInMillis();
     }
 
     /**
@@ -127,6 +168,8 @@ public class Offer implements Parcelable {
         linkPicture = that.linkPicture;
         uuid = that.uuid;
         tag = that.tag;
+        creationDate = that.creationDate;
+        endDate = that.endDate;
         latitude = that.latitude;
         longitude = that.longitude;
     }
@@ -213,6 +256,25 @@ public class Offer implements Parcelable {
         return uuid;
     }
 
+
+    /**
+     * Returns the offer's creation date.
+     *
+     * @return the offer's creation date
+     */
+    public long getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * Returns the offer's end date.
+     *
+     * @return the offer's end date
+     */
+    public long getEndDate() {
+        return endDate;
+    }
+
     /**
      * Returns the offer's latitude.
      *
@@ -237,16 +299,24 @@ public class Offer implements Parcelable {
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
+
         Location location = new Location("");
         location.setLatitude(getLatitude());
         location.setLongitude(getLongitude());
         return new Offer(getUserId(), getTitle(), getDescription(), newLinkPicture,
-                getUuid(), getTag(), location);
+                getUuid(), getTag(), getCreationDate(), getEndDate(), location);
     }
 
+    /**
+     * Sets the location of the offer.
+     *
+     * @param latitude the latitude
+     * @param longitude the longitude
+     */
     public void setLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+
     }
 
 
@@ -265,6 +335,8 @@ public class Offer implements Parcelable {
                 this.linkPicture,
                 this.uuid,
                 this.tag.toString(),
+                Long.toString(this.creationDate),
+                Long.toString(this.endDate),
                 Double.toString(this.latitude),
                 Double.toString(this.longitude)});
     }
@@ -280,7 +352,7 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[8];
+        String[] data = new String[10];
 
         in.readStringArray(data);
         this.userId = data[0];
@@ -289,8 +361,18 @@ public class Offer implements Parcelable {
         this.linkPicture = data[3];
         this.uuid = data[4];
         this.tag = Category.valueOf(data[5]);
-        this.latitude = Double.parseDouble(data[6]);
-        this.longitude = Double.parseDouble(data[7]);
+        this.creationDate = Long.parseLong(data[6]);
+        this.endDate = Long.parseLong(data[7]);
+        this.latitude = Double.parseDouble(data[8]);
+        this.longitude = Double.parseDouble(data[9]);
+    }
+
+    /**
+     * Creates the format for the Date.
+     * @return the date format
+     */
+    public static DateFormat dateFormat() {
+        return new SimpleDateFormat("EEEE, dd/MM/yyyy");
     }
 
 }

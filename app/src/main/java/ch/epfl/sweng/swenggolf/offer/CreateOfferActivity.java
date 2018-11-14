@@ -1,5 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -8,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -28,6 +33,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -53,19 +60,23 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
  * The fragment used to create offers. Note that the extras
  * must contain a string with key "username".
  */
-public class CreateOfferActivity extends FragmentConverter {
+public class CreateOfferActivity extends FragmentConverter
+        implements DatePickerDialog.OnDateSetListener {
 
     private TextView errorMessage;
+    private  TextView dateText;
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
     private Uri filePath = null;
+    private long creationDate;
+    private Calendar now = Calendar.getInstance();
+    private long endDate;
     private View inflated;
-
     private Location location = new Location("default");
-
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
+    private final long separation = 86220000L;
 
     private static final boolean ON = true;
     private static final boolean OFF = false;
@@ -88,6 +99,7 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     };
 
+
     private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -102,14 +114,30 @@ public class CreateOfferActivity extends FragmentConverter {
                 container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
+        if (getArguments() != null) {
+            offerToModify = getArguments().getParcelable("offer");
+        } else {
+            offerToModify = null;
+        }
         setupSpinner();
         preFillFields();
+        initializeDates();
         inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
             }
         });
+
+
+        inflated.findViewById(R.id.pick_date).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+            }
+        });
+
         inflated.findViewById(R.id.offer_position_status)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -119,7 +147,23 @@ public class CreateOfferActivity extends FragmentConverter {
                 });
         inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
         inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
+        dateText = inflated.findViewById(R.id.showDate);
+        dateText.setText(Offer.dateFormat().format(endDate));
         return inflated;
+    }
+
+    /**
+     * Initialize the creation and the end date of the offer.
+     */
+    private void initializeDates(){
+        now = new GregorianCalendar(now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH), now.get(Calendar.DATE));
+        if(offerToModify != null){
+            creationDate = offerToModify.getCreationDate();
+            endDate = offerToModify.getCreationDate();
+        }
+        creationDate = now.getTimeInMillis();
+        endDate = now.getTimeInMillis() + separation;
     }
 
     @Override
@@ -145,8 +189,7 @@ public class CreateOfferActivity extends FragmentConverter {
     }
 
     private void preFillFields() {
-        if (getArguments() != null
-                && (offerToModify = getArguments().getParcelable("offer")) != null) {
+        if ((offerToModify) != null) {
 
             EditText title = inflated.findViewById(R.id.offer_name);
             title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
@@ -276,7 +319,8 @@ public class CreateOfferActivity extends FragmentConverter {
         }
 
         final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                link, uuid, tag, location);
+                link, uuid, tag, creationDate, endDate, location);
+
 
         if (filePath == null) {
             writeOffer(newOffer);
@@ -349,6 +393,78 @@ public class CreateOfferActivity extends FragmentConverter {
         }
     }
 
+
+    public static class DatePickerFragment extends DialogFragment {
+
+        private final Calendar calendar;
+
+        @SuppressLint("ValidFragment")
+        public DatePickerFragment(Calendar calendar) {
+            super();
+            this.calendar = calendar;
+        }
+
+        public DatePickerFragment(){
+            this(Calendar.getInstance());
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            Fragment fragment = this.getFragmentManager().getFragments().get(0);
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(this.getActivity(),
+                    (DatePickerDialog.OnDateSetListener) fragment,
+                    year, month, day);
+        }
+    }
+
+
+
+    /**
+     * Set the new date.
+     * @param calendar the corresponding calendar
+     */
+    private void setDate(final Calendar calendar) {
+        this.endDate = calendar.getTimeInMillis() + separation;
+        dateText.setText(Offer.dateFormat().format(calendar.getTime()));
+
+    }
+
+    /**
+     * Retrieve the date of the calendar and change it if it is valid.
+     * @param view The calendar view
+     * @param year the corresponding year
+     * @param month the corresponding month
+     * @param day the corresponding day
+     */
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = new GregorianCalendar(year, month, day);
+        if (cal.before(now)){
+
+            Toast.makeText(CreateOfferActivity.this.getContext(),
+                    getString(R.string.valid_date), Toast.LENGTH_LONG).show();
+        } else {
+            setDate(cal);
+        }
+    }
+
+    /**
+     * Launches the calendar.
+     * @param v the corresponding view
+     */
+    public void showDatePickerDialog(View v) {
+        Calendar endCalendar = Calendar.getInstance();
+        endCalendar.setTimeInMillis(endDate);
+        DialogFragment newFragment = new DatePickerFragment(endCalendar);
+        newFragment.show(this.getFragmentManager(), "DatePicker");
+    }
+
+
     private void attachLocation() {
 
         if (location.getLatitude() != 0.0 || location.getLongitude() != 0.0) {
@@ -383,6 +499,7 @@ public class CreateOfferActivity extends FragmentConverter {
         ImageView check = inflated.findViewById(R.id.offer_position_status);
         Drawable uncheck = getResources().getDrawable(uncheckResource);
         check.setImageDrawable(uncheck);
+
     }
 
 }
