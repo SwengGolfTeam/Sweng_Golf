@@ -34,10 +34,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,7 +66,7 @@ public class CreateOfferActivity extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
     private TextView errorMessage;
-    private  TextView dateText;
+    private TextView dateText;
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
@@ -157,10 +157,10 @@ public class CreateOfferActivity extends FragmentConverter
     /**
      * Initialize the creation and the end date of the offer.
      */
-    private void initializeDates(){
+    private void initializeDates() {
         now = new GregorianCalendar(now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH), now.get(Calendar.DATE));
-        if(offerToModify != null){
+        if (offerToModify != null) {
             creationDate = offerToModify.getCreationDate();
             endDate = offerToModify.getEndDate();
         } else {
@@ -407,7 +407,7 @@ public class CreateOfferActivity extends FragmentConverter
             this.calendar = calendar;
         }
 
-        public DatePickerFragment(){
+        public DatePickerFragment() {
             this(Calendar.getInstance());
         }
 
@@ -437,9 +437,9 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
 
-
     /**
      * Set the new date.
+     *
      * @param calendar the corresponding calendar
      */
     private void setDate(final Calendar calendar) {
@@ -450,15 +450,16 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Retrieve the date of the calendar and change it if it is valid.
-     * @param view The calendar view
-     * @param year the corresponding year
+     *
+     * @param view  The calendar view
+     * @param year  the corresponding year
      * @param month the corresponding month
-     * @param day the corresponding day
+     * @param day   the corresponding day
      */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
-        if (cal.before(now)){
+        if (cal.before(now)) {
 
             Toast.makeText(CreateOfferActivity.this.getContext(),
                     getString(R.string.valid_date), Toast.LENGTH_LONG).show();
@@ -469,6 +470,7 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Launches the calendar.
+     *
      * @param v the corresponding view
      */
     public void showDatePickerDialog(View v) {

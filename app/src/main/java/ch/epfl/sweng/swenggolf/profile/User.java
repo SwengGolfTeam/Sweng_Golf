@@ -269,7 +269,7 @@ public class User implements Parcelable {
      *
      * @param pointType the type of point to add
      */
-    public void addPoints(PointType pointType){
+    public void addPoints(PointType pointType) {
         points += pointType.getValue();
     }
 

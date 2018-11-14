@@ -54,7 +54,7 @@
     <string name="location_show_offer">Location:</string>
     <string name="answer_load_error">The answers of this offer could not be loaded</string>
     <string name="add_answer">Add your answer</string>
-    <string name="username_min_length_1">"The username should have at least "</string>
-    <string name="username_min_length_2">" characters."</string>
+    <string name="username_min_length">The username should have at least %d characters.</string>
     <string name="my_offers">My offers</string>
+    <string name="answer_limit">The answer should be at least %d characters.</string>
 </resources>

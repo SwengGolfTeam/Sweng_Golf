@@ -17,6 +17,7 @@ public enum PointType {
 
     /**
      * Return the value of the PointType.
+     *
      * @return the value
      */
     public int getValue() {
