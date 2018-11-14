@@ -43,6 +43,7 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -359,6 +360,7 @@ public class CreateOfferActivity extends FragmentConverter
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             LENGTH_SHORT).show();
+                    DatabaseUser.addPoints(0 , Config.getUser().getUserId());
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);

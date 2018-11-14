@@ -70,7 +70,8 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
+    public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
+                             @NonNull final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
         ValueEventListener firebaseListener = getListValueListener(listener, c);
         ref.addListenerForSingleValueEvent(firebaseListener);

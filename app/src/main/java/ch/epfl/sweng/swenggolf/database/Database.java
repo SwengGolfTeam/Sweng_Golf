@@ -66,7 +66,8 @@ public abstract class Database {
                                @NonNull CompletionListener listener);
 
     /**
-     * Read a single value in a given path with a given id. It return the value using a listener.
+     * Listen for changes of a single value in a given path with a given id.
+     * It returns the value using a listener.
      *
      * @param path     the path where we want to read the value
      * @param id       the id of the value
