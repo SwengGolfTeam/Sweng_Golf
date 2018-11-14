@@ -273,7 +273,7 @@ public class CreateOfferActivityTest {
     }
 
     private void setDate(int year, int monthOfYear, int dayOfMonth) {
-        onView(withId(R.id.pick_date)).perform(click());
+        onView(withId(R.id.pick_date)).perform(scrollTo(), click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
         onView(withId(android.R.id.button1)).perform(click());
