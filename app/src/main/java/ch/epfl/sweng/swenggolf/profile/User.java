@@ -74,7 +74,8 @@ public class User implements Parcelable {
      * @param photo    user photo
      */
     public User(String username, String userId, String email, String photo) {
-        this(username, userId, email, photo, DEFAULT_PREFERENCE, DEFAULT_DESCRIPTION, DEFAULT_POINTS);
+        this(username, userId, email, photo, DEFAULT_PREFERENCE,
+                DEFAULT_DESCRIPTION, DEFAULT_POINTS);
     }
 
     /**
@@ -107,8 +108,8 @@ public class User implements Parcelable {
             throw new IllegalArgumentException("Invalid arguments for User");
         }
         if (points < 0) {
-            throw new IllegalArgumentException("The number" +
-                    " of points is not valid");
+            throw new IllegalArgumentException("The number"
+                    + " of points is not valid");
         }
         checkUsername(username);
         checkPreference(preference);
