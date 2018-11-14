@@ -1,6 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingRootException;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -76,11 +78,6 @@ public class AnswersTest {
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
-    }
-
-    @Test
-    public void aEmptyTest() {
-
     }
 
     @Test
