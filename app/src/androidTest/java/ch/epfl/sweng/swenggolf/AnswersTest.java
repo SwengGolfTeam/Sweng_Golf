@@ -62,7 +62,7 @@ public class AnswersTest {
         mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
+                        FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
     }
 
@@ -80,12 +80,12 @@ public class AnswersTest {
         Answers answers = new Answers();
     }
 
-    @Test
+    /*@Test
     public void authorOfAnswerIsCorrect() {
         addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
-    }
+    }*/
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
