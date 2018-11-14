@@ -4,21 +4,11 @@ import android.app.Activity;
 
 import org.junit.Test;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 
-import ch.epfl.sweng.swenggolf.database.CompletionListener;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public class FakeStorageTest {
 

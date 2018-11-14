@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -20,6 +21,8 @@ public class Offer implements Parcelable {
     private final String description;
     private final String linkPicture;
     private final String uuid;
+    private double latitude;
+    private double longitude;
 
     /**
      * Contains the data of an offer.
@@ -30,9 +33,10 @@ public class Offer implements Parcelable {
      * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
      * @param tag         the category of the offer
+     * @param location    the location of the creation of the offer
      */
     public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag) {
+                 String linkPicture, String uuid, Category tag, Location location) {
 
         if (userId.isEmpty()) {
             throw new IllegalArgumentException("UserId of the offer can't be empty.");
@@ -54,6 +58,24 @@ public class Offer implements Parcelable {
                 DESCRIPTION_MAX_LENGTH);
         this.linkPicture = linkPicture;
         this.uuid = uuid;
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+    }
+
+    /**
+     * Contains the data of an offer.
+     *
+     * @param title       the title of the offer. Should not be empty
+     * @param description the description of the offer. Should not be empty
+     * @param linkPicture the link of the offer's picture
+     * @param userId      the user id. Should not be empty
+     * @param uuid        offer identifier
+     * @param tag         the category of the offer
+     */
+    public Offer(String userId, String title, String description,
+                 String linkPicture, String uuid, Category tag) {
+
+        this(userId, title, description, linkPicture, uuid, tag, new Location("default"));
     }
 
     /**
@@ -105,6 +127,8 @@ public class Offer implements Parcelable {
         linkPicture = that.linkPicture;
         uuid = that.uuid;
         tag = that.tag;
+        latitude = that.latitude;
+        longitude = that.longitude;
     }
 
     @Override
@@ -117,8 +141,9 @@ public class Offer implements Parcelable {
             boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
             boolean uuidEquality = uuid.equals(other.uuid);
             boolean tagEquality = tag.equals(other.tag);
+            boolean locationEquality = longitude == other.longitude && latitude == other.latitude;
             return userIdEquality && titleEquality && descriptionEquality
-                    && linkPictureEquality && uuidEquality && tagEquality;
+                    && linkPictureEquality && uuidEquality && tagEquality && locationEquality;
         }
         return false;
     }
@@ -189,12 +214,39 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Returns the offer's latitude.
+     *
+     * @return the latitude of the offer
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Returns the offer's longitude.
+     *
+     * @return the longitude of the offer
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
      * Creates a new offer in the database using the new picture's link given.
      *
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
-        return new Offer(userId, title, description, newLinkPicture, uuid, tag);
+        Location location = new Location("");
+        location.setLatitude(getLatitude());
+        location.setLongitude(getLongitude());
+        return new Offer(getUserId(), getTitle(), getDescription(), newLinkPicture,
+                getUuid(), getTag(), location);
+    }
+
+    public void setLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 
@@ -212,7 +264,9 @@ public class Offer implements Parcelable {
                 this.description,
                 this.linkPicture,
                 this.uuid,
-                this.tag.toString()});
+                this.tag.toString(),
+                Double.toString(this.latitude),
+                Double.toString(this.longitude)});
     }
 
     public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
@@ -226,7 +280,7 @@ public class Offer implements Parcelable {
     };
 
     private Offer(Parcel in) {
-        String[] data = new String[6];
+        String[] data = new String[8];
 
         in.readStringArray(data);
         this.userId = data[0];
@@ -235,6 +289,8 @@ public class Offer implements Parcelable {
         this.linkPicture = data[3];
         this.uuid = data[4];
         this.tag = Category.valueOf(data[5]);
+        this.latitude = Double.parseDouble(data[6]);
+        this.longitude = Double.parseDouble(data[7]);
     }
 
 }

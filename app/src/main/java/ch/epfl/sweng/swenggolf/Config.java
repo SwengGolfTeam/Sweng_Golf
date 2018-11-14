@@ -1,11 +1,23 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+
 import com.google.firebase.auth.FirebaseAuth;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
+import static ch.epfl.sweng.swenggolf.Permission.GPS;
+import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
 /**
  * Class Used to know if we are running a test or not.
  */
 public class Config {
+
+    public static final int PERMISSION_FINE_LOCATION = 66;
 
     private Config() {
     }
@@ -103,4 +115,25 @@ public class Config {
         return Config.activityCallback;
     }
 
+    /**
+     * Parses the answer from Android regarding the permission to give a simple output to the
+     * activity.
+     *
+     * @param requestCode  the request code
+     * @param grantResults the results granted
+     * @return which Permission was given
+     */
+    public static Permission onRequestPermissionsResult(int requestCode,
+                                                        @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_FINE_LOCATION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PERMISSION_GRANTED) {
+                    return GPS;
+                }
+                return NONE;
+            default:
+                return NONE;
+        }
+    }
 }
