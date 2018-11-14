@@ -73,8 +73,7 @@ public class ListOfferActivity extends FragmentConverter {
             if (checkedCategories.contains(categoriesEnum[i])) {
                 mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
                         .setCheckable(true).setChecked(true);
-            }
-            else {
+            } else {
                 mOptionsMenu.add(groupId, i, Menu.NONE, categoriesEnum[i].toString())
                         .setCheckable(true).setChecked(false);
             }
@@ -92,7 +91,7 @@ public class ListOfferActivity extends FragmentConverter {
         }
 
         localDb.writeCategories(listCategories);
-        Log.d(LOG_LOCAL_DB, "write "+ listCategories.toString());
+        Log.d(LOG_LOCAL_DB, "write " + listCategories.toString());
         setRecyclerView(getView(), listCategories);
     }
 

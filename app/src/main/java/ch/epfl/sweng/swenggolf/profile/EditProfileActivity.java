@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -101,10 +100,9 @@ public class EditProfileActivity extends FragmentConverter {
         EditText editedDescription = findViewById(R.id.edit_description);
         String description = editedDescription.getText().toString();
         if (name.length() < User.USERNAME_MIN_LENGTH) {
-            editedName.setError(getResources().getString(R.string.username_min_length_1)
-                    + User.USERNAME_MIN_LENGTH + getResources()
-                    .getString(R.string.username_min_length_2)
-            );
+            editedName.setError(getResources()
+                    .getString(R.string.username_min_length, User.USERNAME_MIN_LENGTH));
+
         } else { //update user data
             user.setDescription(description);
             user.setUserName(name);
