@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -160,10 +162,11 @@ public class CreateOfferActivity extends FragmentConverter
                 now.get(Calendar.MONTH), now.get(Calendar.DATE));
         if(offerToModify != null){
             creationDate = offerToModify.getCreationDate();
-            endDate = offerToModify.getCreationDate();
+            endDate = offerToModify.getEndDate();
+        } else {
+            creationDate = now.getTimeInMillis();
+            endDate = now.getTimeInMillis() + separation;
         }
-        creationDate = now.getTimeInMillis();
-        endDate = now.getTimeInMillis() + separation;
     }
 
     @Override
@@ -414,12 +417,23 @@ public class CreateOfferActivity extends FragmentConverter
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            Fragment fragment = this.getFragmentManager().getFragments().get(0);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(this.getActivity(),
-                    (DatePickerDialog.OnDateSetListener) fragment,
+                    (DatePickerDialog.OnDateSetListener) getVisibleFragment(),
                     year, month, day);
         }
+
+        private Fragment getVisibleFragment() {
+            FragmentManager fragmentManager = this.getFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible()) {
+                    return fragment;
+                }
+            }
+            return null;
+        }
+
     }
 
 
