@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -143,13 +144,13 @@ public class FakeDatabaseTest {
     }
 
     @Test
-    public void readListReturnNull() {
+    public void readListReturnEmptyList() {
         Database d = new FakeDatabase(true);
 
         ValueListener<List<String>> listener = new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {
-                assertNull(value);
+                assertTrue(value.isEmpty());
             }
 
             @Override

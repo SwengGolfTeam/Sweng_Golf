@@ -98,7 +98,7 @@ public class FakeDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c, AttributeOrdering ordering) {
-        if(working) {
+        if (working) {
             List<T> list = getList(path);
             final Field field;
             try {
@@ -107,33 +107,37 @@ public class FakeDatabase extends Database {
                 throw new IllegalArgumentException("The attribute does not exist");
             }
             field.setAccessible(true);
-            Comparator<T> comparator = new Comparator<T>() {
-                @Override
-                public int compare(T o1, T o2) {
-                    Object attribute1;
-                    Object attribute2;
-                    try {
-                        attribute1 = field.get(o1);
-                        attribute2 = field.get(o2);
-                    } catch (IllegalAccessException e) {
-                        throw new IllegalArgumentException("Can't access the attribute");
-                    }
-                    if(attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
-                        return ((Comparable) attribute1).compareTo(attribute2);
-                    }
-                    throw new RuntimeException("The attribute is not comparable");
-                }
-            };
+            Comparator<T> comparator = getComparator(field);
             Collections.sort(list, comparator);
-            if(ordering.isDescending()){
+            if (ordering.isDescending()) {
                 Collections.reverse(list);
             }
             int minSize = Math.min(ordering.getNumberOfElements(), list.size());
             listener.onDataChange(list.subList(0, minSize));
-        }
-        else {
+        } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    @NonNull
+    private <T> Comparator<T> getComparator(final Field field) {
+        return new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                Object attribute1;
+                Object attribute2;
+                try {
+                    attribute1 = field.get(o1);
+                    attribute2 = field.get(o2);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalArgumentException("Can't access the attribute");
+                }
+                if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
+                    return ((Comparable) attribute1).compareTo(attribute2);
+                }
+                throw new IllegalArgumentException("The attribute is not comparable");
+            }
+        };
     }
 
     private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
@@ -206,7 +210,7 @@ public class FakeDatabase extends Database {
                 list.add((T) entry.getValue());
             }
         }
-        return list.isEmpty() ? null : list;
+        return list;
     }
 
     /**

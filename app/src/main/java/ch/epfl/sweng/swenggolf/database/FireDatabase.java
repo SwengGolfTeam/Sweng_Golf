@@ -91,13 +91,12 @@ public final class FireDatabase extends Database {
                              @NonNull final Class<T> c, AttributeOrdering ordering) {
         final DatabaseReference ref = database.getReference(path);
         Query query = ref.orderByChild(ordering.getAttribute());
-        if(ordering.isAscending()) {
+        if (ordering.isAscending()) {
             query = query.limitToFirst(ordering.getNumberOfElements());
-        }
-        else {
+        } else {
             query = query.limitToLast(ordering.getNumberOfElements());
         }
-        readListQuery(listener,query,c, ordering.isDescending());
+        readListQuery(listener, query, c, ordering.isDescending());
     }
 
     @NonNull
@@ -168,7 +167,7 @@ public final class FireDatabase extends Database {
                         list.add(offer.getValue(c));
                     }
                 }
-                if(reverserOrder) {
+                if (reverserOrder) {
                     Collections.reverse(list);
                 }
                 listener.onDataChange(list); // when no data was found -> return empty list
