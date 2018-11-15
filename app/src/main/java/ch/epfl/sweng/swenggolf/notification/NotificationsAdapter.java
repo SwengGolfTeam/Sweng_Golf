@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.notification;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -55,17 +56,47 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         TextView text = notificationViewHolder.getNotificationText();
         ImageView icon = notificationViewHolder.getNotificationIcon();
+        Context context = text.getContext();
         String message;
+        int imageResource;
         switch (notification.getType()) {
             // TODO all cases and get the correct string from R.string + display the correct icon
+            case ANSWER_CHOSEN:
+                message = context.getString(R.string.notif_answer_chosen,
+                        notification.getConcernedUserName(),
+                        notification.getConcernedOfferName());
+                imageResource = R.drawable.ic_favorite_black_24dp;
+                break;
+            case ANSWER_POSTED:
+                message = context.getString(R.string.notif_answer_posted,
+                        notification.getConcernedUserName(),
+                        notification.getConcernedOfferName());
+                imageResource = R.drawable.ic_comment_black_24dp;
+                break;
+            case FOLLOW:
+                message = context.getString(R.string.notif_follow,
+                        notification.getConcernedUserName());
+                imageResource = R.drawable.ic_star_black_24dp;
+                break;
+            case POINTS_GAINED:
+                // TODO
+                message = "";
+                imageResource = 0;
+                break;
+            default: // should never happen? -> throw an exception?
+                message = "";
+                imageResource = 0;
         }
+        text.setText(message);
+        icon.setImageResource(imageResource);
+
 
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return notifications.size();
     }
 
 

@@ -27,5 +27,12 @@
             android:icon="@android:drawable/btn_star"
             android:title="@string/following"
             android:onClick="loadPreferenceListActivity" />
+
+        <item
+            android:id="@+id/notification_activity"
+            android:icon="@drawable/ic_notifications_active_black_24dp"
+            android:title="@string/notifications"
+            android:onClick="loadNotificationsActivity"
+            />
     </group>
 </menu>

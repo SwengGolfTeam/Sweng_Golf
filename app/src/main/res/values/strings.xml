@@ -57,5 +57,8 @@
     <string name="username_min_length_1">"The username should have at least "</string>
     <string name="username_min_length_2">" characters."</string>
     <string name="my_offers">My offers</string>
-    <string name="nofifications">Notifications</string>
+    <string name="notifications">Notifications</string>
+    <string name="notif_answer_chosen">%s has accepted your answer on offer \"%s\"</string>
+    <string name="notif_follow">%s is now following you</string>
+    <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
 </resources>
