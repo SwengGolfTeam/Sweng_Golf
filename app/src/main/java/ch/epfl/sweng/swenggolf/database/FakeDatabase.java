@@ -99,24 +99,30 @@ public class FakeDatabase extends Database {
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c, AttributeOrdering ordering) {
         if (working) {
-            List<T> list = getList(path);
-            final Field field;
-            try {
-                field = c.getDeclaredField(ordering.getAttribute());
-            } catch (NoSuchFieldException e) {
-                throw new IllegalArgumentException("The attribute does not exist");
-            }
-            field.setAccessible(true);
-            Comparator<T> comparator = getComparator(field);
-            Collections.sort(list, comparator);
-            if (ordering.isDescending()) {
-                Collections.reverse(list);
-            }
-            int minSize = Math.min(ordering.getNumberOfElements(), list.size());
-            listener.onDataChange(list.subList(0, minSize));
+            List<T> unsortedList = getList(path);
+            List<T> list = sortList(c, ordering, unsortedList);
+            listener.onDataChange(list);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    @NonNull
+    private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering, List<T> unsortedList) {
+        final Field field;
+        try {
+            field = c.getDeclaredField(ordering.getAttribute());
+        } catch (NoSuchFieldException e) {
+            throw new IllegalArgumentException("The attribute does not exist");
+        }
+        field.setAccessible(true);
+        Comparator<T> comparator = getComparator(field);
+        Collections.sort(unsortedList, comparator);
+        if (ordering.isDescending()) {
+            Collections.reverse(unsortedList);
+        }
+        int minSize = Math.min(ordering.getNumberOfElements(), unsortedList.size());
+        return unsortedList.subList(0, minSize);
     }
 
     @NonNull
