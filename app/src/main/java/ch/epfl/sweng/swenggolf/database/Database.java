@@ -103,6 +103,9 @@ public abstract class Database {
                                       @NonNull ValueListener<List<T>> listener,
                                       @NonNull Class<T> c, AttributeFilter filter);
 
+    public abstract <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                                      @NonNull Class<T> c, AttributeOrdering ordering);
+
     /**
      * Remove the value in path with the given id.
      *
@@ -130,7 +133,6 @@ public abstract class Database {
      * @param listener the onDataChange method will be called if we find the value. Otherwise, the
      *                 onCancelled method will be called
      */
-
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
     }

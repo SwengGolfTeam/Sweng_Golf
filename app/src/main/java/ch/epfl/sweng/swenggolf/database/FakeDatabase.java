@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +91,47 @@ public class FakeDatabase extends Database {
             List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), list);
             listener.onDataChange(newList);
         } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
+    }
+
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                             @NonNull Class<T> c, AttributeOrdering ordering) {
+        if(working) {
+            List<T> list = getList(path);
+            final Field field;
+            try {
+                field = c.getDeclaredField(ordering.getAttribute());
+            } catch (NoSuchFieldException e) {
+                throw new IllegalArgumentException("The attribute does not exist");
+            }
+            field.setAccessible(true);
+            Comparator<T> comparator = new Comparator<T>() {
+                @Override
+                public int compare(T o1, T o2) {
+                    Object attribute1;
+                    Object attribute2;
+                    try {
+                        attribute1 = field.get(o1);
+                        attribute2 = field.get(o2);
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalArgumentException("Can't access the attribute");
+                    }
+                    if(attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
+                        return ((Comparable) attribute1).compareTo(attribute2);
+                    }
+                    throw new RuntimeException("The attribute is not comparable");
+                }
+            };
+            Collections.sort(list, comparator);
+            if(ordering.isDescending()){
+                Collections.reverse(list);
+            }
+            int minSize = Math.min(ordering.getNumberOfElements(), list.size());
+            listener.onDataChange(list.subList(0, minSize));
+        }
+        else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
