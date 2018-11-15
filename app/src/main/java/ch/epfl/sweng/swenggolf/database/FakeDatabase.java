@@ -108,7 +108,8 @@ public class FakeDatabase extends Database {
     }
 
     @NonNull
-    private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering, List<T> unsortedList) {
+    private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
+                                 List<T> unsortedList) {
         final Field field;
         try {
             field = c.getDeclaredField(ordering.getAttribute());
