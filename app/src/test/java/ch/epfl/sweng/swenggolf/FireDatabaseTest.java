@@ -269,29 +269,7 @@ public class FireDatabaseTest {
         when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
         when(tagQuery.limitToLast(anyInt())).thenReturn(idQuery);
         when(tagQuery.limitToFirst(anyInt())).thenReturn(idQuery);
-
-       /* Answer<Void> queryListener = new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) {
-                ValueEventListener valueEventListener = invocation.getArgument(0);
-
-                DataSnapshot dataSnapshot = mock(DataSnapshot.class);
-                when(dataSnapshot.exists()).thenReturn(true);
-                DataSnapshot offer = mock(DataSnapshot.class);
-                List<DataSnapshot> offerList = Arrays.asList(offer);
-                when(dataSnapshot.getChildren()).thenReturn(offerList);
-                Offer offerInd = mock(Offer.class);
-                when(offer.getValue(any(Class.class))).thenReturn(offerInd);
-
-                DatabaseError databaseError = mock(DatabaseError.class);
-                when(databaseError.getCode()).thenReturn(DatabaseError.UNKNOWN_ERROR);
-
-                valueEventListener.onDataChange(dataSnapshot);
-                valueEventListener.onCancelled(databaseError);
-
-                return null;
-            }
-        }; */
+        
         Answer<Void> queryListener = setUpListDataSnapshot();
         doAnswer(queryListener).when(idQuery)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));
