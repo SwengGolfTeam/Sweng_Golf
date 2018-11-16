@@ -162,10 +162,17 @@ public class FakeDatabaseTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void readListThrowExceptionOnInvalidAttribute() {
+    public void readListWithFilteringThrowExceptionOnInvalidAttribute() {
         FakeDatabase database = new FakeDatabase(true);
         database.readList(PATH, null, Offer.class,
                 new AttributeFilter("invalid attribute", "random"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void readListWithOrderingThrowExceptionOnInvalidAttribute() {
+        FakeDatabase database = new FakeDatabase(true);
+        database.readList(PATH, null, Offer.class,
+                AttributeOrdering.ascendingOrdering("invalid attribute", 1));
     }
 
     private void writeListenerError(boolean working, DbError error) {
