@@ -160,7 +160,10 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         writeFavPos(pos);
-                        NotificationManager.addPendingNotification(answer.getUserId(), new Notification(NotificationType.ANSWER_CHOSEN, offer.getTitle()));
+                        NotificationManager.addPendingNotification(
+                                answer.getUserId(),
+                                new Notification(NotificationType.ANSWER_CHOSEN,
+                                        Config.getUser().getUserId(), offer.getTitle()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

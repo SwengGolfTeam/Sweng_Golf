@@ -6,6 +6,8 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 
 public final class NotificationManager {
 
+    private NotificationManager() {}
+
     public static void addPendingNotification(String destinatorId, Notification notification) {
         // TODO add a listener ?
         Database db = Database.getInstance();

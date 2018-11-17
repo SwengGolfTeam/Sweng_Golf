@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.notification;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,16 @@ import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> {
     private List<Notification> notifications;
 
-    public static class NotificationViewHolder extends ThreeFieldsViewHolder {
+    public static class NotificationViewHolder extends ThreeFieldsViewHolder implements View.OnClickListener{
 
         public NotificationViewHolder(@NonNull View itemView, int notificationTextId, int notificationIconId, int crossId) {
             super(itemView, notificationTextId, notificationIconId, crossId);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.wtf("NOTIF", "seems to work");
         }
     }
 

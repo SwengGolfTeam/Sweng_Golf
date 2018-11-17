@@ -168,7 +168,8 @@ public class ProfileActivity extends FragmentConverter {
                     button.setIcon(STAR_ON);
                     isFollowing = true;
                     NotificationManager.addPendingNotification(user.getUserId(),
-                            new Notification(NotificationType.FOLLOW, null));
+                            new Notification(NotificationType.FOLLOW,
+                                    Config.getUser().getUserId(), null));
                     Toast.makeText(ProfileActivity.this.getContext(), getResources()
                                     .getString(R.string.now_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)

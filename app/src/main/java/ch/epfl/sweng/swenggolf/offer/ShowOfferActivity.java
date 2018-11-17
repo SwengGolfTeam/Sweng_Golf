@@ -286,7 +286,8 @@ public class ShowOfferActivity extends FragmentConverter {
             imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
             mLayout.removeView(newReaction);
             NotificationManager.addPendingNotification(offer.getUserId(),
-                    new Notification(NotificationType.ANSWER_POSTED, offer.getTitle()));
+                    new Notification(NotificationType.ANSWER_POSTED,
+                            Config.getUser().getUserId(), offer.getTitle()));
             mAdapter.notifyDataSetChanged();
 
         }

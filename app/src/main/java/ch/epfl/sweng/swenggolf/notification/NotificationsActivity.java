@@ -19,11 +19,14 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.ListOfferTouchListener;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
+    private List<Notification> notifications;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -50,14 +53,7 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // TODO put this as an attribute but which modifiers (private, final etc) ?
-        List<Notification> notifications = new ArrayList<>();
-
-        // TODO sample test
-        /*String offerName = "Could you please give this man a cookie?";
-        notifications.add(new Notification(NotificationType.ANSWER_CHOSEN, offerName));
-        notifications.add(new Notification(NotificationType.ANSWER_POSTED, offerName));
-        notifications.add(new Notification(NotificationType.FOLLOW, null));*/
+        notifications = new ArrayList<>();
 
         fetchNotifications();
 
@@ -68,6 +64,8 @@ public class NotificationsActivity extends FragmentConverter {
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mAdapter = new NotificationsAdapter(notifications);
         mRecyclerView.setAdapter(mAdapter);
+
+        //mRecyclerView.addOnItemTouchListener(new ListOfferTouchListener(getContext(), mRecyclerView, getClickListener()));
 
     }
 
@@ -90,6 +88,54 @@ public class NotificationsActivity extends FragmentConverter {
                 .readList(NotificationManager.getNotificationPath(
                         currentUser.getUserId()), listener, Notification.class);
 
+    }
+
+    private ListOfferTouchListener.OnItemClickListener getClickListener() {
+        return new ListOfferTouchListener.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                Notification notification = notifications.get(position);
+                if(notification.getConcernedOfferName() != null) {
+                    ValueListener<Offer> offerValueListener = new ValueListener<Offer>() {
+                        @Override
+                        public void onDataChange(Offer value) {
+                            if (value != null) {
+                                replaceCentralFragment(createShowOfferWithOffer(value));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DbError error) {
+                            // TODO do what ?!
+                        }
+                    };
+                    Database.getInstance().read(Database.OFFERS_PATH,
+                            notification.getConcernedOfferName(), offerValueListener, Offer.class);
+                } else if (notification.getConcernedUserId() != null) {
+                    ValueListener<User> userValueListener = new ValueListener<User>() {
+                        @Override
+                        public void onDataChange(User value) {
+                            if (value != null) {
+                                replaceCentralFragment(createShowProfileWithProfile(value));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DbError error) {
+                            // TODO do what ?!
+                        }
+                    };
+                    Database.getInstance().read(Database.USERS_PATH,
+                            notification.getConcernedUserId(), userValueListener, User.class);
+                }
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+                // not necessary
+            }
+        };
     }
 
 }
