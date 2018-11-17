@@ -10,6 +10,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -118,7 +119,20 @@ public final class FireDatabase extends Database {
                              @NonNull final Class<T> c, AttributeFilter filter) {
         final DatabaseReference ref = database.getReference(path);
         Query query = ref.orderByChild(filter.getAttribute()).equalTo(filter.getValue());
-        readListQuery(listener, query, c);
+        readListQuery(listener, query, c, false);
+    }
+
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
+                             @NonNull final Class<T> c, AttributeOrdering ordering) {
+        final DatabaseReference ref = database.getReference(path);
+        Query query = ref.orderByChild(ordering.getAttribute());
+        if (ordering.isAscending()) {
+            query = query.limitToFirst(ordering.getNumberOfElements());
+        } else {
+            query = query.limitToLast(ordering.getNumberOfElements());
+        }
+        readListQuery(listener, query, c, ordering.isDescending());
     }
 
     @Override
@@ -138,12 +152,12 @@ public final class FireDatabase extends Database {
         }
         for (int i = 0; i < categories.size(); ++i) {
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
-            readListQuery(listener, query, Offer.class);
+            readListQuery(listener, query, Offer.class, false);
         }
     }
 
     private <T> void readListQuery(@NonNull final ValueListener<List<T>> listener, Query query,
-                                   final Class<T> c) {
+                                   final Class<T> c, final boolean reverserOrder) {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -152,6 +166,9 @@ public final class FireDatabase extends Database {
                     for (DataSnapshot offer : dataSnapshot.getChildren()) {
                         list.add(offer.getValue(c));
                     }
+                }
+                if (reverserOrder) {
+                    Collections.reverse(list);
                 }
                 listener.onDataChange(list); // when no data was found -> return empty list
             }
