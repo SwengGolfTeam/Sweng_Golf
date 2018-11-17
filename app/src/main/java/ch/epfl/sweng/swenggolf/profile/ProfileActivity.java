@@ -22,6 +22,9 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
@@ -164,6 +167,8 @@ public class ProfileActivity extends FragmentConverter {
                 if (error == NONE) {
                     button.setIcon(STAR_ON);
                     isFollowing = true;
+                    NotificationManager.addPendingNotification(user.getUserId(),
+                            new Notification(NotificationType.FOLLOW, null));
                     Toast.makeText(ProfileActivity.this.getContext(), getResources()
                                     .getString(R.string.now_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)
