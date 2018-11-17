@@ -18,12 +18,16 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
+
+import static ch.epfl.sweng.swenggolf.profile.PointType.*;
 
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
     private Answers answers;
@@ -156,6 +160,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setMessage("Do you want to accept this answer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        int previousFavorite = answers.getFavoritePos();
                         writeFavPos(pos);
                     }
                 })
@@ -185,9 +190,23 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         return builder.create();
     }
 
-    private void writeFavPos(int pos) {
+    private void writeFavPos(final int pos) {
+        final int previousFavorite = answers.getFavoritePos();
         answers.setFavoritePos(pos);
-        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers,
+                new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                if(previousFavorite != -1) {
+                    DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
+                            answers.getAnswerList().get(previousFavorite).getUserId());
+                }
+                if(pos != -1) {
+                    DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
+                            answers.getAnswerList().get(pos).getUserId());
+                }
+            }
+        });
         notifyDataSetChanged();
     }
 

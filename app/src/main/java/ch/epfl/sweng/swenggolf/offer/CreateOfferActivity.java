@@ -48,6 +48,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -56,6 +57,9 @@ import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_PICTURE;
+import static ch.epfl.sweng.swenggolf.profile.PointType.POST_OFFER;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
@@ -363,7 +367,7 @@ public class CreateOfferActivity extends FragmentConverter
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             LENGTH_SHORT).show();
-                    DatabaseUser.addPoints(0 , Config.getUser().getUserId());
+                    updateUserScore(offerToModify, offer, Config.getUser().getUserId());
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
@@ -373,6 +377,16 @@ public class CreateOfferActivity extends FragmentConverter
 
         };
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+    }
+
+    private void updateUserScore(Offer offerToModify, Offer offer, String userId) {
+        int scoreToAdd = 0;
+        if(offerToModify == null) {
+            scoreToAdd += offer.offerValue();
+        } else {
+            scoreToAdd += offerToModify.offerValueDiff(offer);
+        }
+        DatabaseUser.addPointsToCurrentUser(scoreToAdd);
     }
 
     @Override
@@ -447,7 +461,6 @@ public class CreateOfferActivity extends FragmentConverter
     private void setDate(final Calendar calendar) {
         this.endDate = calendar.getTimeInMillis() + separation;
         dateText.setText(Offer.dateFormat().format(calendar.getTime()));
-
     }
 
     /**

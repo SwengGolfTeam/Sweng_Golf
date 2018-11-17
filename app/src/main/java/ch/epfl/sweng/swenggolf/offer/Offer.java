@@ -9,6 +9,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import ch.epfl.sweng.swenggolf.profile.PointType;
+
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_PICTURE;
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
@@ -47,14 +51,18 @@ public class Offer implements Parcelable {
                  String linkPicture, String uuid, Category tag,
                  long creationDate, long endDate, Location location) {
 
-        if (userId.isEmpty()) {
+        if (userId == null || userId.isEmpty()) {
             throw new IllegalArgumentException("UserId of the offer can't be empty.");
         }
-        if (title.isEmpty()) {
+        if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Name of the offer can't be empty.");
         }
-        if (description.isEmpty()) {
+        if (description == null || description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
+        }
+        if(linkPicture == null) {
+            throw new IllegalArgumentException("PictureLink cannot be null."
+                    + " For absence of picture use empty.");
         }
         if (tag == null) {
             throw new IllegalArgumentException("Tag must be indicated or use other constructor");
@@ -375,6 +383,49 @@ public class Offer implements Parcelable {
      */
     public static DateFormat dateFormat() {
         return new SimpleDateFormat("EEEE, dd/MM/yyyy");
+    }
+
+    /**
+     * The points yielded by the offer creation.
+     *
+     * @return the score of the offer
+     */
+    public int offerValue() {
+        int value = PointType.POST_OFFER.getValue();
+        if(!linkPicture.isEmpty()) {
+            value += PointType.ADD_PICTURE.getValue();
+        }
+        if(latitude != 0 || longitude != 0) {
+            value += PointType.ADD_LOCALISATION.getValue();
+        }
+        return value;
+    }
+
+    /**
+     * The difference in points yielded by the modification of this offer to another offer.
+     *
+     * @param modifiedOffer the result of this offer being modified
+     * @return the points difference
+     */
+    public int offerValueDiff(Offer modifiedOffer) {
+        int diffValue = 0;
+        if(this.linkPicture.isEmpty() &&
+                !modifiedOffer.linkPicture.isEmpty()) {
+            diffValue += ADD_PICTURE.getValue();
+        }
+        if(this.latitude == 0 && this.longitude == 0 &&
+                (modifiedOffer.latitude != 0 || modifiedOffer.longitude != 0)) {
+            diffValue += ADD_LOCALISATION.getValue();
+        }
+        if(this.linkPicture.isEmpty() &&
+                !modifiedOffer.linkPicture.isEmpty()) {
+            diffValue -= ADD_PICTURE.getValue();
+        }
+        if(this.latitude == 0 && this.longitude == 0 &&
+                (modifiedOffer.latitude != 0 || modifiedOffer.longitude != 0)) {
+            diffValue -= ADD_LOCALISATION.getValue();
+        }
+        return diffValue;
     }
 
 }

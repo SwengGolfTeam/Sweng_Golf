@@ -20,11 +20,13 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
+import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
 
 public class ProfileActivity extends FragmentConverter {
     private User user;
@@ -71,6 +73,7 @@ public class ProfileActivity extends FragmentConverter {
             public void onDataChange(String value) {
                 if (value != null) {
                     setStar(true);
+
                 } else {
                     setStar(false);
                 }
@@ -149,6 +152,7 @@ public class ProfileActivity extends FragmentConverter {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
+                    DatabaseUser.addPointsToUser(-FOLLOW.getValue(), user);
                     setStar(false);
                 }
             }
@@ -162,6 +166,7 @@ public class ProfileActivity extends FragmentConverter {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
+                    DatabaseUser.addPointsToUser(FOLLOW.getValue(), user);
                     button.setIcon(STAR_ON);
                     isFollowing = true;
                     Toast.makeText(ProfileActivity.this.getContext(), getResources()
