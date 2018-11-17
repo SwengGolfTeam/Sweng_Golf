@@ -1,15 +1,8 @@
 package ch.epfl.sweng.swenggolf.notification;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.profile.User;
 
 public final class NotificationManager {
 
@@ -20,7 +13,14 @@ public final class NotificationManager {
     }
 
     public static void removePendingNotification(String destinatorId, String notificationId) {
-        // TODO how can we keep track of the notification Id ???
+        Database db = Database.getInstance();
+        CompletionListener listener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                // TODO do what ??
+            }
+        };
+        db.remove(getNotificationPath(destinatorId), notificationId, listener);
     }
 
     public static String getNotificationPath(String userId) {

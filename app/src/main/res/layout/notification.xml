@@ -4,23 +4,34 @@
     android:layout_height="@dimen/notif_height"
     android:paddingBottom="@dimen/row_padding_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingRight="10dp"
     android:paddingTop="@dimen/row_padding_vertical">
 
     <ImageView
         android:id="@+id/notification_icon"
         android:layout_width="@dimen/notif_icon_size"
         android:layout_height="@dimen/notif_icon_size"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/notification_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@android:string/untitled"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_toEndOf="@id/notification_icon"
         android:layout_toRightOf="@id/notification_icon"
-        android:layout_toEndOf="@id/notification_icon"/>
+        android:text="@android:string/untitled" />
+
+    <ImageButton
+        android:id="@+id/clear"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_clear_black_24dp"
+        style="?android:borderlessButtonStyle"/>
 
 </RelativeLayout>

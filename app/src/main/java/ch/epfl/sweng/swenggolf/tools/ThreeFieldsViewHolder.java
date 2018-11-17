@@ -8,7 +8,7 @@ import android.widget.TextView;
 public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
 
     private TextView fieldOne;
-    private TextView fieldTwo;
+    private View fieldTwo;
     private View fieldThree;
     private View container;
 
@@ -31,7 +31,9 @@ public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
         Typeface customFont = Typeface.createFromAsset(itemView.getContext().getAssets(),
                 "fonts/niramit_medium.ttf");
         this.fieldOne.setTypeface(customFont);
-        this.fieldTwo.setTypeface(customFont);
+        if (this.fieldTwo instanceof TextView) {
+            ((TextView) this.fieldTwo).setTypeface(customFont);
+        }
         if (this.fieldThree instanceof TextView) {
             ((TextView) this.fieldThree).setTypeface(customFont);
         }
