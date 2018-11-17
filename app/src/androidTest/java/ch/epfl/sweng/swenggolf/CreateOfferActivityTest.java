@@ -85,6 +85,10 @@ public class CreateOfferActivityTest {
                 .perform(closeSoftKeyboard());
     }
 
+    /**
+     * Fills the field to create an offer in CreateOfferActivity.
+     * The offer created has a title, description, picture, location and date.
+     */
     public static void fillOffer() {
         fillNameAndDescription();
 

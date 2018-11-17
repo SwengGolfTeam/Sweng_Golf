@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import ch.epfl.sweng.swenggolf.profile.PointType;
 
@@ -210,7 +211,7 @@ public class Offer implements Parcelable {
      * @return the date format
      */
     public static DateFormat dateFormat() {
-        return new SimpleDateFormat("EEEE, dd/MM/yyyy");
+        return new SimpleDateFormat("EEEE, dd/MM/yyyy", Locale.US);
     }
 
     @Override

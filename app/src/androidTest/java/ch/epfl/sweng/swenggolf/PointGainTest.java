@@ -40,6 +40,7 @@ import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.database.DatabaseUser.POINTS;
 import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
 import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_PICTURE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
@@ -61,6 +62,9 @@ public class PointGainTest {
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
+    /**
+     * Sets up the database and the location.
+     */
     @Before
     public void setUpDatabase() {
         Storage.setDebugStorage(new FakeStorage(true));
@@ -73,7 +77,7 @@ public class PointGainTest {
 
     private void testUserPoints(final int newPoints, final User user) {
         Database.getInstance().read(Database.USERS_PATH + "/" + user.getUserId(),
-                "score", new ValueListener<Integer>() {
+                POINTS, new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
                         assertThat(user.getPoints(), is(newPoints));

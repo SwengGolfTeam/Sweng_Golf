@@ -7,6 +7,8 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
 public class DatabaseUser {
 
+    public static final String POINTS = "points";
+
     private DatabaseUser() {
     }
 
@@ -23,27 +25,19 @@ public class DatabaseUser {
         Database.getInstance().read(Database.USERS_PATH, userId, listener, User.class);
     }
 
-    public static void addPointsToUserId(int scoreToAdd, String userId) {
-        if (userId.equals(Config.getUser().getUserId())) {
-            addPointsToCurrentUser(scoreToAdd);
-        } else {
-            addPointsToAppropriateUser(scoreToAdd, userId, null);
-        }
-    }
-
     private static void addPointsToAppropriateUser(final int scoredPoints, final String userId,
                                                    final CompletionListener complete) {
-        Database.getInstance().read(Database.USERS_PATH + "/" + userId, "score",
+        Database.getInstance().read(Database.USERS_PATH + "/" + userId, POINTS,
                 new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
                         value = (value == null) ? 0 : value;
                         if (complete == null) {
                             Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                                    "score", value + scoredPoints);
+                                    POINTS, value + scoredPoints);
                         } else {
                             Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                                    "score", value + scoredPoints, complete);
+                                    POINTS, value + scoredPoints, complete);
                         }
                     }
 
@@ -54,6 +48,27 @@ public class DatabaseUser {
                 }, Integer.class);
     }
 
+    /**
+     * Calls the database to update the points of a user according to his ID.
+     *
+     * @param scoreToAdd the points to add to the user current score.
+     * @param userId the ID of the user that has his points increased.
+     */
+    public static void addPointsToUserId(int scoreToAdd, String userId) {
+        if (userId.equals(Config.getUser().getUserId())) {
+            addPointsToCurrentUser(scoreToAdd);
+        } else {
+            addPointsToAppropriateUser(scoreToAdd, userId, null);
+        }
+    }
+
+    /**
+     * Calls the database to update the points of a user according to his object.
+     * Adds the points to the object when the write to the database is completed.
+     *
+     * @param scorePoints the points scored by the user.
+     * @param user the user that has his points increased.
+     */
     public static void addPointsToUser(final int scorePoints, final User user) {
         addPointsToAppropriateUser(scorePoints, user.getUserId(),
                 new CompletionListener() {
