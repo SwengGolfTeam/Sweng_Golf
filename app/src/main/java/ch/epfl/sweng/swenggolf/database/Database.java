@@ -105,6 +105,21 @@ public abstract class Database {
                                       @NonNull Class<T> c, AttributeFilter filter);
 
     /**
+     * Read a list of value in a given path. It return the value using a listener. It only return
+     * values in the order specified in ordering. It also take only the first n values specified
+     * in the ordering.
+     *
+     * @param path     the path where we want to read the value
+     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
+     *                 onCancelled method will be called
+     * @param c        the class of the value
+     * @param ordering the ordering which give information about how we order the data
+     */
+    public abstract <T> void readList(@NonNull String path,
+                                      @NonNull ValueListener<List<T>> listener,
+                                      @NonNull Class<T> c, AttributeOrdering ordering);
+
+    /**
      * Remove the value in path with the given id.
      *
      * @param path     the path where is the value we want to remove
@@ -131,7 +146,6 @@ public abstract class Database {
      * @param listener the onDataChange method will be called if we find the value. Otherwise, the
      *                 onCancelled method will be called
      */
-
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
     }
