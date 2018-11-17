@@ -24,7 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -36,6 +35,7 @@ import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -50,10 +50,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -68,73 +68,15 @@ import static org.hamcrest.core.IsNot.not;
 @RunWith(AndroidJUnit4.class)
 public class CreateOfferActivityTest {
 
+    private static FragmentManager manager;
     private final long beginingTime = 1515625200000L;
     private final long timeDiff = 10L;
-
     @Rule
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
-
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-
-    private static FragmentManager manager;
-
-    /**
-     * Sets up a fake database and a fake storage, enables TestMode and launches activity.
-     */
-    @Before
-    public void setTest() {
-        ListOfferActivityTest.setUpFakeDatabase();
-        Storage.setDebugStorage(new FakeStorage(true));
-        AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
-        Config.goToTest();
-        intentsTestRule.launchActivity(new Intent());
-        manager = intentsTestRule.getActivity().getSupportFragmentManager();
-    }
-
-    private void goToCreateOffer(boolean hasOffer) {
-        FragmentTransaction transaction = manager.beginTransaction();
-        CreateOfferActivity fragment = new CreateOfferActivity();
-        if (hasOffer) {
-            Bundle bundle = new Bundle();
-
-            Offer offer = new Offer(Config.getUser().getUserId(),"20",
-                    "20", "20", "20",Category.FOOD,beginingTime,
-                    beginingTime+ timeDiff);
-
-            bundle.putParcelable("offer", offer);
-            fragment.setArguments(bundle);
-            Database.getInstance().write("/offers", offer.getUuid(), offer);
-        }
-        transaction.replace(R.id.centralFragment, fragment).commit();
-        try {
-            sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*@Test
-    public void canCreateSimpleOffer() {
-        goToCreateOffer(false);
-        fillNameAndDescription();
-        onView(withId(R.id.button)).perform(scrollTo(), click());
-    }*/
-
-    @Test
-    public void errorMessageDisplayed() {
-        goToCreateOffer(false);
-        onView(withId(R.id.button)).perform(scrollTo(), click());
-        onView(withId(R.id.error_message));
-        onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(scrollTo(), click());
-        onView(withId(R.id.error_message))
-
-                .check(matches(withText(R.string.error_create_offer_invalid)));
-    }
 
     private static void fillNameAndDescription() {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
@@ -161,6 +103,60 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
 
         onView(withId(R.id.button)).perform(scrollTo(), click());
+    }
+
+    /*@Test
+    public void canCreateSimpleOffer() {
+        goToCreateOffer(false);
+        fillNameAndDescription();
+        onView(withId(R.id.button)).perform(scrollTo(), click());
+    }*/
+
+    /**
+     * Sets up a fake database and a fake storage, enables TestMode and launches activity.
+     */
+    @Before
+    public void setTest() {
+        ListOfferActivityTest.setUpFakeDatabase();
+        Storage.setDebugStorage(new FakeStorage(true));
+        AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
+        Config.goToTest();
+        intentsTestRule.launchActivity(new Intent());
+        manager = intentsTestRule.getActivity().getSupportFragmentManager();
+    }
+
+    private void goToCreateOffer(boolean hasOffer) {
+        FragmentTransaction transaction = manager.beginTransaction();
+        CreateOfferActivity fragment = new CreateOfferActivity();
+        if (hasOffer) {
+            Bundle bundle = new Bundle();
+
+            Offer offer = new Offer(Config.getUser().getUserId(), "20",
+                    "20", "20", "20", Category.FOOD, beginingTime,
+                    beginingTime + timeDiff);
+
+            bundle.putParcelable("offer", offer);
+            fragment.setArguments(bundle);
+            Database.getInstance().write("/offers", offer.getUuid(), offer);
+        }
+        transaction.replace(R.id.centralFragment, fragment).commit();
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void errorMessageDisplayed() {
+        goToCreateOffer(false);
+        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.error_message));
+        onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.error_message))
+
+                .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -283,14 +279,14 @@ public class CreateOfferActivityTest {
     @Test
     public void dateTest() {
         goToCreateOffer(false);
-        setDate( 2020, 1, 1);
+        setDate(2020, 1, 1);
         onView(withId(R.id.showDate)).check(matches(withText("Wednesday, 01/01/2020")));
     }
 
     @Test
     public void unvalidDateTest() {
         goToCreateOffer(false);
-        setDate( 2000, 1, 1);
+        setDate(2000, 1, 1);
 
     }
 

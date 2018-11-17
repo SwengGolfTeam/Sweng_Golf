@@ -8,6 +8,6 @@ public interface ActivityCallback {
     /**
      * Notify that the operation is done.
      */
-    public void isDone();
+    void isDone();
 
 }

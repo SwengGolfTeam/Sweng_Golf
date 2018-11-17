@@ -36,9 +36,9 @@ import static org.mockito.Mockito.when;
 
 public class FireDatabaseTest {
 
+    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final String PATH = "path";
     private static final String ID = "id";
-    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final List<String> LIST = Arrays.asList("a", "b", "c", "d", "e");
 
     @Test

@@ -4,13 +4,13 @@
     android:id="@+id/menu_header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
-    android:orientation="vertical"
-    android:paddingBottom="20dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="60dp"
     android:background="@drawable/background_menu"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="60dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp">
 
     <FrameLayout
         android:layout_width="@dimen/user_picture_small_diameter"
@@ -39,9 +39,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:text="@string/username"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/white" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/usermail"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:text="@string/userMail"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
-        android:textStyle="italic"
-        android:textColor="@android:color/white" />
+        android:textStyle="italic" />
 </LinearLayout>

@@ -20,6 +20,9 @@ public abstract class Database {
 
     private static Database database = null;
 
+    protected Database() {
+    }
+
     /**
      * Use the given database as the return of the getInstance() method.
      *
@@ -39,9 +42,6 @@ public abstract class Database {
             database = new FireDatabase();
         }
         return database;
-    }
-
-    protected Database() {
     }
 
     /**

@@ -34,8 +34,8 @@ public class DatabaseTest {
     public void getInstanceAndSetDebugDatabaseNoException() {
         Database db = new FakeDatabase(true);
 
-        db.setDebugDatabase(db);
-        db.getInstance();
+        Database.setDebugDatabase(db);
+        Database.getInstance();
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DatabaseTest {
         CompletionListener listener = new CompletionListener() {
             @Override
             public void onComplete(DbError error) {
-                assertThat(error, is(not(DbError.NONE.NONE)));
+                assertThat(error, is(not(DbError.NONE)));
             }
         };
         database.remove(PATH, ID, listener);

@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginLeft="16dp">
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp">
 
     <LinearLayout
         android:id="@+id/user_info"
@@ -38,8 +38,8 @@
         android:id="@+id/post_button"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:text="@string/post"
+        android:layout_marginTop="16dp"
         android:layout_toRightOf="@id/your_answer_description"
-        android:layout_marginTop="16dp" />
+        android:text="@string/post" />
 
 </RelativeLayout>

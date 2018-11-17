@@ -21,36 +21,6 @@ import ch.epfl.sweng.swenggolf.profile.User;
 
 public abstract class FragmentConverter extends Fragment {
 
-    protected <T extends View> T findViewById(int id) {
-        return getView().findViewById(id);
-    }
-
-    protected void replaceFragment(Fragment fragment, int viewId) {
-        FragmentManager manager = getFragmentManager();
-        manager.beginTransaction().replace(viewId, fragment).commit();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_empty, menu);
-    }
-
-    protected void replaceCentralFragment(Fragment fragment) {
-        replaceFragment(fragment, R.id.centralFragment);
-    }
-
-    protected void setToolbar(int homeIconResId, int titleResId) {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        setHasOptionsMenu(true);
-        actionBar.setHomeAsUpIndicator(homeIconResId);
-        actionBar.setTitle(getResources().getString(titleResId));
-    }
-
-    protected void openDrawer() {
-        DrawerLayout drawer = getActivity().findViewById(R.id.side_menu);
-        drawer.openDrawer(GravityCompat.START);
-    }
-
     /**
      * Creates a ProfileActivity wit arguments already set.
      *
@@ -96,5 +66,35 @@ public abstract class FragmentConverter extends Fragment {
         bundle.putParcelable(key, p);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    protected <T extends View> T findViewById(int id) {
+        return getView().findViewById(id);
+    }
+
+    protected void replaceFragment(Fragment fragment, int viewId) {
+        FragmentManager manager = getFragmentManager();
+        manager.beginTransaction().replace(viewId, fragment).commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_empty, menu);
+    }
+
+    protected void replaceCentralFragment(Fragment fragment) {
+        replaceFragment(fragment, R.id.centralFragment);
+    }
+
+    protected void setToolbar(int homeIconResId, int titleResId) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        setHasOptionsMenu(true);
+        actionBar.setHomeAsUpIndicator(homeIconResId);
+        actionBar.setTitle(getResources().getString(titleResId));
+    }
+
+    protected void openDrawer() {
+        DrawerLayout drawer = getActivity().findViewById(R.id.side_menu);
+        drawer.openDrawer(GravityCompat.START);
     }
 }

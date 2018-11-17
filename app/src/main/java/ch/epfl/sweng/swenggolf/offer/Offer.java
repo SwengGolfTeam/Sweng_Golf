@@ -11,17 +11,23 @@ import java.util.Calendar;
 
 import ch.epfl.sweng.swenggolf.profile.PointType;
 
-import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
-import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_PICTURE;
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
 public class Offer implements Parcelable {
-    private static final int DESCRIPTION_LIMIT = 140;
     public static final int TITLE_MIN_LENGTH = 1;
     public static final int TITLE_MAX_LENGTH = 100;
     public static final int DESCRIPTION_MIN_LENGTH = 1;
     public static final int DESCRIPTION_MAX_LENGTH = 1000;
+    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
+        public Offer createFromParcel(Parcel in) {
+            return new Offer(in);
+        }
 
+        public Offer[] newArray(int size) {
+            return new Offer[size];
+        }
+    };
+    private static final int DESCRIPTION_LIMIT = 140;
     private final Category tag;
     private final String userId;
     private final String title;
@@ -30,7 +36,6 @@ public class Offer implements Parcelable {
     private final String uuid;
     private double latitude;
     private double longitude;
-
     private long creationDate;
     private long endDate;
 
@@ -60,7 +65,7 @@ public class Offer implements Parcelable {
         if (description == null || description.isEmpty()) {
             throw new IllegalArgumentException("Description of the offer can't be empty.");
         }
-        if(linkPicture == null) {
+        if (linkPicture == null) {
             throw new IllegalArgumentException("PictureLink cannot be null."
                     + " For absence of picture use empty.");
         }
@@ -104,6 +109,7 @@ public class Offer implements Parcelable {
 
     }
 
+
     /**
      * Contains the data of an offer.
      *
@@ -123,7 +129,6 @@ public class Offer implements Parcelable {
                 creationDate.getTimeInMillis(),
                 endDate.getTimeInMillis());
     }
-
 
     /**
      * Contains the data of an offer.
@@ -181,6 +186,31 @@ public class Offer implements Parcelable {
         endDate = that.endDate;
         latitude = that.latitude;
         longitude = that.longitude;
+    }
+
+    private Offer(Parcel in) {
+        String[] data = new String[10];
+
+        in.readStringArray(data);
+        this.userId = data[0];
+        this.title = data[1];
+        this.description = data[2];
+        this.linkPicture = data[3];
+        this.uuid = data[4];
+        this.tag = Category.valueOf(data[5]);
+        this.creationDate = Long.parseLong(data[6]);
+        this.endDate = Long.parseLong(data[7]);
+        this.latitude = Double.parseDouble(data[8]);
+        this.longitude = Double.parseDouble(data[9]);
+    }
+
+    /**
+     * Creates the format for the Date.
+     *
+     * @return the date format
+     */
+    public static DateFormat dateFormat() {
+        return new SimpleDateFormat("EEEE, dd/MM/yyyy");
     }
 
     @Override
@@ -265,7 +295,6 @@ public class Offer implements Parcelable {
         return uuid;
     }
 
-
     /**
      * Returns the offer's creation date.
      *
@@ -328,7 +357,6 @@ public class Offer implements Parcelable {
 
     }
 
-
     /* Implements Parcelable */
     @Override
     public int describeContents() {
@@ -350,41 +378,6 @@ public class Offer implements Parcelable {
                 Double.toString(this.longitude)});
     }
 
-    public static final Parcelable.Creator<Offer> CREATOR = new Parcelable.Creator<Offer>() {
-        public Offer createFromParcel(Parcel in) {
-            return new Offer(in);
-        }
-
-        public Offer[] newArray(int size) {
-            return new Offer[size];
-        }
-    };
-
-    private Offer(Parcel in) {
-        String[] data = new String[10];
-
-        in.readStringArray(data);
-        this.userId = data[0];
-        this.title = data[1];
-        this.description = data[2];
-        this.linkPicture = data[3];
-        this.uuid = data[4];
-        this.tag = Category.valueOf(data[5]);
-        this.creationDate = Long.parseLong(data[6]);
-        this.endDate = Long.parseLong(data[7]);
-        this.latitude = Double.parseDouble(data[8]);
-        this.longitude = Double.parseDouble(data[9]);
-    }
-
-    /**
-     * Creates the format for the Date.
-     *
-     * @return the date format
-     */
-    public static DateFormat dateFormat() {
-        return new SimpleDateFormat("EEEE, dd/MM/yyyy");
-    }
-
     /**
      * The points yielded by the offer creation.
      *
@@ -392,10 +385,10 @@ public class Offer implements Parcelable {
      */
     public int offerValue() {
         int value = PointType.POST_OFFER.getValue();
-        if(!linkPicture.isEmpty()) {
+        if (!linkPicture.isEmpty()) {
             value += PointType.ADD_PICTURE.getValue();
         }
-        if(latitude != 0 || longitude != 0) {
+        if (latitude != 0 || longitude != 0) {
             value += PointType.ADD_LOCALISATION.getValue();
         }
         return value;
@@ -405,11 +398,11 @@ public class Offer implements Parcelable {
      * The difference in points yielded by the modification of this offer to another offer.
      *
      * @param modifiedOffer the result of this offer being modified
-     * @throws IllegalArgumentException if the modifiedOffer is null
      * @return the points difference
+     * @throws IllegalArgumentException if the modifiedOffer is null
      */
     public int offerValueDiff(Offer modifiedOffer) {
-        if(modifiedOffer == null) {
+        if (modifiedOffer == null) {
             throw new IllegalArgumentException("The offer cannot be modified to null");
         }
         return modifiedOffer.offerValue() - this.offerValue();

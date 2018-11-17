@@ -24,6 +24,9 @@ public abstract class Storage {
 
     private static Storage storage = null;
 
+    protected Storage() {
+    }
+
     /**
      * Use the given storage as the return of the getInstance() method.
      *
@@ -44,21 +47,6 @@ public abstract class Storage {
         }
         return storage;
     }
-
-    protected Storage() {
-    }
-
-    /**
-     * Writes an image into the storage. Uses the listener to check if everything worked.
-     *
-     * @param uri      the local URI of the image
-     * @param path     the writing path
-     * @param listener the OnCompleteListener that performs operations when done with the uploading
-     */
-    public abstract void write(@NonNull Uri uri, String path,
-                               @NonNull OnCompleteListener<Uri> listener);
-
-    public abstract void remove(@NonNull String linkPicture);
 
     /**
      * Creates an intent that asks Android to fetch an image.
@@ -118,5 +106,17 @@ public abstract class Storage {
         }
         return false;
     }
+
+    /**
+     * Writes an image into the storage. Uses the listener to check if everything worked.
+     *
+     * @param uri      the local URI of the image
+     * @param path     the writing path
+     * @param listener the OnCompleteListener that performs operations when done with the uploading
+     */
+    public abstract void write(@NonNull Uri uri, String path,
+                               @NonNull OnCompleteListener<Uri> listener);
+
+    public abstract void remove(@NonNull String linkPicture);
 
 }

@@ -1,21 +1,16 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.stream.IntStream;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -28,8 +23,6 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.profile.PointType;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -39,14 +32,11 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -63,7 +53,8 @@ import static org.hamcrest.Matchers.hasToString;
 @RunWith(AndroidJUnit4.class)
 public class PointGainTest {
 
-    @Rule public IntentsTestRule<MainMenuActivity> activityTestRule =
+    @Rule
+    public IntentsTestRule<MainMenuActivity> activityTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Rule
@@ -81,7 +72,7 @@ public class PointGainTest {
     }
 
     private void testUserPoints(final int newPoints, final User user) {
-        Database.getInstance().read( Database.USERS_PATH + "/" + user.getUserId(),
+        Database.getInstance().read(Database.USERS_PATH + "/" + user.getUserId(),
                 "score", new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
@@ -121,7 +112,7 @@ public class PointGainTest {
     }
 
     @Test
-    public void followingSomeoneIncreasesDecreasesHisPoints() throws InterruptedException {
+    public void followingSomeoneIncreasesDecreasesHisPoints() {
         User otherUser = FilledFakeDatabase.getUser(1);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,

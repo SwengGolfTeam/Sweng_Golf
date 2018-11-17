@@ -14,13 +14,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -33,14 +33,12 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
-
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
@@ -48,17 +46,16 @@ import static org.junit.Assert.assertEquals;
 public class ProfileActivityTest {
 
     private static final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
-    private User newUser;
-
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    private User newUser;
 
     /**
      * Initialise the Config and the Database for tests.
      */
     @Before
-    public void setUp(){
+    public void setUp() {
         Config.setUser(new User(user));
         newUser = new User(user);
         Database database = FakeDatabase.fakeDatabaseCreator();
@@ -68,7 +65,7 @@ public class ProfileActivityTest {
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, FragmentConverter.createShowProfileWithProfile(user))
-                    .commit();
+                .commit();
     }
 
     @Test
@@ -115,7 +112,7 @@ public class ProfileActivityTest {
     }
 
     @Test
-    public void canGoToMenu() throws InterruptedException {
+    public void canGoToMenu() {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         onView(withId(R.id.side_menu)).check(matches(isOpen()));
     }

@@ -7,13 +7,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -23,12 +23,12 @@ import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
 
 public class ListOwnOfferActivityTest {
 
-    @Rule public IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
     private final Database database = FakeDatabase.fakeDatabaseCreator();
     private final User user = FilledFakeDatabase.getUser(0);
     private final Offer offer = FilledFakeDatabase.getOffer(0);
+    @Rule
+    public IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Set up a fake database, a fake user and launch the fragment.

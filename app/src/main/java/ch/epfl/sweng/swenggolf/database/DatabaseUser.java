@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.database;
 
-import android.util.Log;
-
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.profile.User;
 
@@ -26,7 +24,7 @@ public class DatabaseUser {
     }
 
     public static void addPointsToUserId(int scoreToAdd, String userId) {
-        if(userId.equals(Config.getUser().getUserId())) {
+        if (userId.equals(Config.getUser().getUserId())) {
             addPointsToCurrentUser(scoreToAdd);
         } else {
             addPointsToAppropriateUser(scoreToAdd, userId, null);
@@ -37,31 +35,31 @@ public class DatabaseUser {
                                                    final CompletionListener complete) {
         Database.getInstance().read(Database.USERS_PATH + "/" + userId, "score",
                 new ValueListener<Integer>() {
-            @Override
-            public void onDataChange(Integer value) {
-                value = (value == null) ?  0 : value;
-                if(complete == null) {
-                    Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                            "score", value + scoredPoints);
-                } else {
-                    Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                            "score", value + scoredPoints, complete);
-                }
-            }
+                    @Override
+                    public void onDataChange(Integer value) {
+                        value = (value == null) ? 0 : value;
+                        if (complete == null) {
+                            Database.getInstance().write(Database.USERS_PATH + "/" + userId,
+                                    "score", value + scoredPoints);
+                        } else {
+                            Database.getInstance().write(Database.USERS_PATH + "/" + userId,
+                                    "score", value + scoredPoints, complete);
+                        }
+                    }
 
-            @Override
-            public void onCancelled(DbError error) {
-                //TODO what to do when score fails to update ?
-            }
-        }, Integer.class);
+                    @Override
+                    public void onCancelled(DbError error) {
+                        //TODO what to do when score fails to update ?
+                    }
+                }, Integer.class);
     }
 
-    public static void addPointsToUser(final int scorePoints , final User user) {
+    public static void addPointsToUser(final int scorePoints, final User user) {
         addPointsToAppropriateUser(scorePoints, user.getUserId(),
                 new CompletionListener() {
                     @Override
                     public void onComplete(DbError error) {
-                        if(error == NONE) {
+                        if (error == NONE) {
                             user.addPoints(scorePoints);
                         }
                     }

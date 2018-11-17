@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -21,6 +20,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -79,7 +79,7 @@ public class CategoriesMenuTest {
         onView(withText(cat.toString())).perform(click());
     }
 
-    private void initLocalDatabase(){
+    private void initLocalDatabase() {
         LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);

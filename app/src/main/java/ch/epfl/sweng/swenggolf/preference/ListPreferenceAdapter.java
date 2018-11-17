@@ -69,18 +69,6 @@ public class ListPreferenceAdapter
         d.readList("/followers/" + Config.getUser().getUserId(), getFollowingList, String.class);
     }
 
-    public class PreferenceViewHolder extends ThreeFieldsViewHolder {
-
-        /**
-         * Create a container for displaying a cell of the view.
-         * Container contains user picture, username and preference.
-         */
-        public PreferenceViewHolder(View view) {
-            super(view, R.id.preference_username,
-                    R.id.preference_preference, R.id.preference_userpic);
-        }
-    }
-
     @NonNull
     @Override
     public PreferenceViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
@@ -120,5 +108,17 @@ public class ListPreferenceAdapter
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public class PreferenceViewHolder extends ThreeFieldsViewHolder {
+
+        /**
+         * Create a container for displaying a cell of the view.
+         * Container contains user picture, username and preference.
+         */
+        public PreferenceViewHolder(View view) {
+            super(view, R.id.preference_username,
+                    R.id.preference_preference, R.id.preference_userpic);
+        }
     }
 }

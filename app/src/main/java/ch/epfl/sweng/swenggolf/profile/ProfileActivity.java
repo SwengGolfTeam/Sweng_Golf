@@ -29,12 +29,19 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
 
 public class ProfileActivity extends FragmentConverter {
-    private User user;
     private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
     private static final int STAR_ON = android.R.drawable.btn_star_big_on;
+    private User user;
     private boolean isFollowing = false;
     private View inflated;
     private MenuItem button;
+
+    protected static void displayPicture(ImageView imageView, User user, Context context) {
+        if (!user.getPhoto().isEmpty()) {
+            Uri photoUri = Uri.parse(user.getPhoto());
+            Picasso.with(context).load(photoUri).into(imageView);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,13 +100,6 @@ public class ProfileActivity extends FragmentConverter {
         int star = follow ? STAR_ON : STAR_OFF;
         button.setIcon(star);
         isFollowing = follow;
-    }
-
-    protected static void displayPicture(ImageView imageView, User user, Context context) {
-        if (!user.getPhoto().isEmpty()) {
-            Uri photoUri = Uri.parse(user.getPhoto());
-            Picasso.with(context).load(photoUri).into(imageView);
-        }
     }
 
     @Override

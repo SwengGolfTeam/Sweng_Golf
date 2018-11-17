@@ -23,24 +23,16 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
-import static ch.epfl.sweng.swenggolf.profile.PointType.*;
+import static ch.epfl.sweng.swenggolf.profile.PointType.RESPOND_OFFER;
 
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
-    private Answers answers;
-    private Offer offer;
     private static final int HEART_FULL = R.drawable.ic_favorite;
     private static final int HEART_EMPTY = R.drawable.ic_favorite_border;
-
-    public static class AnswerViewHolder extends ThreeFieldsViewHolder {
-
-        public AnswerViewHolder(View view) {
-            super(view, R.id.user_name, R.id.answer_description, R.id.user_pic);
-        }
-    }
+    private Answers answers;
+    private Offer offer;
 
     /**
      * Constructs a ListAnswerAdapter for the RecyclerView.
@@ -56,16 +48,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     }
 
     /**
-     * Sets the answers field.
-     *
-     * @param answers the new answers
-     */
-    public void setAnswers(Answers answers) {
-        this.answers = answers;
-        notifyDataSetChanged();
-    }
-
-    /**
      * Gets the answers.
      *
      * @return the answers
@@ -74,6 +56,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         return answers;
     }
 
+    /**
+     * Sets the answers field.
+     *
+     * @param answers the new answers
+     */
+    public void setAnswers(Answers answers) {
+        this.answers = answers;
+        notifyDataSetChanged();
+    }
 
     @Override
     public AnswerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -194,20 +185,20 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         answers.setFavoritePos(pos);
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers,
                 new CompletionListener() {
-            @Override
-            public void onComplete(DbError error) {
-                if(error == DbError.NONE) {
-                    if(previousFavorite != -1) {
-                        DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
-                                answers.getAnswerList().get(previousFavorite).getUserId());
+                    @Override
+                    public void onComplete(DbError error) {
+                        if (error == DbError.NONE) {
+                            if (previousFavorite != -1) {
+                                DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
+                                        answers.getAnswerList().get(previousFavorite).getUserId());
+                            }
+                            if (pos != -1) {
+                                DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
+                                        answers.getAnswerList().get(pos).getUserId());
+                            }
+                        }
                     }
-                    if(pos != -1) {
-                        DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
-                                answers.getAnswerList().get(pos).getUserId());
-                    }
-                }
-            }
-        });
+                });
         notifyDataSetChanged();
     }
 
@@ -215,5 +206,12 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     @Override
     public int getItemCount() {
         return answers.getAnswerList().size();
+    }
+
+    public static class AnswerViewHolder extends ThreeFieldsViewHolder {
+
+        public AnswerViewHolder(View view) {
+            super(view, R.id.user_name, R.id.answer_description, R.id.user_pic);
+        }
     }
 }
