@@ -136,14 +136,14 @@ public class CreateOfferActivityTest {
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
-    private void fillNameAndDescription() {
+    private static void fillNameAndDescription() {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
                 .perform(closeSoftKeyboard());
     }
 
-    private void fillOffer() throws InterruptedException {
+    public static void fillOffer() {
         fillNameAndDescription();
 
         // Answer to gallery intent
@@ -169,14 +169,14 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void createOfferShowOfferWhenValidInput() throws InterruptedException {
+    public void createOfferShowOfferWhenValidInput() {
         goToCreateOffer(false);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }
 
     @Test
-    public void showMessageErrorWhenCantCreateOffer() throws InterruptedException {
+    public void showMessageErrorWhenCantCreateOffer() {
         Database.setDebugDatabase(new FakeDatabase(false));
         goToCreateOffer(false);
         fillOffer();
@@ -198,7 +198,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void modifyingOfferViaShowOfferWorks() throws InterruptedException {
+    public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
         fillOffer();
@@ -238,7 +238,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void defineOfferOnCreation() throws InterruptedException {
+    public void defineOfferOnCreation() {
         final String cat = Category.values()[1].toString();
 
         goToCreateOffer(false);

@@ -160,7 +160,6 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setMessage("Do you want to accept this answer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        int previousFavorite = answers.getFavoritePos();
                         writeFavPos(pos);
                     }
                 })
@@ -197,13 +196,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 new CompletionListener() {
             @Override
             public void onComplete(DbError error) {
-                if(previousFavorite != -1) {
-                    DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
-                            answers.getAnswerList().get(previousFavorite).getUserId());
-                }
-                if(pos != -1) {
-                    DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
-                            answers.getAnswerList().get(pos).getUserId());
+                if(error == DbError.NONE) {
+                    if(previousFavorite != -1) {
+                        DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
+                                answers.getAnswerList().get(previousFavorite).getUserId());
+                    }
+                    if(pos != -1) {
+                        DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
+                                answers.getAnswerList().get(pos).getUserId());
+                    }
                 }
             }
         });

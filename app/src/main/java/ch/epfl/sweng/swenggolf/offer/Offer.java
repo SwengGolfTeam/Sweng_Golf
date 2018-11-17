@@ -405,27 +405,14 @@ public class Offer implements Parcelable {
      * The difference in points yielded by the modification of this offer to another offer.
      *
      * @param modifiedOffer the result of this offer being modified
+     * @throws IllegalArgumentException if the modifiedOffer is null
      * @return the points difference
      */
     public int offerValueDiff(Offer modifiedOffer) {
-        int diffValue = 0;
-        if(this.linkPicture.isEmpty() &&
-                !modifiedOffer.linkPicture.isEmpty()) {
-            diffValue += ADD_PICTURE.getValue();
+        if(modifiedOffer == null) {
+            throw new IllegalArgumentException("The offer cannot be modified to null");
         }
-        if(this.latitude == 0 && this.longitude == 0 &&
-                (modifiedOffer.latitude != 0 || modifiedOffer.longitude != 0)) {
-            diffValue += ADD_LOCALISATION.getValue();
-        }
-        if(this.linkPicture.isEmpty() &&
-                !modifiedOffer.linkPicture.isEmpty()) {
-            diffValue -= ADD_PICTURE.getValue();
-        }
-        if(this.latitude == 0 && this.longitude == 0 &&
-                (modifiedOffer.latitude != 0 || modifiedOffer.longitude != 0)) {
-            diffValue -= ADD_LOCALISATION.getValue();
-        }
-        return diffValue;
+        return modifiedOffer.offerValue() - this.offerValue();
     }
 
 }

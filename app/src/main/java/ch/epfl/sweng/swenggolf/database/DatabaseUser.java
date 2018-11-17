@@ -1,8 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
-import android.media.MediaPlayer;
+
+import android.util.Log;
 
 import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
@@ -26,18 +26,26 @@ public class DatabaseUser {
     }
 
     public static void addPointsToUserId(int scoreToAdd, String userId) {
-        addPointsToAppropriateUser(scoreToAdd, userId, null);
+        if(userId.equals(Config.getUser().getUserId())) {
+            addPointsToCurrentUser(scoreToAdd);
+        } else {
+            addPointsToAppropriateUser(scoreToAdd, userId, null);
+        }
     }
 
-    private static void addPointsToAppropriateUser(final int scoredPoints, final String userId, final CompletionListener complete) {
+    private static void addPointsToAppropriateUser(final int scoredPoints, final String userId,
+                                                   final CompletionListener complete) {
         Database.getInstance().read(Database.USERS_PATH + "/" + userId, "score",
                 new ValueListener<Integer>() {
             @Override
             public void onDataChange(Integer value) {
+                value = (value == null) ?  0 : value;
                 if(complete == null) {
-                    Database.getInstance().write(Database.USERS_PATH + "/" + userId, "score", value + scoredPoints);
+                    Database.getInstance().write(Database.USERS_PATH + "/" + userId,
+                            "score", value + scoredPoints);
                 } else {
-                    Database.getInstance().write(Database.USERS_PATH + "/" + userId, "score", value + scoredPoints, complete);
+                    Database.getInstance().write(Database.USERS_PATH + "/" + userId,
+                            "score", value + scoredPoints, complete);
                 }
             }
 
@@ -49,12 +57,12 @@ public class DatabaseUser {
     }
 
     public static void addPointsToUser(final int scorePoints , final User user) {
-        addPointsToAppropriateUser(scorePoints, Config.getUser().getUserId(),
+        addPointsToAppropriateUser(scorePoints, user.getUserId(),
                 new CompletionListener() {
                     @Override
                     public void onComplete(DbError error) {
                         if(error == NONE) {
-                            user.addPoints(); //TODO modify score
+                            user.addPoints(scorePoints);
                         }
                     }
                 });

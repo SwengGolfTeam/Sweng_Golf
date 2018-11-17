@@ -367,7 +367,7 @@ public class CreateOfferActivity extends FragmentConverter
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             LENGTH_SHORT).show();
-                    updateUserScore(offerToModify, offer, Config.getUser().getUserId());
+                    updateUserScore(offerToModify, offer);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
@@ -379,7 +379,7 @@ public class CreateOfferActivity extends FragmentConverter
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
     }
 
-    private void updateUserScore(Offer offerToModify, Offer offer, String userId) {
+    private void updateUserScore(Offer offerToModify, Offer offer) {
         int scoreToAdd = 0;
         if(offerToModify == null) {
             scoreToAdd += offer.offerValue();

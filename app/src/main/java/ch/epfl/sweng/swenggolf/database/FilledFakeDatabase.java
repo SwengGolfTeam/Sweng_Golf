@@ -22,7 +22,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
         for (Offer offer : FAKE_OFFERS) {
             write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
         }
-        for (User user : FOLLOWERS_OF_USER_ZERO) {
+        for (User user : USER_ZERO_FOLLOWS) {
             String uid = user.getUserId();
             write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid, uid);
         }
@@ -60,7 +60,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
      * @return the follower at this index
      */
     public static User getFollowerOfUserZero(int index) {
-        return FOLLOWERS_OF_USER_ZERO[index];
+        return USER_ZERO_FOLLOWS[index];
     }
 
     /**
@@ -87,7 +87,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
      * @return the number of followers of user with id zero
      */
     public static int numberFollowersOfUserZero() {
-        return FOLLOWERS_OF_USER_ZERO.length;
+        return USER_ZERO_FOLLOWS.length;
     }
 
     private static final User[] FAKE_USERS = {
@@ -282,5 +282,5 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     "014")
     };
 
-    private static final User[] FOLLOWERS_OF_USER_ZERO = {getUser(0), getUser(1), getUser(2)};
+    private static final User[] USER_ZERO_FOLLOWS = {getUser(0), getUser(1), getUser(2)};
 }

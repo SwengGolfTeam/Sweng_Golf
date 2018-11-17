@@ -64,11 +64,6 @@ public class FakeDatabase extends Database {
         }
     }
 
-    @Override
-    public <T> void read(@NonNull String path, @NonNull String id, @NonNull ValueReader<T> reader, @NonNull Class<T> c) {
-        read(path, id, (ValueListener<T>) reader, c);
-    }
-
     private boolean isWorkingforEntry(String key) {
         return working && !workingOnEntry.contains(key);
     }
