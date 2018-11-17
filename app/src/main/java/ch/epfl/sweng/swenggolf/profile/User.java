@@ -24,7 +24,7 @@ public class User implements Parcelable {
     private String photo;
     private String preference;
     private String description;
-    private int points;
+    private int points = 0;
 
 
     /**
