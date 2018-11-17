@@ -22,6 +22,9 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -101,7 +104,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         description.setText(answer.getDescription());
         description.setContentDescription("description" + Integer.toString(position));
 
-        setupFavorite(holder, position);
+        setupFavorite(holder, answer, position);
 
     }
 
@@ -119,7 +122,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 + Integer.toString(holder.getAdapterPosition()));
     }
 
-    private void setupFavorite(final AnswerViewHolder holder, int position) {
+    private void setupFavorite(final AnswerViewHolder holder, final Answer answer, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
         favButton.setContentDescription("fav" + Integer.toString(position));
         favButton.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +132,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Context context = holder.getContainer().getContext();
                 int pos = holder.getAdapterPosition();
                 Dialog alertDialog = answers.getFavoritePos() != pos
-                        ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
+                        ? acceptAnswerDialog(context, answer, pos) : stepBackDialog(context);
                 alertDialog.show();
 
 
@@ -149,7 +152,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         }
     }
 
-    private Dialog acceptAnswerDialog(Context context, final int pos) {
+    private Dialog acceptAnswerDialog(Context context, final Answer answer, final int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("Accept answer")
@@ -157,6 +160,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         writeFavPos(pos);
+                        NotificationManager.addPendingNotification(answer.getUserId(), new Notification(NotificationType.ANSWER_CHOSEN, offer.getTitle()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

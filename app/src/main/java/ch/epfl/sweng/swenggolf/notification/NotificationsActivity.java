@@ -14,7 +14,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class NotificationsActivity extends FragmentConverter {
@@ -49,11 +54,13 @@ public class NotificationsActivity extends FragmentConverter {
         List<Notification> notifications = new ArrayList<>();
 
         // TODO sample test
-        String userName = "God";
-        String offerName = "Could you please give this man a cookie?";
-        notifications.add(new Notification(NotificationType.ANSWER_CHOSEN, userName, offerName));
-        notifications.add(new Notification(NotificationType.ANSWER_POSTED, userName, offerName));
-        notifications.add(new Notification(NotificationType.FOLLOW, userName, null));
+        /*String offerName = "Could you please give this man a cookie?";
+        notifications.add(new Notification(NotificationType.ANSWER_CHOSEN, offerName));
+        notifications.add(new Notification(NotificationType.ANSWER_POSTED, offerName));
+        notifications.add(new Notification(NotificationType.FOLLOW, null));*/
+
+        fetchNotifications();
+
 
         // TODO add a custom divider ?
         // Add dividing line
@@ -63,4 +70,26 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
 
     }
+
+    private void fetchNotifications() {
+        User currentUser = Config.getUser();
+        ValueListener<List<Notification>> listener = new ValueListener<List<Notification>>() {
+            @Override
+            public void onDataChange(List<Notification> value) {
+                if (value != null) {
+                    mAdapter.setNotifications(value);
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // TODO set toast
+            }
+        };
+        Database.getInstance()
+                .readList(NotificationManager.getNotificationPath(
+                        currentUser.getUserId()), listener, Notification.class);
+
+    }
+
 }

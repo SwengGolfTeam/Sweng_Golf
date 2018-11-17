@@ -2,15 +2,24 @@ package ch.epfl.sweng.swenggolf.notification;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class Notification {
     private final NotificationType type;
-    private final String concernedUserName;
     private final String concernedOfferName;
+    private final String uuid;
 
-    public Notification(NotificationType type, @Nullable String concernedUserName, @Nullable String concernedOfferName) {
+    public Notification(NotificationType type, @Nullable String concernedOfferName) {
         this.type = type;
-        this.concernedUserName = concernedUserName;
         this.concernedOfferName = concernedOfferName;
+        uuid = UUID.randomUUID().toString();
+    }
+
+    // empty constructor for firebase
+    public Notification() {
+        type = null;
+        concernedOfferName = "";
+        uuid = "";
     }
 
     public NotificationType getType() {
@@ -21,7 +30,7 @@ public class Notification {
         return concernedOfferName;
     }
 
-    public String getConcernedUserName() {
-        return concernedUserName;
+    public String getUuid() {
+        return uuid;
     }
 }

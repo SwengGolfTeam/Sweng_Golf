@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.notification;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> {
     private List<Notification> notifications;
@@ -43,6 +46,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         this.notifications = new ArrayList<>(notifications);
     }
 
+    /**
+     * Sets the notifications field.
+     *
+     * @param notifications the new notifications
+     */
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = new ArrayList<>(notifications);
+        notifyDataSetChanged();
+    }
+
     @Override
     public NotificationsAdapter.NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -54,28 +67,28 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull NotificationViewHolder notificationViewHolder, int i) {
         final Notification notification = notifications.get(i);
 
+        User currentUser = Config.getUser();
         TextView text = notificationViewHolder.getNotificationText();
         ImageView icon = notificationViewHolder.getNotificationIcon();
         Context context = text.getContext();
         String message;
         int imageResource;
         switch (notification.getType()) {
-            // TODO all cases and get the correct string from R.string + display the correct icon
             case ANSWER_CHOSEN:
                 message = context.getString(R.string.notif_answer_chosen,
-                        notification.getConcernedUserName(),
+                        currentUser.getUserName(),
                         notification.getConcernedOfferName());
                 imageResource = R.drawable.ic_favorite_black_24dp;
                 break;
             case ANSWER_POSTED:
                 message = context.getString(R.string.notif_answer_posted,
-                        notification.getConcernedUserName(),
+                        currentUser.getUserName(),
                         notification.getConcernedOfferName());
                 imageResource = R.drawable.ic_comment_black_24dp;
                 break;
             case FOLLOW:
                 message = context.getString(R.string.notif_follow,
-                        notification.getConcernedUserName());
+                        currentUser.getUserName());
                 imageResource = R.drawable.ic_star_black_24dp;
                 break;
             case POINTS_GAINED:
