@@ -26,6 +26,7 @@ public final class Badge {
             case 12: return R.drawable.badge12;
             case 13: return R.drawable.badge13;
             case 14: return R.drawable.badge14;
+            case 15: return  R.drawable.badge15;
             default: return R.drawable.badge00;
         }
 
@@ -37,7 +38,7 @@ public final class Badge {
      * @return the level of the corresponding Badge
      */
     private static int computeLevel(int points){
-        return points/6+1;
+        return (points+1)/6;
         // TODO: implement a MAX_LEVEL constant that can not be exceeded
     }
 }
