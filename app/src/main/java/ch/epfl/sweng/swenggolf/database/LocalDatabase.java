@@ -5,12 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -27,14 +22,14 @@ public class LocalDatabase extends SQLiteOpenHelper {
         super(context, databaseName, factory, dbVersion);
     }
 
-    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion){
+    public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion) {
         this(context, factory, dbVersion, DEFAULT_DATABASE_NAME);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME +"(" + COLUMN_ID
-                +" INTEGER PRIMARY KEY, " + COLUMN_CATEGORIES + " TEXT NOT NULL);";
+        String sqlQueryForCreation = "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID
+                + " INTEGER PRIMARY KEY, " + COLUMN_CATEGORIES + " TEXT NOT NULL);";
         db.execSQL(sqlQueryForCreation);
     }
 
@@ -72,7 +67,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
         String categories = "";
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             categories = cursor.getString(1);
             cursor.close();
         }

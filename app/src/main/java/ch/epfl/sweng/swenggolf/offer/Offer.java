@@ -27,21 +27,21 @@ public class Offer implements Parcelable {
     private double latitude;
     private double longitude;
 
-    private  long creationDate;
-    private  long endDate;
+    private long creationDate;
+    private long endDate;
 
     /**
      * Contains the data of an offer.
      *
-     * @param title       the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
-     * @param linkPicture the link of the offer's picture
-     * @param userId      the user id. Should not be empty
-     * @param uuid        offer identifier
-     * @param tag         the category of the offer
+     * @param title        the title of the offer. Should not be empty
+     * @param description  the description of the offer. Should not be empty
+     * @param linkPicture  the link of the offer's picture
+     * @param userId       the user id. Should not be empty
+     * @param uuid         offer identifier
+     * @param tag          the category of the offer
      * @param creationDate the creation date in ms
-     * @param endDate   the offers's end date in ms
-     * @param location    the location of the creation of the offer
+     * @param endDate      the offers's end date in ms
+     * @param location     the location of the creation of the offer
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid, Category tag,
@@ -98,19 +98,20 @@ public class Offer implements Parcelable {
 
     /**
      * Contains the data of an offer.
-     * @param title       the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
-     * @param linkPicture the link of the offer's picture
-     * @param userId      the user id. Should not be empty
-     * @param uuid        offer identifier
-     * @param tag         the category of the offer
+     *
+     * @param title        the title of the offer. Should not be empty
+     * @param description  the description of the offer. Should not be empty
+     * @param linkPicture  the link of the offer's picture
+     * @param userId       the user id. Should not be empty
+     * @param uuid         offer identifier
+     * @param tag          the category of the offer
      * @param creationDate the creation date in with Calendar notation
-     * @param endDate   the offers's end date in with Calendar notation
+     * @param endDate      the offers's end date in with Calendar notation
      */
     public Offer(String userId, String title, String description,
                  String linkPicture, String uuid, Category tag,
                  Calendar creationDate, Calendar endDate) {
-        this(userId,title,description,linkPicture,uuid,tag,
+        this(userId, title, description, linkPicture, uuid, tag,
                 creationDate.getTimeInMillis(),
                 endDate.getTimeInMillis());
     }
@@ -310,7 +311,7 @@ public class Offer implements Parcelable {
     /**
      * Sets the location of the offer.
      *
-     * @param latitude the latitude
+     * @param latitude  the latitude
      * @param longitude the longitude
      */
     public void setLocation(double latitude, double longitude) {
@@ -369,6 +370,7 @@ public class Offer implements Parcelable {
 
     /**
      * Creates the format for the Date.
+     *
      * @return the date format
      */
     public static DateFormat dateFormat() {

@@ -2,9 +2,9 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.location.Location;
 
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 public final class FilledFakeDatabase extends FakeDatabase {
 

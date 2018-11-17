@@ -2,6 +2,8 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.profile.User;
+
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;

@@ -1,8 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.espresso.NoMatchingRootException;
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -16,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
@@ -31,6 +30,7 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -129,6 +129,15 @@ public class AnswersTest {
                 .commit();
         addAnswer("second answer");
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void errorMessageWhenAnswerIsTooShort() {
+        addAnswer("NO");
+        final MainMenuActivity activity = mActivityRule.getActivity();
+        onView(withId(R.id.your_answer_description)).check(matches(
+                hasErrorText(activity
+                        .getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH))));
     }
 
     private void addAnswer(String answer) {

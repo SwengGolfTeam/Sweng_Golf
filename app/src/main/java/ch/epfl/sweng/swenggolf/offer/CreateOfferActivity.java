@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -33,10 +34,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -64,7 +66,7 @@ public class CreateOfferActivity extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
     private TextView errorMessage;
-    private  TextView dateText;
+    private TextView dateText;
     private Offer offerToModify;
     private boolean creationAsked;
     private Spinner categorySpinner;
@@ -155,15 +157,16 @@ public class CreateOfferActivity extends FragmentConverter
     /**
      * Initialize the creation and the end date of the offer.
      */
-    private void initializeDates(){
+    private void initializeDates() {
         now = new GregorianCalendar(now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH), now.get(Calendar.DATE));
-        if(offerToModify != null){
+        if (offerToModify != null) {
             creationDate = offerToModify.getCreationDate();
-            endDate = offerToModify.getCreationDate();
+            endDate = offerToModify.getEndDate();
+        } else {
+            creationDate = now.getTimeInMillis();
+            endDate = now.getTimeInMillis() + separation;
         }
-        creationDate = now.getTimeInMillis();
-        endDate = now.getTimeInMillis() + separation;
     }
 
     @Override
@@ -404,7 +407,7 @@ public class CreateOfferActivity extends FragmentConverter
             this.calendar = calendar;
         }
 
-        public DatePickerFragment(){
+        public DatePickerFragment() {
             this(Calendar.getInstance());
         }
 
@@ -414,18 +417,29 @@ public class CreateOfferActivity extends FragmentConverter
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            Fragment fragment = this.getFragmentManager().getFragments().get(0);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(this.getActivity(),
-                    (DatePickerDialog.OnDateSetListener) fragment,
+                    (DatePickerDialog.OnDateSetListener) getVisibleFragment(),
                     year, month, day);
         }
-    }
 
+        private Fragment getVisibleFragment() {
+            FragmentManager fragmentManager = this.getFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible()) {
+                    return fragment;
+                }
+            }
+            return null;
+        }
+
+    }
 
 
     /**
      * Set the new date.
+     *
      * @param calendar the corresponding calendar
      */
     private void setDate(final Calendar calendar) {
@@ -436,15 +450,16 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Retrieve the date of the calendar and change it if it is valid.
-     * @param view The calendar view
-     * @param year the corresponding year
+     *
+     * @param view  The calendar view
+     * @param year  the corresponding year
      * @param month the corresponding month
-     * @param day the corresponding day
+     * @param day   the corresponding day
      */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
-        if (cal.before(now)){
+        if (cal.before(now)) {
 
             Toast.makeText(CreateOfferActivity.this.getContext(),
                     getString(R.string.valid_date), Toast.LENGTH_LONG).show();
@@ -455,6 +470,7 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Launches the calendar.
+     *
      * @param v the corresponding view
      */
     public void showDatePickerDialog(View v) {

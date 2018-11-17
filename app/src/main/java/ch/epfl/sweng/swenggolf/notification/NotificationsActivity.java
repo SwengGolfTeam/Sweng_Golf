@@ -45,7 +45,7 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // TODO put this as an attribute but which modificators (private, final etc) ?
+        // TODO put this as an attribute but which modifiers (private, final etc) ?
         List<Notification> notifications = new ArrayList<>();
 
         // TODO sample test

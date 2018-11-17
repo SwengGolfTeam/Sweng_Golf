@@ -12,9 +12,10 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 public interface DatabaseOfferConsumer {
     /**
      * Receive a database and execute a read operation on it.
-     * @param db the database
+     *
+     * @param db         the database
      * @param categories the categories we want to get
-     * @param listener the listener to get the offers
+     * @param listener   the listener to get the offers
      */
     void accept(Database db, List<Category> categories, ValueListener<List<Offer>> listener);
 }

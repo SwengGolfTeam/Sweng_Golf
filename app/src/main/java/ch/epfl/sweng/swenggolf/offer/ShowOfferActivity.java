@@ -40,13 +40,13 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
@@ -271,15 +271,21 @@ public class ShowOfferActivity extends FragmentConverter {
      */
     public void postAnswer(View view) {
         EditText editText = findViewById(R.id.your_answer_description);
-        Answers answers = mAdapter.getAnswers();
-        answers.getAnswerList()
-                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
-        mLayout.removeView(newReaction);
-        mAdapter.notifyDataSetChanged();
+        if (editText.length() < Answer.COMMENT_MIN_LENGTH) {
+            editText.setError(getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH));
+        } else {
+            Answers answers = mAdapter.getAnswers();
+            answers.getAnswerList()
+                    .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+            Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+            InputMethodManager imm = (InputMethodManager) getActivity()
+                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
+            mLayout.removeView(newReaction);
+            mAdapter.notifyDataSetChanged();
+
+        }
+
     }
 
     private void setRecyclerView() {

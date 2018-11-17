@@ -5,9 +5,12 @@ import android.support.annotation.NonNull;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.database.AttributeFilter;
+import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -16,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -28,6 +32,9 @@ public class FakeDatabaseTest {
     private static final String ID2 = "ID2";
     private static final String CONTENT = "This is a string";
     private static final String CONTENT_2 = "This is a second string";
+    private final Offer offer1 = new Offer("uid1", "title", "description");
+    private final Offer offer2 = new Offer("uid2", "title", "description");
+    private final List<Offer> LIST = Arrays.asList(offer1,offer2);
 
     @Test
     public void writeAndReadReturnGoodValues() {
@@ -90,13 +97,60 @@ public class FakeDatabaseTest {
     }
 
     @Test
-    public void readListReturnNull() {
+    public void readListAscendingOrderingIsSorted() {
+        Database d = setupDatabase();
+
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> value) {
+                assertThat(value, is(LIST));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("userId", 10);
+        d.readList(PATH, listener, Offer.class, ordering);
+    }
+
+    @Test
+    public void readListDescendingOrderingIsSorted() {
+        Database d = setupDatabase();
+        final List<Offer> expected = new ArrayList<>(LIST);
+        Collections.reverse(expected);
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> value) {
+                assertThat(value, is(expected));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+        AttributeOrdering ordering = AttributeOrdering.descendingOrdering("userId", 10);
+        d.readList(PATH, listener, Offer.class, ordering);
+    }
+
+    @NonNull
+    private Database setupDatabase() {
+        Database d = new FakeDatabase(true);
+        d.write(Database.OFFERS_PATH, ID, offer1);
+        d.write(Database.OFFERS_PATH, ID2, offer2);
+        return d;
+    }
+
+    @Test
+    public void readListReturnEmptyList() {
         Database d = new FakeDatabase(true);
 
         ValueListener<List<String>> listener = new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {
-                assertNull(value);
+                assertTrue(value.isEmpty());
             }
 
             @Override
@@ -108,10 +162,17 @@ public class FakeDatabaseTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void readListThrowExceptionOnInvalidAttribute() {
+    public void readListWithFilteringThrowExceptionOnInvalidAttribute() {
         FakeDatabase database = new FakeDatabase(true);
         database.readList(PATH, null, Offer.class,
                 new AttributeFilter("invalid attribute", "random"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void readListWithOrderingThrowExceptionOnInvalidAttribute() {
+        FakeDatabase database = new FakeDatabase(true);
+        database.readList(PATH, null, Offer.class,
+                AttributeOrdering.ascendingOrdering("invalid attribute", 1));
     }
 
     private void writeListenerError(boolean working, DbError error) {
@@ -172,12 +233,20 @@ public class FakeDatabaseTest {
     }
 
     @Test
+    public void readListenerListOrderingHasError() {
+        Database d  = new FakeDatabase(false);
+        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("y",42);
+        d.readList(PATH, getListValueListener(), Offer.class, ordering);
+    }
+
+    @Test
     public void readOffersOfUserHasError() {
         Database d = new FakeDatabase(false);
 
         ValueListener<List<Offer>> listener = getListValueListener();
         d.readOffers(listener, new ArrayList<Category>(), "user");
     }
+
 
     @NonNull
     private ValueListener<List<Offer>> getListValueListener() {
