@@ -43,8 +43,10 @@ import static org.mockito.Mockito.when;
 
 public class FireDatabaseTest {
 
+    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final String PATH = "path";
     private static final String ID = "id";
+
     private static final Offer OFFER1 = new Offer("id", "title", "description");
     private static final Offer OFFER2 = new Offer("id2", "title2", "description2");
 

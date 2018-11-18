@@ -8,38 +8,34 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
 public class ProfileActivityOtherUserTest {
 
+    @Rule
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
     final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
     final User otherUser = new User("other", "user", "is", "a", "placeholder");
     private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
     private ProfileActivity profile;
-
-    @Rule
-    public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Set up a fake database and user.
@@ -60,7 +56,7 @@ public class ProfileActivityOtherUserTest {
     }
 
     @Test
-    public void canFollow() throws InterruptedException {
+    public void canFollow() {
         testToast("You are now following ");
 
         ValueListener<String> listener = new ValueListener<String>() {
@@ -87,7 +83,7 @@ public class ProfileActivityOtherUserTest {
 
             }
         };
-        database.remove(path,userId,completionListener);
+        database.remove(path, userId, completionListener);
     }
 
     private void testToast(String s) {

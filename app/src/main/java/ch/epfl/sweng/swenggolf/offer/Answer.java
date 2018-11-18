@@ -3,11 +3,10 @@ package ch.epfl.sweng.swenggolf.offer;
 import ch.epfl.sweng.swenggolf.tools.Check;
 
 public class Answer {
-    private final String userId;
-    private final String description;
-
     public static final int COMMENT_MAX_LENGTH = 200;
     public static final int COMMENT_MIN_LENGTH = 4;
+    private final String userId;
+    private final String description;
 
     /**
      * Create a new Answer to an offer.

@@ -32,6 +32,19 @@ public class FakeDatabase extends Database {
         workingOnEntry = new HashSet<>();
     }
 
+    private static void handleError(String attribute) {
+        throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
+    }
+
+    /**
+     * Creates a database already filled with users and offers.
+     *
+     * @return an instance of FilledFakeDatabase.
+     */
+    public static Database fakeDatabaseCreator() {
+        return new FilledFakeDatabase();
+    }
+
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         if (working) {
@@ -171,10 +184,6 @@ public class FakeDatabase extends Database {
         return newList;
     }
 
-    private static void handleError(String attribute) {
-        throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
-    }
-
     @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
@@ -218,15 +227,6 @@ public class FakeDatabase extends Database {
             }
         }
         return list;
-    }
-
-    /**
-     * Creates a database already filled with users and offers.
-     *
-     * @return an instance of FilledFakeDatabase.
-     */
-    public static Database fakeDatabaseCreator() {
-        return new FilledFakeDatabase();
     }
 
     /**

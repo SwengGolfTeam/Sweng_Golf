@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/row_padding_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="16dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="16dp">
+    android:paddingBottom="@dimen/row_padding_vertical">
 
 
     <LinearLayout
@@ -38,12 +38,12 @@
 
     <ImageButton
         android:id="@+id/favorite"
+        style="?android:borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="24dp"
-        android:layout_toRightOf="@id/answer_description"
         android:layout_centerVertical="true"
-        style="?android:borderlessButtonStyle" />
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@id/answer_description" />
 
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
 import android.support.v4.app.Fragment;
 
 import org.hamcrest.Matcher;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
@@ -26,12 +26,9 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-
 import static android.support.test.espresso.contrib.DrawerActions.open;
-
 import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -42,7 +39,7 @@ public class MainMenuActivityInstrumentedTestIntents {
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     private void testReplacement(Class expectedClass, int id, boolean click) {
-        if(click){
+        if (click) {
             onView(withId(R.id.drawer)).perform(navigateTo(id));
         }
         try {
@@ -69,8 +66,8 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
-    public void testIntentOfferList(){
-        testReplacement(ListOfferActivity.class,R.id.offers, true);
+    public void testIntentOfferList() {
+        testReplacement(ListOfferActivity.class, R.id.offers, true);
     }
 
     @Test
@@ -79,8 +76,8 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
-    public void testIntentCreateOffer(){
-        testReplacement(CreateOfferActivity.class,R.id.create_offer, true);
+    public void testIntentCreateOffer() {
+        testReplacement(CreateOfferActivity.class, R.id.create_offer, true);
     }
 
     @Test

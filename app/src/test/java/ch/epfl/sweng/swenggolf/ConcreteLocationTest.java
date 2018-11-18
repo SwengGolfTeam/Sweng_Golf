@@ -47,7 +47,7 @@ public class ConcreteLocationTest {
 
         Answer<Void> answer = new Answer<Void>() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
+            public Void answer(InvocationOnMock invocation) {
                 Location l = new Location("");
                 l.setLatitude(lat);
                 l.setLongitude(lon);

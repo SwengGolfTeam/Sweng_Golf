@@ -1,23 +1,23 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.location.Location;
-
 import org.junit.Test;
-
-import java.util.Calendar;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
+import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_PICTURE;
+import static ch.epfl.sweng.swenggolf.profile.PointType.POST_OFFER;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 
 public class OfferTest {
 
+    private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
     private final String id = "id_Patrick", title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
-    private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
-
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyId() {
@@ -33,7 +33,6 @@ public class OfferTest {
     public void testEmptyDescription() {
         new Offer(id, title, "");
     }
-
 
 
     @Test
@@ -76,7 +75,7 @@ public class OfferTest {
 
     @Test
     public void testUpdateLink() {
-        Offer offer =         new Offer("9", "bipbupbap",
+        Offer offer = new Offer("9", "bipbupbap",
                 "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
                 LUMIERE
                         + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
@@ -88,14 +87,68 @@ public class OfferTest {
 
     @Test
     public void testSetOffer() {
-        Offer offer =         new Offer("9", "bipbupbap",
+        Offer offer = new Offer("9", "bipbupbap",
                 "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
                 LUMIERE
                         + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
                 "09", Category.values()[3], 123123123, 123123123);
         String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
-        offer.setLocation(1,2);
-        assertEquals(1, offer.getLatitude(),0.05);
+        offer.setLocation(1, 2);
+        assertEquals(1, offer.getLatitude(), 0.05);
         assertEquals(2, offer.getLongitude(), 0.05);
+    }
+
+    @Test
+    public void testOfferValueWithNoExtras() {
+        Offer offer = new Offer(id, title, description, "", "23",
+                Category.values()[3], 123123123, 123123123);
+        assertThat(offer.offerValue(), is(POST_OFFER.getValue()));
+    }
+
+    @Test
+    public void testOfferValueWithLocation() {
+        Offer offer = new Offer(id, title, description, "", "23",
+                Category.values()[3], 123123123, 123123123);
+        offer.setLocation(12, 13);
+        assertThat(offer.offerValue(),
+                is(POST_OFFER.getValue() + ADD_LOCALISATION.getValue()));
+    }
+
+    @Test
+    public void testOfferValueWithLinkPicture() {
+        Offer offer = new Offer(id, title, description, "mypicture", "23",
+                Category.values()[3], 123123123, 123123123);
+        assertThat(offer.offerValue(), is(POST_OFFER.getValue() + ADD_PICTURE.getValue()));
+    }
+
+    @Test
+    public void testOfferValueWithAllExtras() {
+        Offer offer = new Offer(id, title, description, "mypicture", "23",
+                Category.values()[3], 123123123, 123123123);
+        offer.setLocation(23, 23);
+        assertThat(offer.offerValue(), is(POST_OFFER.getValue() + ADD_PICTURE.getValue()
+                + ADD_LOCALISATION.getValue()));
+    }
+
+    @Test
+    public void testSameOfferHaveNoDiff() {
+        Offer offer = new Offer(id, title, description, "mypicture", "23",
+                Category.values()[3], 123123123, 123123123);
+        assertThat(offer.offerValueDiff(offer), is(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDiffOnNullModification() {
+        Offer o = new Offer();
+        o.offerValueDiff(null);
+    }
+
+    @Test
+    public void testDiffOnDifferentOffers() {
+        Offer offer = new Offer(id, title, description, "mypicture", "23",
+                Category.values()[3], 123123123, 123123123);
+        Offer offer1 = new Offer(offer);
+        offer1.setLocation(123, 123);
+        assertThat(offer.offerValueDiff(offer1), is(ADD_LOCALISATION.getValue()));
     }
 }

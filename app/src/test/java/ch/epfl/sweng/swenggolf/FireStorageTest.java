@@ -84,7 +84,7 @@ public class FireStorageTest {
 
         Answer<Void> completeAnswer = new Answer<Void>() {
             @Override
-            public Void answer(InvocationOnMock invocation) throws Exception {
+            public Void answer(InvocationOnMock invocation) {
                 OnCompleteListener<Uri> complete = invocation.getArgument(0);
                 complete.onComplete(uriTask);
                 return null;
