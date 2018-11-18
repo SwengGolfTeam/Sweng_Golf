@@ -26,6 +26,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
+import static ch.epfl.sweng.swenggolf.offer.Answers.NO_FAVORITE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.RESPOND_OFFER;
 
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
@@ -169,7 +170,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setMessage("Do you really want to remove your approval?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        writeFavPos(-1);
+                        writeFavPos(NO_FAVORITE);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -188,11 +189,11 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                     @Override
                     public void onComplete(DbError error) {
                         if (error == DbError.NONE) {
-                            if (previousFavorite != -1) {
+                            if (previousFavorite != NO_FAVORITE) {
                                 DatabaseUser.addPointsToUserId(-RESPOND_OFFER.getValue(),
                                         answers.getAnswerList().get(previousFavorite).getUserId());
                             }
-                            if (pos != -1) {
+                            if (pos != NO_FAVORITE) {
                                 DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
                                         answers.getAnswerList().get(pos).getUserId());
                             }

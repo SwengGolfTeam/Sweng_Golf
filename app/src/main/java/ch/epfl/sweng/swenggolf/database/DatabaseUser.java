@@ -27,23 +27,27 @@ public class DatabaseUser {
 
     private static void addPointsToAppropriateUser(final int scoredPoints, final String userId,
                                                    final CompletionListener complete) {
-        Database.getInstance().read(Database.USERS_PATH + "/" + userId, POINTS,
+        final String userPath = Database.USERS_PATH + "/" + userId;
+        Database.getInstance().read(userPath, POINTS,
                 new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
                         value = (value == null) ? 0 : value;
+                        value += scoredPoints;
                         if (complete == null) {
-                            Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                                    POINTS, value + scoredPoints);
+                            Database.getInstance().write(userPath,
+                                    POINTS, value);
                         } else {
-                            Database.getInstance().write(Database.USERS_PATH + "/" + userId,
-                                    POINTS, value + scoredPoints, complete);
+                            Database.getInstance().write(userPath,
+                                    POINTS, value, complete);
                         }
                     }
 
                     @Override
                     public void onCancelled(DbError error) {
-                        //TODO what to do when score fails to update ?
+                        if(complete != null) {
+                            complete.onComplete(error);
+                        }
                     }
                 }, Integer.class);
     }

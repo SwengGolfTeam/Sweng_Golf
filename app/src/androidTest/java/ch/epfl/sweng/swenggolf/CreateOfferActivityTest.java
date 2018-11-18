@@ -109,13 +109,6 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button)).perform(scrollTo(), click());
     }
 
-    /*@Test
-    public void canCreateSimpleOffer() {
-        goToCreateOffer(false);
-        fillNameAndDescription();
-        onView(withId(R.id.button)).perform(scrollTo(), click());
-    }*/
-
     /**
      * Sets up a fake database and a fake storage, enables TestMode and launches activity.
      */
