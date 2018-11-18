@@ -164,13 +164,14 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     }
 
     private Dialog acceptAnswerDialog(Context context, final int pos) {
-        return createFavoriteDialog(context, pos,"Accept answer",
-                "Do you want to accept this answer?");
+        return createFavoriteDialog(context, pos,context.getString(R.string.accept_favorite),
+                context.getString(R.string.accept_favorite_question));
     }
 
     private Dialog stepBackDialog(Context context) {
-        return createFavoriteDialog(context, NO_FAVORITE, "Did you change your mind?",
-                "Do you really want to remove your approval?");
+        return createFavoriteDialog(context, NO_FAVORITE,
+                context.getString(R.string.remove_favorite),
+                context.getString(R.string.remove_favorite_question));
     }
 
     private void writeFavPos(final int pos) {
