@@ -1,8 +1,15 @@
 package ch.epfl.sweng.swenggolf.profile;
 
+import android.graphics.Color;
+
 import ch.epfl.sweng.swenggolf.R;
 
 public final class Badge {
+    private static final int MAX_LEVEL = 15;
+    private static final String GOLD = "#ffdf00";
+    private static final String SILVER = "#c0c0c0";
+    private static final String BRONZE = "#cd7f32";
+    private static final String WHITE = "#ffffff";
 
     /**
      * Returns the Drawable element of the badge corresponding to the points of a user
@@ -33,12 +40,37 @@ public final class Badge {
     }
 
     /**
+     * Computes the color of the background of the comments of the user (under the Offers)
+     * @param points the amount of points of the user
+     * @return the color corresponding to its badge
+     */
+    public static int getColor(int points){
+        int level = computeLevel(points);
+        String color;
+        switch (level){
+            case 1: case 2: case 3: case 4: case 5:
+                color = BRONZE;
+                break;
+            case 6: case 7: case 8: case 9: case 10:
+                color = SILVER;
+                break;
+            case 11: case 12: case 13: case 14: case 15:
+                color = GOLD;
+                break;
+            default:
+                color = WHITE;
+                break;
+        }
+        return Color.parseColor(color);
+    }
+
+    /**
      * Computes the Level corresponding to the amount of points
      * @param points the amount of points of the user
      * @return the level of the corresponding Badge
      */
     private static int computeLevel(int points){
-        return (points+1)/6;
-        // TODO: implement a MAX_LEVEL constant that can not be exceeded
+        int level = (points+1)/4;
+        return (level > MAX_LEVEL)? MAX_LEVEL : level;
     }
 }
