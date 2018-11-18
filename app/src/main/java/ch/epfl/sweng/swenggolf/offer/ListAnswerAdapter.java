@@ -145,11 +145,11 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         }
     }
 
-    private Dialog acceptAnswerDialog(Context context, final int pos) {
+    private Dialog createFavoriteDialog(Context context, final int pos, String title, String hint) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Accept answer")
-                .setMessage("Do you want to accept this answer?")
+        builder.setTitle(title)
+                .setMessage(hint)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         writeFavPos(pos);
@@ -163,22 +163,14 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         return builder.create();
     }
 
-    private Dialog stepBackDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    private Dialog acceptAnswerDialog(Context context, final int pos) {
+        return createFavoriteDialog(context, pos,"Accept answer",
+                "Do you want to accept this answer?");
+    }
 
-        builder.setTitle("Did you change your mind?")
-                .setMessage("Do you really want to remove your approval?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        writeFavPos(NO_FAVORITE);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // user cancelled the dialog
-                    }
-                });
-        return builder.create();
+    private Dialog stepBackDialog(Context context) {
+        return createFavoriteDialog(context, NO_FAVORITE, "Did you change your mind?",
+                "Do you really want to remove your approval?");
     }
 
     private void writeFavPos(final int pos) {
