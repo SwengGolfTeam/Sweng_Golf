@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/cvProfile"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:text="@android:string/unknownName"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -59,12 +59,22 @@
         android:id="@+id/line"
         android:layout_width="100dp"
         android:layout_height="3dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="100dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="12dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <TextView
         android:id="@+id/profilePreferences"
@@ -72,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:text="@string/user_preferences"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -82,7 +92,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_below="@id/profilePreferences"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
@@ -110,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="5dp"
         android:text="@string/description"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -120,7 +130,7 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_below="@id/profilePreferences"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
@@ -139,8 +149,33 @@
             android:layout_marginLeft="20dp"
             android:text="@android:string/unknownName"
             android:textSize="16sp" />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/profileReputation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/user_reputation"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@android:string/unknownName"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/profileReputation"
+        app:layout_constraintStart_toEndOf="@+id/profileReputation"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
 

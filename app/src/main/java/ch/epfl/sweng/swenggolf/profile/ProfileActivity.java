@@ -63,6 +63,8 @@ public class ProfileActivity extends FragmentConverter {
         description.setText(user.getDescription());
         ImageView badge = inflated.findViewById(R.id.ivBadge);
         badge.setImageResource(Badge.getDrawable(user.getPoints()));
+        TextView points = inflated.findViewById(R.id.points);
+        points.setText(Integer.toString(user.getPoints()));
     }
 
     private void showFollowButton() {
