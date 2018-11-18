@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.profile;
 
-import android.graphics.Color;
-
 import ch.epfl.sweng.swenggolf.R;
 
 public final class Badge {
@@ -10,6 +8,11 @@ public final class Badge {
     public static final String SILVER = "#c0c0c0";
     public static final String BRONZE = "#cd7f32";
     public static final String WHITE = "#ffffff";
+
+    /**
+     * Private constructor to hide the implicit public one.
+     */
+    private Badge(){ }
 
     /**
      * Returns the Drawable element of the badge corresponding to the points of a user.
