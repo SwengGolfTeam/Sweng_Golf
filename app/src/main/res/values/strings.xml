@@ -12,6 +12,7 @@
     <string name="go_to_main_menu">Go To Main Menu</string>
     <string name="profile_activity_name">Profile</string>
     <string name="edit_profile_activity_name">Edit Profile</string>
+    <string name="user_reputation">Reputation:</string>
     <string name="user_preferences">Preferences:</string>
     <string name="offers_posted">offers posted</string>
     <string name="offers_answered">offers answered</string>
@@ -54,9 +55,13 @@
     <string name="location_show_offer">Location:</string>
     <string name="answer_load_error">The answers of this offer could not be loaded</string>
     <string name="add_answer">Add your answer</string>
-    <string name="username_min_length_1">"The username should have at least "</string>
-    <string name="username_min_length_2">" characters."</string>
+    <string name="username_min_length">The username should have at least %d characters.</string>
     <string name="my_offers">My offers</string>
     <string name="title_activity_leaderboard">Leaderboard</string>
     <string name="leaderboard">LeaderBoard</string>
+    <string name="answer_limit">The answer should be at least %d characters.</string>
+    <string name="accept_favorite">Accept answer</string>
+    <string name="accept_favorite_question">Do you want to accept this answer?</string>
+    <string name="remove_favorite">Did you change your mind?</string>
+    <string name="remove_favorite_question">Do you really want to remove your approval?</string>
 </resources>

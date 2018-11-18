@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainMenuActivity" />
+        <activity
+            android:name=".main.MainMenuActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".database.CreateUserActivity" />
         <activity android:name=".database.WaitingActivity" />
 

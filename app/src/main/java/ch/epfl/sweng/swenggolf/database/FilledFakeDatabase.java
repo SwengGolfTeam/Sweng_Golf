@@ -2,94 +2,18 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.location.Location;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 public final class FilledFakeDatabase extends FakeDatabase {
 
     public static final double FAKE_LATITUDE = 44.34;
     public static final double FAKE_LONGITUDE = 1.21;
-
-    /**
-     * Returns a prefilled FakeDatabase.
-     */
-    protected FilledFakeDatabase() {
-        super(true);
-        for (User user : FAKE_USERS) {
-            write(Database.USERS_PATH, user.getUserId(), new User(user));
-        }
-        for (Offer offer : FAKE_OFFERS) {
-            write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
-        }
-        for (User user : FOLLOWERS_OF_USER_ZERO) {
-            String uid = user.getUserId();
-            write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid, uid);
-        }
-    }
-
     private static final String WIKIA_NO_COOKIE = "https://vignette.wikia.nocookie.net/";
     private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
     private static final String STARWARS = "starwars/";
     private static final long DATE = 123123123L;
-
-    /**
-     * Return an user from the list.
-     *
-     * @param index the index of the user.
-     * @return the user at this index
-     */
-    public static User getUser(int index) {
-        return new User(FAKE_USERS[index]);
-    }
-
-    /**
-     * Return an offer from the list.
-     *
-     * @param index the index of the offer.
-     * @return the offer at this index
-     */
-    public static Offer getOffer(int index) {
-        return new Offer(FAKE_OFFERS[index]);
-    }
-
-    /**
-     * Return a follower of the user with id 0.
-     *
-     * @param index the index of the follower
-     * @return the follower at this index
-     */
-    public static User getFollowerOfUserZero(int index) {
-        return FOLLOWERS_OF_USER_ZERO[index];
-    }
-
-    /**
-     * The number of offers.
-     *
-     * @return number of offers
-     */
-    public static int numberOffer() {
-        return FAKE_OFFERS.length;
-    }
-
-    /**
-     * The number of users.
-     *
-     * @return number of users
-     */
-    public static int numberUser() {
-        return FAKE_USERS.length;
-    }
-
-    /**
-     * Return the number of followers of user with id zero.
-     *
-     * @return the number of followers of user with id zero
-     */
-    public static int numberFollowersOfUserZero() {
-        return FOLLOWERS_OF_USER_ZERO.length;
-    }
-
     private static final User[] FAKE_USERS = {
             new User("C3PO", "0", "c3po@gmail.com",
                     WIKIA_NO_COOKIE + STARWARS
@@ -176,18 +100,6 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "region=0%2C0%2C1200%2C675&width=768",
                     "Lightsabers")
     };
-
-    private static Location getLocation() {
-        return getLocation(FAKE_LATITUDE, FAKE_LONGITUDE);
-    }
-
-    private static Location getLocation(double latitude, double longitude) {
-        Location location = new Location("");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        return location;
-    }
-
     private static final Offer[] FAKE_OFFERS = {
             new Offer("0", "Little Droid for ride",
                     "I have a little droid with informations"
@@ -281,6 +193,90 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "scale-to-width-down/800",
                     "014")
     };
+    private static final User[] USER_ZERO_FOLLOWS = {getUser(0), getUser(1), getUser(2)};
 
-    private static final User[] FOLLOWERS_OF_USER_ZERO = {getUser(0), getUser(1), getUser(2)};
+    /**
+     * Returns a prefilled FakeDatabase.
+     */
+    protected FilledFakeDatabase() {
+        super(true);
+        for (User user : FAKE_USERS) {
+            write(Database.USERS_PATH, user.getUserId(), new User(user));
+        }
+        for (Offer offer : FAKE_OFFERS) {
+            write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
+        }
+        for (User user : USER_ZERO_FOLLOWS) {
+            String uid = user.getUserId();
+            write(Database.FOLLOWERS_PATH + "/" + getUser(0).getUserId(), uid, uid);
+        }
+    }
+
+    /**
+     * Return an user from the list.
+     *
+     * @param index the index of the user.
+     * @return the user at this index
+     */
+    public static User getUser(int index) {
+        return new User(FAKE_USERS[index]);
+    }
+
+    /**
+     * Return an offer from the list.
+     *
+     * @param index the index of the offer.
+     * @return the offer at this index
+     */
+    public static Offer getOffer(int index) {
+        return new Offer(FAKE_OFFERS[index]);
+    }
+
+    /**
+     * Return a follower of the user with id 0.
+     *
+     * @param index the index of the follower
+     * @return the follower at this index
+     */
+    public static User getFollowerOfUserZero(int index) {
+        return USER_ZERO_FOLLOWS[index];
+    }
+
+    /**
+     * The number of offers.
+     *
+     * @return number of offers
+     */
+    public static int numberOffer() {
+        return FAKE_OFFERS.length;
+    }
+
+    /**
+     * The number of users.
+     *
+     * @return number of users
+     */
+    public static int numberUser() {
+        return FAKE_USERS.length;
+    }
+
+    /**
+     * Return the number of followers of user with id zero.
+     *
+     * @return the number of followers of user with id zero
+     */
+    public static int numberFollowersOfUserZero() {
+        return USER_ZERO_FOLLOWS.length;
+    }
+
+    private static Location getLocation() {
+        return getLocation(FAKE_LATITUDE, FAKE_LONGITUDE);
+    }
+
+    private static Location getLocation(double latitude, double longitude) {
+        Location location = new Location("");
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
+    }
 }

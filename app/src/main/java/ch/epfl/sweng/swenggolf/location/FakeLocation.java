@@ -7,9 +7,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class FakeLocation extends AppLocation {
 
-    private final Location location;
     public static final double LATITUDE = 44.02;
     public static final double LONGITUDE = 1.36;
+    private final Location location;
 
     private FakeLocation(double latitude, double longitude) {
         location = new Location("");

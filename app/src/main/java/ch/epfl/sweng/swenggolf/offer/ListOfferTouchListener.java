@@ -10,13 +10,6 @@ import android.view.View;
 public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener {
 
     private final OnItemClickListener mListener;
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-
-        void onLongItemClick(View view, int position);
-    }
-
     private final GestureDetector mGestureDetector;
 
     /**
@@ -71,5 +64,11 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
         // No gestures to be intercepted before click
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onLongItemClick(View view, int position);
     }
 }

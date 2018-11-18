@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,19 +16,25 @@ import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FireDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -36,10 +43,14 @@ import static org.mockito.Mockito.when;
 
 public class FireDatabaseTest {
 
+    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final String PATH = "path";
     private static final String ID = "id";
-    public static final Offer OFFER = new Offer("id", "title", "description");
-    private static final List<String> LIST = Arrays.asList("a", "b", "c", "d", "e");
+
+    private static final Offer OFFER1 = new Offer("id", "title", "description");
+    private static final Offer OFFER2 = new Offer("id2", "title2", "description2");
+
+    private static final List<Offer> LIST = Arrays.asList(OFFER1, OFFER2);
 
     @Test
     public void writeAndReadReturnCorrectValues() {
@@ -55,11 +66,11 @@ public class FireDatabaseTest {
         };
 
 
-        mockWrite(idReference, OFFER);
-        ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER);
+        mockWrite(idReference, OFFER1);
+        ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER1);
 
         FireDatabase d = new FireDatabase(database);
-        d.write(PATH, ID, OFFER, listener);
+        d.write(PATH, ID, OFFER1, listener);
         d.read(PATH, ID, listenerOffer, Offer.class);
 
     }
@@ -107,14 +118,14 @@ public class FireDatabaseTest {
         Answer<Void> ans = new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) {
-                assertThat((Offer) invocation.getArgument(0), is(OFFER));
+                assertThat((Offer) invocation.getArgument(0), is(OFFER1));
                 return null;
             }
         };
         doAnswer(ans).when(idReference).setValue(any(Offer.class));
 
         FireDatabase d = new FireDatabase(database);
-        d.write(PATH, ID, OFFER);
+        d.write(PATH, ID, OFFER1);
     }
 
     @Test
@@ -125,9 +136,9 @@ public class FireDatabaseTest {
 
         setUpReadListData(categoryReference);
 
-        ValueListener<List<String>> listener = new ValueListener<List<String>>() {
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
-            public void onDataChange(List<String> value) {
+            public void onDataChange(List<Offer> value) {
                 assertThat(value, is(LIST));
             }
 
@@ -137,20 +148,70 @@ public class FireDatabaseTest {
             }
         };
         FireDatabase d = new FireDatabase(database);
-        d.readList(PATH, listener, String.class);
+        d.readList(PATH, listener, Offer.class);
+    }
+
+    @Test
+    public void readListWithAscendingOrderingReturnCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        setUpQuery(database);
+
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> offers) {
+                assertThat(offers, is(LIST));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+            }
+        };
+        FireDatabase d = new FireDatabase(database);
+        AttributeOrdering o = AttributeOrdering.ascendingOrdering("id", 100);
+        d.readList(Database.OFFERS_PATH, listener, Offer.class, o);
+    }
+
+    @Test
+    public void readListWithDescendingOrderingReturnCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        setUpQuery(database);
+
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> offers) {
+                List<Offer> expected = LIST;
+                Collections.reverse(expected);
+                assertThat(offers, is(expected));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+            }
+        };
+        FireDatabase d = new FireDatabase(database);
+        AttributeOrdering o = AttributeOrdering.descendingOrdering("id", 100);
+        d.readList(Database.OFFERS_PATH, listener, Offer.class, o);
     }
 
     private void setUpReadListData(DatabaseReference categoryReference) {
+        Answer<Void> ans = setUpListDataSnapshot();
+        doAnswer(ans).when(categoryReference)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+    }
+
+    @NonNull
+    private Answer<Void> setUpListDataSnapshot() {
         List<DataSnapshot> data = new ArrayList<>();
-        for (String s : LIST) {
+        for (Offer offer : LIST) {
             DataSnapshot snapshot = mock(DataSnapshot.class);
-            when(snapshot.getValue(String.class)).thenReturn(s);
+            when(snapshot.getValue(Offer.class)).thenReturn(offer);
             data.add(snapshot);
         }
         final DataSnapshot list = mock(DataSnapshot.class);
         when(list.getChildren()).thenReturn(data);
+        when(list.exists()).thenReturn(true);
 
-        Answer<Void> ans = new Answer<Void>() {
+        return new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) {
                 ValueEventListener listener = invocation.getArgument(0);
@@ -158,47 +219,18 @@ public class FireDatabaseTest {
                 return null;
             }
         };
-        doAnswer(ans).when(categoryReference)
-                .addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     @Test
     public void readOffersReturnsCorrectValues() {
         FirebaseDatabase database = mock(FirebaseDatabase.class);
-        DatabaseReference ref = mock(DatabaseReference.class);
-        when(database.getReference(anyString())).thenReturn(ref);
 
-        Query query = setUpQuery(ref);
-
-        Answer<Void> queryListener = new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) {
-                ValueEventListener valueEventListener = invocation.getArgument(0);
-
-                DataSnapshot dataSnapshot = mock(DataSnapshot.class);
-                when(dataSnapshot.exists()).thenReturn(true);
-                DataSnapshot offer = mock(DataSnapshot.class);
-                List<DataSnapshot> offerList = Arrays.asList(offer);
-                when(dataSnapshot.getChildren()).thenReturn(offerList);
-                Offer offerInd = mock(Offer.class);
-                when(offer.getValue(any(Class.class))).thenReturn(offerInd);
-
-                DatabaseError databaseError = mock(DatabaseError.class);
-                when(databaseError.getCode()).thenReturn(DatabaseError.UNKNOWN_ERROR);
-
-                valueEventListener.onDataChange(dataSnapshot);
-                valueEventListener.onCancelled(databaseError);
-
-                return null;
-            }
-        };
-
-        doAnswer(queryListener).when(query)
-                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+        setUpQuery(database);
 
         ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
+                assertTrue(offers.equals(LIST) || offers.size() == 0);
             }
 
             @Override
@@ -208,15 +240,41 @@ public class FireDatabaseTest {
 
         FireDatabase d = new FireDatabase(database);
         d.readOffers(listener); // test both versions
+    }
+
+    @Test
+    public void readOffersWithCategoryReturnsCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        setUpQuery(database);
+
+        ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> offers) {
+               assertEquals(0, offers.size());
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+            }
+        };
+
+        FireDatabase d = new FireDatabase(database);
         d.readOffers(listener, new ArrayList<Category>());
     }
 
-    private Query setUpQuery(DatabaseReference ref) {
+    private void setUpQuery(FirebaseDatabase database) {
+        DatabaseReference ref = mock(DatabaseReference.class);
+        when(database.getReference(anyString())).thenReturn(ref);
         Query idQuery = mock(Query.class);
         Query tagQuery = mock(Query.class);
         when(ref.orderByChild(anyString())).thenReturn(tagQuery);
         when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
-        return idQuery;
+        when(tagQuery.limitToLast(anyInt())).thenReturn(idQuery);
+        when(tagQuery.limitToFirst(anyInt())).thenReturn(idQuery);
+        
+        Answer<Void> queryListener = setUpListDataSnapshot();
+        doAnswer(queryListener).when(idQuery)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     @NonNull

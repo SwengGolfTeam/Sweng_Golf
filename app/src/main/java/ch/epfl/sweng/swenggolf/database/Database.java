@@ -20,6 +20,9 @@ public abstract class Database {
 
     private static Database database = null;
 
+    protected Database() {
+    }
+
     /**
      * Use the given database as the return of the getInstance() method.
      *
@@ -39,9 +42,6 @@ public abstract class Database {
             database = new FireDatabase();
         }
         return database;
-    }
-
-    protected Database() {
     }
 
     /**
@@ -66,7 +66,8 @@ public abstract class Database {
                                @NonNull CompletionListener listener);
 
     /**
-     * Read a single value in a given path with a given id. It return the value using a listener.
+     * Listen for changes of a single value in a given path with a given id.
+     * It returns the value using a listener.
      *
      * @param path     the path where we want to read the value
      * @param id       the id of the value
@@ -104,6 +105,21 @@ public abstract class Database {
                                       @NonNull Class<T> c, AttributeFilter filter);
 
     /**
+     * Read a list of value in a given path. It return the value using a listener. It only return
+     * values in the order specified in ordering. It also take only the first n values specified
+     * in the ordering.
+     *
+     * @param path     the path where we want to read the value
+     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
+     *                 onCancelled method will be called
+     * @param c        the class of the value
+     * @param ordering the ordering which give information about how we order the data
+     */
+    public abstract <T> void readList(@NonNull String path,
+                                      @NonNull ValueListener<List<T>> listener,
+                                      @NonNull Class<T> c, AttributeOrdering ordering);
+
+    /**
      * Remove the value in path with the given id.
      *
      * @param path     the path where is the value we want to remove
@@ -130,7 +146,6 @@ public abstract class Database {
      * @param listener the onDataChange method will be called if we find the value. Otherwise, the
      *                 onCancelled method will be called
      */
-
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
     }
@@ -138,9 +153,10 @@ public abstract class Database {
     /**
      * Read the list of all offers of an user in the given categories. It return the list using a
      * listener.
-     * @param listener  the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
-     * @param categories the list of categories that we want
+     *
+     * @param listener     the onDataChange method will be called if we find the value. Otherwise, the
+     *                     onCancelled method will be called
+     * @param categories   the list of categories that we want
      * @param offerCreator the creator of the use
      */
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener,

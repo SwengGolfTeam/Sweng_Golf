@@ -17,18 +17,18 @@ import com.squareup.picasso.Picasso;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.Leaderboard;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private FragmentManager manager;
     private final User user = Config.getUser();
+    private FragmentManager manager;
     private View nav;
 
     @Override

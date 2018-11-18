@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
@@ -28,6 +29,8 @@ public class Leaderboard extends FragmentConverter {
     private TextView errorMessage;
     private TextView noUser;
     public static final List<User> userList = new ArrayList<>();
+    private static final String ATTRIBUTE = "points";
+    private static final int LEADERBOARD_SIZE = 10;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -36,19 +39,19 @@ public class Leaderboard extends FragmentConverter {
         View inflated = inflater.inflate(R.layout.activity_leaderboard, container, false);
 
         errorMessage = inflated.findViewById(R.id.error_message);
-        noUser = inflated.findViewById(R.id.no_offers_to_show);
+        noUser = inflated.findViewById(R.id.no_user_to_show);
         setRecyclerView(inflated);
         return inflated;
     }
 
     private void setRecyclerView(View inflated) {
         noUser.setVisibility(View.VISIBLE);
-        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.users_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new LeaderboardAdapter(userList);
+        mAdapter = new LeaderboardAdapter(userList, this.getContext());
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
@@ -56,9 +59,8 @@ public class Leaderboard extends FragmentConverter {
 
         userList.clear();
 
-
-
-
+        Database db = Database.getInstance();
+        prepareOfferData(inflated, db);
     }
 
     /**
@@ -68,6 +70,9 @@ public class Leaderboard extends FragmentConverter {
                                     Database db) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.user_list_loading).setVisibility(View.VISIBLE);
+
+        List<User> topUsers = new ArrayList<>(LEADERBOARD_SIZE);
+        AttributeOrdering ordering = AttributeOrdering.descendingOrdering(ATTRIBUTE, LEADERBOARD_SIZE);
         ValueListener listener = new ValueListener<List<User>>() {
             @Override
             public void onDataChange(List<User> users) {
@@ -86,6 +91,7 @@ public class Leaderboard extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
+        db.readList("users",listener,User.class,ordering);
     }
 
 }

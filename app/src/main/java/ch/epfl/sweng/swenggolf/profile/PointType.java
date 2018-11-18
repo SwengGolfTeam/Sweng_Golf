@@ -5,9 +5,13 @@ package ch.epfl.sweng.swenggolf.profile;
  */
 public enum PointType {
 
-    POST_OFFER(10),
-    RESPOND_OFFER(20),
-    CLOSE_OFFER(50);
+    POST_OFFER(3),
+    RESPOND_OFFER(10),
+    CLOSE_OFFER(0),
+    ADD_PICTURE(1),
+    ADD_LOCALISATION(1),
+    FOLLOW(2);
+
 
     private final int value;
 
@@ -17,6 +21,7 @@ public enum PointType {
 
     /**
      * Return the value of the PointType.
+     *
      * @return the value
      */
     public int getValue() {

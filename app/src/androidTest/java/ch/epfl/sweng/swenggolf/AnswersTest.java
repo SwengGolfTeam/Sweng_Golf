@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
@@ -22,6 +21,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Answer;
 import ch.epfl.sweng.swenggolf.offer.Answers;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -30,13 +30,13 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
@@ -60,7 +60,7 @@ public class AnswersTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
@@ -128,6 +128,15 @@ public class AnswersTest {
                 .commit();
         addAnswer("second answer");
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void errorMessageWhenAnswerIsTooShort() {
+        addAnswer("NO");
+        final MainMenuActivity activity = mActivityRule.getActivity();
+        onView(withId(R.id.your_answer_description)).check(matches(
+                hasErrorText(activity
+                        .getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH))));
     }
 
     private void addAnswer(String answer) {

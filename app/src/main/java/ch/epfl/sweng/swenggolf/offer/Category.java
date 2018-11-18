@@ -24,14 +24,13 @@ public enum Category {
      * @param categories The List of Categories we want to see translated
      * @return the concatenated String
      */
-    public static String categoriesToSingleString(List<Category> categories){
+    public static String categoriesToSingleString(List<Category> categories) {
         List<String> list = new ArrayList<>();
 
-        for (Category cat : Category.values()){
-            if (categories.contains(cat)){
+        for (Category cat : Category.values()) {
+            if (categories.contains(cat)) {
                 list.add("true");
-            }
-            else{
+            } else {
                 list.add("false");
             }
         }
@@ -45,12 +44,12 @@ public enum Category {
      * @param list A String of the form "true,true,false,[...],true"
      * @return A List of Categories
      */
-    public static List<Category> singleStringToCategories(String list){
+    public static List<Category> singleStringToCategories(String list) {
         String[] array = TextUtils.split(list, ",");
         List<Category> categories = new ArrayList<>();
         Category[] cat = Category.values();
-        for (int i=0; i< cat.length; i++){
-            if (array[i].equals("true")){
+        for (int i = 0; i < cat.length; i++) {
+            if (array[i].equals("true")) {
                 categories.add(cat[i]);
             }
         }
