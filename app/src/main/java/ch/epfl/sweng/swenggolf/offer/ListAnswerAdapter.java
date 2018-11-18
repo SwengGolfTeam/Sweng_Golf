@@ -163,7 +163,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                         NotificationManager.addPendingNotification(
                                 answer.getUserId(),
                                 new Notification(NotificationType.ANSWER_CHOSEN,
-                                        Config.getUser().getUserId(), offer.getTitle()));
+                                        Config.getUser(), offer));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

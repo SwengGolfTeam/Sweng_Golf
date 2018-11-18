@@ -4,24 +4,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
+
 public class Notification {
     private final NotificationType type;
-    private final String concernedOfferName;
-    private final String concernedUserId;
+    private final Offer concernedOffer;
+    private final User concernedUser;
     private final String uuid;
 
-    public Notification(NotificationType type, @Nullable String concernedUserId, @Nullable String concernedOfferName) {
+    public Notification(NotificationType type, @Nullable User concernedUser, @Nullable Offer concernedOffer) {
         this.type = type;
-        this.concernedUserId = concernedUserId;
-        this.concernedOfferName = concernedOfferName;
+        this.concernedUser = concernedUser;
+        this.concernedOffer = concernedOffer;
         uuid = UUID.randomUUID().toString();
     }
 
     // empty constructor for firebase
     public Notification() {
         type = null;
-        concernedUserId = "";
-        concernedOfferName = "";
+        concernedUser = null;
+        concernedOffer = null;
         uuid = "";
     }
 
@@ -29,12 +32,12 @@ public class Notification {
         return type;
     }
 
-    public String getConcernedUserId() {
-        return concernedUserId;
+    public User getConcernedUser() {
+        return concernedUser;
     }
 
-    public String getConcernedOfferName() {
-        return concernedOfferName;
+    public Offer getConcernedOffer() {
+        return concernedOffer;
     }
 
     public String getUuid() {

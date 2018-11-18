@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.notification;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,30 +15,41 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> {
     private List<Notification> notifications;
+    private ItemClickListener viewHolderOnClickListener;
 
-    public static class NotificationViewHolder extends ThreeFieldsViewHolder implements View.OnClickListener{
+    public static class NotificationViewHolder extends ThreeFieldsViewHolder implements View.OnClickListener {
+        private ItemClickListener listener;
 
         public NotificationViewHolder(@NonNull View itemView, int notificationTextId, int notificationIconId, int crossId) {
             super(itemView, notificationTextId, notificationIconId, crossId);
             itemView.setOnClickListener(this);
         }
 
+        public void setItemClickListener(ItemClickListener listener) {
+            this.listener = listener;
+        }
+
         @Override
         public void onClick(View v) {
-            Log.wtf("NOTIF", "seems to work");
+            listener.onClick(v, getAdapterPosition());
         }
     }
 
-    public NotificationsAdapter(List<Notification> notifications) {
+    public NotificationsAdapter(List<Notification> notifications, ItemClickListener viewHolderOnClickListener) {
         if (notifications == null) {
             throw new IllegalArgumentException();
         }
         this.notifications = new ArrayList<>(notifications);
+        this.viewHolderOnClickListener = viewHolderOnClickListener;
     }
 
     /**
@@ -59,6 +69,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return new NotificationViewHolder(view, R.id.notification_text, R.id.notification_icon, R.id.clear);
     }
 
+    // TODO this method is way too long
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder notificationViewHolder, int i) {
         final Notification notification = notifications.get(i);
@@ -72,19 +83,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         switch (notification.getType()) {
             case ANSWER_CHOSEN:
                 message = context.getString(R.string.notif_answer_chosen,
-                        currentUser.getUserName(),
-                        notification.getConcernedOfferName());
+                        notification.getConcernedUser().getUserName(),
+                        notification.getConcernedOffer().getTitle());
                 imageResource = R.drawable.ic_favorite_black_24dp;
                 break;
             case ANSWER_POSTED:
                 message = context.getString(R.string.notif_answer_posted,
-                        currentUser.getUserName(),
-                        notification.getConcernedOfferName());
+                        notification.getConcernedUser().getUserName(),
+                        notification.getConcernedOffer().getTitle());
                 imageResource = R.drawable.ic_comment_black_24dp;
                 break;
             case FOLLOW:
                 message = context.getString(R.string.notif_follow,
-                        currentUser.getUserName());
+                        notification.getConcernedUser().getUserName());
                 imageResource = R.drawable.ic_star_black_24dp;
                 break;
             case POINTS_GAINED:
@@ -115,6 +126,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 notifyDataSetChanged();
             }
         });
+
+        notificationViewHolder.setItemClickListener(viewHolderOnClickListener);
     }
 
     @Override

@@ -287,7 +287,7 @@ public class ShowOfferActivity extends FragmentConverter {
             mLayout.removeView(newReaction);
             NotificationManager.addPendingNotification(offer.getUserId(),
                     new Notification(NotificationType.ANSWER_POSTED,
-                            Config.getUser().getUserId(), offer.getTitle()));
+                            Config.getUser(), offer));
             mAdapter.notifyDataSetChanged();
 
         }
