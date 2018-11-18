@@ -18,13 +18,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     private List<Offer> offerList;
 
-    public static class MyViewHolder extends ThreeFieldsViewHolder {
-
-        public MyViewHolder(View view) {
-            super(view, R.id.offer_title, R.id.offer_author, R.id.offer_description);
-        }
-    }
-
     /**
      * Constructs a ListOfferAdapter for the RecyclerView.
      *
@@ -36,7 +29,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         }
         this.offerList = offerList;
     }
-
 
     @Override
     public ListOfferAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,5 +68,12 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public void add(@NonNull List<Offer> offers) {
         offerList.addAll(offers);
         notifyDataSetChanged();
+    }
+
+    public static class MyViewHolder extends ThreeFieldsViewHolder {
+
+        public MyViewHolder(View view) {
+            super(view, R.id.offer_title, R.id.offer_author, R.id.offer_description);
+        }
     }
 }

@@ -18,15 +18,10 @@ public enum DbError {
     USER_CODE_EXCEPTION("User code exception"),
     WRITE_CANCELED("Write was cancelled");
 
-    DbError(String message) {
-        this.message = message;
-    }
-
     private final String message;
 
-    @Override
-    public String toString() {
-        return message;
+    DbError(String message) {
+        this.message = message;
     }
 
     /**
@@ -66,5 +61,10 @@ public enum DbError {
             default:
                 throw new IllegalArgumentException("The error code is incorrect.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return message;
     }
 }

@@ -17,8 +17,8 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.conditionActivityResult;
 import static ch.epfl.sweng.swenggolf.storage.Storage.takePicture;
 import static org.junit.Assert.assertFalse;
@@ -47,7 +47,7 @@ public class StorageTest {
 
     @Test
     public void conditionActivityResultFalseOnFailedPictureIntent() {
-        assertFalse(conditionActivityResult(CAPTURE_IMAGE_REQUEST, RESULT_CANCELED,  new Intent()));
+        assertFalse(conditionActivityResult(CAPTURE_IMAGE_REQUEST, RESULT_CANCELED, new Intent()));
     }
 
     @Test

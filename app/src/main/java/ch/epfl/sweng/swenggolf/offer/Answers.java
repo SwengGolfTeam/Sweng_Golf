@@ -6,6 +6,7 @@ import java.util.List;
 public class Answers {
     private int favoritePos;
     private List<Answer> answerList;
+    public static final int NO_FAVORITE = -1;
 
     public Answers(List<Answer> answerList, int favoritePos) {
         this.answerList = new ArrayList<>(answerList);

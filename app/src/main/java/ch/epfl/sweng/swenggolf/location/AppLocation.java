@@ -39,13 +39,6 @@ public abstract class AppLocation {
     }
 
     /**
-     * Fetches the location from Android and outputs it in the given listener.
-     *
-     * @param listener the listener which handles a case of success
-     */
-    public abstract void getLocation(@NonNull OnSuccessListener<Location> listener);
-
-    /**
      * Checks if the app is allowed to check the location. If not, requests it to Android.
      *
      * @param activity the current activity in which we ask for the permission
@@ -59,4 +52,11 @@ public abstract class AppLocation {
         }
         return true;
     }
+
+    /**
+     * Fetches the location from Android and outputs it in the given listener.
+     *
+     * @param listener the listener which handles a case of success
+     */
+    public abstract void getLocation(@NonNull OnSuccessListener<Location> listener);
 }

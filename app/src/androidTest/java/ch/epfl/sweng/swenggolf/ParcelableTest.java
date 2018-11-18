@@ -5,18 +5,19 @@ import android.os.Parcelable;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.profile.PointType;
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.PointType;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ParcelableTest {
-    private static final Offer parceledOffer = new Offer("a","b","c","d","e", Category.TEST,0,1);
-    private static final User parceledUser = new User("a","b","c","d","e","f",
+    private static final Offer parceledOffer =
+            new Offer("a", "b", "c", "d", "e", Category.TEST, 0, 1);
+    private static final User parceledUser = new User("a", "b", "c", "d", "e", "f",
             PointType.CLOSE_OFFER.getValue());
 
     private static Parcel writeToParcel(Parcelable parcelable) {
@@ -27,7 +28,12 @@ public class ParcelableTest {
     }
 
     private static <T> void parcelCreator(Parcelable.Creator<T> c, Parcelable p) {
-        assertEquals(p ,c.createFromParcel(writeToParcel(p)));
+        assertEquals(p, c.createFromParcel(writeToParcel(p)));
+    }
+
+    private static <T extends Parcelable> void newArrayHasGoodSize(Parcelable.Creator<T> creator) {
+        int size = 10;
+        assertThat(creator.newArray(size).length, is(size));
     }
 
     @Test
@@ -66,10 +72,5 @@ public class ParcelableTest {
     @Test
     public void newArrayHasGoodSizeUser() {
         newArrayHasGoodSize(User.CREATOR);
-    }
-
-    private static <T extends Parcelable> void newArrayHasGoodSize(Parcelable.Creator<T> creator) {
-        int size = 10;
-        assertThat(creator.newArray(size).length, is(size));
     }
 }

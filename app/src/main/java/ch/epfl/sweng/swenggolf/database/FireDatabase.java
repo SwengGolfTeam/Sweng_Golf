@@ -36,6 +36,42 @@ public final class FireDatabase extends Database {
         this.database = database;
     }
 
+    @NonNull
+    private static <T> ValueEventListener getListValueListener(
+            @NonNull final ValueListener<List<T>> listener, @NonNull final Class<T> c) {
+        return new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<T> list = new ArrayList<>();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    list.add(data.getValue(c));
+                }
+                listener.onDataChange(list);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onCancelled(DbError.getError(databaseError));
+            }
+        };
+    }
+
+    @NonNull
+    private static DatabaseReference.CompletionListener getCompletionListener(
+            final CompletionListener listener) {
+        return new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError,
+                                   @NonNull DatabaseReference databaseReference) {
+                DbError error = NONE;
+                if (databaseError != null) {
+                    error = DbError.getError(databaseError);
+                }
+                listener.onComplete(error);
+            }
+        };
+    }
+
     @Override
     public void write(String path, String id, Object object) {
 
@@ -48,7 +84,6 @@ public final class FireDatabase extends Database {
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
         database.getReference(path).child(id).setValue(object, firebaseListener);
     }
-
 
     @Override
     public <T> void read(String path, String id, final ValueListener<T> listener,
@@ -71,7 +106,8 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList(String path, final ValueListener<List<T>> listener, final Class<T> c) {
+    public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
+                             @NonNull final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
         ValueEventListener firebaseListener = getListValueListener(listener, c);
         ref.addListenerForSingleValueEvent(firebaseListener);
@@ -99,47 +135,11 @@ public final class FireDatabase extends Database {
         readListQuery(listener, query, c, ordering.isDescending());
     }
 
-    @NonNull
-    private static <T> ValueEventListener getListValueListener(
-            @NonNull final ValueListener<List<T>> listener, @NonNull final Class<T> c) {
-        return new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<T> list = new ArrayList<>();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    list.add(data.getValue(c));
-                }
-                listener.onDataChange(list);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onCancelled(DbError.getError(databaseError));
-            }
-        };
-    }
-
     @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
         database.getReference(path).child(id).removeValue(firebaseListener);
-    }
-
-    @NonNull
-    private static DatabaseReference.CompletionListener getCompletionListener(
-            final CompletionListener listener) {
-        return new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError,
-                                   @NonNull DatabaseReference databaseReference) {
-                DbError error = NONE;
-                if (databaseError != null) {
-                    error = DbError.getError(databaseError);
-                }
-                listener.onComplete(error);
-            }
-        };
     }
 
     @Override

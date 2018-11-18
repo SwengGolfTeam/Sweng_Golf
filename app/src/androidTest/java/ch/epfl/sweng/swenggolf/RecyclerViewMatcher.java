@@ -17,34 +17,6 @@ public class RecyclerViewMatcher {
     private final int recyclerViewId;
     private int position;
     private int targetViewId;
-
-    public RecyclerViewMatcher(int recyclerViewId) {
-        this.recyclerViewId = recyclerViewId;
-    }
-
-    /**
-     * Enables the selection of an item on a RecyclerList.
-     *
-     * @param position the position of the item
-     * @return the view matcher of the item, used by espresso
-     */
-    public Matcher<View> atPosition(final int position) {
-        return atPositionOnView(position, -1);
-    }
-
-    /**
-     * Enables the selection of an item on a RecyclerList.
-     *
-     * @param position     the position of the item
-     * @param targetViewId the view on which the item is
-     * @return the view matcher of the item, used by espresso
-     */
-    public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
-        this.position = position;
-        this.targetViewId = targetViewId;
-        return typeSafeMatcher;
-    }
-
     private TypeSafeMatcher<View> typeSafeMatcher =
             new TypeSafeMatcher<View>() {
                 Resources resources = null;
@@ -92,4 +64,31 @@ public class RecyclerViewMatcher {
                     return recyclerView.findViewHolderForAdapterPosition(position).itemView;
                 }
             };
+
+    public RecyclerViewMatcher(int recyclerViewId) {
+        this.recyclerViewId = recyclerViewId;
+    }
+
+    /**
+     * Enables the selection of an item on a RecyclerList.
+     *
+     * @param position the position of the item
+     * @return the view matcher of the item, used by espresso
+     */
+    public Matcher<View> atPosition(final int position) {
+        return atPositionOnView(position, -1);
+    }
+
+    /**
+     * Enables the selection of an item on a RecyclerList.
+     *
+     * @param position     the position of the item
+     * @param targetViewId the view on which the item is
+     * @return the view matcher of the item, used by espresso
+     */
+    public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
+        this.position = position;
+        this.targetViewId = targetViewId;
+        return typeSafeMatcher;
+    }
 }
