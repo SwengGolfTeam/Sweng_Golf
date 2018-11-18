@@ -4,9 +4,11 @@ import ch.epfl.sweng.swenggolf.R;
 
 public final class Badge {
     public static final int MAX_LEVEL = 15;
-    public static final String GOLD = "#ffdf00";
-    public static final String SILVER = "#c0c0c0";
-    public static final String BRONZE = "#cd7f32";
+
+    // Color format: #AARRGGBB or #RRGGBB
+    public static final String GOLD = "#40ffdf00";
+    public static final String SILVER = "#40c0c0c0";
+    public static final String BRONZE = "#40cd7f32";
     public static final String WHITE = "#ffffff";
 
     /**
