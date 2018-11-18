@@ -5,14 +5,14 @@ import android.graphics.Color;
 import ch.epfl.sweng.swenggolf.R;
 
 public final class Badge {
-    private static final int MAX_LEVEL = 15;
-    private static final String GOLD = "#ffdf00";
-    private static final String SILVER = "#c0c0c0";
-    private static final String BRONZE = "#cd7f32";
-    private static final String WHITE = "#ffffff";
+    public static final int MAX_LEVEL = 15;
+    public static final String GOLD = "#ffdf00";
+    public static final String SILVER = "#c0c0c0";
+    public static final String BRONZE = "#cd7f32";
+    public static final String WHITE = "#ffffff";
 
     /**
-     * Returns the Drawable element of the badge corresponding to the points of a user
+     * Returns the Drawable element of the badge corresponding to the points of a user.
      * @param points The amount of points of a user
      * @return The Drawable of the badge
      */
@@ -40,32 +40,26 @@ public final class Badge {
     }
 
     /**
-     * Computes the color of the background of the comments of the user (under the Offers)
+     * Computes the color of the background of the comments of the user (under the Offers).
      * @param points the amount of points of the user
      * @return the color corresponding to its badge
      */
-    public static int getColor(int points){
+    public static String getColor(int points){
         int level = computeLevel(points);
-        String color;
         switch (level){
             case 1: case 2: case 3: case 4: case 5:
-                color = BRONZE;
-                break;
+                return BRONZE;
             case 6: case 7: case 8: case 9: case 10:
-                color = SILVER;
-                break;
+                return SILVER;
             case 11: case 12: case 13: case 14: case 15:
-                color = GOLD;
-                break;
+                return GOLD;
             default:
-                color = WHITE;
-                break;
+                return WHITE;
         }
-        return Color.parseColor(color);
     }
 
     /**
-     * Computes the Level corresponding to the amount of points
+     * Computes the Level corresponding to the amount of points.
      * @param points the amount of points of the user
      * @return the level of the corresponding Badge
      */

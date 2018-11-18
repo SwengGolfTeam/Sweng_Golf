@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -118,7 +119,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .fit().into(userPic);
         userPic.setContentDescription("pic"
                 + Integer.toString(holder.getAdapterPosition()));
-        holder.itemView.setBackgroundColor(Badge.getColor(value.getPoints()));
+        holder.itemView.setBackgroundColor(Color.parseColor(Badge.getColor(value.getPoints())));
     }
 
     private void setupFavorite(final AnswerViewHolder holder, int position) {
