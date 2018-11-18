@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -113,6 +115,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .fit().into(userPic);
         userPic.setContentDescription("pic"
                 + Integer.toString(holder.getAdapterPosition()));
+        holder.itemView.setBackgroundColor(Color.parseColor(Badge.getColor(value.getPoints())));
     }
 
     private void setupFavorite(final AnswerViewHolder holder, int position) {
