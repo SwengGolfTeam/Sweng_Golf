@@ -79,6 +79,7 @@ public class CreateOfferActivity extends FragmentConverter
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
     private final long separation = 86220000L;
+    private int fragmentsToSkip;
 
     private static final boolean ON = true;
     private static final boolean OFF = false;
@@ -173,6 +174,10 @@ public class CreateOfferActivity extends FragmentConverter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
+        final Bundle bundle = getArguments();
+        if(bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
+            fragmentsToSkip = bundle.getInt("futureFragmentsToSkip");
+        }
     }
 
     @Override
@@ -362,7 +367,9 @@ public class CreateOfferActivity extends FragmentConverter
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             LENGTH_SHORT).show();
-                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
+                    int newFragmentsToSkip = offerToModify == null ? 1 : 2;
+                    newFragmentsToSkip += fragmentsToSkip;
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer, newFragmentsToSkip));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
@@ -382,12 +389,7 @@ public class CreateOfferActivity extends FragmentConverter
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                 Fragment backFrag;
-                if (offerToModify == null) {
-                    backFrag = new ListOfferActivity();
-                } else {
-                    backFrag = FragmentConverter.createShowOfferWithOffer(offerToModify);
-                }
-                replaceCentralFragment(backFrag);
+                getFragmentManager().popBackStack();
                 return true;
             }
             default: {

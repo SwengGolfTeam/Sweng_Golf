@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +44,9 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
         setUserDisplay();
+        FragmentManager.enableDebugLogging(true);
         if (savedInstances == null) {
+            Log.d("MAINACTIVITY", "Creating main fragment.");
             launchFragment();
         }
     }
@@ -58,7 +61,9 @@ public class MainMenuActivity extends AppCompatActivity {
         Fragment offerList = new ListOfferActivity();
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
-                manager.beginTransaction().add(R.id.centralFragment, offerList);
+                manager.beginTransaction()
+                        .add(R.id.centralFragment, offerList);
+        //                    .addToBackStack("offer list");
         transaction.commit();
     }
 
@@ -93,7 +98,18 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void replaceCentralFragment(Fragment fragment) {
-        manager.beginTransaction().replace(R.id.centralFragment, fragment).commit();
+        //TODO : maybe we need to clear the backstack before proceeding
+        //drain the backstack
+        int backStackSize = manager.getBackStackEntryCount();
+        Log.d("MAINACTIVTY", "Draining backstack from " + backStackSize + " fragments");
+        for(int i = 0; i <backStackSize; ++i) {
+            manager.popBackStack();
+        }
+        // manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        manager.beginTransaction().replace(R.id.centralFragment, fragment)
+                .addToBackStack(null)
+                .commit();
         DrawerLayout drawerLayout = findViewById(R.id.side_menu);
         drawerLayout.closeDrawers();
     }
@@ -136,5 +152,29 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void createOfferActivity(MenuItem item) {
         replaceCentralFragment(new CreateOfferActivity());
+    }
+
+    @Override
+    public void onBackPressed() {
+            Log.d("MAINACTIVITY", "" + getSupportFragmentManager().getBackStackEntryCount());
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
+            final Bundle bundle = fragment.getArguments();
+            if (bundle != null) {
+                if (bundle.containsKey("fragmentsToSkip")) {
+                    int nbr = bundle.getInt("fragmentsToSkip");
+                    Log.d("MAINACTIVITY", "Popping " + nbr + " elements from backstack");
+                    for (int i = 0; i < nbr; ++i) {
+                        getSupportFragmentManager().popBackStackImmediate();
+                    }
+                }
+            }
+                super.onBackPressed();
+        } else {
+            Log.d("MAINACTIVITY", "Finish activity");
+            moveTaskToBack(true);
+            // finish();
+        }
+
     }
 }

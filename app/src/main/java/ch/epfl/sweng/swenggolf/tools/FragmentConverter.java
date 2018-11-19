@@ -2,8 +2,10 @@ package ch.epfl.sweng.swenggolf.tools;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,6 +18,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
@@ -27,7 +30,9 @@ public abstract class FragmentConverter extends Fragment {
 
     protected void replaceFragment(Fragment fragment, int viewId) {
         FragmentManager manager = getFragmentManager();
-        manager.beginTransaction().replace(viewId, fragment).commit();
+        FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
+            transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -63,6 +68,27 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
+     * Creates a ProfileActivity wit arguments already set.
+     *
+     * @param user the user to pass to the fragment.
+     * @return a new ProfileActivity fragment with user.
+     */
+    public static ProfileActivity createShowProfileWithProfile(User user, int fragmentsToSkip) {
+        String key = "ch.epfl.sweng.swenggolf.user";
+        ProfileActivity fragment = fillFragment(new ProfileActivity(), key, user);
+        fragment.getArguments().putInt("fragmentsToSkip", fragmentsToSkip);
+        return fragment;
+    }
+
+    public static EditProfileActivity createEditProfileActivity(int fragmentsToSkip) {
+        EditProfileActivity fragment = new EditProfileActivity();
+        Bundle bundle = new Bundle();
+        bundle.putInt("futureFragmentsToSkip", fragmentsToSkip);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    /**
      * Creates a ShowOfferActivity with arguments already set.
      *
      * @param offer the offer to pass to the fragment.
@@ -70,6 +96,16 @@ public abstract class FragmentConverter extends Fragment {
      */
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
         return fillFragment(new ShowOfferActivity(), "offer", offer);
+    }
+    public static ShowOfferActivity createShowOfferWithOffer(Offer offer, int fragmentsToSkip) {
+        ShowOfferActivity fragment =  fillFragment(new ShowOfferActivity(), "offer", offer);
+        return putFragmentsToSkip(fragment, fragmentsToSkip);
+    }
+
+    @NonNull
+    private static <T extends Fragment> T putFragmentsToSkip(T fragment, int fragmentsToSkip) {
+        fragment.getArguments().putInt("fragmentsToSkip", fragmentsToSkip);
+        return fragment;
     }
 
     /**
@@ -80,6 +116,18 @@ public abstract class FragmentConverter extends Fragment {
      */
     public static CreateOfferActivity createOfferActivityWithOffer(Offer offer) {
         return fillFragment(new CreateOfferActivity(), "offer", offer);
+    }
+
+    /**
+     * Creates a CreateOfferActivity with arguments already set.
+     *
+     * @param offer the offer to pass to the fragment.
+     * @return a new CreateOfferActivity with an offer.
+     */
+    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer, int fragmentsToSkip) {
+        CreateOfferActivity fragment = fillFragment(new CreateOfferActivity(), "offer", offer);
+        fragment.getArguments().putInt("futureFragmentsToSkip", fragmentsToSkip);
+        return fragment;
     }
 
     /**

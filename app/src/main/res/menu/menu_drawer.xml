@@ -11,7 +11,6 @@
             android:icon="@android:drawable/ic_menu_myplaces"
             android:title="@string/offers"
             android:onClick="loadShowOffersActivity" />
-        <!-- TODO : add a new icon for my offers-->
         <item
             android:id="@+id/my_offers"
             android:icon="@drawable/baseline_library_books_24"

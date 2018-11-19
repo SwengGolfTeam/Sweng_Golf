@@ -60,6 +60,7 @@ public class ShowOfferActivity extends FragmentConverter {
     private Offer offer;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
+    private int fragmentsToSkip;
 
     private View inflated;
 
@@ -92,7 +93,12 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        offer = getArguments().getParcelable("offer");
+
+        final Bundle bundle = getArguments();
+        offer = bundle.getParcelable("offer");
+        if(bundle.containsKey("fragmentsToSkip")) {
+            fragmentsToSkip = bundle.getInt("fragmentsToSkip");
+        }
     }
 
     @Override
@@ -324,7 +330,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 return true;
             }
             case R.id.button_modify_offer: {
-                replaceCentralFragment(createOfferActivityWithOffer(offer));
+                replaceCentralFragment(createOfferActivityWithOffer(offer, fragmentsToSkip));
                 return true;
             }
             case R.id.button_delete_offer: {
@@ -381,7 +387,9 @@ public class ShowOfferActivity extends FragmentConverter {
                 if (databaseError == DbError.NONE && showToast) {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
-                    replaceCentralFragment(new ListOfferActivity());
+                    //replaceCentralFragment(new ListOfferActivity(), true);
+                    getFragmentManager().popBackStack();
+                    //TODO : need to handle case where the offer has been modified before
                 }
             }
 
