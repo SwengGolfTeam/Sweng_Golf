@@ -15,18 +15,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.offer.ListOfferAdapter;
-import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
-import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.MyViewHolder> {
 
     private List<User> userList;
     private Context mContext;
+    private UserListener userListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,11 +31,13 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         TextView userPoints;
         ImageView userImage;
         ImageView userBadge;
+        TextView userPosition;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.user_name);
             userPoints = itemView.findViewById(R.id.user_points);
+            userPosition = itemView.findViewById(R.id.user_position);
             userImage = itemView.findViewById(R.id.user_image);
             userBadge = itemView.findViewById(R.id.user_badge);
         }
@@ -49,12 +48,13 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
      *
      * @param userList the list of offers to be displayed
      */
-    public LeaderboardAdapter(List<User> userList, Context mContext) {
+    public LeaderboardAdapter(List<User> userList, Context mContext, UserListener userListener) {
         if (userList == null) {
             throw new IllegalArgumentException();
         }
         this.userList = userList;
         this.mContext = mContext;
+        this.userListener = userListener;
     }
 
 
@@ -74,13 +74,27 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         name.setText(user.getUserName());
 
         TextView points = holder.userPoints;
-        points.setText(Integer.toString(user.getPoints()));
+        String pointString = "Points : " + Integer.toString(user.getPoints());
+        points.setText(pointString);
+
+        TextView userPosition = holder.userPosition;
+        String positionString = "Position : " +
+                Integer.toString(userList.indexOf(user) + 1);
+        userPosition.setText(positionString);
 
         Uri photoUri = Uri.parse(user.getPhoto());
         Picasso.with(mContext).load(photoUri).into(holder.userImage);
 
         ImageView badge = holder.userBadge;
         badge.setImageResource(Badge.getDrawable(user.getPoints()));
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userListener.onUserClick(user);
+            }
+        });
 
     }
 

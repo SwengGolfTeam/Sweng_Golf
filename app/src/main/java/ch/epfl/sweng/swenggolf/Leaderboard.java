@@ -35,14 +35,14 @@ public class Leaderboard extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.leaderboard);
         View inflated = inflater.inflate(R.layout.activity_leaderboard, container, false);
-
         errorMessage = inflated.findViewById(R.id.error_message);
         noUser = inflated.findViewById(R.id.no_user_to_show);
         setRecyclerView(inflated);
         return inflated;
     }
+
 
     private void setRecyclerView(View inflated) {
         noUser.setVisibility(View.VISIBLE);
@@ -50,8 +50,13 @@ public class Leaderboard extends FragmentConverter {
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mAdapter = new LeaderboardAdapter(userList, this.getContext());
+        UserListener userListener = new UserListener() {
+            @Override
+            public void onUserClick(User user) {
+                replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+            }
+        };
+        mAdapter = new LeaderboardAdapter(userList, this.getContext(),userListener);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
@@ -86,7 +91,7 @@ public class Leaderboard extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Unable to load offers from database");
+                Log.d(error.toString(), "Unable to load best users from database");
                 inflated.findViewById(R.id.user_list_loading).setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
