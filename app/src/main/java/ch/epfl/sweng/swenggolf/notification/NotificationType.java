@@ -1,5 +1,5 @@
 package ch.epfl.sweng.swenggolf.notification;
 
 public enum NotificationType {
-    ANSWER_CHOSEN, FOLLOW, ANSWER_POSTED, POINTS_GAINED
+    ANSWER_CHOSEN, FOLLOW, ANSWER_POSTED,LEVEL_GAINED
 }

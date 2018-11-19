@@ -133,9 +133,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Dialog alertDialog = answers.getFavoritePos() != pos
                         ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
-
-
-            }
+          }
         });
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());
@@ -171,7 +169,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     }
 
     private Dialog acceptAnswerDialog(Context context, final int pos) {
-        return createFavoriteDialog(context, pos,context.getString(R.string.accept_favorite),
+        return createFavoriteDialog(context, pos, context.getString(R.string.accept_favorite),
                 context.getString(R.string.accept_favorite_question));
     }
 

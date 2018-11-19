@@ -15,10 +15,6 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -98,10 +94,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                         notification.getConcernedUser().getUserName());
                 imageResource = R.drawable.ic_star_black_24dp;
                 break;
-            case POINTS_GAINED:
-                // TODO
-                message = "";
-                imageResource = 0;
+            case LEVEL_GAINED:
+                message = context.getString(R.string.notif_level_gained);
+                imageResource = R.drawable.ic_exposure_plus_1_black_24dp;
                 break;
             default: // should never happen? -> throw an exception?
                 message = "";
