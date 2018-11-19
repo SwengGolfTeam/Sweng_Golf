@@ -5,9 +5,11 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+import static ch.epfl.sweng.swenggolf.profile.PointType.CLOSE_OFFER;
+import static ch.epfl.sweng.swenggolf.profile.PointType.POST_OFFER;
+import static ch.epfl.sweng.swenggolf.profile.PointType.RESPOND_OFFER;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,9 +21,9 @@ public class UserTest {
             EMAIL = "Google", PHOTO = "Picsou",
             PREFERENCE = "Banana", DESCRIPTION = "Hello, I'm happy";
 
-    private static final int POINTS = PointType.CLOSE_OFFER.getValue()
-            + PointType.RESPOND_OFFER.getValue()
-            + PointType.POST_OFFER.getValue();
+    private static final int POINTS = CLOSE_OFFER.getValue()
+            + RESPOND_OFFER.getValue()
+            + POST_OFFER.getValue();
 
     private User user1;
 
@@ -52,12 +54,13 @@ public class UserTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullPreference() {  new User(USERNAME, ID, EMAIL, null);
+    public void testNullPreference() {
+        new User(USERNAME, ID, EMAIL, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNegativePoints() {
-       new User(USERNAME, ID, EMAIL, PHOTO,
+        new User(USERNAME, ID, EMAIL, PHOTO,
                 PREFERENCE, DESCRIPTION, -POINTS);
     }
 
@@ -90,9 +93,7 @@ public class UserTest {
         user2.setUserId(ID);
         user2.setPreference(PREFERENCE);
         user2.setDescription(DESCRIPTION);
-        user2.addPoints(PointType.POST_OFFER);
-        user2.addPoints(PointType.RESPOND_OFFER);
-        user2.addPoints(PointType.CLOSE_OFFER);
+        user2.addPoints(POST_OFFER.getValue() + RESPOND_OFFER.getValue() + CLOSE_OFFER.getValue());
         assertEquals("Failed to set preference", user1, user2);
     }
 

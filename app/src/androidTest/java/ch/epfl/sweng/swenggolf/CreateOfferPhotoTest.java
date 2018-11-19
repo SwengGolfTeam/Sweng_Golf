@@ -25,10 +25,8 @@ import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,6 +38,25 @@ public class CreateOfferPhotoTest {
     @Rule
     public IntentsTestRule<MainMenuActivity> mActivitiyRule =
             new IntentsTestRule<>(MainMenuActivity.class);
+
+    private static void onActivityResultAnswer(
+            final IntentsTestRule<MainMenuActivity> rule, final Parcel parcel) {
+        final Instrumentation.ActivityResult pictureResult =
+                new Instrumentation.ActivityResult(RESULT_OK, null);
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWithFunction(
+                new ActivityResultFunction() {
+                    @Override
+                    public Instrumentation.ActivityResult apply(Intent intent) {
+                        Uri photoUri = (Uri) intent.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                        Uri.writeToParcel(parcel, photoUri);
+                        parcel.setDataPosition(0);
+                        File cacheDirectory = rule.getActivity().getCacheDir();
+                        File photoFile = new File(cacheDirectory, photoUri.getLastPathSegment());
+                        assertThat(photoFile.exists(), is(true));
+                        return pictureResult;
+                    }
+                });
+    }
 
     /**
      * Set up the environnement to work with CreateOfferActivity.
@@ -55,34 +72,15 @@ public class CreateOfferPhotoTest {
     public void takePictureButtonTriggersIntent() {
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
                 .respondWithFunction(new ActivityResultFunction() {
-            @Override
-            public Instrumentation.ActivityResult apply(Intent intent) {
-                assertThat(intent.getExtras(), not(is((Bundle)null)));
-                assertThat((Uri)intent.getExtras()
-                        .get(MediaStore.EXTRA_OUTPUT), not(is((Uri) null)));
-                return new Instrumentation.ActivityResult(RESULT_OK, null);
-            }
-        });
+                    @Override
+                    public Instrumentation.ActivityResult apply(Intent intent) {
+                        assertThat(intent.getExtras(), not(is((Bundle) null)));
+                        assertThat((Uri) intent.getExtras()
+                                .get(MediaStore.EXTRA_OUTPUT), not(is((Uri) null)));
+                        return new Instrumentation.ActivityResult(RESULT_OK, null);
+                    }
+                });
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());
-    }
-
-    private static void onActivityResultAnswer(
-            final IntentsTestRule<MainMenuActivity> rule, final Parcel parcel) {
-        final Instrumentation.ActivityResult pictureResult =
-                new Instrumentation.ActivityResult(RESULT_OK, null);
-        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWithFunction(
-                new ActivityResultFunction() {
-            @Override
-            public Instrumentation.ActivityResult apply(Intent intent) {
-                Uri photoUri = (Uri) intent.getExtras().get(MediaStore.EXTRA_OUTPUT);
-                Uri.writeToParcel(parcel, photoUri);
-                parcel.setDataPosition(0);
-                File cacheDirectory = rule.getActivity().getCacheDir();
-                File photoFile = new File(cacheDirectory, photoUri.getLastPathSegment());
-                assertThat(photoFile.exists(), is(true));
-                return pictureResult;
-            }
-        });
     }
 
     @Test

@@ -9,19 +9,19 @@
         <item
             android:id="@+id/offers"
             android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="@string/offers"
-            android:onClick="loadShowOffersActivity" />
+            android:onClick="loadShowOffersActivity"
+            android:title="@string/offers" />
         <!-- TODO : add a new icon for my offers-->
         <item
             android:id="@+id/my_offers"
             android:icon="@drawable/baseline_library_books_24"
-            android:title="@string/my_offers"
-            android:onClick="loadListOwnOfferActivity" />
+            android:onClick="loadListOwnOfferActivity"
+            android:title="@string/my_offers" />
         <item
             android:id="@+id/create_offer"
             android:icon="@android:drawable/ic_menu_add"
-            android:title="@string/create_offer"
-            android:onClick="createOfferActivity" />
+            android:onClick="createOfferActivity"
+            android:title="@string/create_offer" />
         <item
             android:id="@+id/preference_activity"
             android:icon="@android:drawable/btn_star"

@@ -16,25 +16,22 @@ import static ch.epfl.sweng.swenggolf.Permission.NONE;
 public class Config {
 
     public static final int PERMISSION_FINE_LOCATION = 66;
-
-    private Config() {
-    }
-
     /**
      * onTest must be true for tests and false otherwise.
      */
     private static boolean onTest = false;
-
     /**
      * The ActivityCallback set before.
      */
     private static ActivityCallback activityCallback = null;
-
-
     /**
      * user is used to mock a Firebase user during a test.
      */
     private static User user = null;
+
+
+    private Config() {
+    }
 
     /**
      * Method to know if we are in test or not.
@@ -83,15 +80,6 @@ public class Config {
     }
 
     /**
-     * Set the ActivityCallback.
-     *
-     * @param activityCallback the ActivityCallback to set
-     */
-    public static void setActivityCallback(ActivityCallback activityCallback) {
-        Config.activityCallback = activityCallback;
-    }
-
-    /**
      * Reset The ActivityCallback.
      */
     public static void resetActivityCallback() {
@@ -111,6 +99,15 @@ public class Config {
             Config.resetActivityCallback();
         }
         return Config.activityCallback;
+    }
+
+    /**
+     * Set the ActivityCallback.
+     *
+     * @param activityCallback the ActivityCallback to set
+     */
+    public static void setActivityCallback(ActivityCallback activityCallback) {
+        Config.activityCallback = activityCallback;
     }
 
     /**

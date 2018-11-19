@@ -2,6 +2,10 @@ package ch.epfl.sweng.swenggolf.tools;
 
 public final class Check {
 
+    private Check() {
+
+    }
+
     /**
      * Use this function to test if the length of the string is between minLength and maxLength.
      *
@@ -22,9 +26,5 @@ public final class Check {
                     + length + ".");
         }
         return inputText;
-    }
-
-    private Check() {
-
     }
 }

@@ -59,16 +59,13 @@ import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermissi
 
 
 public class ShowOfferActivity extends FragmentConverter {
+    public static final int DISTANCE_GRANULARITY = 100;
+    private static final int KILOMETER_SIZE = 1000;
+    private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private boolean userIsCreator;
     private Offer offer;
-    private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private ListAnswerAdapter mAdapter;
-
     private View inflated;
-
-    private static final int KILOMETER_SIZE = 1000;
-    public static final int DISTANCE_GRANULARITY = 100;
-
     private TextView errorMessage;
     private LinearLayout mLayout;
     private View newReaction;
@@ -378,6 +375,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
         database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
         database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
+        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
     }
 
     private CompletionListener getRemoveOfferListerner(final boolean showToast) {

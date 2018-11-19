@@ -12,10 +12,10 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 
 public class LocalDatabase extends SQLiteOpenHelper {
 
+    public static final String COLUMN_CATEGORIES = "categories";
     private static final String DEFAULT_DATABASE_NAME = "local.db";
     private static final String TABLE_NAME = "filters";
     private static final String COLUMN_ID = "_id";
-    public static final String COLUMN_CATEGORIES = "categories";
 
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory,
                          int dbVersion, String databaseName) {

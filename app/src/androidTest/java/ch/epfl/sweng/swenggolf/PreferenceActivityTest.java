@@ -14,15 +14,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-
 import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -54,15 +53,15 @@ public class PreferenceActivityTest {
         preferenceRule.launchActivity(new Intent());
         preferenceRule.getActivity().getSupportFragmentManager()
                 .beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity())
-                    .commit();
+                .commit();
     }
 
     /**
      * Scrolls to last element and check that it is displayed.
      */
     @Test
-    public void scrollingWorks(){
-        int userLength = FilledFakeDatabase.numberUser()-1;
+    public void scrollingWorks() {
+        int userLength = FilledFakeDatabase.numberUser() - 1;
         ViewAction scrollToLast =
                 RecyclerViewActions
                         .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
@@ -70,9 +69,9 @@ public class PreferenceActivityTest {
     }
 
     @Test
-    public void testListSize(){
+    public void testListSize() {
         ListPreferenceAdapter adapter = new ListPreferenceAdapter();
-        assertThat(adapter.getItemCount(),is(FilledFakeDatabase.numberFollowersOfUserZero()));
+        assertThat(adapter.getItemCount(), is(FilledFakeDatabase.numberFollowersOfUserZero()));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class PreferenceActivityTest {
 
     @Test
     public void showLastUserInFollowList() {
-        int last = FilledFakeDatabase.numberFollowersOfUserZero()-1;
+        int last = FilledFakeDatabase.numberFollowersOfUserZero() - 1;
         User user = FilledFakeDatabase.getFollowerOfUserZero(last);
         onView(new RecyclerViewMatcher(R.id.preference_list).atPosition(last))
                 .check(matches(hasDescendant(withText(user.getUserName()))));

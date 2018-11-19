@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
@@ -24,6 +23,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -33,9 +33,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -44,10 +42,6 @@ import static junit.framework.TestCase.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class ListOfferActivityTest {
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
 
     public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."
@@ -59,22 +53,12 @@ public class ListOfferActivityTest {
             + "Nullam tristique vel nisi a rutrum. Sed commodo nec libero sed volutpat."
             + "Fusce in nibh pharetra nunc pellentesque tempor id interdum est."
             + "Sed rutrum mauris in ipsum consequat, nec scelerisque nulla facilisis.";
-
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
-    /**
-     * Configures a fake database and enables TestMode.
-     */
-    @Before
-    public void init() throws InterruptedException {
-        setUpFakeDatabase();
-        Config.goToTest();
-        mActivityRule.launchActivity(new Intent());
-        // reinit local database to default values just in case test are not independent
-        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
-        localDb.writeCategories(Arrays.asList(Category.values()));
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 
     /**
@@ -89,6 +73,19 @@ public class ListOfferActivityTest {
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
+    }
+
+    /**
+     * Configures a fake database and enables TestMode.
+     */
+    @Before
+    public void init() {
+        setUpFakeDatabase();
+        Config.goToTest();
+        mActivityRule.launchActivity(new Intent());
+        // reinit local database to default values just in case test are not independent
+        LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
+        localDb.writeCategories(Arrays.asList(Category.values()));
     }
 
     @Test
@@ -106,13 +103,13 @@ public class ListOfferActivityTest {
                 onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                         .check(matches(hasDescendant(withText(value.getUserName()))));
             }
-            
+
             @Override
             public void onCancelled(DbError error) {
                 fail();
             }
         }, offer.getUserId());
-   }
+    }
 
     @Test
     public void canOpenMenu() {
@@ -179,7 +176,7 @@ public class ListOfferActivityTest {
         onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
     }
 
-    private void clickOnCategoryInMenu(Category cat){
+    private void clickOnCategoryInMenu(Category cat) {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(cat.toString())).perform(click());
     }

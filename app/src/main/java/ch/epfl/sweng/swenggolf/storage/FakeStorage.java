@@ -71,7 +71,7 @@ public final class FakeStorage extends Storage {
 
         @Nullable
         @Override
-        public <X extends Throwable> Uri getResult(@NonNull Class<X> aClass) throws X {
+        public <X extends Throwable> Uri getResult(@NonNull Class<X> aClass) {
             return uri;
         }
 

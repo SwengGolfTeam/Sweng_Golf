@@ -20,6 +20,7 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.notification.Notification;
@@ -28,14 +29,22 @@ import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
+import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
 
 public class ProfileActivity extends FragmentConverter {
-    private User user;
     private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
     private static final int STAR_ON = android.R.drawable.btn_star_big_on;
+    private User user;
     private boolean isFollowing = false;
     private View inflated;
     private MenuItem button;
+
+    protected static void displayPicture(ImageView imageView, User user, Context context) {
+        if (!user.getPhoto().isEmpty()) {
+            Uri photoUri = Uri.parse(user.getPhoto());
+            Picasso.with(context).load(photoUri).into(imageView);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +73,10 @@ public class ProfileActivity extends FragmentConverter {
         preference.setText(user.getPreference());
         TextView description = inflated.findViewById(R.id.description);
         description.setText(user.getDescription());
+        ImageView badge = inflated.findViewById(R.id.ivBadge);
+        badge.setImageResource(Badge.getDrawable(user.getPoints()));
+        TextView points = inflated.findViewById(R.id.points);
+        points.setText(Integer.toString(user.getPoints()));
     }
 
     private void showFollowButton() {
@@ -74,6 +87,7 @@ public class ProfileActivity extends FragmentConverter {
             public void onDataChange(String value) {
                 if (value != null) {
                     setStar(true);
+
                 } else {
                     setStar(false);
                 }
@@ -93,13 +107,6 @@ public class ProfileActivity extends FragmentConverter {
         int star = follow ? STAR_ON : STAR_OFF;
         button.setIcon(star);
         isFollowing = follow;
-    }
-
-    protected static void displayPicture(ImageView imageView, User user, Context context) {
-        if (!user.getPhoto().isEmpty()) {
-            Uri photoUri = Uri.parse(user.getPhoto());
-            Picasso.with(context).load(photoUri).into(imageView);
-        }
     }
 
     @Override
@@ -152,6 +159,7 @@ public class ProfileActivity extends FragmentConverter {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
+                    DatabaseUser.addPointsToUser(-FOLLOW.getValue(), user);
                     setStar(false);
                 }
             }
@@ -165,6 +173,7 @@ public class ProfileActivity extends FragmentConverter {
             @Override
             public void onComplete(DbError error) {
                 if (error == NONE) {
+                    DatabaseUser.addPointsToUser(FOLLOW.getValue(), user);
                     button.setIcon(STAR_ON);
                     isFollowing = true;
                     NotificationManager.addPendingNotification(user.getUserId(),

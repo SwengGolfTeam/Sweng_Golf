@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/follow"
-        android:title="@string/follow"
         android:icon="@android:drawable/btn_star_big_off"
+        android:title="@string/follow"
         app:showAsAction="always" />
 </menu>
