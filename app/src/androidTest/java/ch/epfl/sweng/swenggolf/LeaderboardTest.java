@@ -25,6 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.lang.Thread.sleep;
 import static junit.framework.TestCase.fail;
 
 
@@ -72,6 +73,11 @@ public class LeaderboardTest {
 
     @Test
     public void userCorrectlyDisplayedAfterClickOnList() {
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.users_recycler_view)).perform(actionOnItem(hasDescendant(
                 ViewMatchers.withText(Leaderboard.userList.get(0).getUserName())), click()));
 
