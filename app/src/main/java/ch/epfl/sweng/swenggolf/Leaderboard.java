@@ -65,19 +65,17 @@ public class Leaderboard extends FragmentConverter {
         userList.clear();
 
         Database db = Database.getInstance();
-        prepareOfferData(inflated, db);
+        prepareUserData(inflated, db);
     }
 
     /**
      * Get the users from the database.
      */
-    protected void prepareOfferData(final View inflated,
-                                    Database db) {
-        Database database = Database.getInstance();
+    protected void prepareUserData(final View inflated,
+                                   Database db) {
         inflated.findViewById(R.id.user_list_loading).setVisibility(View.VISIBLE);
-
-        List<User> topUsers = new ArrayList<>(LEADERBOARD_SIZE);
-        AttributeOrdering ordering = AttributeOrdering.descendingOrdering(ATTRIBUTE, LEADERBOARD_SIZE);
+        AttributeOrdering ordering =
+                AttributeOrdering.descendingOrdering(ATTRIBUTE, LEADERBOARD_SIZE);
         ValueListener listener = new ValueListener<List<User>>() {
             @Override
             public void onDataChange(List<User> users) {
@@ -96,7 +94,7 @@ public class Leaderboard extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        db.readList("users",listener,User.class,ordering);
+        db.readList("users", listener, User.class, ordering);
     }
 
 }
