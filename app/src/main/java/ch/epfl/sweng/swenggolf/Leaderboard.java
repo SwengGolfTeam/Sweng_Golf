@@ -79,20 +79,21 @@ public class Leaderboard extends FragmentConverter {
         ValueListener listener = new ValueListener<List<User>>() {
 
             @Override
-            public void onCancelled(DbError error) {
-                Log.d(error.toString(), "Unable to load best users from database");
-                inflated.findViewById(R.id.user_list_loading).setVisibility(View.GONE);
-                errorMessage.setVisibility(View.VISIBLE);
-            }
-
-            @Override
             public void onDataChange(List<User> users) {
-                inflated.findViewById(R.id.user_list_loading).setVisibility(View.GONE);
                 if (!users.isEmpty()) {
                     noUser.setVisibility(View.GONE);
                     mAdapter.add(users);
                 }
+                inflated.findViewById(R.id.user_list_loading).setVisibility(View.GONE);
             }
+
+            @Override
+            public void onCancelled(DbError error) {
+                errorMessage.setVisibility(View.VISIBLE);
+                Log.d(error.toString(), "Unable to load best users from database");
+                inflated.findViewById(R.id.user_list_loading).setVisibility(View.GONE);
+            }
+
         };
         db.readList("users", listener, User.class, ordering);
     }
