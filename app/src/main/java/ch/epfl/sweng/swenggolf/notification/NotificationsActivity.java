@@ -6,7 +6,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -42,9 +40,11 @@ public class NotificationsActivity extends FragmentConverter {
         switch (item.getItemId()) {
             case android.R.id.home:
                 openDrawer();
-                return true; // TODO voir quoi renvoyer
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setRecyclerView(View inflated) {
@@ -55,7 +55,7 @@ public class NotificationsActivity extends FragmentConverter {
 
         notifications = new ArrayList<>();
 
-        fetchNotifications();
+        fetchNotifications(inflated);
 
 
         // TODO add a custom divider ?
@@ -65,17 +65,19 @@ public class NotificationsActivity extends FragmentConverter {
         mAdapter = new NotificationsAdapter(notifications, getClickListener());
         mRecyclerView.setAdapter(mAdapter);
 
-        //mRecyclerView.addOnItemTouchListener(new ListOfferTouchListener(getContext(), mRecyclerView, getClickListener()));
-
+        if (mAdapter.getItemCount() == 0) {
+            inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);
+        }
     }
 
-    private void fetchNotifications() {
+    private void fetchNotifications(final View inflated) {
         User currentUser = Config.getUser();
         ValueListener<List<Notification>> listener = new ValueListener<List<Notification>>() {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
                     notifications = value;
+                    inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
                     mAdapter.setNotifications(value);
                 }
             }

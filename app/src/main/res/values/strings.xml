@@ -62,6 +62,7 @@
     <string name="notif_follow">%s is now following you</string>
     <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
     <string name="notif_level_gained">You gained one level!</string>
+    <string name="no_notifications">You currently don\'t have any notification</string>
     <string name="answer_limit">The answer should be at least %d characters.</string>
     <string name="accept_favorite">Accept answer</string>
     <string name="accept_favorite_question">Do you want to accept this answer?</string>
