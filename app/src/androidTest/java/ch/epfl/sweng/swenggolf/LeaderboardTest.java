@@ -22,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -70,6 +71,11 @@ public class LeaderboardTest {
 
 
 
+    @Test
+    public void brokenDatabase() {
+        Database database = new FakeDatabase(false);
+        Database.setDebugDatabase(database);
+    }
 
     @Test
     public void userCorrectlyDisplayedAfterClickOnList() {
@@ -90,6 +96,13 @@ public class LeaderboardTest {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testLeaderBoardAdapter() {
+        new LeaderboardAdapter(null, null,null);
+    }
+
+
 
 }
 
