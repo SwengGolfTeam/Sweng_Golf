@@ -131,7 +131,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Context context = holder.getContainer().getContext();
                 int pos = holder.getAdapterPosition();
                 Dialog alertDialog = answers.getFavoritePos() != pos
-                        ? acceptAnswerDialog(context, answer, pos) : stepBackDialog(context, answer);
+                        ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
 
 
@@ -151,7 +151,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         }
     }
 
-    private Dialog createFavoriteDialog(Context context, final Answer answer, final int pos, String title, String hint) {
+    private Dialog createFavoriteDialog(Context context, final int pos, String title, String hint) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle(title)
@@ -159,10 +159,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         writeFavPos(pos);
-                        NotificationManager.addPendingNotification(
-                                answer.getUserId(),
-                                new Notification(NotificationType.ANSWER_CHOSEN,
-                                        Config.getUser(), offer));
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -173,13 +170,13 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         return builder.create();
     }
 
-    private Dialog acceptAnswerDialog(Context context, Answer answer, final int pos) {
-        return createFavoriteDialog(context, answer, pos,context.getString(R.string.accept_favorite),
+    private Dialog acceptAnswerDialog(Context context, final int pos) {
+        return createFavoriteDialog(context, pos,context.getString(R.string.accept_favorite),
                 context.getString(R.string.accept_favorite_question));
     }
 
-    private Dialog stepBackDialog(Context context, Answer answer) {
-        return createFavoriteDialog(context, answer, NO_FAVORITE,
+    private Dialog stepBackDialog(Context context) {
+        return createFavoriteDialog(context, NO_FAVORITE,
                 context.getString(R.string.remove_favorite),
                 context.getString(R.string.remove_favorite_question));
     }
@@ -187,6 +184,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private void writeFavPos(final int pos) {
         final int previousFavorite = answers.getFavoritePos();
         answers.setFavoritePos(pos);
+
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers,
                 new CompletionListener() {
                     @Override
@@ -199,6 +197,10 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                             if (pos != NO_FAVORITE) {
                                 DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
                                         answers.getAnswerList().get(pos).getUserId());
+                                NotificationManager.addPendingNotification(
+                                        answers.getAnswerList().get(pos).getUserId(),
+                                        new Notification(NotificationType.ANSWER_CHOSEN,
+                                                Config.getUser(), offer));
                             }
                         }
                     }
