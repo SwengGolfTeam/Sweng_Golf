@@ -46,7 +46,7 @@ public class LeaderboardTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-
+        Config.goToTest();
         User user1 = new User("username1", "userId1", "email1", "photo1", "", "DEFAULT_DESCRIPTION1", 30);
         database.write("users", "userId1", user1);
         database.write("users", "userId2", USER2);
