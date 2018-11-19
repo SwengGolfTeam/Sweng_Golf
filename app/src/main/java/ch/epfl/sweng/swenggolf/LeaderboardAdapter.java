@@ -25,6 +25,9 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     private Context mContext;
     private UserListener userListener;
 
+    /**
+     * Representation of one row of the recyclerView.
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName;
@@ -33,6 +36,10 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         ImageView userBadge;
         TextView userPosition;
 
+        /**
+         * Constructor.
+         * @param itemView view of one item
+         */
         public MyViewHolder(View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.user_name);
@@ -46,7 +53,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     /**
      * Constructs a LeaderboardAdapter for the RecyclerView.
      *
-     * @param userList the list of offers to be displayed
+     * @param userList the list of users to be displayed
      */
     public LeaderboardAdapter(List<User> userList, Context mContext, UserListener userListener) {
         if (userList == null) {
@@ -78,8 +85,8 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         points.setText(pointString);
 
         TextView userPosition = holder.userPosition;
-        String positionString = "Position : " +
-                Integer.toString(userList.indexOf(user) + 1);
+        String positionString = "Position : "
+                + Integer.toString(userList.indexOf(user) + 1);
         userPosition.setText(positionString);
 
         Uri photoUri = Uri.parse(user.getPhoto());

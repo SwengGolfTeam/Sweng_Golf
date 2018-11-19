@@ -31,8 +31,6 @@ import static junit.framework.TestCase.fail;
 @RunWith(AndroidJUnit4.class)
 public class LeaderboardTest {
 
-    private final static User USER2 =  new User("username2", "userId2", "email2", "photo2", "", "DEFAULT_DESCRIPTION2", 50);
-
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
@@ -47,9 +45,12 @@ public class LeaderboardTest {
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
         Config.goToTest();
-        User user1 = new User("username1", "userId1", "email1", "photo1", "", "DEFAULT_DESCRIPTION1", 30);
+        User user1 = new User("username1", "userId1", "email1",
+                "photo1", "", "DEFAULT_DESCRIPTION1", 30);
+        User user2 = new User("username2", "userId2", "email2",
+                "photo2", "", "DEFAULT_DESCRIPTION2", 50);
         database.write("users", "userId1", user1);
-        database.write("users", "userId2", USER2);
+        database.write("users", "userId2", user2);
         Database.setDebugDatabase(database);
         DatabaseUser.addUser(Config.getUser());
     }
@@ -74,7 +75,7 @@ public class LeaderboardTest {
         onView(withId(R.id.users_recycler_view)).perform(actionOnItem(hasDescendant(
                 ViewMatchers.withText(Leaderboard.userList.get(0).getUserName())), click()));
 
-        onView(withId(R.id.name)).check(matches(withText(USER2.getUserName())));
+        onView(withId(R.id.name)).check(matches(withText("username2")));
     }
 
 
