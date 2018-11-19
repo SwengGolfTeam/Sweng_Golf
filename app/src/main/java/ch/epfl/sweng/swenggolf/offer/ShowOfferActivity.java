@@ -388,7 +388,9 @@ public class ShowOfferActivity extends FragmentConverter {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     //replaceCentralFragment(new ListOfferActivity(), true);
-                    getFragmentManager().popBackStack();
+                    getActivity().onBackPressed();
+                   // getFragmentManager().popBackStack();
+
                     //TODO : need to handle case where the offer has been modified before
                 }
             }

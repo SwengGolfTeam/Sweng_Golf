@@ -157,7 +157,7 @@ public class FakeDatabase extends Database {
             field.setAccessible(true);
 
             for (T object : list) {
-                if (!field.get(object).equals(value)) {
+                if (field.get(object).equals(value)) {
                     newList.add(object);
                 }
             }

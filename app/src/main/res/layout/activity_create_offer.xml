@@ -147,7 +147,7 @@
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/button_create_offer"
                 android:layout_width="156dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"

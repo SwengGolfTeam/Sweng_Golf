@@ -117,20 +117,15 @@ public class CreateOfferActivityTest {
         }
     }
 
-    /*@Test
-    public void canCreateSimpleOffer() {
-        goToCreateOffer(false);
-        fillNameAndDescription();
-        onView(withId(R.id.button)).perform(scrollTo(), click());
-    }*/
+
 
     @Test
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
         onView(withId(R.id.error_message));
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
         onView(withId(R.id.error_message))
 
                 .check(matches(withText(R.string.error_create_offer_invalid)));
@@ -160,7 +155,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
 
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -228,22 +223,12 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void backFromEmptyOfferIsListOffer() {
-        assertBackFrom(false, ListOfferActivity.class);
-    }
-
-    @Test
-    public void backFromModifyOfferIsShowOffer() {
-        assertBackFrom(true, ShowOfferActivity.class);
-    }
-
-    @Test
     public void defineOfferOnCreation() throws InterruptedException {
         final String cat = Category.values()[1].toString();
 
         goToCreateOffer(false);
         //onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), closeSoftKeyboard());
         onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
                 .perform(customClick());
         onView(withText(cat)).perform(scrollTo(), click());

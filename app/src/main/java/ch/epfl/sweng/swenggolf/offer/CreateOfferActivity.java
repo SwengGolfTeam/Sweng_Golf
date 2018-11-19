@@ -149,7 +149,7 @@ public class CreateOfferActivity extends FragmentConverter
                     }
                 });
         inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
-        inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
+        inflated.findViewById(R.id.button_create_offer).setOnClickListener(onCreateOfferClick);
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
         return inflated;
