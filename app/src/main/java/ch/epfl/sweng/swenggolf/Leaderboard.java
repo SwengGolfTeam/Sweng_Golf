@@ -62,7 +62,6 @@ public class Leaderboard extends FragmentConverter {
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
-        userList.clear();
 
         Database db = Database.getInstance();
         prepareUserData(inflated, db);
