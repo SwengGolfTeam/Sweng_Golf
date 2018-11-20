@@ -44,7 +44,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public NotificationsAdapter(List<Notification> notifications, ItemClickListener viewHolderOnClickListener) {
-        if (notifications == null) {
+        if (notifications == null || viewHolderOnClickListener == null) {
             throw new IllegalArgumentException();
         }
         this.notifications = new ArrayList<>(notifications);
@@ -129,8 +129,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 message = context.getString(R.string.notif_level_gained);
                 imageResource = R.drawable.ic_exposure_plus_1_black_24dp;
                 break;
-            default: // should never happen? -> throw an exception?
-                message = "";
+            default:
+                message = "TEST";
                 imageResource = 0;
         }
         text.setText(message);

@@ -85,7 +85,7 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onCancelled(DbError error) {
                 Toast.makeText(NotificationsActivity.this.getContext(), getResources()
-                                .getString(R.string.notif_error), Toast.LENGTH_SHORT).show();
+                        .getString(R.string.notif_error), Toast.LENGTH_SHORT).show();
             }
         };
         Database.getInstance()

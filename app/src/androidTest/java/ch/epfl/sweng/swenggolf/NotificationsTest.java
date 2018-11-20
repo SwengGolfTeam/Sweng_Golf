@@ -9,11 +9,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
+import ch.epfl.sweng.swenggolf.notification.NotificationsAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
@@ -39,12 +46,13 @@ public class NotificationsTest {
     private User user2 = FilledFakeDatabase.getUser(3);
     private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
 
-    // TODO tester la suppression de notif avec db working + not
-
     @Rule
     public IntentsTestRule<MainMenuActivity> activityTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
+    /**
+     * Set up a fake database, a fake user, and launches activity
+     */
     @Before
     public void setUp() {
         Config.setUser(user1);
@@ -54,20 +62,10 @@ public class NotificationsTest {
 
     @Test
     public void followNotifIsSentAndRedirectsToProfile() {
-        ProfileActivity user2Profile = FragmentConverter.createShowProfileWithProfile(user2);
-        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, user2Profile)
-                .commit();
-        // follow user2
-        ViewInteraction followButton = onView(withId(R.id.follow));
-        followButton.perform(click());
-        assertTrue(user2Profile.isFollowing());
-
-        // change to other user
-        changeUserAndGoToNotifications(user2);
-        String follow_message = activityTestRule.getActivity()
+        postFollowNotification();
+        String followMessage = activityTestRule.getActivity()
                 .getString(R.string.notif_follow, user1.getUserName());
-        ViewInteraction notification = onView(withText(follow_message));
+        ViewInteraction notification = onView(withText(followMessage));
         notification.check(matches(isDisplayed()));
         // check that it shows the profile when clicking on it
         notification.perform(click());
@@ -104,6 +102,48 @@ public class NotificationsTest {
     public void displayMessageIfNoNotification() {
         changeUserAndGoToNotifications(user1);
         onView(withId(R.id.message_empty)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void hasEmptyConstructorForFirebase() {
+        new Notification();
+    }
+
+    @Test
+    public void canDeleteNotification() {
+        postFollowNotification();
+        onView(withId(R.id.clear)).perform(click());
+        Database.getInstance().readList(NotificationManager.getNotificationPath(user2.getUserId()),
+                new ValueListener<List<Notification>>() {
+            @Override
+            public void onDataChange(List<Notification> value) {
+                assertTrue(value.isEmpty());
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // db should work
+            }
+        }, Notification.class);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void cannotCreateAdapterWithNullList() {
+        new NotificationsAdapter(null, null);
+    }
+
+    private void postFollowNotification() {
+        ProfileActivity user2Profile = FragmentConverter.createShowProfileWithProfile(user2);
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, user2Profile)
+                .commit();
+        // follow user2
+        ViewInteraction followButton = onView(withId(R.id.follow));
+        followButton.perform(click());
+        assertTrue(user2Profile.isFollowing());
+
+        // change to other user
+        changeUserAndGoToNotifications(user2);
     }
 
     private void changeUserAndGoToNotifications(User otherUser) {
