@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer.create;
 import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
@@ -22,6 +24,7 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.OFF;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
+import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 class CreateHelper {
 
@@ -120,5 +123,37 @@ class CreateHelper {
     private void saveLocation(Location location) {
         create.location = location;
         create.setCheckbox(ON);
+    }
+
+    public void setListeners() {
+
+        create.inflated.findViewById(R.id.fetch_picture)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        create.startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
+                    }
+                });
+
+        create.inflated.findViewById(R.id.pick_date)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        create.showDatePickerDialog();
+                    }
+                });
+
+        create.inflated.findViewById(R.id.offer_position_status)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        attachLocation();
+                    }
+                });
+
+        create.inflated.findViewById(R.id.take_picture)
+                .setOnClickListener(create.onTakePictureClick);
+
+        create.inflated.findViewById(R.id.button).setOnClickListener(create.onCreateOfferClick);
     }
 }

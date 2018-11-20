@@ -71,12 +71,12 @@ public class CreateOfferActivity extends FragmentConverter
     private TextView dateText;
     private Spinner categorySpinner;
     private Calendar now = Calendar.getInstance();
-    private View inflated;
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
 
     private CreateHelper createHelper;
 
+    View inflated;
     Offer offerToModify;
     long creationDate;
     long endDate;
@@ -84,7 +84,7 @@ public class CreateOfferActivity extends FragmentConverter
     Uri filePath = null;
     boolean creationAsked;
 
-    private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
+    View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
@@ -103,12 +103,35 @@ public class CreateOfferActivity extends FragmentConverter
     };
 
 
-    private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
+    View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             createOffer();
         }
     };
+
+    CompletionListener createWriteOfferListener(final Offer offer) {
+        return new CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DbError databaseError) {
+                if (databaseError == DbError.NONE) {
+                    Toast.makeText(getContext(), "Offer created",
+                            LENGTH_SHORT).show();
+                    createHelper.updateUserScore(offerToModify, offer);
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
+                } else {
+                    errorMessage.setVisibility(View.VISIBLE);
+                    errorMessage.setText(R.string.error_create_offer_database);
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        creationAsked = false;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -127,43 +150,12 @@ public class CreateOfferActivity extends FragmentConverter
         }
 
         preFillFields();
-
-        inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
-            }
-        });
-
-
-        inflated.findViewById(R.id.pick_date).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
-
-        inflated.findViewById(R.id.offer_position_status)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createHelper.attachLocation();
-                    }
-                });
-        inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
-        inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
+        createHelper.setListeners();
 
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
 
         return inflated;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        creationAsked = false;
     }
 
     @Override
@@ -328,23 +320,6 @@ public class CreateOfferActivity extends FragmentConverter
             createHelper.createOfferObject(title, description, category);
         }
 
-    }
-
-    CompletionListener createWriteOfferListener(final Offer offer) {
-        return new CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE) {
-                    Toast.makeText(getContext(), "Offer created",
-                            LENGTH_SHORT).show();
-                    createHelper.updateUserScore(offerToModify, offer);
-                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
-                } else {
-                    errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText(R.string.error_create_offer_database);
-                }
-            }
-        };
     }
 
 
