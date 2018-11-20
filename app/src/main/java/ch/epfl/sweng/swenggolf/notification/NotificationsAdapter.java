@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.notification;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,19 +111,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         switch (notification.getType()) {
             case ANSWER_CHOSEN: // TODO too similar to ANSWER_POSTED ?!
                 message = context.getString(R.string.notif_answer_chosen,
-                        notification.getConcernedUser().getUserName(),
-                        notification.getConcernedOffer().getTitle());
+                        notification.getUserName(),
+                        notification.getOfferName());
                 imageResource = R.drawable.ic_favorite_black_24dp;
                 break;
             case ANSWER_POSTED:
                 message = context.getString(R.string.notif_answer_posted,
-                        notification.getConcernedUser().getUserName(),
-                        notification.getConcernedOffer().getTitle());
+                        notification.getUserName(),
+                        notification.getOfferName());
                 imageResource = R.drawable.ic_comment_black_24dp;
                 break;
             case FOLLOW:
                 message = context.getString(R.string.notif_follow,
-                        notification.getConcernedUser().getUserName());
+                        notification.getUserName());
                 imageResource = R.drawable.ic_star_black_24dp;
                 break;
             case LEVEL_GAINED:
@@ -140,6 +141,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     @Override
     public int getItemCount() {
+        Log.d("NOTIF", Integer.toString(notifications.size()));
         return notifications.size();
     }
 

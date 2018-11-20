@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -77,7 +79,9 @@ public class NotificationsActivity extends FragmentConverter {
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
                     notifications = value;
-                    inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
+                    if (value.size() != 0) {
+                        inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
+                    }
                     mAdapter.setNotifications(value);
                 }
             }
@@ -100,10 +104,34 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onClick(View view, int position) {
                 Notification notification = notifications.get(position);
-                if (notification.getConcernedOffer() != null) {
-                    replaceCentralFragment(createShowOfferWithOffer(notification.getConcernedOffer()));
-                } else if (notification.getConcernedUser() != null) {
-                    replaceCentralFragment(createShowProfileWithProfile(notification.getConcernedUser()));
+                if (notification.getOfferId() != null) {
+                    Database.getInstance().read(Database.OFFERS_PATH, notification.getOfferId(), new ValueListener<Offer>() {
+                        @Override
+                        public void onDataChange(Offer value) {
+                            if (value != null) {
+                                replaceCentralFragment(createShowOfferWithOffer(value));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DbError error) {
+                            // do nothing, it just won't respond
+                        }
+                    }, Offer.class);
+                } else if (notification.getUserId() != null) {
+                    Database.getInstance().read(Database.USERS_PATH, notification.getUserId(), new ValueListener<User>() {
+                        @Override
+                        public void onDataChange(User value) {
+                            if (value != null) {
+                                replaceCentralFragment(createShowProfileWithProfile(value));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DbError error) {
+                            // do nothing, it just won't respond
+                        }
+                    }, User.class);
                 }
             }
         };
