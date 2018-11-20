@@ -50,12 +50,6 @@ public class Leaderboard extends FragmentConverter {
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        UserListener userListener = new UserListener() {
-            @Override
-            public void onUserClick(User user) {
-                replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
-            }
-        };
         mAdapter = new LeaderboardAdapter(userList, this);
         // Add dividing line
         mRecyclerView.addItemDecoration(

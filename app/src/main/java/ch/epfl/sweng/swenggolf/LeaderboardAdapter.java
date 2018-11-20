@@ -99,7 +99,8 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentConverter.replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                fragmentConverter.replaceCentralFragment(
+                        FragmentConverter.createShowProfileWithProfile(user));
             }
         });
 
