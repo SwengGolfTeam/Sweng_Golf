@@ -66,7 +66,7 @@ public class LeaderboardTest {
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new Leaderboard()).commit();
+                .add(R.id.centralFragment, new Leaderboard()).commit();
     }
 
     @Test
