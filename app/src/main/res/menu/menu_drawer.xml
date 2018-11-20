@@ -27,5 +27,10 @@
             android:icon="@android:drawable/btn_star"
             android:onClick="loadPreferenceListActivity"
             android:title="@string/following" />
+        <item
+            android:id="@+id/leaderboard_activity"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:onClick="loadLeaderboard"
+            android:title="@string/leaderboard"/>
     </group>
 </menu>

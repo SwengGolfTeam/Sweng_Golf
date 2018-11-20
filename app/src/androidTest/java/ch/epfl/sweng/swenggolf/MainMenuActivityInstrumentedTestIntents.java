@@ -91,6 +91,11 @@ public class MainMenuActivityInstrumentedTestIntents {
     }
 
     @Test
+    public void testIntentLeaderboard() {
+        testReplacement(Leaderboard.class, R.id.leaderboard_activity, true);
+    }
+
+    @Test
     public void testIntentProfileByClickingOnPicture() {
         onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
         testReplacement(ProfileActivity.class, 0, false);
