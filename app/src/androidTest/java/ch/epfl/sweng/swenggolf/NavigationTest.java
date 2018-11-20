@@ -75,7 +75,7 @@ public class NavigationTest {
         //Edit profile multiple times
         for(int i = 0; i <4; ++i) {
         onView(withId(R.id.edit_profile)).perform(click());
-        onView(withId(R.id.saveButton)).perform(click());
+        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         }
 
         checkFragmentShown(ProfileActivity.class);
