@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.offer.create;
 import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,14 +31,15 @@ import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermissi
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.OFF;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.SEPARATION;
-import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 class CreateHelper {
 
     private final CreateOfferActivity create;
+    private final CreateListeners listeners;
 
-    protected CreateHelper(CreateOfferActivity create) {
+    protected CreateHelper(CreateOfferActivity create, CreateListeners listeners) {
         this.create = create;
+        this.listeners = listeners;
     }
 
     void preFillFields() {
@@ -146,7 +146,7 @@ class CreateHelper {
     private void writeOffer(final Offer offer) {
         create.creationAsked = true;
         Database database = Database.getInstance();
-        CompletionListener listener = create.createWriteOfferListener(offer);
+        CompletionListener listener = listeners.createWriteOfferListener(offer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
     }
 
@@ -183,37 +183,5 @@ class CreateHelper {
     private void saveLocation(Location location) {
         create.location = location;
         create.setCheckbox(ON);
-    }
-
-    public void setListeners() {
-
-        create.inflated.findViewById(R.id.fetch_picture)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        create.startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
-                    }
-                });
-
-        create.inflated.findViewById(R.id.pick_date)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        create.showDatePickerDialog();
-                    }
-                });
-
-        create.inflated.findViewById(R.id.offer_position_status)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        attachLocation();
-                    }
-                });
-
-        create.inflated.findViewById(R.id.take_picture)
-                .setOnClickListener(create.onTakePictureClick);
-
-        create.inflated.findViewById(R.id.button).setOnClickListener(create.onCreateOfferClick);
     }
 }

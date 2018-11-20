@@ -31,24 +31,19 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.CompletionListener;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static android.widget.Toast.LENGTH_LONG;
-import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
@@ -64,12 +59,10 @@ public class CreateOfferActivity extends FragmentConverter
 
     static final boolean ON = true;
     static final boolean OFF = false;
-    private TextView errorMessage;
     private TextView dateText;
     private Uri photoDestination = null;
-    private Uri tempPicturePath = null;
 
-    private CreateHelper createHelper;
+    CreateHelper createHelper;
 
     View inflated;
     Offer offerToModify;
@@ -80,48 +73,11 @@ public class CreateOfferActivity extends FragmentConverter
     boolean creationAsked;
     Calendar now = Calendar.getInstance();
     Spinner categorySpinner;
+    Uri tempPicturePath = null;
+    TextView errorMessage;
 
-    View.OnClickListener onTakePictureClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            try {
-                Intent takePictureIntent = Storage.takePicture(getActivity());
-
-                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    tempPicturePath = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
-                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
-                } else {
-                    Toast.makeText(getContext(), "Cannot take a picture", LENGTH_SHORT).show();
-                }
-            } catch (IOException e) {
-                Toast.makeText(getContext(), "Unable to create picture", LENGTH_LONG).show();
-            }
-        }
-    };
-
-
-    View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            createOffer();
-        }
-    };
-
-    CompletionListener createWriteOfferListener(final Offer offer) {
-        return new CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE) {
-                    Toast.makeText(getContext(), "Offer created",
-                            LENGTH_SHORT).show();
-                    createHelper.updateUserScore(offerToModify, offer);
-                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
-                } else {
-                    errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText(R.string.error_create_offer_database);
-                }
-            }
-        };
+    void replaceCentralFragmentWithOffer(Offer offer) {
+        replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
     }
 
     @Override
@@ -134,7 +90,8 @@ public class CreateOfferActivity extends FragmentConverter
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        createHelper = new CreateHelper(this);
+        CreateListeners createListeners = new CreateListeners(this);
+        createHelper = new CreateHelper(this, createListeners);
 
         inflated = inflater.inflate(R.layout.activity_create_offer,
                 container, false);
@@ -147,7 +104,8 @@ public class CreateOfferActivity extends FragmentConverter
         }
 
         createHelper.preFillFields();
-        createHelper.setListeners();
+
+        createListeners.setListeners();
 
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
