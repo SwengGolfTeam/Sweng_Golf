@@ -30,14 +30,17 @@ class CreateListeners {
             try {
                 Intent takePictureIntent = Storage.takePicture(create.getActivity());
 
-                if (takePictureIntent.resolveActivity(create.getActivity().getPackageManager()) != null) {
+                if (takePictureIntent.resolveActivity(create.getActivity().getPackageManager())
+                        != null) {
                     create.tempPicturePath = (Uri) takePictureIntent.getExtras().get(EXTRA_OUTPUT);
                     create.startActivityForResult(takePictureIntent, CAPTURE_IMAGE_REQUEST);
                 } else {
-                    Toast.makeText(create.getContext(), "Cannot take a picture", LENGTH_SHORT).show();
+                    Toast.makeText(create.getContext(), "Cannot take a picture", LENGTH_SHORT)
+                            .show();
                 }
             } catch (IOException e) {
-                Toast.makeText(create.getContext(), "Unable to create picture", LENGTH_LONG).show();
+                Toast.makeText(create.getContext(), "Unable to create picture", LENGTH_LONG)
+                        .show();
             }
         }
     };
