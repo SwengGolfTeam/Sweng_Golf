@@ -103,6 +103,7 @@ class CreateListeners {
         create.inflated.findViewById(R.id.take_picture)
                 .setOnClickListener(onTakePictureClick);
 
-        create.inflated.findViewById(R.id.button_create_offer).setOnClickListener(onCreateOfferClick);
+        create.inflated.findViewById(R.id.button_create_offer)
+                .setOnClickListener(onCreateOfferClick);
     }
 }
