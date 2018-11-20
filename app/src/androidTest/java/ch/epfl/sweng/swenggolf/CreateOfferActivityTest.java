@@ -125,7 +125,7 @@ public class CreateOfferActivityTest {
                     "20", "20", "20", Category.FOOD, beginingTime,
                     beginingTime + timeDiff);
 
-            bundle.putParcelable("offer", offer);
+            bundle.putParcelable(Offer.OFFER, offer);
             fragment.setArguments(bundle);
             Database.getInstance().write("/offers", offer.getUuid(), offer);
         }

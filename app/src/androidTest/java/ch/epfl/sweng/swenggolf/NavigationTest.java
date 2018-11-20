@@ -2,13 +2,10 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.PerformException;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.KeyEvent;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,18 +26,17 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
-import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
@@ -54,8 +50,6 @@ public class NavigationTest {
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-
-    private final KeyEvent goBack = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
 
     /**
      * Set up the fake database, the user, the fake storage and launch activity.
@@ -75,7 +69,7 @@ public class NavigationTest {
 
         clickOnDrawer(R.id.my_account);
         //Edit profile multiple times
-        editMultipleTimes(R.id.edit_profile, R.id.saveButton);
+        editMultipleTimes(R.id.edit_profile, R.id.saveButton, 4);
 
         checkFragmentShown(ProfileActivity.class);
 
@@ -83,33 +77,30 @@ public class NavigationTest {
         checkFragmentShown(ListOfferActivity.class);
     }
 
-    private void editMultipleTimes(int modifyButton, int saveButton) {
-        for (int i = 0; i < 4; ++i) {
+    private void editMultipleTimes(int modifyButton, int saveButton, int numberOfIterations) {
+        for (int i = 0; i < numberOfIterations; ++i) {
             onView(withId(modifyButton)).perform(click());
             onView(withId(saveButton)).perform(scrollTo(), click());
         }
     }
 
     @NonNull
-    private <T extends Fragment> FragmentManager checkFragmentShown(Class<T> fragmentExpected) {
+    private <T extends Fragment> void checkFragmentShown(Class<T> fragmentExpected) {
         final MainMenuActivity activity = intentRule.getActivity();
         final FragmentManager fragmentManager = activity.getSupportFragmentManager();
         List<Fragment> frags = fragmentManager.getFragments();
-        boolean condition = false;
+
         for(Fragment fragment : frags) {
             if(fragment.getClass().getName().equals(fragmentExpected.getName())){
-                condition = true;
-                break;
+                return;
             }
         }
-        assertTrue(condition);
-        return fragmentManager;
+        fail();
     }
 
     @Test
     public void goToMyOffersAndBackToMenu() {
         goToXAndBackToMenu(R.id.my_offers, ListOwnOfferActivity.class);
-
     }
 
     @Test
@@ -148,7 +139,7 @@ public class NavigationTest {
     private void goToShowOffer() {
         clickOnDrawer(R.id.my_offers);
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0)).perform(click());
-        editMultipleTimes(R.id.button_modify_offer, R.id.button_create_offer);
+        editMultipleTimes(R.id.button_modify_offer, R.id.button_create_offer, 4);
         checkFragmentShown(ShowOfferActivity.class);
     }
 
@@ -163,7 +154,8 @@ public class NavigationTest {
     @Test
     public void goHomeScreen() {
         pressBackButton();
-        assertEquals(1,
+        final int expectedNumberOfFragments = 1;
+        assertEquals(expectedNumberOfFragments,
                 intentRule.getActivity().getSupportFragmentManager().getFragments().size());
     }
 

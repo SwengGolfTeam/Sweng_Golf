@@ -93,9 +93,9 @@ public class ShowOfferActivity extends FragmentConverter {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle = getArguments();
-        offer = bundle.getParcelable("offer");
-        if (bundle.containsKey(FRAGMENTSTOSKIP)) {
-            fragmentsToSkip = bundle.getInt(FRAGMENTSTOSKIP);
+        offer = bundle.getParcelable(Offer.OFFER);
+        if (bundle.containsKey(FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FRAGMENTS_TO_SKIP);
         }
     }
 

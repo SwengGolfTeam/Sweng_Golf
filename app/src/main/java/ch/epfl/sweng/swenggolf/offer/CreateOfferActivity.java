@@ -118,7 +118,7 @@ public class CreateOfferActivity extends FragmentConverter
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
         if (getArguments() != null) {
-            offerToModify = getArguments().getParcelable("offer");
+            offerToModify = getArguments().getParcelable(Offer.OFFER);
         } else {
             offerToModify = null;
         }
@@ -175,8 +175,8 @@ public class CreateOfferActivity extends FragmentConverter
         super.onCreate(savedInstanceState);
         creationAsked = false;
         final Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(FUTUREFRAGMENTSTOSKIP)) {
-            fragmentsToSkip = bundle.getInt(FUTUREFRAGMENTSTOSKIP);
+        if (bundle != null && bundle.containsKey(FUTURE_FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FUTURE_FRAGMENTS_TO_SKIP);
         }
     }
 

@@ -24,7 +24,7 @@ import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static ch.epfl.sweng.swenggolf.tools.FragmentConverter.FRAGMENTSTOSKIP;
+import static ch.epfl.sweng.swenggolf.tools.FragmentConverter.FRAGMENTS_TO_SKIP;
 
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -170,8 +170,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private void skipFragments() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
         final Bundle bundle = fragment.getArguments();
-        if (bundle != null && bundle.containsKey(FRAGMENTSTOSKIP)) {
-            int nbr = bundle.getInt(FRAGMENTSTOSKIP);
+        if (bundle != null && bundle.containsKey(FRAGMENTS_TO_SKIP)) {
+            int nbr = bundle.getInt(FRAGMENTS_TO_SKIP);
             for (int i = 0; i < nbr; ++i) {
                 getSupportFragmentManager().popBackStackImmediate();
             }

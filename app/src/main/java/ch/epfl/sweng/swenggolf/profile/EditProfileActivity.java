@@ -32,8 +32,8 @@ public class EditProfileActivity extends FragmentConverter {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(FUTUREFRAGMENTSTOSKIP)) {
-            fragmentsToSkip = bundle.getInt(FUTUREFRAGMENTSTOSKIP);
+        if (bundle != null && bundle.containsKey(FUTURE_FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FUTURE_FRAGMENTS_TO_SKIP);
         } else {
             fragmentsToSkip = 0;
         }

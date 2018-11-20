@@ -29,7 +29,7 @@ public class Offer implements Parcelable {
         }
     };
     private static final int DESCRIPTION_LIMIT = 140;
-    public static final String OFFER = "offer";
+    public static final String OFFER = "ch.epfl.sweng.swenggolf.offer";
     private final Category tag;
     private final String userId;
     private final String title;
