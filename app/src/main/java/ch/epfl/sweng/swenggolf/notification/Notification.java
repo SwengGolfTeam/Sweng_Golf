@@ -9,10 +9,10 @@ import ch.epfl.sweng.swenggolf.profile.User;
 
 public class Notification {
     private final NotificationType type;
-    private final String userName;
-    private final String userId;
-    private final String offerName;
-    private final String offerId;
+    private String userName;
+    private String userId;
+    private String offerName;
+    private String offerId;
     private final String uuid;
 
     /**
@@ -22,27 +22,22 @@ public class Notification {
      * @param concernedUser  the user that performed an action worth sending a notification
      * @param concernedOffer the offer on which that action was performed, if any
      */
-    public Notification(NotificationType type, @Nullable User concernedUser, @Nullable Offer concernedOffer) {
+    public Notification(NotificationType type, @Nullable User concernedUser,
+                        @Nullable Offer concernedOffer) {
         this.type = type;
         if (concernedUser != null) {
             this.userName = concernedUser.getUserName();
             this.userId = concernedUser.getUserId();
-        } else {
-            this.userName = null;
-            this.userId = null;
         }
         if (concernedOffer != null) {
             this.offerName = concernedOffer.getTitle();
             this.offerId = concernedOffer.getUuid();
-        } else {
-            this.offerName = null;
-            this.offerId = null;
         }
         uuid = UUID.randomUUID().toString();
     }
 
     /**
-     * Empty constructor for firebase
+     * Empty constructor for firebase.
      */
     public Notification() {
         type = null;

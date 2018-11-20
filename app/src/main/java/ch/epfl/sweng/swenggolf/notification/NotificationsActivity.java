@@ -105,36 +105,34 @@ public class NotificationsActivity extends FragmentConverter {
             public void onClick(View view, int position) {
                 Notification notification = notifications.get(position);
                 if (notification.getOfferId() != null) {
-                    Database.getInstance().read(Database.OFFERS_PATH, notification.getOfferId(), new ValueListener<Offer>() {
-                        @Override
-                        public void onDataChange(Offer value) {
-                            if (value != null) {
-                                replaceCentralFragment(createShowOfferWithOffer(value));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DbError error) {
-                            // do nothing, it just won't respond
-                        }
-                    }, Offer.class);
+                    lookUpAndGoTo(notification.getOfferId(), Database.OFFERS_PATH);
                 } else if (notification.getUserId() != null) {
-                    Database.getInstance().read(Database.USERS_PATH, notification.getUserId(), new ValueListener<User>() {
-                        @Override
-                        public void onDataChange(User value) {
-                            if (value != null) {
-                                replaceCentralFragment(createShowProfileWithProfile(value));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DbError error) {
-                            // do nothing, it just won't respond
-                        }
-                    }, User.class);
+                    lookUpAndGoTo(notification.getUserId(), Database.USERS_PATH);
                 }
             }
         };
+    }
+
+    private void lookUpAndGoTo(String id, String destination) {
+        final boolean isUser = destination.equals(Database.USERS_PATH);
+        Class c = isUser ? User.class : Offer.class;
+        Database.getInstance().read(destination, id, new ValueListener<Object>() {
+            @Override
+            public void onDataChange(Object value) {
+                if (value != null) {
+                    if (isUser) {
+                        replaceCentralFragment(createShowProfileWithProfile((User) value));
+                    } else {
+                        replaceCentralFragment(createShowOfferWithOffer((Offer) value));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // do nothing, it just won't respond
+            }
+        }, c);
     }
 
 }

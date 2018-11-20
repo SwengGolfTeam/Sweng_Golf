@@ -13,7 +13,8 @@ public final class NotificationManager {
         db.write(getNotificationPath(destinatorId), notification.getUuid(), notification);
     }
 
-    public static void removePendingNotification(String destinatorId, String notificationId, CompletionListener listener) {
+    public static void removePendingNotification(
+            String destinatorId, String notificationId, CompletionListener listener) {
         Database db = Database.getInstance();
         db.remove(getNotificationPath(destinatorId), notificationId, listener);
     }
