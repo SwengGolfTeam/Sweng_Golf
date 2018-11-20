@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.Leaderboard;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -131,6 +132,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void loadListOwnOfferActivity(MenuItem item) {
         replaceCentralFragment(new ListOwnOfferActivity());
+    }
+
+    public void loadLeaderboard(MenuItem item){
+        replaceCentralFragment(new Leaderboard());
     }
 
     /**

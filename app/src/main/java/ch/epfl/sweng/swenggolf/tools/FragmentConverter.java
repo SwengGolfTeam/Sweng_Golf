@@ -40,7 +40,7 @@ public abstract class FragmentConverter extends Fragment {
         inflater.inflate(R.menu.menu_empty, menu);
     }
 
-    protected void replaceCentralFragment(Fragment fragment) {
+    public void replaceCentralFragment(Fragment fragment) {
         replaceFragment(fragment, R.id.centralFragment);
     }
 
