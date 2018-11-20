@@ -141,6 +141,10 @@ public class AnswersTest {
                         .getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH))));
     }
 
+    /**
+     * Posts an answer on the current offer.
+     * @param answer the message to be posted
+     */
     public static void addAnswer(String answer) {
 
         onView(withId(R.id.react_button)).perform(scrollTo(), click());

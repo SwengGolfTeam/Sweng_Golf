@@ -24,6 +24,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class NotificationsDbNotWorkingTest {
     private User user = FilledFakeDatabase.getUser(0);
 
+    /**
+     * Sets the user and wait a moment.
+     */
     @Before
     public void setUser() {
         Config.setUser(user);

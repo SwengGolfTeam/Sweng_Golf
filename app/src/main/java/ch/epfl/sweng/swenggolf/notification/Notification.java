@@ -15,6 +15,13 @@ public class Notification {
     private final String offerId;
     private final String uuid;
 
+    /**
+     * Create a new notification, in the local sense.
+     *
+     * @param type           the type of the notification
+     * @param concernedUser  the user that performed an action worth sending a notification
+     * @param concernedOffer the offer on which that action was performed, if any
+     */
     public Notification(NotificationType type, @Nullable User concernedUser, @Nullable Offer concernedOffer) {
         this.type = type;
         if (concernedUser != null) {
@@ -34,7 +41,9 @@ public class Notification {
         uuid = UUID.randomUUID().toString();
     }
 
-    // empty constructor for firebase
+    /**
+     * Empty constructor for firebase
+     */
     public Notification() {
         type = null;
         uuid = "";

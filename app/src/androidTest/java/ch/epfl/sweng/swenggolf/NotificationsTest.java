@@ -51,7 +51,7 @@ public class NotificationsTest {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
-     * Set up a fake database, a fake user, and launches activity
+     * Set up a fake database, a fake user, and launches activity.
      */
     @Before
     public void setUp() {
@@ -175,7 +175,8 @@ public class NotificationsTest {
         notification.check(matches(isDisplayed()));
         /// check that it shows the offer when clicking on it
         notification.perform(click());
-        checkThatWeAreAt(ShowOfferActivity.class.getName(), R.id.show_offer_title, offer.getTitle());
+        checkThatWeAreAt(ShowOfferActivity.class.getName(),
+                R.id.show_offer_title, offer.getTitle());
     }
 
 }
