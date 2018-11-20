@@ -17,6 +17,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -29,7 +30,6 @@ public class Leaderboard extends FragmentConverter {
     private TextView errorMessage;
     private TextView noUser;
     public static final List<User> userList = new ArrayList<>();
-    private static final String ATTRIBUTE = "points";
     private static final int LEADERBOARD_SIZE = 10;
 
     @Override
@@ -74,7 +74,7 @@ public class Leaderboard extends FragmentConverter {
                                    Database db) {
         inflated.findViewById(R.id.user_list_loading).setVisibility(View.VISIBLE);
         AttributeOrdering ordering =
-                AttributeOrdering.descendingOrdering(ATTRIBUTE, LEADERBOARD_SIZE);
+                AttributeOrdering.descendingOrdering(DatabaseUser.POINTS, LEADERBOARD_SIZE);
 
         ValueListener listener = new ValueListener<List<User>>() {
 

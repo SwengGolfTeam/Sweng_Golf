@@ -66,10 +66,8 @@ public class LeaderboardTest {
         Config.goToTest();
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.centralFragment, new Leaderboard()).commit();
+                .replace(R.id.centralFragment, new Leaderboard()).commit();
     }
-
-
 
     @Test
     public void brokenDatabase() {
@@ -89,7 +87,6 @@ public class LeaderboardTest {
 
         onView(withId(R.id.name)).check(matches(withText("username2")));
     }
-
 
     @Test
     public void backFromListIsMenu() {

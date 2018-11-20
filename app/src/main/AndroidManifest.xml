@@ -38,10 +38,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".Leaderboard"
-            android:label="@string/title_activity_leaderboard"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
