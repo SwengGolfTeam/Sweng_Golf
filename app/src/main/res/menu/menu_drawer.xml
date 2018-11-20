@@ -11,7 +11,6 @@
             android:icon="@android:drawable/ic_menu_myplaces"
             android:onClick="loadShowOffersActivity"
             android:title="@string/offers" />
-        <!-- TODO : add a new icon for my offers-->
         <item
             android:id="@+id/my_offers"
             android:icon="@drawable/baseline_library_books_24"
@@ -25,14 +24,19 @@
         <item
             android:id="@+id/preference_activity"
             android:icon="@android:drawable/btn_star"
-            android:title="@string/following"
-            android:onClick="loadPreferenceListActivity" />
+            android:onClick="loadPreferenceListActivity"
+            android:title="@string/following" />
 
         <item
             android:id="@+id/notification_activity"
             android:icon="@drawable/ic_notifications_active_black_24dp"
-            android:title="@string/notifications"
             android:onClick="loadNotificationsActivity"
-            />
+            android:title="@string/notifications" />
+
+        <item
+            android:id="@+id/leaderboard_activity"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:onClick="loadLeaderboard"
+            android:title="@string/leaderboard" />
     </group>
 </menu>

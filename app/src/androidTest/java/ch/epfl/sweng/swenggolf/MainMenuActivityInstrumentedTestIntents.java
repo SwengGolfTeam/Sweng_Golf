@@ -18,7 +18,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
@@ -88,6 +88,11 @@ public class MainMenuActivityInstrumentedTestIntents {
     @Test
     public void testIntentListOwnOffer() {
         testReplacement(ListOwnOfferActivity.class, R.id.my_offers, true);
+    }
+
+    @Test
+    public void testIntentLeaderboard() {
+        testReplacement(Leaderboard.class, R.id.leaderboard_activity, true);
     }
 
     @Test
