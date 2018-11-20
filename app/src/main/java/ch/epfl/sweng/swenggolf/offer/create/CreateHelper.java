@@ -4,11 +4,18 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -24,6 +31,7 @@ import ch.epfl.sweng.swenggolf.storage.Storage;
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.OFF;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
+import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.SEPARATION;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 class CreateHelper {
@@ -32,6 +40,58 @@ class CreateHelper {
 
     protected CreateHelper(CreateOfferActivity create) {
         this.create = create;
+    }
+
+    void preFillFields() {
+
+        setupSpinner();
+
+        create.now = new GregorianCalendar(create.now.get(Calendar.YEAR),
+                create.now.get(Calendar.MONTH), create.now.get(Calendar.DATE));
+
+        create.creationDate = create.now.getTimeInMillis();
+        create.endDate = create.now.getTimeInMillis() + SEPARATION;
+
+        if (create.offerToModify != null) {
+
+            EditText title = create.inflated.findViewById(R.id.offer_name);
+            title.setText(create.offerToModify.getTitle(), TextView.BufferType.EDITABLE);
+
+            EditText description = create.inflated.findViewById(R.id.offer_description);
+            description.setText(create.offerToModify.getDescription(),
+                    TextView.BufferType.EDITABLE);
+
+            create.categorySpinner.setSelection(create.offerToModify.getTag().ordinal());
+
+            create.location = new Location("");
+            create.location.setLatitude(create.offerToModify.getLatitude());
+            create.location.setLongitude(create.offerToModify.getLongitude());
+
+            create.creationDate = create.offerToModify.getCreationDate();
+            create.endDate = create.offerToModify.getEndDate();
+
+            checkFillConditions();
+
+        }
+    }
+
+    private void setupSpinner() {
+        create.categorySpinner = create.inflated.findViewById(R.id.category_spinner);
+        create.categorySpinner.setAdapter(new ArrayAdapter<>(create.getContext(),
+                android.R.layout.simple_list_item_1, Category.values()));
+    }
+
+    private void checkFillConditions() {
+        if (create.location.getLatitude() == 0.0 && create.location.getLongitude() == 0.0) {
+            create.setCheckbox(ON);
+        }
+
+        ImageView picture = create.inflated.findViewById(R.id.offer_picture);
+        String link = create.offerToModify.getLinkPicture();
+
+        if (!link.isEmpty() && !Config.isTest()) {
+            Picasso.with(create.getContext()).load(Uri.parse(link)).into(picture);
+        }
     }
 
     /**

@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +28,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -42,7 +40,6 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -53,7 +50,6 @@ import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
-import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
@@ -64,13 +60,12 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 public class CreateOfferActivity extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
+    static final long SEPARATION = 86220000L;
+
     static final boolean ON = true;
     static final boolean OFF = false;
-    private final long separation = 86220000L;
     private TextView errorMessage;
     private TextView dateText;
-    private Spinner categorySpinner;
-    private Calendar now = Calendar.getInstance();
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
 
@@ -83,6 +78,8 @@ public class CreateOfferActivity extends FragmentConverter
     Location location = new Location("");
     Uri filePath = null;
     boolean creationAsked;
+    Calendar now = Calendar.getInstance();
+    Spinner categorySpinner;
 
     View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
@@ -149,7 +146,7 @@ public class CreateOfferActivity extends FragmentConverter
             offerToModify = getArguments().getParcelable("offer");
         }
 
-        preFillFields();
+        createHelper.preFillFields();
         createHelper.setListeners();
 
         dateText = inflated.findViewById(R.id.showDate);
@@ -235,57 +232,6 @@ public class CreateOfferActivity extends FragmentConverter
         removeStalledPicture();
     }
 
-    private void preFillFields() {
-
-        setupSpinner();
-
-        now = new GregorianCalendar(now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH), now.get(Calendar.DATE));
-
-        creationDate = now.getTimeInMillis();
-        endDate = now.getTimeInMillis() + separation;
-
-        if ((offerToModify) != null) {
-
-            EditText title = inflated.findViewById(R.id.offer_name);
-            title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
-
-            EditText description = inflated.findViewById(R.id.offer_description);
-            description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
-
-            categorySpinner.setSelection(offerToModify.getTag().ordinal());
-
-            location = new Location("");
-            location.setLatitude(offerToModify.getLatitude());
-            location.setLongitude(offerToModify.getLongitude());
-
-            creationDate = offerToModify.getCreationDate();
-            endDate = offerToModify.getEndDate();
-
-            checkFillConditions();
-
-        }
-    }
-
-    private void setupSpinner() {
-        categorySpinner = inflated.findViewById(R.id.category_spinner);
-        categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
-                android.R.layout.simple_list_item_1, Category.values()));
-    }
-
-    private void checkFillConditions() {
-        if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
-            setCheckbox(ON);
-        }
-
-        ImageView picture = inflated.findViewById(R.id.offer_picture);
-        String link = offerToModify.getLinkPicture();
-
-        if (!link.isEmpty() && !Config.isTest()) {
-            Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
-        }
-    }
-
     private void removeStalledPicture() {
         if (photoDestination != null) {
             File previous = new File(getContext().getCacheDir(),
@@ -329,7 +275,7 @@ public class CreateOfferActivity extends FragmentConverter
      * @param calendar the corresponding calendar
      */
     private void setDate(final Calendar calendar) {
-        this.endDate = calendar.getTimeInMillis() + separation;
+        this.endDate = calendar.getTimeInMillis() + SEPARATION;
         dateText.setText(Offer.dateFormat().format(calendar.getTime()));
     }
 
