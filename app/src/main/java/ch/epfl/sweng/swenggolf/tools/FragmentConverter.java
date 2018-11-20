@@ -13,7 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
