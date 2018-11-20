@@ -175,8 +175,8 @@ public class CreateOfferActivity extends FragmentConverter
         super.onCreate(savedInstanceState);
         creationAsked = false;
         final Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
-            fragmentsToSkip = bundle.getInt("futureFragmentsToSkip");
+        if (bundle != null && bundle.containsKey(FUTUREFRAGMENTSTOSKIP)) {
+            fragmentsToSkip = bundle.getInt(FUTUREFRAGMENTSTOSKIP);
         }
     }
 
@@ -367,9 +367,8 @@ public class CreateOfferActivity extends FragmentConverter
                             LENGTH_SHORT).show();
 
                     updateUserScore(offerToModify, offer);
-                    int newFragmentsToSkip = offerToModify == null ? 1 : 2;
-                    newFragmentsToSkip += fragmentsToSkip;
-                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer, newFragmentsToSkip));
+                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer,
+                            numberOfFragmentsToSkip()));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
@@ -378,6 +377,12 @@ public class CreateOfferActivity extends FragmentConverter
 
         };
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+    }
+
+    private int numberOfFragmentsToSkip() {
+        int newFragmentsToSkip = offerToModify == null ? 1 : 2;
+        newFragmentsToSkip += fragmentsToSkip;
+        return newFragmentsToSkip;
     }
 
     private void updateUserScore(Offer offerToModify, Offer offer) {
@@ -398,7 +403,6 @@ public class CreateOfferActivity extends FragmentConverter
                         (InputMethodManager) getActivity()
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                //Fragment backFrag;
                 getFragmentManager().popBackStack();
                 return true;
             }

@@ -25,6 +25,9 @@ import ch.epfl.sweng.swenggolf.profile.User;
 public abstract class FragmentConverter extends Fragment {
 
 
+    public static final String FRAGMENTSTOSKIP = "fragmentsToSkip";
+    public static final String FUTUREFRAGMENTSTOSKIP = "futureFragmentsToSkip";
+
     protected void replaceFragment(Fragment fragment, int viewId) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
@@ -62,14 +65,21 @@ public abstract class FragmentConverter extends Fragment {
     public static ProfileActivity createShowProfileWithProfile(User user, int fragmentsToSkip) {
         String key = "ch.epfl.sweng.swenggolf.user";
         ProfileActivity fragment = fillFragment(new ProfileActivity(), key, user);
-        fragment.getArguments().putInt("fragmentsToSkip", fragmentsToSkip);
+        fragment.getArguments().putInt(FRAGMENTSTOSKIP, fragmentsToSkip);
         return fragment;
     }
 
+    /**
+     * Create a EditProfileActivity with a number of fragments to skip.
+     *
+     * @param fragmentsToSkip the number of fragments we currently need to skip when we click on
+     *                        back button
+     * @return the EditProfileActivity
+     */
     public static EditProfileActivity createEditProfileActivity(int fragmentsToSkip) {
         EditProfileActivity fragment = new EditProfileActivity();
         Bundle bundle = new Bundle();
-        bundle.putInt("futureFragmentsToSkip", fragmentsToSkip);
+        bundle.putInt(FUTUREFRAGMENTSTOSKIP, fragmentsToSkip);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -81,17 +91,17 @@ public abstract class FragmentConverter extends Fragment {
      * @return a new ShowOfferActivity with an offer.
      */
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
-        return fillFragment(new ShowOfferActivity(), "offer", offer);
+        return fillFragment(new ShowOfferActivity(), Offer.OFFER, offer);
     }
 
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer, int fragmentsToSkip) {
-        ShowOfferActivity fragment = fillFragment(new ShowOfferActivity(), "offer", offer);
+        ShowOfferActivity fragment = fillFragment(new ShowOfferActivity(), Offer.OFFER, offer);
         return putFragmentsToSkip(fragment, fragmentsToSkip);
     }
 
     @NonNull
     private static <T extends Fragment> T putFragmentsToSkip(T fragment, int fragmentsToSkip) {
-        fragment.getArguments().putInt("fragmentsToSkip", fragmentsToSkip);
+        fragment.getArguments().putInt(FRAGMENTSTOSKIP, fragmentsToSkip);
         return fragment;
     }
 
@@ -102,7 +112,7 @@ public abstract class FragmentConverter extends Fragment {
      * @return a new CreateOfferActivity with an offer.
      */
     public static CreateOfferActivity createOfferActivityWithOffer(Offer offer) {
-        return fillFragment(new CreateOfferActivity(), "offer", offer);
+        return fillFragment(new CreateOfferActivity(), Offer.OFFER, offer);
     }
 
     /**
@@ -112,8 +122,8 @@ public abstract class FragmentConverter extends Fragment {
      * @return a new CreateOfferActivity with an offer.
      */
     public static CreateOfferActivity createOfferActivityWithOffer(Offer offer, int fragmentsToSkip) {
-        CreateOfferActivity fragment = fillFragment(new CreateOfferActivity(), "offer", offer);
-        fragment.getArguments().putInt("futureFragmentsToSkip", fragmentsToSkip);
+        CreateOfferActivity fragment = fillFragment(new CreateOfferActivity(), Offer.OFFER, offer);
+        fragment.getArguments().putInt(FUTUREFRAGMENTSTOSKIP, fragmentsToSkip);
         return fragment;
     }
 

@@ -61,8 +61,8 @@ public class ProfileActivity extends FragmentConverter {
         if (user == null) {
             throw new NullPointerException("The user given to ProfileActivity can not be null");
         }
-        if (bundle.containsKey("fragmentsToSkip")) {
-            fragmentsToSkip = bundle.getInt("fragmentsToSkip");
+        if (bundle.containsKey(FRAGMENTSTOSKIP)) {
+            fragmentsToSkip = bundle.getInt(FRAGMENTSTOSKIP);
         } else {
             fragmentsToSkip = 0;
         }

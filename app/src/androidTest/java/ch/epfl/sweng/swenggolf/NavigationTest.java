@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.NoMatchingViewException;
@@ -58,6 +57,9 @@ public class NavigationTest {
 
     private final KeyEvent goBack = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
 
+    /**
+     * Set up the fake database, the user, the fake storage and launch activity.
+     */
     @Before
     public void setUp() {
         Database database = FakeDatabase.fakeDatabaseCreator();
@@ -73,15 +75,19 @@ public class NavigationTest {
 
         clickOnDrawer(R.id.my_account);
         //Edit profile multiple times
-        for(int i = 0; i <4; ++i) {
-        onView(withId(R.id.edit_profile)).perform(click());
-        onView(withId(R.id.saveButton)).perform(scrollTo(), click());
-        }
+        editMultipleTimes(R.id.edit_profile, R.id.saveButton);
 
         checkFragmentShown(ProfileActivity.class);
 
         pressBackButton();
         checkFragmentShown(ListOfferActivity.class);
+    }
+
+    private void editMultipleTimes(int edit_profile, int saveButton) {
+        for (int i = 0; i < 4; ++i) {
+            onView(withId(edit_profile)).perform(click());
+            onView(withId(saveButton)).perform(scrollTo(), click());
+        }
     }
 
     @NonNull
@@ -142,10 +148,7 @@ public class NavigationTest {
     private void goToShowOffer() {
         clickOnDrawer(R.id.my_offers);
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0)).perform(click());
-        for(int i = 0; i< 4; ++i) {
-            onView(withId(R.id.button_modify_offer)).perform(click());
-            onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
-        }
+        editMultipleTimes(R.id.button_modify_offer, R.id.button_create_offer);
         checkFragmentShown(ShowOfferActivity.class);
     }
 
@@ -154,26 +157,20 @@ public class NavigationTest {
         goToShowOffer();
         onView(withId(R.id.button_delete_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
-        //TODO : maybe we need a sleep here
         checkFragmentShown(ListOwnOfferActivity.class);
-
-       /* try {
-            onView(withId(R.id.button_delete_offer)).perform(click());
-        } catch (NoMatchingViewException | PerformException e) {
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(click());
-        }
-        onView(withText(android.R.string.yes)).perform(scrollTo(), click());*/
     }
 
     @Test
     public void goHomeScreen() {
         pressBackButton();
-        assertEquals(1, intentRule.getActivity().getSupportFragmentManager().getFragments().size());
+        assertEquals(1,
+                intentRule.getActivity().getSupportFragmentManager().getFragments().size());
     }
 
     private <T> void goToXAndBackToMenu(int menuItemId, Class<T> destinationClass) {
         clickOnDrawer(menuItemId);
-        final FragmentManager fragmentManager = intentRule.getActivity().getSupportFragmentManager();
+        final FragmentManager fragmentManager =
+                intentRule.getActivity().getSupportFragmentManager();
         List<Fragment> frags = fragmentManager.getFragments();
         assertThat(frags.get(0).getClass().getName(), is(destinationClass.getName()));
 
