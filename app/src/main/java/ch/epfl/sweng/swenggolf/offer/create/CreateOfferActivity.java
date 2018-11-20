@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf.offer.create;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -29,9 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -39,15 +37,15 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -66,22 +64,26 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 public class CreateOfferActivity extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
-    private static final boolean ON = true;
-    private static final boolean OFF = false;
+    static final boolean ON = true;
+    static final boolean OFF = false;
     private final long separation = 86220000L;
     private TextView errorMessage;
     private TextView dateText;
-    private Offer offerToModify;
-    private boolean creationAsked;
     private Spinner categorySpinner;
-    private Uri filePath = null;
-    private long creationDate;
     private Calendar now = Calendar.getInstance();
-    private long endDate;
     private View inflated;
-    private Location location = new Location("default");
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
+
+    private CreateHelper createHelper;
+
+    Offer offerToModify;
+    long creationDate;
+    long endDate;
+    Location location = new Location("");
+    Uri filePath = null;
+    boolean creationAsked;
+
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -111,18 +113,21 @@ public class CreateOfferActivity extends FragmentConverter
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        createHelper = new CreateHelper(this);
+
         inflated = inflater.inflate(R.layout.activity_create_offer,
                 container, false);
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.create_offer);
         errorMessage = inflated.findViewById(R.id.error_message);
+
+        offerToModify = null;
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable("offer");
-        } else {
-            offerToModify = null;
         }
-        setupSpinner();
+
         preFillFields();
-        initializeDates();
+
         inflated.findViewById(R.id.fetch_picture).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -143,29 +148,16 @@ public class CreateOfferActivity extends FragmentConverter
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        attachLocation();
+                        createHelper.attachLocation();
                     }
                 });
         inflated.findViewById(R.id.take_picture).setOnClickListener(onTakePictureClick);
         inflated.findViewById(R.id.button).setOnClickListener(onCreateOfferClick);
+
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
-        return inflated;
-    }
 
-    /**
-     * Initialize the creation and the end date of the offer.
-     */
-    private void initializeDates() {
-        now = new GregorianCalendar(now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH), now.get(Calendar.DATE));
-        if (offerToModify != null) {
-            creationDate = offerToModify.getCreationDate();
-            endDate = offerToModify.getEndDate();
-        } else {
-            creationDate = now.getTimeInMillis();
-            endDate = now.getTimeInMillis() + separation;
-        }
+        return inflated;
     }
 
     @Override
@@ -184,43 +176,6 @@ public class CreateOfferActivity extends FragmentConverter
                 new InputFilter.LengthFilter(Offer.DESCRIPTION_MAX_LENGTH)});
     }
 
-    private void setupSpinner() {
-        categorySpinner = inflated.findViewById(R.id.category_spinner);
-        categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
-                android.R.layout.simple_list_item_1, Category.values()));
-    }
-
-    private void preFillFields() {
-        if ((offerToModify) != null) {
-
-            EditText title = inflated.findViewById(R.id.offer_name);
-            title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
-
-            EditText description = inflated.findViewById(R.id.offer_description);
-            description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
-
-            categorySpinner.setSelection(offerToModify.getTag().ordinal());
-
-            location = new Location("");
-            location.setLatitude(offerToModify.getLatitude());
-            location.setLongitude(offerToModify.getLongitude());
-
-            checkFillConditions(inflated);
-        }
-    }
-
-    private void checkFillConditions(View inflated) {
-        if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
-            setCheckbox(ON);
-        }
-
-        ImageView picture = inflated.findViewById(R.id.offer_picture);
-        String link = offerToModify.getLinkPicture();
-
-        if (!link.isEmpty() && !Config.isTest()) {
-            Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -255,7 +210,30 @@ public class CreateOfferActivity extends FragmentConverter
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
-            attachLocation();
+            createHelper.attachLocation();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                InputMethodManager manager =
+                        (InputMethodManager) getActivity()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                Fragment backFrag;
+                if (offerToModify == null) {
+                    backFrag = new ListOfferActivity();
+                } else {
+                    backFrag = FragmentConverter.createShowOfferWithOffer(offerToModify);
+                }
+                replaceCentralFragment(backFrag);
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
         }
     }
 
@@ -263,6 +241,57 @@ public class CreateOfferActivity extends FragmentConverter
     public void onStop() {
         super.onStop();
         removeStalledPicture();
+    }
+
+    private void preFillFields() {
+
+        setupSpinner();
+
+        now = new GregorianCalendar(now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH), now.get(Calendar.DATE));
+
+        creationDate = now.getTimeInMillis();
+        endDate = now.getTimeInMillis() + separation;
+
+        if ((offerToModify) != null) {
+
+            EditText title = inflated.findViewById(R.id.offer_name);
+            title.setText(offerToModify.getTitle(), TextView.BufferType.EDITABLE);
+
+            EditText description = inflated.findViewById(R.id.offer_description);
+            description.setText(offerToModify.getDescription(), TextView.BufferType.EDITABLE);
+
+            categorySpinner.setSelection(offerToModify.getTag().ordinal());
+
+            location = new Location("");
+            location.setLatitude(offerToModify.getLatitude());
+            location.setLongitude(offerToModify.getLongitude());
+
+            creationDate = offerToModify.getCreationDate();
+            endDate = offerToModify.getEndDate();
+
+            checkFillConditions();
+
+        }
+    }
+
+    private void setupSpinner() {
+        categorySpinner = inflated.findViewById(R.id.category_spinner);
+        categorySpinner.setAdapter(new ArrayAdapter<>(this.getContext(),
+                android.R.layout.simple_list_item_1, Category.values()));
+    }
+
+    private void checkFillConditions() {
+        if (location.getLatitude() == 0.0 && location.getLongitude() == 0.0) {
+            setCheckbox(ON);
+        }
+
+        ImageView picture = inflated.findViewById(R.id.offer_picture);
+        String link = offerToModify.getLinkPicture();
+
+        if (!link.isEmpty() && !Config.isTest()) {
+            Picasso.with(this.getContext()).load(Uri.parse(link)).into(picture);
+        }
     }
 
     private void removeStalledPicture() {
@@ -296,113 +325,28 @@ public class CreateOfferActivity extends FragmentConverter
             errorMessage.setText(R.string.error_create_offer_invalid);
             errorMessage.setVisibility(View.VISIBLE);
         } else {
-            createOfferObject(title, description, category);
+            createHelper.createOfferObject(title, description, category);
         }
 
     }
 
-    /**
-     * Creates the offer and pushes it to the database.
-     *
-     * @param name        the title of the offer
-     * @param description the description of the offer
-     */
-    protected void createOfferObject(String name, String description, Category tag) {
-        String uuid;
-        String link;
-        if (offerToModify != null) {
-            uuid = offerToModify.getUuid();
-            link = offerToModify.getLinkPicture();
-        } else {
-            uuid = UUID.randomUUID().toString();
-            link = "";
-        }
-
-        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                link, uuid, tag, creationDate, endDate, location);
-
-
-        if (filePath == null) {
-            writeOffer(newOffer);
-        } else {
-            uploadImage(newOffer);
-        }
-    }
-
-    private void uploadImage(final Offer offer) {
-        OnCompleteListener<Uri> listener = new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    String link = task.getResult().toString();
-                    Offer newOffer = offer.updateLinkToPicture(link);
-                    writeOffer(newOffer);
-                } else {
-                    // TODO Handle failures
-                }
-            }
-        };
-        Storage.getInstance().write(filePath, "images/" + offer.getUuid(), listener);
-    }
-
-    /**
-     * Write an offer into the database.
-     *
-     * @param offer offer to be written
-     */
-    private void writeOffer(final Offer offer) {
-        creationAsked = true;
-        Database database = Database.getInstance();
-        CompletionListener listener = new CompletionListener() {
+    CompletionListener createWriteOfferListener(final Offer offer) {
+        return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
-                    Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
+                    Toast.makeText(getContext(), "Offer created",
                             LENGTH_SHORT).show();
-                    updateUserScore(offerToModify, offer);
+                    createHelper.updateUserScore(offerToModify, offer);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.error_create_offer_database);
                 }
             }
-
         };
-        database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
     }
 
-    private void updateUserScore(Offer offerToModify, Offer offer) {
-        int scoreToAdd = 0;
-        if (offerToModify == null) {
-            scoreToAdd += offer.offerValue();
-        } else {
-            scoreToAdd += offerToModify.offerValueDiff(offer);
-        }
-        DatabaseUser.addPointsToCurrentUser(scoreToAdd);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                InputMethodManager manager =
-                        (InputMethodManager) getActivity()
-                                .getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                Fragment backFrag;
-                if (offerToModify == null) {
-                    backFrag = new ListOfferActivity();
-                } else {
-                    backFrag = FragmentConverter.createShowOfferWithOffer(offerToModify);
-                }
-                replaceCentralFragment(backFrag);
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
-        }
-    }
 
     /**
      * Set the new date.
@@ -425,8 +369,8 @@ public class CreateOfferActivity extends FragmentConverter
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
-        if (cal.before(now)) {
 
+        if (cal.before(now)) {
             Toast.makeText(CreateOfferActivity.this.getContext(),
                     getString(R.string.valid_date), Toast.LENGTH_LONG).show();
         } else {
@@ -444,33 +388,7 @@ public class CreateOfferActivity extends FragmentConverter
         newFragment.show(this.getFragmentManager(), "DatePicker");
     }
 
-    private void attachLocation() {
-
-        if (location.getLatitude() != 0.0 || location.getLongitude() != 0.0) {
-
-            location = new Location("");
-            setCheckbox(OFF);
-
-            return;
-        }
-
-        if (checkLocationPermission(getActivity())) {
-            AppLocation currentLocation = AppLocation.getInstance(getActivity());
-            currentLocation.getLocation(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location l) {
-                    saveLocation(l);
-                }
-            });
-        }
-    }
-
-    private void saveLocation(Location location) {
-        this.location = location;
-        setCheckbox(ON);
-    }
-
-    private void setCheckbox(boolean on) {
+    void setCheckbox(boolean on) {
         String uri = on ? "@android:drawable/checkbox_on_background"
                 : "@android:drawable/checkbox_off_background";
         int uncheckResource = getResources().getIdentifier(uri, null,

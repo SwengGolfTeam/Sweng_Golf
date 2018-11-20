@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 
 import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
