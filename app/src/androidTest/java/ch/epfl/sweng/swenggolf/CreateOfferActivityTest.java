@@ -24,7 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -36,6 +35,7 @@ import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -50,10 +50,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -68,19 +68,39 @@ import static org.hamcrest.core.IsNot.not;
 @RunWith(AndroidJUnit4.class)
 public class CreateOfferActivityTest {
 
+    private static FragmentManager manager;
     private final long beginingTime = 1515625200000L;
     private final long timeDiff = 10L;
-
     @Rule
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
-
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-    private static FragmentManager manager;
+    /**
+     * Fills the field to create an offer in CreateOfferActivity.
+     * The offer created has a title, description, picture, location and date.
+     */
+    public static void fillOffer() {
+        fillNameAndDescription();
+
+        // Answer to gallery intent
+        Intent resultData = new Intent();
+        resultData.setData(Uri.parse("drawable://" + R.drawable.img));
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(not(isInternal())).respondWith(result);
+
+        onView(withId(R.id.fetch_picture)).perform(scrollTo(), click());
+
+        // We ensure that the unchecking works
+        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
+        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
+        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
+
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
+    }
 
     /**
      * Sets up a fake database and a fake storage, enables TestMode and launches activity.
@@ -101,9 +121,9 @@ public class CreateOfferActivityTest {
         if (hasOffer) {
             Bundle bundle = new Bundle();
 
-            Offer offer = new Offer(Config.getUser().getUserId(),"20",
-                    "20", "20", "20",Category.FOOD,beginingTime,
-                    beginingTime+ timeDiff);
+            Offer offer = new Offer(Config.getUser().getUserId(), "20",
+                    "20", "20", "20", Category.FOOD, beginingTime,
+                    beginingTime + timeDiff);
 
             bundle.putParcelable("offer", offer);
             fragment.setArguments(bundle);
@@ -117,8 +137,6 @@ public class CreateOfferActivityTest {
         }
     }
 
-
-
     @Test
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
@@ -131,31 +149,11 @@ public class CreateOfferActivityTest {
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
-    private void fillNameAndDescription() {
+    private static void fillNameAndDescription() {
         onView(withId(R.id.offer_name)).perform(typeText("title test"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.offer_description)).perform(typeText("description test"))
                 .perform(closeSoftKeyboard());
-    }
-
-    private void fillOffer() throws InterruptedException {
-        fillNameAndDescription();
-
-        // Answer to gallery intent
-        Intent resultData = new Intent();
-        resultData.setData(Uri.parse("drawable://" + R.drawable.img));
-        Instrumentation.ActivityResult result =
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(not(isInternal())).respondWith(result);
-
-        onView(withId(R.id.fetch_picture)).perform(scrollTo(), click());
-
-        // We ensure that the unchecking works
-        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
-        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
-        onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
-
-        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -164,14 +162,14 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void createOfferShowOfferWhenValidInput() throws InterruptedException {
+    public void createOfferShowOfferWhenValidInput() {
         goToCreateOffer(false);
         fillOffer();
         assertDisplayedFragment(ShowOfferActivity.class);
     }
 
     @Test
-    public void showMessageErrorWhenCantCreateOffer() throws InterruptedException {
+    public void showMessageErrorWhenCantCreateOffer() {
         Database.setDebugDatabase(new FakeDatabase(false));
         goToCreateOffer(false);
         fillOffer();
@@ -193,7 +191,7 @@ public class CreateOfferActivityTest {
     }
 
     @Test
-    public void modifyingOfferViaShowOfferWorks() throws InterruptedException {
+    public void modifyingOfferViaShowOfferWorks() {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
         fillOffer();
@@ -222,8 +220,10 @@ public class CreateOfferActivityTest {
         assertDisplayedFragment(expectedDisplayedClass);
     }
 
+
+
     @Test
-    public void defineOfferOnCreation() throws InterruptedException {
+    public void defineOfferOnCreation() {
         final String cat = Category.values()[1].toString();
 
         goToCreateOffer(false);
@@ -268,14 +268,14 @@ public class CreateOfferActivityTest {
     @Test
     public void dateTest() {
         goToCreateOffer(false);
-        setDate( 2020, 1, 1);
+        setDate(2020, 1, 1);
         onView(withId(R.id.showDate)).check(matches(withText("Wednesday, 01/01/2020")));
     }
 
     @Test
     public void unvalidDateTest() {
         goToCreateOffer(false);
-        setDate( 2000, 1, 1);
+        setDate(2000, 1, 1);
 
     }
 

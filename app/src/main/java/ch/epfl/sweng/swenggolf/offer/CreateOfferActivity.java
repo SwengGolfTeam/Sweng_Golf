@@ -45,6 +45,7 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -65,6 +66,9 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 public class CreateOfferActivity extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
+    private static final boolean ON = true;
+    private static final boolean OFF = false;
+    private final long separation = 86220000L;
     private TextView errorMessage;
     private TextView dateText;
     private Offer offerToModify;
@@ -78,11 +82,7 @@ public class CreateOfferActivity extends FragmentConverter
     private Location location = new Location("default");
     private Uri photoDestination = null;
     private Uri tempPicturePath = null;
-    private final long separation = 86220000L;
     private int fragmentsToSkip;
-
-    private static final boolean ON = true;
-    private static final boolean OFF = false;
 
     private View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
@@ -106,12 +106,12 @@ public class CreateOfferActivity extends FragmentConverter
     private View.OnClickListener onCreateOfferClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            createOffer(v);
+            createOffer();
         }
     };
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         inflated = inflater.inflate(R.layout.activity_create_offer,
                 container, false);
@@ -137,7 +137,7 @@ public class CreateOfferActivity extends FragmentConverter
         inflated.findViewById(R.id.pick_date).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePickerDialog(v);
+                showDatePickerDialog();
             }
         });
 
@@ -284,10 +284,8 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Creates an Offer by parsing the contents given by the user.
-     *
-     * @param view the view
      */
-    public void createOffer(View view) {
+    public void createOffer() {
         if (creationAsked) {
             return;
         }
@@ -367,6 +365,8 @@ public class CreateOfferActivity extends FragmentConverter
                 if (databaseError == DbError.NONE) {
                     Toast.makeText(CreateOfferActivity.this.getContext(), "Offer created",
                             LENGTH_SHORT).show();
+
+                    updateUserScore(offerToModify, offer);
                     int newFragmentsToSkip = offerToModify == null ? 1 : 2;
                     newFragmentsToSkip += fragmentsToSkip;
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer, newFragmentsToSkip));
@@ -378,6 +378,16 @@ public class CreateOfferActivity extends FragmentConverter
 
         };
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+    }
+
+    private void updateUserScore(Offer offerToModify, Offer offer) {
+        int scoreToAdd = 0;
+        if (offerToModify == null) {
+            scoreToAdd += offer.offerValue();
+        } else {
+            scoreToAdd += offerToModify.offerValueDiff(offer);
+        }
+        DatabaseUser.addPointsToCurrentUser(scoreToAdd);
     }
 
     @Override
@@ -398,47 +408,6 @@ public class CreateOfferActivity extends FragmentConverter
         }
     }
 
-
-    public static class DatePickerFragment extends DialogFragment {
-
-        private final Calendar calendar;
-
-        @SuppressLint("ValidFragment")
-        public DatePickerFragment(Calendar calendar) {
-            super();
-            this.calendar = calendar;
-        }
-
-        public DatePickerFragment() {
-            this(Calendar.getInstance());
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(this.getActivity(),
-                    (DatePickerDialog.OnDateSetListener) getVisibleFragment(),
-                    year, month, day);
-        }
-
-        private Fragment getVisibleFragment() {
-            FragmentManager fragmentManager = this.getFragmentManager();
-            List<Fragment> fragments = fragmentManager.getFragments();
-            for (Fragment fragment : fragments) {
-                if (fragment != null && fragment.isVisible()) {
-                    return fragment;
-                }
-            }
-            return null;
-        }
-
-    }
-
-
     /**
      * Set the new date.
      *
@@ -447,7 +416,6 @@ public class CreateOfferActivity extends FragmentConverter
     private void setDate(final Calendar calendar) {
         this.endDate = calendar.getTimeInMillis() + separation;
         dateText.setText(Offer.dateFormat().format(calendar.getTime()));
-
     }
 
     /**
@@ -472,16 +440,13 @@ public class CreateOfferActivity extends FragmentConverter
 
     /**
      * Launches the calendar.
-     *
-     * @param v the corresponding view
      */
-    public void showDatePickerDialog(View v) {
+    public void showDatePickerDialog() {
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTimeInMillis(endDate);
         DialogFragment newFragment = new DatePickerFragment(endCalendar);
         newFragment.show(this.getFragmentManager(), "DatePicker");
     }
-
 
     private void attachLocation() {
 
@@ -517,6 +482,46 @@ public class CreateOfferActivity extends FragmentConverter
         ImageView check = inflated.findViewById(R.id.offer_position_status);
         Drawable uncheck = getResources().getDrawable(uncheckResource);
         check.setImageDrawable(uncheck);
+
+    }
+
+    public static class DatePickerFragment extends DialogFragment {
+
+        private final Calendar calendar;
+
+        @SuppressLint("ValidFragment")
+        public DatePickerFragment(Calendar calendar) {
+            super();
+            this.calendar = calendar;
+        }
+
+        public DatePickerFragment() {
+            this(Calendar.getInstance());
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(this.getActivity(),
+                    (DatePickerDialog.OnDateSetListener) getVisibleFragment(),
+                    year, month, day);
+        }
+
+        private Fragment getVisibleFragment() {
+            FragmentManager fragmentManager = this.getFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible()) {
+                    return fragment;
+                }
+            }
+            return null;
+        }
 
     }
 

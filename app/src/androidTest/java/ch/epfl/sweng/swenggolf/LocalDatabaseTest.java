@@ -1,12 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +35,7 @@ public class LocalDatabaseTest {
     }
 
     @Test
-    public void upgradeDatabaseDoesWorkTest(){
+    public void upgradeDatabaseDoesWorkTest() {
         String upgradeDatabaseName = "TEST_DATABASE.db";
         LocalDatabase localDb1 = new LocalDatabase(activityRule.getActivity(), null,
                 1, upgradeDatabaseName);

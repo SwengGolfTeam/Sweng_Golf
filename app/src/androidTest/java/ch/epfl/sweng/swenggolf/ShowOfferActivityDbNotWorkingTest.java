@@ -9,34 +9,29 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.swenggolf.TestUtility.testToastShow;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityDbNotWorkingTest {
-    @Rule
-    public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
     private static final FakeDatabase database = new FakeDatabase(true);
     private static final User user = new User("patrick", "0", "email", "photo", "preference");
     private static final Offer offer = new Offer("0", "title", "description");
+    @Rule
+    public final IntentsTestRule<MainMenuActivity> mActivityRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Set up a fake database, a fake user and launch activity.
@@ -50,7 +45,7 @@ public class ShowOfferActivityDbNotWorkingTest {
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
-                    .commit();
+                .commit();
     }
 
     @Test

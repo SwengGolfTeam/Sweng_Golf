@@ -27,8 +27,8 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private FragmentManager manager;
     private final User user = Config.getUser();
+    private FragmentManager manager;
     private View nav;
 
     @Override
