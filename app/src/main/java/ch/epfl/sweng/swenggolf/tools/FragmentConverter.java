@@ -15,9 +15,9 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.offer.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -96,7 +96,8 @@ public abstract class FragmentConverter extends Fragment {
 
     /**
      * Creates a ShowOfferActivity with arguments already set.
-     * @param offer the offer to pass to the fragment.
+     *
+     * @param offer           the offer to pass to the fragment.
      * @param fragmentsToSkip the number of fragments to skip when the user click on back button.
      * @return new ShowOfferActivity with an offer.
      */
