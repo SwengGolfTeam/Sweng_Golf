@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -36,10 +37,6 @@ public class LeaderboardTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
-    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
-        return new RecyclerViewMatcher(recyclerViewId);
-    }
 
     /**
      * Set up a fake database with two offers.
@@ -82,8 +79,8 @@ public class LeaderboardTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withId(R.id.users_recycler_view)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(Leaderboard.userList.get(0).getUserName())), click()));
+        onView(withId(R.id.users_recycler_view))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.name)).check(matches(withText("username2")));
     }
@@ -96,7 +93,7 @@ public class LeaderboardTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void testLeaderBoardAdapter() {
-        new LeaderboardAdapter(null, null,null);
+        new LeaderboardAdapter(null, null);
     }
 
 

@@ -29,7 +29,7 @@ public class Leaderboard extends FragmentConverter {
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     private TextView noUser;
-    public static final List<User> userList = new ArrayList<>();
+    public final List<User> userList = new ArrayList<>();
     private static final int LEADERBOARD_SIZE = 10;
 
     @Override
@@ -56,7 +56,7 @@ public class Leaderboard extends FragmentConverter {
                 replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
             }
         };
-        mAdapter = new LeaderboardAdapter(userList, this.getContext(),userListener);
+        mAdapter = new LeaderboardAdapter(userList, this);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));

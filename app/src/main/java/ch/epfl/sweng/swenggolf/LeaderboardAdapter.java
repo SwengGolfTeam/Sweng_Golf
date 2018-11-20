@@ -16,13 +16,13 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.MyViewHolder> {
 
+    private final FragmentConverter fragmentConverter;
     private List<User> userList;
-    private Context mContext;
-    private UserListener userListener;
 
     /**
      * Representation of one row of the recyclerView.
@@ -34,6 +34,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         ImageView userImage;
         ImageView userBadge;
         TextView userPosition;
+        FragmentConverter fragmentConverter;
 
         /**
          * Constructor.
@@ -54,13 +55,13 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
      *
      * @param userList the list of users to be displayed
      */
-    public LeaderboardAdapter(List<User> userList, Context mContext, UserListener userListener) {
+    public LeaderboardAdapter(List<User> userList, FragmentConverter fragmentConverter) {
         if (userList == null) {
             throw new IllegalArgumentException();
         }
         this.userList = userList;
-        this.mContext = mContext;
-        this.userListener = userListener;
+        this.fragmentConverter = fragmentConverter;
+
     }
 
 
@@ -89,7 +90,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         userPosition.setText(positionString);
 
         Uri photoUri = Uri.parse(user.getPhoto());
-        Picasso.with(mContext).load(photoUri).into(holder.userImage);
+        Picasso.with(fragmentConverter.getContext()).load(photoUri).into(holder.userImage);
 
         ImageView badge = holder.userBadge;
         badge.setImageResource(Badge.getDrawable(user.getPoints()));
@@ -98,7 +99,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userListener.onUserClick(user);
+                fragmentConverter.replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
             }
         });
 
