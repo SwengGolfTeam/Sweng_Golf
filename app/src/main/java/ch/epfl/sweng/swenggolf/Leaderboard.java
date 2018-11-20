@@ -29,7 +29,7 @@ public class Leaderboard extends FragmentConverter {
     protected RecyclerView.LayoutManager mLayoutManager;
     private TextView errorMessage;
     private TextView noUser;
-    public final List<User> userList = new ArrayList<>();
+    private final List<User> userList = new ArrayList<>();
     private static final int LEADERBOARD_SIZE = 10;
 
     @Override

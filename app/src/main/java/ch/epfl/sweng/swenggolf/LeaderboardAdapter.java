@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         ImageView userImage;
         ImageView userBadge;
         TextView userPosition;
-        FragmentConverter fragmentConverter;
 
         /**
          * Constructor.
