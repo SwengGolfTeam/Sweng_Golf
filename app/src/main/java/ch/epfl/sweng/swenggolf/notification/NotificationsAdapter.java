@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -65,7 +68,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return new NotificationViewHolder(view, R.id.notification_text, R.id.notification_icon, R.id.clear);
     }
 
-    // TODO this method is way too long
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder notificationViewHolder, int i) {
         final Notification notification = notifications.get(i);
@@ -73,7 +75,36 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         TextView text = (TextView) notificationViewHolder.getFieldOne();
         ImageView icon = (ImageView) notificationViewHolder.getFieldTwo();
-        Context context = text.getContext();
+        final Context context = text.getContext();
+
+        setContent(notification, text, icon, context);
+
+        ImageButton close = (ImageButton) notificationViewHolder.getFieldThree();
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CompletionListener removeListener = new CompletionListener() {
+                    @Override
+                    public void onComplete(DbError error) {
+                        if (error == DbError.NONE) {
+                            notifications.remove(notification);
+                            notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(context, context.getResources()
+                                    .getString(R.string.notif_delete_error), Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                };
+                NotificationManager.removePendingNotification(currentUser.getUserId(),
+                        notification.getUuid(), removeListener);
+            }
+        });
+
+        notificationViewHolder.setItemClickListener(viewHolderOnClickListener);
+    }
+
+    private void setContent(Notification notification, TextView text, ImageView icon, Context context) {
         String message;
         int imageResource;
         switch (notification.getType()) {
@@ -104,26 +135,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         }
         text.setText(message);
         icon.setImageResource(imageResource);
-
-        ImageButton close = (ImageButton) notificationViewHolder.getFieldThree();
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NotificationManager.removePendingNotification(currentUser.getUserId(), notification.getUuid());
-                // TODO can we do this better?
-                Notification concerned = null;
-                for (Notification n : notifications) {
-                    if (n.getUuid().equals(notification.getUuid())) {
-                        concerned = n;
-                    }
-                }
-                notifications.remove(concerned);
-                notifyDataSetChanged();
-            }
-        });
-
-        notificationViewHolder.setItemClickListener(viewHolderOnClickListener);
     }
+
 
     @Override
     public int getItemCount() {

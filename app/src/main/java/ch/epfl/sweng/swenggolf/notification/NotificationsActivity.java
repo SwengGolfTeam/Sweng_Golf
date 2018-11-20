@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,7 @@ public class NotificationsActivity extends FragmentConverter {
         notifications = new ArrayList<>();
 
         fetchNotifications(inflated);
-
-
-        // TODO add a custom divider ?
+        
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
@@ -84,7 +83,8 @@ public class NotificationsActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                // TODO set toast
+                Toast.makeText(NotificationsActivity.this.getContext(), getResources()
+                                .getString(R.string.notif_error), Toast.LENGTH_SHORT).show();
             }
         };
         Database.getInstance()
