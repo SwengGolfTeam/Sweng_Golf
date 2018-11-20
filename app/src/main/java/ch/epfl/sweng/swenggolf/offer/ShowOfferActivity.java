@@ -96,7 +96,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
         final Bundle bundle = getArguments();
         offer = bundle.getParcelable("offer");
-        if(bundle.containsKey("fragmentsToSkip")) {
+        if (bundle.containsKey("fragmentsToSkip")) {
             fragmentsToSkip = bundle.getInt("fragmentsToSkip");
         }
     }
@@ -388,7 +388,7 @@ public class ShowOfferActivity extends FragmentConverter {
                             Toast.LENGTH_SHORT).show();
                     //replaceCentralFragment(new ListOfferActivity(), true);
                     getActivity().onBackPressed();
-                   // getFragmentManager().popBackStack();
+                    // getFragmentManager().popBackStack();
 
                     //TODO : need to handle case where the offer has been modified before
                 }

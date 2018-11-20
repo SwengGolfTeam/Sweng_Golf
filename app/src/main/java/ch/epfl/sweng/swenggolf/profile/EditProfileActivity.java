@@ -32,10 +32,9 @@ public class EditProfileActivity extends FragmentConverter {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Bundle bundle = getArguments();
-        if(bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
+        if (bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
             fragmentsToSkip = bundle.getInt("futureFragmentsToSkip");
-        }
-        else {
+        } else {
             fragmentsToSkip = 0;
         }
     }
@@ -130,7 +129,7 @@ public class EditProfileActivity extends FragmentConverter {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-               // replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                // replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
                 //TODO : handle case where we skip items
                 getFragmentManager().popBackStack();
                 return true;

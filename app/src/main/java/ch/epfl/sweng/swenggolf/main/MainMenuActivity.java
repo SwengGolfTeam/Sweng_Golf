@@ -102,7 +102,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //drain the backstack
         int backStackSize = manager.getBackStackEntryCount();
         Log.d("MAINACTIVTY", "Draining backstack from " + backStackSize + " fragments");
-        for(int i = 0; i <backStackSize; ++i) {
+        for (int i = 0; i < backStackSize; ++i) {
             manager.popBackStack();
         }
         // manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -156,7 +156,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            Log.d("MAINACTIVITY", "" + getSupportFragmentManager().getBackStackEntryCount());
+        Log.d("MAINACTIVITY", "" + getSupportFragmentManager().getBackStackEntryCount());
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
             final Bundle bundle = fragment.getArguments();
@@ -169,7 +169,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     }
                 }
             }
-                super.onBackPressed();
+            super.onBackPressed();
         } else {
             Log.d("MAINACTIVITY", "Finish activity");
             moveTaskToBack(true);

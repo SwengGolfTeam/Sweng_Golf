@@ -175,7 +175,7 @@ public class CreateOfferActivity extends FragmentConverter
         super.onCreate(savedInstanceState);
         creationAsked = false;
         final Bundle bundle = getArguments();
-        if(bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
+        if (bundle != null && bundle.containsKey("futureFragmentsToSkip")) {
             fragmentsToSkip = bundle.getInt("futureFragmentsToSkip");
         }
     }

@@ -31,7 +31,7 @@ public abstract class FragmentConverter extends Fragment {
     protected void replaceFragment(Fragment fragment, int viewId) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
-            transaction.addToBackStack(null);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -97,8 +97,9 @@ public abstract class FragmentConverter extends Fragment {
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
         return fillFragment(new ShowOfferActivity(), "offer", offer);
     }
+
     public static ShowOfferActivity createShowOfferWithOffer(Offer offer, int fragmentsToSkip) {
-        ShowOfferActivity fragment =  fillFragment(new ShowOfferActivity(), "offer", offer);
+        ShowOfferActivity fragment = fillFragment(new ShowOfferActivity(), "offer", offer);
         return putFragmentsToSkip(fragment, fragmentsToSkip);
     }
 
