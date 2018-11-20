@@ -325,8 +325,7 @@ public class ShowOfferActivity extends FragmentConverter {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.centralFragment, new ListOfferActivity()).commit();
+                getActivity().onBackPressed();
                 return true;
             }
             case R.id.button_modify_offer: {

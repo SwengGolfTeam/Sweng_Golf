@@ -37,6 +37,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
@@ -44,6 +45,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
 public class NavigationTest {
     @Rule
@@ -110,6 +112,14 @@ public class NavigationTest {
     }
 
     @Test
+    public void goToCreateOfferAndBackToMenuUsingArrow() {
+        clickOnDrawer(R.id.create_offer);
+        checkFragmentShown(CreateOfferActivity.class);
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
+        checkFragmentShown(ListOfferActivity.class);
+    }
+
+    @Test
     public void goToFollowingAndBackToMenu() {
         goToXAndBackToMenu(R.id.preference_activity, ListPreferencesActivity.class);
     }
@@ -118,6 +128,14 @@ public class NavigationTest {
     public void goToOfferAndBackToMyOffer() {
         goToShowOffer();
         pressBackButton();
+        checkFragmentShown(ListOwnOfferActivity.class);
+    }
+
+    @Test
+    public void goToOfferAndBackToMyOfferUsingArrow() {
+        goToShowOffer();
+        checkFragmentShown(ShowOfferActivity.class);
+        onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         checkFragmentShown(ListOwnOfferActivity.class);
     }
 
@@ -145,6 +163,12 @@ public class NavigationTest {
             onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(click());
         }
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());*/
+    }
+
+    @Test
+    public void goHomeScreen() {
+        pressBackButton();
+        assertEquals(1, intentRule.getActivity().getSupportFragmentManager().getFragments().size());
     }
 
     private <T> void goToXAndBackToMenu(int menuItemId, Class<T> destinationClass) {

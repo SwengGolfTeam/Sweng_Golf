@@ -388,7 +388,7 @@ public class CreateOfferActivity extends FragmentConverter
                         (InputMethodManager) getActivity()
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                Fragment backFrag;
+                //Fragment backFrag;
                 getFragmentManager().popBackStack();
                 return true;
             }
