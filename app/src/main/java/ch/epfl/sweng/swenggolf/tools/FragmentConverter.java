@@ -72,7 +72,7 @@ public abstract class FragmentConverter extends Fragment {
         return getView().findViewById(id);
     }
 
-    public void replaceFragment(Fragment fragment, int viewId) {
+    protected void replaceFragment(Fragment fragment, int viewId) {
         FragmentManager manager = getFragmentManager();
         manager.beginTransaction().replace(viewId, fragment).commit();
     }
