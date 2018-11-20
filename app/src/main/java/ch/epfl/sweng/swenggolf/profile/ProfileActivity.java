@@ -133,7 +133,6 @@ public class ProfileActivity extends FragmentConverter {
             }
             case R.id.edit_profile: {
                 replaceCentralFragment(createEditProfileActivity(fragmentsToSkip));
-                Log.d("PROFILE", "" + fragmentsToSkip);
                 return true;
             }
             case R.id.follow: {

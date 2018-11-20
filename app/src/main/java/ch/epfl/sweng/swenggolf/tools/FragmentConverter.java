@@ -121,7 +121,8 @@ public abstract class FragmentConverter extends Fragment {
      * @param offer the offer to pass to the fragment.
      * @return a new CreateOfferActivity with an offer.
      */
-    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer, int fragmentsToSkip) {
+    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer,
+                                                                   int fragmentsToSkip) {
         CreateOfferActivity fragment = fillFragment(new CreateOfferActivity(), Offer.OFFER, offer);
         fragment.getArguments().putInt(FUTUREFRAGMENTSTOSKIP, fragmentsToSkip);
         return fragment;

@@ -83,9 +83,9 @@ public class NavigationTest {
         checkFragmentShown(ListOfferActivity.class);
     }
 
-    private void editMultipleTimes(int edit_profile, int saveButton) {
+    private void editMultipleTimes(int modifyButton, int saveButton) {
         for (int i = 0; i < 4; ++i) {
-            onView(withId(edit_profile)).perform(click());
+            onView(withId(modifyButton)).perform(click());
             onView(withId(saveButton)).perform(scrollTo(), click());
         }
     }
