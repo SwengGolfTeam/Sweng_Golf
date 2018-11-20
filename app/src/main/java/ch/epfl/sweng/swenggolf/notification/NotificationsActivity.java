@@ -56,13 +56,14 @@ public class NotificationsActivity extends FragmentConverter {
 
         notifications = new ArrayList<>();
 
+        mAdapter = new NotificationsAdapter(notifications, getClickListener());
+        mRecyclerView.setAdapter(mAdapter);
+
         fetchNotifications(inflated);
-        
+
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-        mAdapter = new NotificationsAdapter(notifications, getClickListener());
-        mRecyclerView.setAdapter(mAdapter);
 
         if (mAdapter.getItemCount() == 0) {
             inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);

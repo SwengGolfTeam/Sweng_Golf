@@ -52,8 +52,8 @@ public class AnswersTest {
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-    private Offer offer = FilledFakeDatabase.getOffer(0);
-    private User author = FilledFakeDatabase.getUser(Integer.parseInt(offer.getUserId()));
+    private User author = FilledFakeDatabase.getUser(0);
+    private Offer offer = FilledFakeDatabase.getOfferOfUser(author.getUserId());
     private User otherUser = FilledFakeDatabase.getUser(1);
 
     /**
@@ -99,7 +99,9 @@ public class AnswersTest {
         // user is author
         favButton.check(matches(isClickable()));
         favButton.perform(scrollTo(), click());
-        onView(withText("Accept answer")).check(matches(isDisplayed()));
+        String acceptFav = mActivityRule.getActivity().getApplicationContext()
+                .getString(R.string.accept_favorite);
+        onView(withText(acceptFav)).check(matches(isDisplayed()));
         onView(withText(android.R.string.yes)).perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
         favButton.perform(scrollTo(), click());
@@ -139,7 +141,7 @@ public class AnswersTest {
                         .getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH))));
     }
 
-    private void addAnswer(String answer) {
+    public static void addAnswer(String answer) {
 
         onView(withId(R.id.react_button)).perform(scrollTo(), click());
 

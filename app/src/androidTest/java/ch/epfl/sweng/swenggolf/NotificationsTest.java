@@ -1,13 +1,141 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.v4.app.Fragment;
+
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.is;
 
 public class NotificationsTest {
 
-    // TODO
-    // 1. tester le message d'erreur
-    // 2. tester chaque type de notif
-    // 3. tester la suppression de notif
-    // 4. tester la redirection vers les offres/profil
+    private User user1 = FilledFakeDatabase.getUser(2);
+    private User user2 = FilledFakeDatabase.getUser(3);
+    private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
+
+    // TODO tester la suppression de notif avec db working + not
+
+    @Rule
+    public IntentsTestRule<MainMenuActivity> activityTestRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
+
+    @Before
+    public void setUp() {
+        Config.setUser(user1);
+        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+        activityTestRule.launchActivity(new Intent());
+    }
+
+    @Test
+    public void followNotifIsSentAndRedirectsToProfile() {
+        ProfileActivity user2Profile = FragmentConverter.createShowProfileWithProfile(user2);
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, user2Profile)
+                .commit();
+        // follow user2
+        ViewInteraction followButton = onView(withId(R.id.follow));
+        followButton.perform(click());
+        assertTrue(user2Profile.isFollowing());
+
+        // change to other user
+        changeUserAndGoToNotifications(user2);
+        String follow_message = activityTestRule.getActivity()
+                .getString(R.string.notif_follow, user1.getUserName());
+        ViewInteraction notification = onView(withText(follow_message));
+        notification.check(matches(isDisplayed()));
+        // check that it shows the profile when clicking on it
+        notification.perform(click());
+        checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
+    }
+
+    @Test
+    public void answerPostedNotifIsSentAndRedirectsToOffer() {
+        goToOfferAndPostAnswer("I can help you!");
+
+        // change user
+        changeUserAndGoToNotifications(user2);
+        String answerMessage = activityTestRule.getActivity()
+                .getString(R.string.notif_answer_posted, user1.getUserName(), offer.getTitle());
+        checkNotificationIsThereAndLeadsToOffer(answerMessage);
+    }
+
+    @Test
+    public void answerChosenNotifIsSentAndRedirectsToOffer() {
+        goToOfferAndPostAnswer("I can help you!");
+        //change user
+        Config.setUser(user2);
+        goToOfferAndPostAnswer("Thanks!");
+        onView(withContentDescription("fav0")).perform(scrollTo(), click());
+        onView(withText(android.R.string.yes)).perform(click());
+        // go back to user1 to check notification
+        changeUserAndGoToNotifications(user1);
+        String answerChosenMessage = activityTestRule.getActivity()
+                .getString(R.string.notif_answer_chosen, user2.getUserName(), offer.getTitle());
+        checkNotificationIsThereAndLeadsToOffer(answerChosenMessage);
+    }
+
+    @Test
+    public void displayMessageIfNoNotification() {
+        changeUserAndGoToNotifications(user1);
+        onView(withId(R.id.message_empty)).check(matches(isDisplayed()));
+    }
+
+    private void changeUserAndGoToNotifications(User otherUser) {
+        Config.setUser(otherUser);
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, new NotificationsActivity())
+                .commit();
+    }
+
+    private void checkThatWeAreAt(String activityName, int contentId, String contentName) {
+        Fragment fragment = activityTestRule.getActivity()
+                .getSupportFragmentManager().getFragments().get(0);
+        assertThat(fragment.getClass().getName(), is(activityName));
+        onView(withId(contentId)).check(matches(withText(contentName)));
+    }
+
+    private void goToOfferAndPostAnswer(String message) {
+        if (offer == null) {
+            fail("Please choose a user that wrote an offer");
+        }
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
+        AnswersTest.addAnswer(message);
+    }
+
+    private void checkNotificationIsThereAndLeadsToOffer(String message) {
+        ViewInteraction notification = onView(withText(message));
+        notification.check(matches(isDisplayed()));
+        /// check that it shows the offer when clicking on it
+        notification.perform(click());
+        checkThatWeAreAt(ShowOfferActivity.class.getName(), R.id.show_offer_title, offer.getTitle());
+    }
 
 }

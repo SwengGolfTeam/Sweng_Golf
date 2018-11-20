@@ -108,7 +108,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         String message;
         int imageResource;
         switch (notification.getType()) {
-            case ANSWER_CHOSEN:
+            case ANSWER_CHOSEN: // TODO too similar to ANSWER_POSTED ?!
                 message = context.getString(R.string.notif_answer_chosen,
                         notification.getConcernedUser().getUserName(),
                         notification.getConcernedOffer().getTitle());

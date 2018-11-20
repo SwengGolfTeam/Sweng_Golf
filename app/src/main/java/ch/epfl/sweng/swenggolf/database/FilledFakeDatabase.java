@@ -233,6 +233,21 @@ public final class FilledFakeDatabase extends FakeDatabase {
     }
 
     /**
+     * Return an offer written by a user.
+     *
+     * @param userId the id of the user
+     * @return an offer they wrote or null if they did not write any
+     */
+    public static Offer getOfferOfUser(String userId) {
+        for (Offer o : FAKE_OFFERS) {
+            if (o.getUserId().equals(userId)) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Return a follower of the user with id 0.
      *
      * @param index the index of the follower
