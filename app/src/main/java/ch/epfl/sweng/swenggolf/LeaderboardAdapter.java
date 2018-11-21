@@ -36,6 +36,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
         /**
          * Constructor.
+         *
          * @param itemView view of one item
          */
         public MyViewHolder(View itemView) {

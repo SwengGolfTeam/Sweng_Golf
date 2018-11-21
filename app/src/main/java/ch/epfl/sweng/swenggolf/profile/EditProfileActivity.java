@@ -26,6 +26,18 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 public class EditProfileActivity extends FragmentConverter {
     private User user;
+    private int fragmentsToSkip;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(FUTURE_FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FUTURE_FRAGMENTS_TO_SKIP);
+        } else {
+            fragmentsToSkip = 0;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,7 +121,8 @@ public class EditProfileActivity extends FragmentConverter {
             user.setPreference(pref);
             DatabaseUser.addUser(user);
 
-            replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+            replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user,
+                    fragmentsToSkip + 2));
         }
     }
 
@@ -117,7 +130,7 @@ public class EditProfileActivity extends FragmentConverter {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+                getFragmentManager().popBackStack();
                 return true;
             }
             default: {

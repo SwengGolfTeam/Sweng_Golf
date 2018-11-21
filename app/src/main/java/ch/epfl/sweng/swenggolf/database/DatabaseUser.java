@@ -45,7 +45,7 @@ public class DatabaseUser {
 
                     @Override
                     public void onCancelled(DbError error) {
-                        if(complete != null) {
+                        if (complete != null) {
                             complete.onComplete(error);
                         }
                     }
@@ -56,7 +56,7 @@ public class DatabaseUser {
      * Calls the database to update the points of a user according to his ID.
      *
      * @param scoreToAdd the points to add to the user current score.
-     * @param userId the ID of the user that has his points increased.
+     * @param userId     the ID of the user that has his points increased.
      */
     public static void addPointsToUserId(int scoreToAdd, String userId) {
         if (userId.equals(Config.getUser().getUserId())) {
@@ -71,7 +71,7 @@ public class DatabaseUser {
      * Adds the points to the object when the write to the database is completed.
      *
      * @param scorePoints the points scored by the user.
-     * @param user the user that has his points increased.
+     * @param user        the user that has his points increased.
      */
     public static void addPointsToUser(final int scorePoints, final User user) {
         addPointsToAppropriateUser(scorePoints, user.getUserId(),

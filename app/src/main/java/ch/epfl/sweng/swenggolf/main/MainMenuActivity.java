@@ -25,6 +25,8 @@ import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+import static ch.epfl.sweng.swenggolf.tools.FragmentConverter.FRAGMENTS_TO_SKIP;
+
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -45,6 +47,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
         setUserDisplay();
+        FragmentManager.enableDebugLogging(true);
         if (savedInstances == null) {
             launchFragment();
         }
@@ -60,7 +63,8 @@ public class MainMenuActivity extends AppCompatActivity {
         Fragment offerList = new ListOfferActivity();
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
-                manager.beginTransaction().add(R.id.centralFragment, offerList);
+                manager.beginTransaction()
+                        .add(R.id.centralFragment, offerList);
         transaction.commit();
     }
 
@@ -95,7 +99,16 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void replaceCentralFragment(Fragment fragment) {
-        manager.beginTransaction().replace(R.id.centralFragment, fragment).commit();
+
+        //drain the backstack
+        int backStackSize = manager.getBackStackEntryCount();
+        for (int i = 0; i < backStackSize; ++i) {
+            manager.popBackStack();
+        }
+
+        manager.beginTransaction().replace(R.id.centralFragment, fragment)
+                .addToBackStack(null)
+                .commit();
         DrawerLayout drawerLayout = findViewById(R.id.side_menu);
         drawerLayout.closeDrawers();
     }
@@ -151,5 +164,28 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void createOfferActivity(MenuItem item) {
         replaceCentralFragment(new CreateOfferActivity());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            skipFragments();
+            super.onBackPressed();
+        } else {
+            moveTaskToBack(true);
+        }
+
+    }
+
+    private void skipFragments() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
+        final Bundle bundle = fragment.getArguments();
+        if (bundle != null && bundle.containsKey(FRAGMENTS_TO_SKIP)) {
+            int nbr = bundle.getInt(FRAGMENTS_TO_SKIP);
+            for (int i = 0; i < nbr; ++i) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+        }
+
     }
 }

@@ -38,6 +38,7 @@ public class ProfileActivity extends FragmentConverter {
     private boolean isFollowing = false;
     private View inflated;
     private MenuItem button;
+    private int fragmentsToSkip;
 
     protected static void displayPicture(ImageView imageView, User user, Context context) {
         if (!user.getPhoto().isEmpty()) {
@@ -58,9 +59,15 @@ public class ProfileActivity extends FragmentConverter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = getArguments().getParcelable("ch.epfl.sweng.swenggolf.user");
+        final Bundle bundle = getArguments();
+        user = bundle.getParcelable("ch.epfl.sweng.swenggolf.user");
         if (user == null) {
             throw new NullPointerException("The user given to ProfileActivity can not be null");
+        }
+        if (bundle.containsKey(FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FRAGMENTS_TO_SKIP);
+        } else {
+            fragmentsToSkip = 0;
         }
     }
 
@@ -128,7 +135,7 @@ public class ProfileActivity extends FragmentConverter {
                 return true;
             }
             case R.id.edit_profile: {
-                replaceCentralFragment(new EditProfileActivity());
+                replaceCentralFragment(createEditProfileActivity(fragmentsToSkip));
                 return true;
             }
             case R.id.follow: {

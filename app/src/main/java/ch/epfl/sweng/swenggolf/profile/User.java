@@ -29,6 +29,7 @@ public class User implements Parcelable {
         }
     };
     private static final String DEFAULT_PREFERENCE = "";
+    public static final String USER = "ch.epfl.sweng.swenggolf.user";
     private String userName;
     private String userId;
     private String email;

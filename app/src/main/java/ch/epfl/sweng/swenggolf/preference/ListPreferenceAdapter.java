@@ -88,7 +88,7 @@ public class ListPreferenceAdapter
                 profile.setArguments(bundle);
                 ((AppCompatActivity) (parent.getContext()))
                         .getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.centralFragment, profile).commit();
+                        .replace(R.id.centralFragment, profile).addToBackStack(null).commit();
             }
         });
         return preferenceHolder;
