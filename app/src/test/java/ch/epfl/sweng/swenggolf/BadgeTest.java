@@ -15,7 +15,7 @@ public class BadgeTest {
      * @return the amount of points corresponding to the level
      */
     private int levelToPoints(int level){
-        return level*4-1;
+        return level*7-1;
     }
 
     @Test
