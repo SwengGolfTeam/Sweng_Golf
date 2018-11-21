@@ -9,8 +9,8 @@
         <item
             android:id="@+id/offers"
             android:icon="@android:drawable/ic_menu_myplaces"
-            android:onClick="loadShowOffersActivity"
-            android:title="@string/offers" />
+            android:title="@string/offers"
+            android:onClick="loadShowOffersActivity" />
         <item
             android:id="@+id/my_offers"
             android:icon="@drawable/baseline_library_books_24"

@@ -78,13 +78,6 @@ public class CreateOfferActivityTest {
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-    private static void fillNameAndDescription() {
-        onView(withId(R.id.offer_name)).perform(typeText("title test"))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform(typeText("description test"))
-                .perform(closeSoftKeyboard());
-    }
-
     /**
      * Fills the field to create an offer in CreateOfferActivity.
      * The offer created has a title, description, picture, location and date.
@@ -106,7 +99,7 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
         onView(withId(R.id.offer_position_status)).perform(scrollTo(), click());
 
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
     }
 
     /**
@@ -132,7 +125,7 @@ public class CreateOfferActivityTest {
                     "20", "20", "20", Category.FOOD, beginingTime,
                     beginingTime + timeDiff);
 
-            bundle.putParcelable("offer", offer);
+            bundle.putParcelable(Offer.OFFER, offer);
             fragment.setArguments(bundle);
             Database.getInstance().write("/offers", offer.getUuid(), offer);
         }
@@ -147,13 +140,20 @@ public class CreateOfferActivityTest {
     @Test
     public void errorMessageDisplayed() {
         goToCreateOffer(false);
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
         onView(withId(R.id.error_message));
         onView(withId(R.id.offer_name)).perform(closeSoftKeyboard());
-        onView(withId(R.id.button)).perform(scrollTo(), click());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
         onView(withId(R.id.error_message))
 
                 .check(matches(withText(R.string.error_create_offer_invalid)));
+    }
+
+    private static void fillNameAndDescription() {
+        onView(withId(R.id.offer_name)).perform(typeText("title test"))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.offer_description)).perform(typeText("description test"))
+                .perform(closeSoftKeyboard());
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -220,15 +220,7 @@ public class CreateOfferActivityTest {
         assertDisplayedFragment(expectedDisplayedClass);
     }
 
-    @Test
-    public void backFromEmptyOfferIsListOffer() {
-        assertBackFrom(false, ListOfferActivity.class);
-    }
 
-    @Test
-    public void backFromModifyOfferIsShowOffer() {
-        assertBackFrom(true, ShowOfferActivity.class);
-    }
 
     @Test
     public void defineOfferOnCreation() {
@@ -236,7 +228,7 @@ public class CreateOfferActivityTest {
 
         goToCreateOffer(false);
         //onView(withId(R.id.create_offer_button)).perform(click());
-        onView(withId(R.id.button)).perform(scrollTo(), closeSoftKeyboard());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), closeSoftKeyboard());
         onView(withId(R.id.category_spinner)).check(matches(allOf(isEnabled(), isClickable())))
                 .perform(customClick());
         onView(withText(cat)).perform(scrollTo(), click());

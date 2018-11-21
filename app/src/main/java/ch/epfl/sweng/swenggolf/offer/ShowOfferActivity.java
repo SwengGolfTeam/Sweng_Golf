@@ -65,6 +65,8 @@ public class ShowOfferActivity extends FragmentConverter {
     private boolean userIsCreator;
     private Offer offer;
     private ListAnswerAdapter mAdapter;
+    private int fragmentsToSkip;
+
     private View inflated;
     private TextView errorMessage;
     private LinearLayout mLayout;
@@ -92,7 +94,12 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        offer = getArguments().getParcelable("offer");
+
+        final Bundle bundle = getArguments();
+        offer = bundle.getParcelable(Offer.OFFER);
+        if (bundle.containsKey(FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FRAGMENTS_TO_SKIP);
+        }
     }
 
     @Override
@@ -322,12 +329,11 @@ public class ShowOfferActivity extends FragmentConverter {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.centralFragment, new ListOfferActivity()).commit();
+                getActivity().onBackPressed();
                 return true;
             }
             case R.id.button_modify_offer: {
-                replaceCentralFragment(createOfferActivityWithOffer(offer));
+                replaceCentralFragment(createOfferActivityWithOffer(offer, fragmentsToSkip));
                 return true;
             }
             case R.id.button_delete_offer: {
@@ -385,7 +391,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 if (databaseError == DbError.NONE && showToast) {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
-                    replaceCentralFragment(new ListOfferActivity());
+                    getActivity().onBackPressed();
                 }
             }
 

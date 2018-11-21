@@ -38,7 +38,6 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -61,6 +60,7 @@ public class CreateOfferActivity extends FragmentConverter
     static final boolean OFF = false;
     private TextView dateText;
     private Uri photoDestination = null;
+    private int fragmentsToSkip;
 
     CreateHelper createHelper;
 
@@ -77,13 +77,18 @@ public class CreateOfferActivity extends FragmentConverter
     TextView errorMessage;
 
     void replaceCentralFragmentWithOffer(Offer offer) {
-        replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer));
+        replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer,
+                numberOfFragmentsToSkip()));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         creationAsked = false;
+        final Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(FUTURE_FRAGMENTS_TO_SKIP)) {
+            fragmentsToSkip = bundle.getInt(FUTURE_FRAGMENTS_TO_SKIP);
+        }
     }
 
     @Override
@@ -100,16 +105,16 @@ public class CreateOfferActivity extends FragmentConverter
 
         offerToModify = null;
         if (getArguments() != null) {
-            offerToModify = getArguments().getParcelable("offer");
+            offerToModify = getArguments().getParcelable(Offer.OFFER);
+        } else {
+            offerToModify = null;
         }
 
         createHelper.preFillFields();
 
         createListeners.setListeners();
-
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
-
         return inflated;
     }
 
@@ -161,6 +166,12 @@ public class CreateOfferActivity extends FragmentConverter
         }
     }
 
+    private int numberOfFragmentsToSkip() {
+        int newFragmentsToSkip = offerToModify == null ? 1 : 2;
+        newFragmentsToSkip += fragmentsToSkip;
+        return newFragmentsToSkip;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -169,13 +180,7 @@ public class CreateOfferActivity extends FragmentConverter
                         (InputMethodManager) getActivity()
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                Fragment backFrag;
-                if (offerToModify == null) {
-                    backFrag = new ListOfferActivity();
-                } else {
-                    backFrag = FragmentConverter.createShowOfferWithOffer(offerToModify);
-                }
-                replaceCentralFragment(backFrag);
+                getFragmentManager().popBackStack();
                 return true;
             }
             default: {
@@ -225,7 +230,6 @@ public class CreateOfferActivity extends FragmentConverter
         }
 
     }
-
 
     /**
      * Set the new date.
