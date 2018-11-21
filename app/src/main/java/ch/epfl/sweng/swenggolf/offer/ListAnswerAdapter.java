@@ -24,6 +24,9 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
@@ -130,9 +133,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Dialog alertDialog = answers.getFavoritePos() != pos
                         ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
-
-
-            }
+          }
         });
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());
@@ -156,6 +157,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         writeFavPos(pos);
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -167,7 +169,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     }
 
     private Dialog acceptAnswerDialog(Context context, final int pos) {
-        return createFavoriteDialog(context, pos,context.getString(R.string.accept_favorite),
+        return createFavoriteDialog(context, pos, context.getString(R.string.accept_favorite),
                 context.getString(R.string.accept_favorite_question));
     }
 
@@ -180,6 +182,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private void writeFavPos(final int pos) {
         final int previousFavorite = answers.getFavoritePos();
         answers.setFavoritePos(pos);
+
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers,
                 new CompletionListener() {
                     @Override
@@ -192,6 +195,10 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                             if (pos != NO_FAVORITE) {
                                 DatabaseUser.addPointsToUserId(RESPOND_OFFER.getValue(),
                                         answers.getAnswerList().get(pos).getUserId());
+                                NotificationManager.addPendingNotification(
+                                        answers.getAnswerList().get(pos).getUserId(),
+                                        new Notification(NotificationType.ANSWER_CHOSEN,
+                                                Config.getUser(), offer));
                             }
                         }
                     }

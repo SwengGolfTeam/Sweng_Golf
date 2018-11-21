@@ -14,8 +14,6 @@
     <string name="edit_profile_activity_name">Edit Profile</string>
     <string name="user_reputation">Reputation:</string>
     <string name="user_preferences">Preferences:</string>
-    <string name="offers_posted">offers posted</string>
-    <string name="offers_answered">offers answered</string>
     <string name="username">username</string>
     <string name="change_pic">Change profile picture</string>
     <string name="save">Save</string>
@@ -57,6 +55,13 @@
     <string name="add_answer">Add your answer</string>
     <string name="username_min_length">The username should have at least %d characters.</string>
     <string name="my_offers">My offers</string>
+    <string name="notifications">Notifications</string>
+    <string name="notif_answer_chosen">%s has accepted your answer on offer \"%s\"</string>
+    <string name="notif_follow">%s is now following you</string>
+    <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
+    <string name="no_notifications">You currently don\'t have any notification</string>
+    <string name="notif_error">There has been an error loading the notifications</string>
+    <string name="notif_delete_error">The notification couldn\'t be deleted</string>
     <string name="title_activity_leaderboard">Leaderboard</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="answer_limit">The answer should be at least %d characters.</string>

@@ -46,6 +46,9 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -279,6 +282,9 @@ public class ShowOfferActivity extends FragmentConverter {
                     .getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
             mLayout.removeView(newReaction);
+            NotificationManager.addPendingNotification(offer.getUserId(),
+                    new Notification(NotificationType.ANSWER_POSTED,
+                            Config.getUser(), offer));
             mAdapter.notifyDataSetChanged();
 
         }
