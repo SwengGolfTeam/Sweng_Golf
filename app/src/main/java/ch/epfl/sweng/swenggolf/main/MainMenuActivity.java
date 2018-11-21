@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.Leaderboard;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
@@ -145,6 +146,15 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadPreferenceListActivity(MenuItem item) {
         replaceCentralFragment(new ListPreferencesActivity());
+    }
+
+    /**
+     * Launches the NotificationsActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void loadNotificationsActivity(MenuItem item) {
+        replaceCentralFragment(new NotificationsActivity());
     }
 
     /**

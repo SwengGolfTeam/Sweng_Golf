@@ -1,0 +1,74 @@
+package ch.epfl.sweng.swenggolf.notification;
+
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
+
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.User;
+
+public class Notification {
+    private final NotificationType type;
+    private String userName;
+    private String userId;
+    private String offerName;
+    private String offerId;
+    private final String uuid;
+
+    /**
+     * Create a new notification, in the local sense.
+     *
+     * @param type           the type of the notification
+     * @param concernedUser  the user that performed an action worth sending a notification
+     * @param concernedOffer the offer on which that action was performed, if any
+     */
+    public Notification(NotificationType type, @Nullable User concernedUser,
+                        @Nullable Offer concernedOffer) {
+        this.type = type;
+        if (concernedUser != null) {
+            this.userName = concernedUser.getUserName();
+            this.userId = concernedUser.getUserId();
+        }
+        if (concernedOffer != null) {
+            this.offerName = concernedOffer.getTitle();
+            this.offerId = concernedOffer.getUuid();
+        }
+        uuid = UUID.randomUUID().toString();
+    }
+
+    /**
+     * Empty constructor for firebase.
+     */
+    public Notification() {
+        type = null;
+        uuid = "";
+        userName = null;
+        userId = null;
+        offerName = null;
+        offerId = null;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getOfferName() {
+        return offerName;
+    }
+
+    public String getOfferId() {
+        return offerId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+}

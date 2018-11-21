@@ -9,4 +9,6 @@
     <dimen name="user_info_width">80dp</dimen>
     <dimen name="user_picture_small_diameter">60dp</dimen>
     <dimen name="user_picture_small_radius">30dp</dimen>
+    <dimen name="notif_icon_size">24dp</dimen>
+    <dimen name="notif_height">80dp</dimen>
 </resources>
