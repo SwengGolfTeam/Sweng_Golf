@@ -37,7 +37,7 @@ public class Answer {
     }
 
     /**
-     * Get the description of an Answer
+     * Get the description of an Answer.
      * @return the description of an Answer
      */
     public String getDescription() {

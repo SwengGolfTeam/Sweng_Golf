@@ -41,7 +41,7 @@ public class NotificationsAdapter
          * @param itemView the view of the item
          * @param notificationTextId the text id of the notification
          * @param notificationIconId the icon id of the notification
-         * @param crossId
+         * @param crossId the cross id
          */
         public NotificationViewHolder(@NonNull View itemView, int notificationTextId,
                                       int notificationIconId, int crossId) {

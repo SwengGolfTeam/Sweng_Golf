@@ -12,7 +12,7 @@ public class Answers {
     public static final int NO_FAVORITE = -1;
 
     /**
-     * Empty constructor required by Firebase
+     * Empty constructor required by Firebase.
      */
     public Answers() {
     }
@@ -28,7 +28,7 @@ public class Answers {
     }
 
     /**
-     * Get the favorite answer position
+     * Get the favorite answer position.
      * @return the position of the favorite answer
      */
     public int getFavoritePos() {

@@ -21,7 +21,7 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
 /**
- * Create Listeners to help the offer creation
+ * Create Listeners to help the offer creation.
  */
 class CreateListeners {
 
@@ -59,7 +59,7 @@ class CreateListeners {
     /**
      * Create a completion listener based on an offer.
      * @param offer the corresponding offer
-     * @return
+     * @return the correspondig CompletionListener
      */
     CompletionListener createWriteOfferListener(final Offer offer) {
         return new CompletionListener() {

@@ -24,7 +24,7 @@ public final class FakeStorage extends Storage {
 
     /**
      * Construct a mock Storage.
-     * @param working
+     * @param working working state
      */
     public FakeStorage(boolean working) {
         this.storage = new TreeMap<>();

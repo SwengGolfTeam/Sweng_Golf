@@ -22,10 +22,10 @@ public final class NotificationManager {
     }
 
     /**
-     *
-     * @param destinatorId
-     * @param notificationId
-     * @param listener
+     * Remove the pending Notification.
+     * @param destinatorId the id of the destinator
+     * @param notificationId the id of the notification
+     * @param listener the listener
      */
     public static void removePendingNotification(
             String destinatorId, String notificationId, CompletionListener listener) {
@@ -33,6 +33,11 @@ public final class NotificationManager {
         db.remove(getNotificationPath(destinatorId), notificationId, listener);
     }
 
+    /**
+     * Get the path of the Notification
+     * @param userId the user id
+     * @return the corresponding path
+     */
     public static String getNotificationPath(String userId) {
         return Database.NOTIFICATION_PATH + "/" + userId;
     }

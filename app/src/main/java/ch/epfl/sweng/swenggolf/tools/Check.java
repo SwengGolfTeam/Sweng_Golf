@@ -1,7 +1,7 @@
 package ch.epfl.sweng.swenggolf.tools;
 
 /**
- * Tool class which checks properties
+ * Tool class which checks properties.
  */
 public final class Check {
 
