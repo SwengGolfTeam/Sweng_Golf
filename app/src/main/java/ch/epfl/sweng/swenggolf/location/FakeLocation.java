@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ * Mocked Location for tests purposes.
+ */
 public class FakeLocation extends AppLocation {
 
     public static final double LATITUDE = 44.02;
@@ -17,6 +20,10 @@ public class FakeLocation extends AppLocation {
         location.setLongitude(longitude);
     }
 
+    /**
+     * Create a Fake location with predefined fields.
+     * @return the corresponding FakeLocation
+     */
     public static FakeLocation fakeLocationCreator() {
         return new FakeLocation(LATITUDE, LONGITUDE);
     }

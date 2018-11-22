@@ -11,6 +11,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+/**
+ * Class which represents the location of the user.
+ */
 public class ConcreteLocation extends AppLocation {
 
     private static final int GPS_INTERVAL = 10_000;

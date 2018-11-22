@@ -9,6 +9,14 @@ public class Answer {
     private final String description;
 
     /**
+     * Empty Constructor needed by Firebase.
+     */
+    public Answer() {
+        userId = "";
+        description = "";
+    }
+
+    /**
      * Create a new Answer to an offer.
      *
      * @param userId      the id of the user who answers
@@ -20,16 +28,18 @@ public class Answer {
                 COMMENT_MIN_LENGTH, COMMENT_MAX_LENGTH);
     }
 
-    // firebase needs empty constructor
-    public Answer() {
-        userId = "";
-        description = "";
-    }
-
+    /**
+     * Get the user id of the Answer.
+     * @return the user id
+     */
     public String getUserId() {
         return userId;
     }
 
+    /**
+     * Get the description of an Answer
+     * @return the description of an Answer
+     */
     public String getDescription() {
         return description;
     }

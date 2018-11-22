@@ -11,6 +11,10 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+/**
+ * Activity which waits Firebase answer after
+ * the sign-in.
+ */
 public class WaitingActivity extends AppCompatActivity {
 
     private User user;

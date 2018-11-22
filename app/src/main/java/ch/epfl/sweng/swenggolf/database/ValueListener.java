@@ -1,5 +1,9 @@
 package ch.epfl.sweng.swenggolf.database;
 
+/**
+ * Listener of generic type.
+ * @param <T> the type of the value
+ */
 public interface ValueListener<T> {
 
     /**

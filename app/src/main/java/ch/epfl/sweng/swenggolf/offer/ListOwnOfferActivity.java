@@ -13,6 +13,9 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
+/**
+ * Fragment which displays only the user related offers.
+ */
 public class ListOwnOfferActivity extends ListOfferActivity {
     @Override
     protected void prepareOfferData(View inflated,

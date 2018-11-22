@@ -14,6 +14,9 @@ import ch.epfl.sweng.swenggolf.profile.PointType;
 
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
+/**
+ * Class which represents an offer.
+ */
 public class Offer implements Parcelable {
     public static final int TITLE_MIN_LENGTH = 1;
     public static final int TITLE_MAX_LENGTH = 100;
@@ -92,7 +95,7 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Contains the data of an offer.
+     * Constructor with default location.
      *
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
@@ -113,7 +116,7 @@ public class Offer implements Parcelable {
 
 
     /**
-     * Contains the data of an offer.
+     * Constructor with default dates and location.
      *
      * @param title        the title of the offer. Should not be empty
      * @param description  the description of the offer. Should not be empty
@@ -133,12 +136,12 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Contains the data of an offer.
+     * Constructor with default dates, location and categories.
      *
+     * @param userId      the user id. Should not be empty
      * @param title       the title of the offer. Should not be empty
      * @param description the description of the offer. Should not be empty
      * @param linkPicture the link of the offer's picture
-     * @param userId      the user id. Should not be empty
      * @param uuid        offer identifier
      */
     public Offer(String userId, String title, String description,
@@ -148,7 +151,7 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Contains the data of an offer.
+     * Constructor with default dates, location and categories, linkPicture and uuid.
      *
      * @param userId      the id of the user.
      * @param title       the title of the offer. Should not be empty
