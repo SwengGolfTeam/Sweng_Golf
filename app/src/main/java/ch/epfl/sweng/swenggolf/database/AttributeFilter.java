@@ -8,7 +8,7 @@ public final class AttributeFilter {
     private final String value;
 
     /**
-     * Constructor.
+     * Create a filter used to compare an attribute of a class with it's value.
      *
      * @param attribute the class attribute
      * @param value     the value to compare
