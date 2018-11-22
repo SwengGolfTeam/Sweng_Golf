@@ -34,7 +34,7 @@ public final class NotificationManager {
     }
 
     /**
-     * Get the path of the Notification
+     * Get the path of the Notification.
      * @param userId the user id
      * @return the corresponding path
      */
