@@ -10,14 +10,24 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+/**
+ * Class which represents Firebase Storage.
+ */
 public final class FireStorage extends Storage {
 
     private final FirebaseStorage storage;
 
+    /**
+     * Construct a new Storage with instancied Storage.
+     */
     protected FireStorage() {
         storage = FirebaseStorage.getInstance();
     }
 
+    /**
+     * Construct a new Firebase Storage with existing Storage.
+     * @param storage the storage
+     */
     public FireStorage(FirebaseStorage storage) {
         this.storage = storage;
     }

@@ -22,6 +22,9 @@ import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+/**
+ * Class which Convert activities into Fragments.
+ */
 public abstract class FragmentConverter extends Fragment {
 
 

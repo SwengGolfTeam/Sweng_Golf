@@ -23,6 +23,9 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+/**
+ * Fragment which shows the LeaderBoard.
+ */
 public class Leaderboard extends FragmentConverter {
 
     private LeaderboardAdapter mAdapter;
