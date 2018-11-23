@@ -154,16 +154,6 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setUuid("05").setTag(Category.values()[2])
                     .setCreationDate(DATE).setEndDate(DATE).build(),
 
-            new Offer.Builder().setUserId("7")
-                    .setTitle("Defeat Dark Sidious I must")
-                    .setDescription("Defeat Dark Sidious. "
-                            + "With me train you shall,"
-                            + " If so you want.")
-                    .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
-                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911")
-                    .setUuid("05").setTag(Category.values()[2])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
-
             new Offer.Builder().setUserId("4")
                     .setTitle("Help to get the senate")
                     .setDescription("I'm looking for an apprentice to show him"
@@ -199,7 +189,8 @@ public final class FilledFakeDatabase extends FakeDatabase {
 
             new Offer.Builder().setUserId("1")
                     .setTitle("Nice helmet to build ship")
-                    .setDescription("I must build some star like ship, you can have my helmet then !")
+                    .setDescription("I must build some star like ship,"
+                            + " you can have my helmet then !")
                     .setLinkPicture(LUMIERE
                             + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768")
                     .setTag(Category.values()[3])

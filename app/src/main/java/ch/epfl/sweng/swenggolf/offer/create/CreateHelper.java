@@ -112,14 +112,14 @@ class CreateHelper {
      * @param description the description of the offer
      */
     void createOfferObject(String name, String description, Category tag) {
-        String uuid;
-        String link;
         Offer.Builder builder;
         if (create.offerToModify != null) {
             builder = new Offer.Builder(create.offerToModify);
+        } else {
+            builder = new Offer.Builder();
         }
 
-        final Offer newOffer = new Offer.Builder().setUserId(Config.getUser().getUserId())
+        final Offer newOffer = builder.setUserId(Config.getUser().getUserId())
                 .setTitle(name).setDescription(description)
                 .setTag(tag).setCreationDate(create.creationDate)
                 .setEndDate(create.endDate).setLocation(create.location).build();

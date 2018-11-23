@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -27,6 +29,7 @@ public class FakeDatabase extends Database {
 
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
+     *
      *
      * @param working the working state of the Database, the DataBase will send
      *                error when working is set at false and will work as
@@ -128,7 +131,7 @@ public class FakeDatabase extends Database {
 
     private String getGetter(String attribute) {
         return "get" + Character.toUpperCase(attribute.charAt(0))
-                + attribute.substring(1, attribute.length());
+                + attribute.substring(1,attribute.length());
     }
 
     @NonNull
@@ -155,37 +158,39 @@ public class FakeDatabase extends Database {
         return new Comparator<T>() {
             @Override
             public int compare(T o1, T o2) {
-                Object attribute1;
-                Object attribute2;
-                try {
-                    attribute1 = method.invoke(o1);
-                    attribute2 = method.invoke(o2);
-                } catch (IllegalAccessException e) {
-                    throw new IllegalArgumentException("Can't access the attribute");
-                } catch (InvocationTargetException e) {
-                    throw new IllegalArgumentException("Cannot call method on generic parameter T");
-                }
-                if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
-                    return ((Comparable) attribute1).compareTo(attribute2);
-                }
-                throw new IllegalArgumentException("The attribute is not comparable");
+                Object attribute1 = invokeGetter(method, o1);
+                Object attribute2 = invokeGetter(method, o2);
+
+                return compareGotAttributes(attribute1, attribute2);
             }
         };
     }
 
+    private <T> Object invokeGetter(Method method, T invokedOn) {
+        try {
+            return  method.invoke(invokedOn);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Can't access the attribute");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Cannot call method on generic parameter T");
+        }
+    }
+
+    private <T>  int compareGotAttributes(T attribute1, T attribute2) {
+        if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
+            return ((Comparable) attribute1).compareTo(attribute2);
+        }
+        throw new IllegalArgumentException("The attribute is not comparable");
+    }
+
     private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
                                    List<T> list) {
-        List<T> newList = new ArrayList<>();
+        List<T> filtered = new ArrayList<>();
         try {
 
             //Use reflection to check the attribute
             Method method = c.getDeclaredMethod(getGetter(attribute));
-
-            for (T object : list) {
-                if (method.invoke(object).equals(value)) {
-                    newList.add(object);
-                }
-            }
+            filtered = createFilteredList(method, list, value);
 
         } catch (IllegalAccessException e) {
             handleError(attribute);
@@ -193,6 +198,17 @@ public class FakeDatabase extends Database {
             throw new IllegalArgumentException("No getter for " + attribute + " attribute");
         } catch (InvocationTargetException e) {
             throw new IllegalArgumentException("Generic type T has no getter for this attribute");
+        }
+        return filtered;
+    }
+
+    private <T> List<T> createFilteredList(Method getter, List<T> list, String value)
+            throws InvocationTargetException, IllegalAccessException {
+        List<T> newList = new ArrayList<>();
+        for (T object : list) {
+            if (getter.invoke(object).equals(value)) {
+                newList.add(object);
+            }
         }
         return newList;
     }
@@ -246,8 +262,8 @@ public class FakeDatabase extends Database {
      * Set working state of the Database.
      *
      * @param w the working state of the Database, the DataBase will send
-     *          error when working is set at false and will work as
-     *          expected otherwise.
+     *                error when working is set at false and will work as
+     *                expected otherwise.
      */
     public void setWorking(boolean w) {
         working = w;

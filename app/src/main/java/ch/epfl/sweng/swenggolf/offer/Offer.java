@@ -44,6 +44,7 @@ public class Offer implements Parcelable {
     private final Category tag;
     private final double longitude;
     private final double latitude;
+
     private Offer(String uuid, String title, String description, long creationDate, long endDate,
                   String linkPicture, String userId, Category tag,
                   double longitude, double latitude) {
@@ -58,6 +59,7 @@ public class Offer implements Parcelable {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
     /**
      * Empty constructor for the listener of Firebase.
      */
@@ -73,6 +75,7 @@ public class Offer implements Parcelable {
         latitude = 0;
         uuid = "";
     }
+
     private Offer(Parcel in) {
         String[] data = new String[10];
 
@@ -339,6 +342,10 @@ public class Offer implements Parcelable {
         private double latitude;
         private String uuid;
 
+        /**
+         * Creates a new Builder with his fields initialized to the ones of another offer.
+         * @param offer the source offer to serve as base values for the new builder.
+         */
         public Builder(Offer offer) {
             this.creationDate = offer.creationDate;
             this.endDate = offer.endDate;
@@ -437,6 +444,13 @@ public class Offer implements Parcelable {
             return this;
         }
 
+        /**
+         * Performs identically as calling setLongitude and setLatitude.
+         * latitude and longitude are extracted from a location.
+         *
+         * @param location the location that gives latitude and longitude
+         * @return this
+         */
         public Builder setLocation(Location location) {
             this.latitude = location.getLatitude();
             this.longitude = location.getLongitude();
