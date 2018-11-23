@@ -50,6 +50,5 @@
             android:text="@string/create_account"
             android:theme="@style/ButtonTheme"
             android:layout_gravity="center"/>
-
     </LinearLayout>
 </ScrollView>
