@@ -7,6 +7,7 @@ import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -21,10 +22,13 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 
 public class CreateUserActivity extends AppCompatActivity {
 
-    private EditText mail;
     private EditText name;
     private ImageView photo;
     private User user;
+    private static final String PRESENTATION_TEXT = "Welcome" +
+            "to Polytroc, please put your username. You can" +
+            " change your picture, your description an many " +
+            "other things after this step.";
 
 
     @Override
@@ -33,7 +37,8 @@ public class CreateUserActivity extends AppCompatActivity {
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_create_user);
         name = findViewById(ch.epfl.sweng.swenggolf.R.id.name);
         name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(User.USERNAME_MAX_LENGTH)});
-        mail = findViewById(ch.epfl.sweng.swenggolf.R.id.mail);
+        TextView presentation = findViewById(R.id.presentation);
+        presentation.setText(PRESENTATION_TEXT);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         user = Config.getUser();
         displayInformation(user);
@@ -54,7 +59,6 @@ public class CreateUserActivity extends AppCompatActivity {
 
     private void displayInformation(User user) {
         name.setText(user.getUserName());
-        mail.setText(user.getEmail());
         if (!Config.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
@@ -72,12 +76,10 @@ public class CreateUserActivity extends AppCompatActivity {
      */
     public void onClick(View view) {
         String userName = name.getText().toString();
-        String userMail = mail.getText().toString();
 
         // Handle the exception if the EditText fields are null
-        if (!(userName.length() < User.USERNAME_MIN_LENGTH) && !userMail.isEmpty()
-                && isEmailValid(userMail)) {
-            User u = User.userChanged(user, userName, userMail);
+        if (!(userName.length() < User.USERNAME_MIN_LENGTH)) {
+            User u = User.userChanged(user, userName, user.getEmail());
             DatabaseUser.addUser(u);
             Config.setUser(u);
             quit();
