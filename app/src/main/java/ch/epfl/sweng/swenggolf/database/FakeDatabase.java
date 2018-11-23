@@ -27,7 +27,10 @@ public class FakeDatabase extends Database {
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
      *
-     * @param working working state of the Database
+     *
+     * @param working the working state of the Database, the DataBase will send
+     *                error when working is set at false and will work as
+     *                expected otherwise.
      */
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
@@ -235,7 +238,9 @@ public class FakeDatabase extends Database {
     /**
      * Set working state of the Database.
      *
-     * @param w the working state of the Database
+     * @param w the working state of the Database, the DataBase will send
+     *                error when working is set at false and will work as
+     *                expected otherwise.
      */
     public void setWorking(boolean w) {
         working = w;

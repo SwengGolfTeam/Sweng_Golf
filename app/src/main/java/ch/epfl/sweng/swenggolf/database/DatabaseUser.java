@@ -16,8 +16,8 @@ public class DatabaseUser {
     }
 
     /**
-     * Add an User to the Database.
-     * @param user the User to added
+     * Add a User to the Database.
+     * @param user the User to add
      */
     public static void addUser(User user) {
         Database.getInstance().write(Database.USERS_PATH, user.getUserId(), user);
@@ -25,7 +25,7 @@ public class DatabaseUser {
 
 
     /**
-     * Get an User in the Database.
+     * Get a User in the Database.
      * @param listener the listener which will provide the corresponding user
      * @param userId the id of the user we want to find
      */
@@ -34,7 +34,7 @@ public class DatabaseUser {
     }
 
     /**
-     * Get an User in the Database.
+     * Get a User in the Database.
      * @param listener the listener which will provide the corresponding user
      * @param user the user we want to find
      */

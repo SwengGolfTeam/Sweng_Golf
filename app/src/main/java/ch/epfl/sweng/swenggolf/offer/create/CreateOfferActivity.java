@@ -77,7 +77,7 @@ public class CreateOfferActivity extends FragmentConverter
     TextView errorMessage;
 
     /**
-     * Replace the central fragment.
+     * Replace the central fragment by an Offer.
      * @param offer the offer which will replace the central fragment
      */
     void replaceCentralFragmentWithOffer(Offer offer) {

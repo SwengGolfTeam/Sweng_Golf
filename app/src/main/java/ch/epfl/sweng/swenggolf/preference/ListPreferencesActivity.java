@@ -12,7 +12,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 /**
- * fragment which displays the list of preferences.
+ * Fragment which displays the list of preferences.
  */
 public class ListPreferencesActivity extends FragmentConverter {
     private static final int SPAN_COUNT = 3;

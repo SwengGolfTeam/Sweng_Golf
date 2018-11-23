@@ -33,7 +33,7 @@ import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.SEPARATION;
 
 /**
- * Helps the creation of offers.
+ * Helps the CreateOfferactivity to set some fields.
  */
 class CreateHelper {
 
