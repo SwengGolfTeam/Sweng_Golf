@@ -11,6 +11,9 @@ import java.util.Set;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+/**
+ * Database used to load and save Objects.
+ */
 public abstract class Database {
 
     public static final String OFFERS_PATH = "/offers";
@@ -72,33 +75,33 @@ public abstract class Database {
      *
      * @param path     the path where we want to read the value
      * @param id       the id of the value
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
+     * @param listener the onDataChange method will be called if there is a corresponding
+     *                 value. Otherwise, the onCancelled method will be called
      * @param c        the class of the value
      */
     public abstract <T> void read(@NonNull String path, @NonNull String id,
                                   @NonNull ValueListener<T> listener, @NonNull Class<T> c);
 
     /**
-     * Read a list of value in a given path. It return the value using a listener.
+     * Read a list of value in a given path. It return the list using a listener.
      *
-     * @param path     the path where we want to read the value
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
-     * @param c        the class of the value
+     * @param path     the path where we want to read the list
+     * @param listener the onDataChange method will be called if there is a corresponding
+     *                 list. Otherwise, the onCancelled method will be called
+     * @param c        the class of the values
      */
     public abstract <T> void readList(@NonNull String path,
                                       @NonNull ValueListener<List<T>> listener,
                                       @NonNull Class<T> c);
 
     /**
-     * Read a list of value in a given path. It return the value using a listener. It only return
-     * value with an attribute equals to the value given in the filter.
+     * Read a list of value in a given path. It return the list using a listener. It only return
+     * values with an attribute equals to the value given in the filter.
      *
-     * @param path     the path where we want to read the value
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
-     * @param c        the class of the value
+     * @param path     the path where we want to read the list
+     * @param listener the onDataChange method will be called if there is a corresponding
+     *                 list. Otherwise, the onCancelled method will be called
+     * @param c        the class of the values
      * @param filter   must contains the attribute to filter on and the value to filter.
      */
     public abstract <T> void readList(@NonNull String path,
@@ -106,14 +109,14 @@ public abstract class Database {
                                       @NonNull Class<T> c, AttributeFilter filter);
 
     /**
-     * Read a list of value in a given path. It return the value using a listener. It only return
+     * Read a list of value in a given path. It return the list using a listener. It only return
      * values in the order specified in ordering. It also take only the first n values specified
      * in the ordering.
      *
-     * @param path     the path where we want to read the value
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
-     * @param c        the class of the value
+     * @param path     the path where we want to read the list
+     * @param listener the onDataChange method will be called if if there is a corresponding
+     *                 list. Otherwise, the onCancelled method will be called
+     * @param c        the class of the values
      * @param ordering the ordering which give information about how we order the data
      */
     public abstract <T> void readList(@NonNull String path,
@@ -134,8 +137,8 @@ public abstract class Database {
     /**
      * Read the list of offers of specific categories. It return the list using a listener.
      *
-     * @param listener   the onDataChange method will be called if we find the value. Otherwise, the
-     *                   onCancelled method will be called
+     * @param listener   the onDataChange method will be called if there is a corresponding
+     *                   list. Otherwise, the onCancelled method will be called
      * @param categories the list of categories that we want
      */
     public abstract void readOffers(@NonNull final ValueListener<List<Offer>> listener,
@@ -144,8 +147,8 @@ public abstract class Database {
     /**
      * Read the list of all offers. It return the list using a listener.
      *
-     * @param listener the onDataChange method will be called if we find the value. Otherwise, the
-     *                 onCancelled method will be called
+     * @param listener the onDataChange method will be called if there is a corresponding
+     *                 list. Otherwise, the onCancelled method will be called
      */
     public void readOffers(@NonNull ValueListener<List<Offer>> listener) {
         readOffers(listener, Arrays.asList(Category.values()));
@@ -155,8 +158,8 @@ public abstract class Database {
      * Read the list of all offers of an user in the given categories. It return the list using a
      * listener.
      *
-     * @param listener     the onDataChange method will be called if we find the value. Otherwise, the
-     *                     onCancelled method will be called
+     * @param listener     the onDataChange method will be called if there is a corresponding
+     *                     list. Otherwise, the onCancelled method will be called
      * @param categories   the list of categories that we want
      * @param offerCreator the creator of the use
      */

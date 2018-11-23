@@ -2,6 +2,9 @@ package ch.epfl.sweng.swenggolf.database;
 
 import com.google.firebase.database.DatabaseError;
 
+/**
+ * Enumeration of the Database Errors.
+ */
 public enum DbError {
     NONE("Everything went fine"),
     DATA_STALE("Data is outdated"),

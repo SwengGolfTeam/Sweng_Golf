@@ -76,6 +76,10 @@ public class CreateOfferActivity extends FragmentConverter
     Uri tempPicturePath = null;
     TextView errorMessage;
 
+    /**
+     * Replace the central fragment by an Offer.
+     * @param offer the offer which will replace the central fragment
+     */
     void replaceCentralFragmentWithOffer(Offer offer) {
         replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(offer,
                 numberOfFragmentsToSkip()));
@@ -282,6 +286,9 @@ public class CreateOfferActivity extends FragmentConverter
 
     }
 
+    /**
+     * Fragment which shows a calendar to pick the the date.
+     */
     public static class DatePickerFragment extends DialogFragment {
 
         private final Calendar calendar;
@@ -292,6 +299,9 @@ public class CreateOfferActivity extends FragmentConverter
             this.calendar = calendar;
         }
 
+        /**
+         * Create the Calendar.
+         */
         public DatePickerFragment() {
             this(Calendar.getInstance());
         }

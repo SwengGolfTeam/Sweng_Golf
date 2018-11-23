@@ -12,6 +12,9 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static ch.epfl.sweng.swenggolf.Config.PERMISSION_FINE_LOCATION;
 
+/**
+ * Abstract class which represents a Location.
+ */
 public abstract class AppLocation {
 
     private static AppLocation location = null;

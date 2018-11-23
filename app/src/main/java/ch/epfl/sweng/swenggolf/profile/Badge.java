@@ -2,6 +2,9 @@ package ch.epfl.sweng.swenggolf.profile;
 
 import ch.epfl.sweng.swenggolf.R;
 
+/**
+ * Class which represents a User Badge.
+ */
 public final class Badge {
     public static final int MAX_LEVEL = 15;
 

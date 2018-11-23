@@ -24,6 +24,9 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
+/**
+ * Fragment which allows to edit the Profile.
+ */
 public class EditProfileActivity extends FragmentConverter {
     private User user;
     private int fragmentsToSkip;
@@ -139,6 +142,10 @@ public class EditProfileActivity extends FragmentConverter {
         }
     }
 
+    /**
+     * Change the profile picture.
+     * @param view the view
+     */
     public void changeProfilePicture(View view) {
         startActivityForResult(Storage.choosePicture(), PICK_IMAGE_REQUEST);
     }

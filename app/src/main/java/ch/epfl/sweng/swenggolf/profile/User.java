@@ -7,6 +7,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
+/**
+ * Class which represents an User.
+ */
 public class User implements Parcelable {
 
     public static final String DEFAULT_DESCRIPTION = "Hello, I'm new Here!";
@@ -77,7 +80,7 @@ public class User implements Parcelable {
     }
 
     /**
-     * Constructor for a user with empty preference.
+     * Constructor for a user with default preferences, description and points.
      *
      * @param username the username
      * @param userId   a unique identifier
@@ -90,7 +93,7 @@ public class User implements Parcelable {
     }
 
     /**
-     * Constructor for a user.
+     * Constructor for a user with default description and points.
      *
      * @param username   the username
      * @param userId     a unique identifier

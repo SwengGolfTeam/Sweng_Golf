@@ -32,16 +32,27 @@ import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.OFF;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
 import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.SEPARATION;
 
+/**
+ * Helps the CreateOfferactivity to set some fields.
+ */
 class CreateHelper {
 
     private final CreateOfferActivity create;
     private final CreateListeners listeners;
 
+    /**
+     * Initialize the create helper.
+     * @param create the CreateOfferActivity to help
+     * @param listeners the CreateListeners
+     */
     protected CreateHelper(CreateOfferActivity create, CreateListeners listeners) {
         this.create = create;
         this.listeners = listeners;
     }
 
+    /**
+     * Pre-fill the date, category, location fields of the CreateOfferActivity.
+     */
     void preFillFields() {
 
         setupSpinner();
@@ -150,6 +161,11 @@ class CreateHelper {
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
     }
 
+    /**
+     * Update the User score.
+     * @param offerToModify the offer to modify
+     * @param offer the offer
+     */
     void updateUserScore(Offer offerToModify, Offer offer) {
         int scoreToAdd = 0;
         if (offerToModify == null) {
@@ -160,6 +176,9 @@ class CreateHelper {
         DatabaseUser.addPointsToCurrentUser(scoreToAdd);
     }
 
+    /**
+     * Attach location to the offer.
+     */
     void attachLocation() {
         if (create.location.getLatitude() != 0.0 || create.location.getLongitude() != 0.0) {
 

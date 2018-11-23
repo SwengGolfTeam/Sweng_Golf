@@ -26,6 +26,9 @@ import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+/**
+ * Fragment which shows the offers stored in the Database.
+ */
 public class ListOfferActivity extends FragmentConverter {
 
     public static final List<Offer> offerList = new ArrayList<>();

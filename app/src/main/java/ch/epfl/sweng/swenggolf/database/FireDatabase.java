@@ -18,6 +18,9 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
+/**
+ * Database which uses Firebase.
+ */
 public final class FireDatabase extends Database {
     private final FirebaseDatabase database;
 

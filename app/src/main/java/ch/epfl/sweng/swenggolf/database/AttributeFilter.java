@@ -1,11 +1,14 @@
 package ch.epfl.sweng.swenggolf.database;
 
+/**
+ * Filter used to compare an attribute of a class with it's value.
+ */
 public final class AttributeFilter {
     private final String attribute;
     private final String value;
 
     /**
-     * This is used to compare an attribute of a class with it's value.
+     * Create a filter used to compare an attribute of a class with it's value.
      *
      * @param attribute the class attribute
      * @param value     the value to compare
@@ -22,7 +25,7 @@ public final class AttributeFilter {
     }
 
     /**
-     * Return the attribute we choose to compare.
+     * Get the attribute we choose to compare.
      *
      * @return the attribute we choose to compare
      */
@@ -31,7 +34,7 @@ public final class AttributeFilter {
     }
 
     /**
-     * Return the value to compare.
+     * Get the value to compare.
      *
      * @return the value to compare
      */

@@ -22,6 +22,12 @@ import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+/**
+ * Class adding functionalities to work with the MainMenuActivity
+ * and automatize initialization such as setting the toolbar.
+ * It also adds functionalities to create initialized fragments
+ * such as ShowOfferActivity or CreateOfferActivity.
+ */
 public abstract class FragmentConverter extends Fragment {
 
 

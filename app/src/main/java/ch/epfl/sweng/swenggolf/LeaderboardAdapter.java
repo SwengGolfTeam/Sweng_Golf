@@ -17,7 +17,9 @@ import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-
+/**
+ * Adapter for the Leaderboard RecyclerView.
+ */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.MyViewHolder> {
 
     private final FragmentConverter fragmentConverter;

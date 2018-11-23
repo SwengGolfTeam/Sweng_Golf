@@ -10,18 +10,34 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 
+/**
+ * Local Database which store User preferences.
+ */
 public class LocalDatabase extends SQLiteOpenHelper {
 
-    public static final String COLUMN_CATEGORIES = "categories";
+    private static final String COLUMN_CATEGORIES = "categories";
     private static final String DEFAULT_DATABASE_NAME = "local.db";
     private static final String TABLE_NAME = "filters";
     private static final String COLUMN_ID = "_id";
 
+    /**
+     * Create a new Local Database.
+     * @param context the context of the application
+     * @param factory used to allow returning sub-classes of Cursor when calling query
+     * @param dbVersion the Database version
+     * @param databaseName the Database name
+     */
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory,
                          int dbVersion, String databaseName) {
         super(context, databaseName, factory, dbVersion);
     }
 
+    /**
+     * Create a new Local Database with a default name.
+     * @param context the context of the application
+     * @param factory used to allow returning sub-classes of Cursor when calling query
+     * @param dbVersion the Database version
+     */
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion) {
         this(context, factory, dbVersion, DEFAULT_DATABASE_NAME);
     }

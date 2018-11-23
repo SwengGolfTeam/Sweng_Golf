@@ -25,6 +25,9 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+/**
+ * Notification fragment which shows all the User's notification.
+ */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
     private List<Notification> notifications;

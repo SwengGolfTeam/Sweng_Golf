@@ -8,6 +8,9 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+/**
+ * Tool class which enables to fill a view with data.
+ */
 public abstract class ViewUserFiller {
 
     private ViewUserFiller() {

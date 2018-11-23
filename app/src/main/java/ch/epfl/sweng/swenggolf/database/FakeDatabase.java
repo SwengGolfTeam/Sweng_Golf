@@ -16,6 +16,9 @@ import java.util.TreeMap;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+/**
+ * Mocked Database which works locally.
+ */
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     Set<String> workingOnEntry;
@@ -24,7 +27,10 @@ public class FakeDatabase extends Database {
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
      *
-     * @param working if the database work or send errors
+     *
+     * @param working the working state of the Database, the DataBase will send
+     *                error when working is set at false and will work as
+     *                expected otherwise.
      */
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
@@ -37,7 +43,7 @@ public class FakeDatabase extends Database {
     }
 
     /**
-     * Creates a database already filled with users and offers.
+     * Creates a Database already filled with users and offers.
      *
      * @return an instance of FilledFakeDatabase.
      */
@@ -230,9 +236,11 @@ public class FakeDatabase extends Database {
     }
 
     /**
-     * Set the database to a "non-working" mode if false.
+     * Set working state of the Database.
      *
-     * @param w working
+     * @param w the working state of the Database, the DataBase will send
+     *                error when working is set at false and will work as
+     *                expected otherwise.
      */
     public void setWorking(boolean w) {
         working = w;

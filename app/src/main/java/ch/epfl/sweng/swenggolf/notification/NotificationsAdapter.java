@@ -21,21 +21,38 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
+/**
+ * Adapter of the Notification recyclerview.
+ */
 public class NotificationsAdapter
         extends RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder> {
     private List<Notification> notifications;
     private ItemClickListener viewHolderOnClickListener;
 
+    /**
+     * Representation of a row of the recyclerview.
+     */
     public static class NotificationViewHolder extends ThreeFieldsViewHolder
             implements View.OnClickListener {
         private ItemClickListener listener;
 
+        /**
+         * Create a new ThreeFieldsViewHolder.
+         * @param itemView the view of the item
+         * @param notificationTextId the text id of the notification
+         * @param notificationIconId the icon id of the notification
+         * @param crossId the cross id
+         */
         public NotificationViewHolder(@NonNull View itemView, int notificationTextId,
                                       int notificationIconId, int crossId) {
             super(itemView, notificationTextId, notificationIconId, crossId);
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * Set the ItemClickListener.
+         * @param listener the corresponding ItemclickListener
+         */
         public void setItemClickListener(ItemClickListener listener) {
             this.listener = listener;
         }

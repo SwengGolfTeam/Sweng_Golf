@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
+/**
+ * Fragment which displays the list of preferences.
+ */
 public class ListPreferencesActivity extends FragmentConverter {
     private static final int SPAN_COUNT = 3;
     private RecyclerView mRecyclerView;

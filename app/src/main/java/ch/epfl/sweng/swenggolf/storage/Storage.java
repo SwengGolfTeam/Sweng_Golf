@@ -17,6 +17,10 @@ import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * Class which represents Storage.
+ * which is a database for big files (photos).
+ */
 public abstract class Storage {
 
     public static final int PICK_IMAGE_REQUEST = 71;
@@ -117,6 +121,10 @@ public abstract class Storage {
     public abstract void write(@NonNull Uri uri, String path,
                                @NonNull OnCompleteListener<Uri> listener);
 
+    /**
+     * Removes an image of the storage.
+     * @param linkPicture the link of the Picture
+     */
     public abstract void remove(@NonNull String linkPicture);
 
 }
