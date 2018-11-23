@@ -101,98 +101,138 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     "Lightsabers")
     };
     private static final Offer[] FAKE_OFFERS = {
-            new Offer("0", "Little Droid for ride",
-                    "I have a little droid with informations"
-                            + " on the rebels care to exchange it against"
-                            + " a ride from Tatooine ?",
-                    WIKIA_NO_COOKIE + STARWARS
-                            + "images/f/ff/Sandcrawler.png/"
-                            + "revision/latest?cb=20130812001443",
-                    "01", Category.values()[0], DATE, DATE, getLocation()),
+            new Offer.Builder().setUserId("0")
+                    .setTitle("Little Droid for ride")
+                    .setDescription("I have a little droid with informations"
+                    + " on the rebels care to exchange it against"
+                    + " a ride from Tatooine ?")
+                    .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
+                    + "images/f/ff/Sandcrawler.png/"
+                    + "revision/latest?cb=20130812001443")
+                    .setUuid("01").setTag(Category.values()[0])
+                    .setCreationDate(DATE).setEndDate(DATE).setLocation(getLocation()).build(),
 
-            new Offer("13", "Defense against the droids",
-                    "The Trade Federation is attacking my planet,"
+            new Offer.Builder().setUserId("13")
+                    .setTitle("Defense against the droids")
+                    .setDescription("The Trade Federation is attacking my planet,"
                             + " I need help ! I have some nice clothes"
-                            + " I can exchange !",
-                    LUMIERE
+                            + " I can exchange !")
+                    .setLinkPicture(LUMIERE
                             + "databank_battledroid_01_169_1524f145.jpeg?"
-                            + "region=0%2C0%2C1560%2C878&width=768",
+                            + "region=0%2C0%2C1560%2C878&width=768")
+                    .setUuid("02").setTag(Category.values()[1])
+                    .setCreationDate(DATE).setEndDate(DATE).setLocation(getLocation()).build(),
 
-                    "02", Category.values()[1], DATE, DATE),
-            new Offer("8", "Chosen one",
-                    "Someone out there is the chosen one ?"
+            new Offer.Builder().setUserId("8")
+                    .setTitle("Chosen one")
+                    .setDescription("Someone out there is the chosen one ?"
                             + " If you are I can train you !"
-                            + " Warning, last apprentice got bad burns !",
-                    "https://i.redd.it/4zqd4mvkq3n01.jpg",
+                            + " Warning, last apprentice got bad burns !")
+                    .setUuid("03").setTag(Category.values()[1])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
 
-                    "03", Category.values()[1], DATE, DATE),
-            new Offer("15", "Great Price to find a friend",
-                    "I'm looking for a \"friend\" of mine, a certain Han Solo,"
+            new Offer.Builder().setUserId("15")
+                    .setTitle("Great Price to find a friend")
+                    .setDescription("I'm looking for a \"friend\" of mine, a certain Han Solo,"
                             + " I offer a desert spaceship to interested !"
-                            + " It's him on the left.",
-                    "https://cdn3.whatculture.com/"
-                            + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg",
-                    "04", Category.values()[2], DATE, DATE),
+                            + " It's him on the left.")
+                    .setLinkPicture("https://cdn3.whatculture.com/"
+                            + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg")
+                    .setUuid("04").setTag(Category.values()[2])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
 
-            new Offer("7", "Defeat Dark Sidious I must",
-                    "Defeat Dark Sidious. "
+            new Offer.Builder().setUserId("7")
+                    .setTitle("Defeat Dark Sidious I must")
+                    .setDescription("Defeat Dark Sidious. "
                             + "With me train you shall,"
-                            + " If so you want.",
-                    WIKIA_NO_COOKIE + STARWARS
-                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911",
+                            + " If so you want.")
+                    .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
+                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911")
+                    .setUuid("05").setTag(Category.values()[2])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
 
-                    "05", Category.values()[2], DATE, DATE),
-            new Offer("4", "Help to get the senate",
-                    "I'm looking for an apprentice to show him"
-                            + " my unlimited power and take down the senate !",
-                    LUMIERE
-                            + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342",
-                    "06", Category.values()[1], DATE, DATE),
+            new Offer.Builder().setUserId("7")
+                    .setTitle("Defeat Dark Sidious I must")
+                    .setDescription("Defeat Dark Sidious. "
+                            + "With me train you shall,"
+                            + " If so you want.")
+                    .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
+                            + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911")
+                    .setUuid("05").setTag(Category.values()[2])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
 
-            new Offer("5", "Prepare Surprise for a friend",
-                    "Someone would like to help me prepare a surprise "
+            new Offer.Builder().setUserId("4")
+                    .setTitle("Help to get the senate")
+                    .setDescription("I'm looking for an apprentice to show him"
+                            + " my unlimited power and take down the senate !")
+                    .setLinkPicture(LUMIERE
+                            + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342")
+                    .setUuid("06").setTag(Category.values()[1])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
+
+            new Offer.Builder().setUserId("5")
+                    .setTitle("Prepare Surprise for a friend")
+                    .setDescription("Someone would like to help me prepare a surprise "
                             + "for a friend ? Create a display with \"NOT YET !\""
-                            + " on it. I'll invite you to a beer then.",
-                    "",
-                    "07", Category.values()[2], DATE, DATE),
+                            + " on it. I'll invite you to a beer then.")
+                    .setUuid("07").setTag(Category.values()[2])
+                    .setCreationDate(DATE).setEndDate(DATE).build(),
 
-            new Offer("10", "Take revenge on my apprentice",
-                    "Need someone to find my apprentice, some \"bat\" guy. "
-                            + "I'll show you the League of Shadows !",
-                    "",
-                    "08"),
-            new Offer("9", "bipbupbap",
-                    "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                    LUMIERE
-                            + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                    "09", Category.values()[3], DATE, DATE),
-            new Offer("1", "Nice helmet to build ship",
-                    "I must build some star like ship, you can have my helmet then !",
-                    LUMIERE
-                            + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768",
-                    "010"),
-            new Offer("3", "Student job in a farm",
-                    "I need help to rebuild my spaceship in exchange I can help "
-                            + "with farm work since I'm pretty good at farm stuff !",
-                    "https://www.jedidefender.com/collect92/lukexwing%20anh.jpg",
-                    "011"),
-            new Offer("17", "Lightsaber to find Jedi",
-                    "I'm looking for a bold general, care to help me ?",
-                    "",
-                    "012"),
-            new Offer("2", "Transport some important data",
-                    "I have some nice crew of people that can help you "
-                            + "do anything if you are okay to transport some data !",
-                    "",
-                    "013"),
-            new Offer("14", "Help to fix me up",
-                    "My torso lacks my legs, I might trade "
-                            + "my double ended lightsaber if you're nice.",
-                    WIKIA_NO_COOKIE
+            new Offer.Builder().setUserId("10")
+                    .setTitle("Take revenge on my apprentice")
+                    .setDescription("Need someone to find my apprentice, some \"bat\" guy. "
+                            + "I'll show you the League of Shadows !")
+                    .setUuid("08").build(),
+
+            new Offer.Builder().setUserId("9")
+                    .setTitle("bipbupbap")
+                    .setDescription("titut bip bop tilit tut tut tat dut dut ! Mip zat zat !")
+                    .setLinkPicture(LUMIERE
+                            + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768")
+                    .setTag(Category.values()[3])
+                    .setCreationDate(DATE)
+                    .setEndDate(DATE)
+                    .setUuid("09").build(),
+
+            new Offer.Builder().setUserId("1")
+                    .setTitle("Nice helmet to build ship")
+                    .setDescription("I must build some star like ship, you can have my helmet then !")
+                    .setLinkPicture(LUMIERE
+                            + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768")
+                    .setTag(Category.values()[3])
+                    .setCreationDate(DATE)
+                    .setEndDate(DATE)
+                    .setUuid("010").build(),
+
+            new Offer.Builder().setUserId("3")
+                    .setTitle("Student job in a farm")
+                    .setDescription("I need help to rebuild my spaceship in exchange I can help "
+                            + "with farm work since I'm pretty good at farm stuff !")
+                    .setLinkPicture("https://www.jedidefender.com/collect92/lukexwing%20anh.jpg")
+                    .setUuid("011").build(),
+
+            new Offer.Builder().setUserId("17")
+                    .setTitle("Lightsaber to find Jedi")
+                    .setDescription("I'm looking for a bold general, care to help me ?")
+                    .setUuid("012").build(),
+
+            new Offer.Builder().setUserId("2")
+                    .setTitle("Transport some important data")
+                    .setDescription("I have some nice crew of people that can help you "
+                            + "do anything if you are okay to transport some data !")
+                    .setUuid("013").build(),
+
+            new Offer.Builder().setUserId("14")
+                    .setTitle("Help to fix me up")
+                    .setDescription("My torso lacks my legs, I might trade "
+                            + "my double ended lightsaber if you're nice.")
+                    .setLinkPicture(WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
-                            + "scale-to-width-down/800",
-                    "014")
+                            + "scale-to-width-down/800")
+                    .setUuid("014").build(),
+
     };
+
     private static final User[] USER_ZERO_FOLLOWS = {getUser(0), getUser(1), getUser(2)};
 
     /**
@@ -204,7 +244,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
             write(Database.USERS_PATH, user.getUserId(), new User(user));
         }
         for (Offer offer : FAKE_OFFERS) {
-            write(Database.OFFERS_PATH, offer.getUuid(), new Offer(offer));
+            write(Database.OFFERS_PATH, offer.getUuid(), offer);
         }
         for (User user : USER_ZERO_FOLLOWS) {
             String uid = user.getUserId();
@@ -229,7 +269,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
      * @return the offer at this index
      */
     public static Offer getOffer(int index) {
-        return new Offer(FAKE_OFFERS[index]);
+        return FAKE_OFFERS[index];
     }
 
     /**
@@ -285,13 +325,9 @@ public final class FilledFakeDatabase extends FakeDatabase {
     }
 
     private static Location getLocation() {
-        return getLocation(FAKE_LATITUDE, FAKE_LONGITUDE);
-    }
-
-    private static Location getLocation(double latitude, double longitude) {
         Location location = new Location("");
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
+        location.setLatitude(FAKE_LATITUDE);
+        location.setLongitude(FAKE_LONGITUDE);
         return location;
     }
 }

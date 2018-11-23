@@ -103,17 +103,15 @@ class CreateHelper {
     void createOfferObject(String name, String description, Category tag) {
         String uuid;
         String link;
+        Offer.Builder builder;
         if (create.offerToModify != null) {
-            uuid = create.offerToModify.getUuid();
-            link = create.offerToModify.getLinkPicture();
-        } else {
-            uuid = UUID.randomUUID().toString();
-            link = "";
+            builder = new Offer.Builder(create.offerToModify);
         }
 
-        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                link, uuid, tag, create.creationDate, create.endDate, create.location);
-
+        final Offer newOffer = new Offer.Builder().setUserId(Config.getUser().getUserId())
+                .setTitle(name).setDescription(description)
+                .setTag(tag).setCreationDate(create.creationDate)
+                .setEndDate(create.endDate).setLocation(create.location).build();
 
         if (create.filePath == null) {
             writeOffer(newOffer);

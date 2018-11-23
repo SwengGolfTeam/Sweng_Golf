@@ -42,13 +42,13 @@ import static org.mockito.Mockito.when;
 
 
 public class FireDatabaseTest {
-
-    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final String PATH = "path";
     private static final String ID = "id";
 
-    private static final Offer OFFER1 = new Offer("id", "title", "description");
-    private static final Offer OFFER2 = new Offer("id2", "title2", "description2");
+    private static final Offer OFFER1 = (new Offer.Builder()).setUserId("id").setTitle("title")
+            .setDescription("description").build();
+    private static final Offer OFFER2 = (new Offer.Builder()).setUserId("id2").setTitle("title2")
+            .setDescription("description2").build();
 
     private static final List<Offer> LIST = Arrays.asList(OFFER1, OFFER2);
 

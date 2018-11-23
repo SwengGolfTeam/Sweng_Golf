@@ -120,10 +120,10 @@ public class CreateOfferActivityTest {
         CreateOfferActivity fragment = new CreateOfferActivity();
         if (hasOffer) {
             Bundle bundle = new Bundle();
-
-            Offer offer = new Offer(Config.getUser().getUserId(), "20",
-                    "20", "20", "20", Category.FOOD, beginingTime,
-                    beginingTime + timeDiff);
+            Offer offer = (new Offer.Builder()).setUserId(Config.getUser().getUserId())
+                .setTitle("20").setDescription("20").setLinkPicture("20").setUuid("20")
+                    .setTag(Category.FOOD).setCreationDate(beginingTime)
+                    .setEndDate(beginingTime + timeDiff).build();
 
             bundle.putParcelable(Offer.OFFER, offer);
             fragment.setArguments(bundle);
@@ -178,7 +178,9 @@ public class CreateOfferActivityTest {
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        Offer testOffer = new Offer(Config.getUser().getUserId(), "Test", "Test");
+
+        Offer testOffer = new Offer.Builder().setUserId(Config.getUser().getUserId())
+                .setTitle("Test").setDescription("Test").build();
         Database.getInstance().write("/offers", testOffer.getUuid(), testOffer);
         Fragment offer = FragmentConverter.createShowOfferWithOffer(testOffer);
         if (setToOtherThanOwner) {

@@ -103,14 +103,15 @@ public class PointGainTest {
         testUserPoints(scoredPoints, Config.getUser());
     }
 
+    private final static Offer FAKE_OFFER = (new Offer.Builder()).setUserId(Config.getUser().getUserId()).setTitle("test")
+                .setDescription("title").setUuid("23").setTag(Category.values()[3])
+            .setLatitude(23.4).setLongitude(23.4).build();
+
     @Test
     public void modifyingOfferChangesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
-                        FragmentConverter.createOfferActivityWithOffer(offer)).commit();
+                        FragmentConverter.createOfferActivityWithOffer(FAKE_OFFER)).commit();
         CreateOfferActivityTest.fillOffer();
         testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(), Config.getUser());
     }
@@ -129,12 +130,9 @@ public class PointGainTest {
 
     @Test
     public void acceptingOfferIncreasesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
-                        FragmentConverter.createShowOfferWithOffer(offer)).commit();
+                        FragmentConverter.createShowOfferWithOffer(FAKE_OFFER)).commit();
         addAnswer();
         performFavoriteAction();
         testUserPoints(RESPOND_OFFER.getValue(), Config.getUser());
@@ -157,11 +155,8 @@ public class PointGainTest {
 
     @Test
     public void removeOfferDecreasesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(FAKE_OFFER))
                 .commit();
 
         //TODO: find why the test fail if we have this line
@@ -172,6 +167,6 @@ public class PointGainTest {
             onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(click());
         }
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
-        testUserPoints(-offer.offerValue(), Config.getUser());
+        testUserPoints(-FAKE_OFFER.offerValue(), Config.getUser());
     }
 }

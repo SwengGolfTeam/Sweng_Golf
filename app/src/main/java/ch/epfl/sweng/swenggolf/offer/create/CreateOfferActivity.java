@@ -106,8 +106,6 @@ public class CreateOfferActivity extends FragmentConverter
         offerToModify = null;
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable(Offer.OFFER);
-        } else {
-            offerToModify = null;
         }
 
         createHelper.preFillFields();

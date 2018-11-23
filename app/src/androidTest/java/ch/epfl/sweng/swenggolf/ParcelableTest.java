@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.PointType;
@@ -15,8 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ParcelableTest {
-    private static final Offer parceledOffer =
-            new Offer("a", "b", "c", "d", "e", Category.TEST, 0, 1);
+    private static final Offer parceledOffer = FilledFakeDatabase.getOffer(0);
     private static final User parceledUser = new User("a", "b", "c", "d", "e", "f",
             PointType.CLOSE_OFFER.getValue());
 

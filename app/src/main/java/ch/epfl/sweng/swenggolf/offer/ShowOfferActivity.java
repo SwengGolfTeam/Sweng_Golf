@@ -165,7 +165,7 @@ public class ShowOfferActivity extends FragmentConverter {
                         offerLocation.setLongitude(offer.getLongitude());
 
                         int distance = (int) offerLocation.distanceTo(location)
-                                / DISTANCE_GRANULARITY * DISTANCE_GRANULARITY;
+                                / (DISTANCE_GRANULARITY * DISTANCE_GRANULARITY);
                         String toPrompt;
                         if (distance >= KILOMETER_SIZE) {
                             distance /= KILOMETER_SIZE;
