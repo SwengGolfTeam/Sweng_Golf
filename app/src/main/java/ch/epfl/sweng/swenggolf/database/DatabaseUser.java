@@ -5,6 +5,9 @@ import ch.epfl.sweng.swenggolf.profile.User;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
+/**
+ * Class that regroups all the Users related database code.
+ */
 public class DatabaseUser {
 
     public static final String POINTS = "points";
@@ -12,17 +15,34 @@ public class DatabaseUser {
     private DatabaseUser() {
     }
 
+    /**
+     * Add a User to the Database.
+     *
+     * @param user the User to add
+     */
     public static void addUser(User user) {
         Database.getInstance().write(Database.USERS_PATH, user.getUserId(), user);
     }
 
 
-    public static void getUser(final ValueListener<User> listener, User user) {
-        getUser(listener, user.getUserId());
-    }
-
+    /**
+     * Get a User in the Database.
+     *
+     * @param listener the listener which will provide the corresponding user
+     * @param userId   the id of the user we want to find
+     */
     public static void getUser(final ValueListener<User> listener, String userId) {
         Database.getInstance().read(Database.USERS_PATH, userId, listener, User.class);
+    }
+
+    /**
+     * Get a User in the Database.
+     *
+     * @param listener the listener which will provide the corresponding user
+     * @param user     the user we want to find
+     */
+    public static void getUser(final ValueListener<User> listener, User user) {
+        getUser(listener, user.getUserId());
     }
 
     private static void addPointsToAppropriateUser(final int scoredPoints, final String userId,
@@ -85,6 +105,11 @@ public class DatabaseUser {
                 });
     }
 
+    /**
+     * Add Points to current User.
+     *
+     * @param points the amount of point we want to add
+     */
     public static void addPointsToCurrentUser(final int points) {
         addPointsToUser(points, Config.getUser());
     }

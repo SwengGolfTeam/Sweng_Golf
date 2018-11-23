@@ -5,6 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Class used to represent a row in a RecyclerView.
+ */
 public class ThreeFieldsViewHolder extends RecyclerView.ViewHolder {
 
     private TextView fieldOne;

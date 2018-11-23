@@ -6,7 +6,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-
+/**
+ * TouchListener which handles click on ListOffer.
+ */
 public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener {
 
     private final OnItemClickListener mListener;
@@ -66,9 +68,25 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
         // No gestures to be intercepted before click
     }
 
+    /**
+     * ClickListener which can handle long and short click.
+     */
     public interface OnItemClickListener {
+
+        /**
+         * Actions made when a single click is performed.
+         *
+         * @param view     the view
+         * @param position the position of the item on the list.
+         */
         void onItemClick(View view, int position);
 
+        /**
+         * Actions made when a long click is performed.
+         *
+         * @param view     the view
+         * @param position the position of the item on the list.
+         */
         void onLongItemClick(View view, int position);
     }
 }

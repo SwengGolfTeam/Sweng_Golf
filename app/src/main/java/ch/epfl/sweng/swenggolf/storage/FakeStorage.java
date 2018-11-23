@@ -14,12 +14,21 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.Executor;
 
-
+/**
+ * Class which represents a mocked Storage.
+ */
 public final class FakeStorage extends Storage {
 
     private final Map<String, Object> storage;
     private final boolean working;
 
+    /**
+     * Construct a mock Storage.
+     *
+     * @param working the working state, the Storage will send
+     *                error when working is set at false and will work as
+     *                expected otherwise.
+     */
     public FakeStorage(boolean working) {
         this.storage = new TreeMap<>();
         this.working = working;
@@ -38,11 +47,22 @@ public final class FakeStorage extends Storage {
         // TODO implement when necessary
     }
 
+    /**
+     * Class which represents a fake Task.
+     */
     public static final class FakeTask extends Task<Uri> {
 
         private final Uri uri;
         private final boolean working;
 
+        /**
+         * Create a fake Task.
+         *
+         * @param uri     the uri
+         * @param working the working state, the Storage will send
+         *                error when working is set at false and will work as
+         *                expected otherwise.
+         */
         public FakeTask(Uri uri, boolean working) {
             this.uri = uri;
             this.working = working;

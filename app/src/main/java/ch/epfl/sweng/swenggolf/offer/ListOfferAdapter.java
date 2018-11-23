@@ -13,7 +13,9 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
-
+/**
+ * Adapter of the ListOffer RecyclerView.
+ */
 public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyViewHolder> {
 
     private List<Offer> offerList;
@@ -61,7 +63,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     }
 
     /**
-     * Add a list of offers to the recycler view.
+     * Add a list of offers to the RecyclerView.
      *
      * @param offers a list of offers
      */
@@ -70,8 +72,16 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         notifyDataSetChanged();
     }
 
+    /**
+     * Create a ThreeFieldsViewHolder which represents a row in the RecyclerView.
+     */
     public static class MyViewHolder extends ThreeFieldsViewHolder {
 
+        /**
+         * Create a row of the RecyclerView.
+         *
+         * @param view the corresponding view
+         */
         public MyViewHolder(View view) {
             super(view, R.id.offer_title, R.id.offer_author, R.id.offer_description);
         }

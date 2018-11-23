@@ -22,6 +22,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.Config;
 
+/**
+ * Sign-in Activity where the user can log in his
+ * google account in order to access to the application.
+ * (https://firebase.google.com/docs/auth/android/google-signin)
+ */
 public class SignInActivity extends AppCompatActivity {
 
     /*(Random) Number linked with the Sign in process*/

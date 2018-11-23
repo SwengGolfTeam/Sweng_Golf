@@ -5,13 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-import com.google.firebase.database.PropertyName;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.BitSet;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -19,6 +15,9 @@ import ch.epfl.sweng.swenggolf.profile.PointType;
 
 import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
 
+/**
+ * Class which represents an offer.
+ */
 public class Offer implements Parcelable {
     public static final int TITLE_MIN_LENGTH = 1;
     public static final int TITLE_MAX_LENGTH = 100;
@@ -33,186 +32,8 @@ public class Offer implements Parcelable {
             return new Offer[size];
         }
     };
-    private static final int DESCRIPTION_LIMIT = 140;
     public static final String OFFER = "ch.epfl.sweng.swenggolf.offer";
-
-    //Objects.requireNonNull API level is 19
-    private static <T> T checkNullity(T toCheck, String erroredAttribute) {
-        if(toCheck == null) {
-            throw new IllegalArgumentException(erroredAttribute + " cannot be null");
-        }
-        return toCheck;
-    }
-
-    private static String checkStringValidity(String toCheck , String erroredAttribute) {
-        checkNullity(toCheck, erroredAttribute);
-        if(toCheck.isEmpty()) {
-            throw new IllegalArgumentException(erroredAttribute + " cannot be empty");
-        }
-        return toCheck;
-    }
-
-    /**
-     * Class used to create an offer.
-     * If the fields are strings they are initially set to an empty string.
-     * Location values are set to  0.
-     * Date value are set to the current time.
-     * Tag is set to default.
-     */
-    public static final class Builder {
-        private long creationDate;
-        private String linkPicture;
-        private long endDate;
-        private String description;
-        private String title;
-        private String userId;
-        private Category tag;
-        private double longitude;
-        private double latitude;
-        private String uuid;
-
-        public Builder(Offer offer) {
-            this.creationDate = offer.creationDate;
-            this.endDate = offer.endDate;
-            this.description = offer.description;
-            this.title = offer.title;
-            this.userId = offer.userId;
-            this.linkPicture = offer.linkPicture;
-            this.tag = offer.tag;
-            this.longitude = offer.longitude;
-            this.latitude = offer.latitude;
-            this.uuid = offer.uuid;
-        }
-
-        public Builder() {
-            creationDate = Calendar.getInstance().getTimeInMillis();
-            endDate = Calendar.getInstance().getTimeInMillis();
-            description = "";
-            title = "";
-            userId = "";
-            tag = Category.getDefault();
-            longitude = 0;
-            latitude = 0;
-            linkPicture = "";
-            uuid = UUID.randomUUID().toString();
-        }
-
-        public Category getTag() {
-            return this.tag;
-        }
-
-        public Builder setTag(Category tag) {
-            this.tag = tag;
-            return this;
-        }
-
-        public String getUserId() {
-            return this.userId;
-        }
-
-        public Builder setUserId(String userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public String getTitle() {
-            return this.title;
-        }
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public String getDescription() {
-            return this.description;
-        }
-
-        public Builder setDescription(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public String getLinkPicture() {
-            return this.linkPicture;
-        }
-
-        public Builder setLinkPicture(String linkPicture) {
-            this.linkPicture = linkPicture;
-            return this;
-        }
-
-        public String getUuid() {
-            return uuid;
-        }
-
-        public Builder setUuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
-
-        public double getLatitude() {
-            return this.latitude;
-        }
-
-        public Builder setLatitude(double latitude) {
-            this.latitude = latitude;
-            return this;
-        }
-
-        public double getLongitude() {
-            return this.longitude;
-        }
-
-        public Builder setLongitude(double longitude) {
-            this.longitude = longitude;
-            return this;
-        }
-
-        public Builder setLocation(Location location) {
-            this.latitude = location.getLatitude();
-            this.longitude = location.getLongitude();
-            return this;
-        }
-
-        public long getCreationDate() {
-            return this.creationDate;
-        }
-
-        public Builder setCreationDate(long creationDate) {
-            this.creationDate = creationDate;
-            return this;
-        }
-
-        public long getEndDate() {
-            return this.endDate;
-        }
-
-        public Builder setEndDate(long endDate) {
-            this.endDate = endDate;
-            return this;
-        }
-
-        public Offer build() {
-            if(creationDate < 0 || endDate < 0 || creationDate > endDate) {
-                throw new IllegalArgumentException("CreationDate, endDate must be positive and"
-                + " creation must precede end");
-            }
-            return new Offer(
-                    checkNullity(uuid, "UUID"),
-                    checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH),
-                    checkString(description, "description", DESCRIPTION_MIN_LENGTH,
-                            DESCRIPTION_MAX_LENGTH),
-                    creationDate, endDate,
-                    checkNullity(linkPicture, "picture link"),
-                    checkStringValidity(userId, "user ID"),
-                    checkNullity(tag, "tag"),
-                    longitude, latitude
-            );
-        }
-
-    }
-
+    private static final int DESCRIPTION_LIMIT = 140;
     private final String uuid;
     private final String title;
     private final String description;
@@ -223,7 +44,6 @@ public class Offer implements Parcelable {
     private final Category tag;
     private final double longitude;
     private final double latitude;
-
     private Offer(String uuid, String title, String description, long creationDate, long endDate,
                   String linkPicture, String userId, Category tag,
                   double longitude, double latitude) {
@@ -238,7 +58,6 @@ public class Offer implements Parcelable {
         this.longitude = longitude;
         this.latitude = latitude;
     }
-
     /**
      * Empty constructor for the listener of Firebase.
      */
@@ -254,7 +73,6 @@ public class Offer implements Parcelable {
         latitude = 0;
         uuid = "";
     }
-
     private Offer(Parcel in) {
         String[] data = new String[10];
 
@@ -269,6 +87,22 @@ public class Offer implements Parcelable {
         this.endDate = Long.parseLong(data[7]);
         this.latitude = Double.parseDouble(data[8]);
         this.longitude = Double.parseDouble(data[9]);
+    }
+
+    //Objects.requireNonNull API level is 19
+    private static <T> T checkNullity(T toCheck, String erroredAttribute) {
+        if (toCheck == null) {
+            throw new IllegalArgumentException(erroredAttribute + " cannot be null");
+        }
+        return toCheck;
+    }
+
+    private static String checkStringValidity(String toCheck, String erroredAttribute) {
+        checkNullity(toCheck, erroredAttribute);
+        if (toCheck.isEmpty()) {
+            throw new IllegalArgumentException(erroredAttribute + " cannot be empty");
+        }
+        return toCheck;
     }
 
     /**
@@ -484,6 +318,167 @@ public class Offer implements Parcelable {
             throw new IllegalArgumentException("The offer cannot be modified to null");
         }
         return modifiedOffer.offerValue() - this.offerValue();
+    }
+
+    /**
+     * Class used to create an offer.
+     * If the fields are strings they are initially set to an empty string.
+     * Location values are set to  0.
+     * Date value are set to the current time.
+     * Tag is set to default.
+     */
+    public static final class Builder {
+        private long creationDate;
+        private String linkPicture;
+        private long endDate;
+        private String description;
+        private String title;
+        private String userId;
+        private Category tag;
+        private double longitude;
+        private double latitude;
+        private String uuid;
+
+        public Builder(Offer offer) {
+            this.creationDate = offer.creationDate;
+            this.endDate = offer.endDate;
+            this.description = offer.description;
+            this.title = offer.title;
+            this.userId = offer.userId;
+            this.linkPicture = offer.linkPicture;
+            this.tag = offer.tag;
+            this.longitude = offer.longitude;
+            this.latitude = offer.latitude;
+            this.uuid = offer.uuid;
+        }
+
+        public Builder() {
+            creationDate = Calendar.getInstance().getTimeInMillis();
+            endDate = Calendar.getInstance().getTimeInMillis();
+            description = "";
+            title = "";
+            userId = "";
+            tag = Category.getDefault();
+            longitude = 0;
+            latitude = 0;
+            linkPicture = "";
+            uuid = UUID.randomUUID().toString();
+        }
+
+        public Category getTag() {
+            return this.tag;
+        }
+
+        public Builder setTag(Category tag) {
+            this.tag = tag;
+            return this;
+        }
+
+        public String getUserId() {
+            return this.userId;
+        }
+
+        public Builder setUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public String getTitle() {
+            return this.title;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public String getDescription() {
+            return this.description;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public String getLinkPicture() {
+            return this.linkPicture;
+        }
+
+        public Builder setLinkPicture(String linkPicture) {
+            this.linkPicture = linkPicture;
+            return this;
+        }
+
+        public String getUuid() {
+            return uuid;
+        }
+
+        public Builder setUuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public double getLatitude() {
+            return this.latitude;
+        }
+
+        public Builder setLatitude(double latitude) {
+            this.latitude = latitude;
+            return this;
+        }
+
+        public double getLongitude() {
+            return this.longitude;
+        }
+
+        public Builder setLongitude(double longitude) {
+            this.longitude = longitude;
+            return this;
+        }
+
+        public Builder setLocation(Location location) {
+            this.latitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+            return this;
+        }
+
+        public long getCreationDate() {
+            return this.creationDate;
+        }
+
+        public Builder setCreationDate(long creationDate) {
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        public long getEndDate() {
+            return this.endDate;
+        }
+
+        public Builder setEndDate(long endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        public Offer build() {
+            if (creationDate < 0 || endDate < 0 || creationDate > endDate) {
+                throw new IllegalArgumentException("CreationDate, endDate must be positive and"
+                        + " creation must precede end");
+            }
+            return new Offer(
+                    checkNullity(uuid, "UUID"),
+                    checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH),
+                    checkString(description, "description", DESCRIPTION_MIN_LENGTH,
+                            DESCRIPTION_MAX_LENGTH),
+                    creationDate, endDate,
+                    checkNullity(linkPicture, "picture link"),
+                    checkStringValidity(userId, "user ID"),
+                    checkNullity(tag, "tag"),
+                    longitude, latitude
+            );
+        }
+
     }
 
 }

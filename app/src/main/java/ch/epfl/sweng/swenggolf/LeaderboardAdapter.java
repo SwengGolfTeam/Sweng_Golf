@@ -17,37 +17,13 @@ import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-
+/**
+ * Adapter for the Leaderboard RecyclerView.
+ */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.MyViewHolder> {
 
     private final FragmentConverter fragmentConverter;
     private List<User> userList;
-
-    /**
-     * Representation of one row of the recyclerView.
-     */
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView userName;
-        TextView userPoints;
-        ImageView userImage;
-        ImageView userBadge;
-        TextView userPosition;
-
-        /**
-         * Constructor.
-         *
-         * @param itemView view of one item
-         */
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            userName = itemView.findViewById(R.id.user_name);
-            userPoints = itemView.findViewById(R.id.user_points);
-            userPosition = itemView.findViewById(R.id.user_position);
-            userImage = itemView.findViewById(R.id.user_image);
-            userBadge = itemView.findViewById(R.id.user_badge);
-        }
-    }
 
     /**
      * Constructs a LeaderboardAdapter for the RecyclerView.
@@ -62,7 +38,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         this.fragmentConverter = fragmentConverter;
 
     }
-
 
     @Override
     public LeaderboardAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -119,5 +94,31 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     public void add(@NonNull List<User> users) {
         userList.addAll(users);
         notifyDataSetChanged();
+    }
+
+    /**
+     * Representation of one row of the recyclerView.
+     */
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        TextView userName;
+        TextView userPoints;
+        ImageView userImage;
+        ImageView userBadge;
+        TextView userPosition;
+
+        /**
+         * Constructor.
+         *
+         * @param itemView view of one item
+         */
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            userName = itemView.findViewById(R.id.user_name);
+            userPoints = itemView.findViewById(R.id.user_points);
+            userPosition = itemView.findViewById(R.id.user_position);
+            userImage = itemView.findViewById(R.id.user_image);
+            userBadge = itemView.findViewById(R.id.user_badge);
+        }
     }
 }

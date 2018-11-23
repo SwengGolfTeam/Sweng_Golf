@@ -31,6 +31,9 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
 
+/**
+ * Fragment which shows a profile of an User.
+ */
 public class ProfileActivity extends FragmentConverter {
     private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
     private static final int STAR_ON = android.R.drawable.btn_star_big_on;
@@ -202,6 +205,12 @@ public class ProfileActivity extends FragmentConverter {
                 user.getUserId(), listener);
     }
 
+    /**
+     * Returns <code>true</code> if the profile is followed.
+     *
+     * @return <code>true</code> if the profile is followed;
+     * <code>false</code> otherwise
+     */
     public boolean isFollowing() {
         return isFollowing;
     }

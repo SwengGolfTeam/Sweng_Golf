@@ -34,6 +34,9 @@ import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 import static ch.epfl.sweng.swenggolf.offer.Answers.NO_FAVORITE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.RESPOND_OFFER;
 
+/**
+ * Adapter of the RecyclerVew of the AnswerList.
+ */
 public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
     private static final int HEART_FULL = R.drawable.ic_favorite;
     private static final int HEART_EMPTY = R.drawable.ic_favorite_border;
@@ -133,7 +136,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Dialog alertDialog = answers.getFavoritePos() != pos
                         ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
-          }
+            }
         });
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());

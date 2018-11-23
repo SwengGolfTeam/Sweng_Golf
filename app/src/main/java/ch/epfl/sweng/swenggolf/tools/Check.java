@@ -1,5 +1,8 @@
 package ch.epfl.sweng.swenggolf.tools;
 
+/**
+ * Tool class which checks properties.
+ */
 public final class Check {
 
     private Check() {
@@ -18,7 +21,7 @@ public final class Check {
      */
     public static String checkString(String inputText, String fieldName, int minLength,
                                      int maxLength) {
-        if(inputText == null) {
+        if (inputText == null) {
             throw new IllegalArgumentException(fieldName + "cannot be null");
         }
         int length = inputText.length();

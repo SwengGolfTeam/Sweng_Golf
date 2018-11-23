@@ -15,6 +15,11 @@ public enum PointType {
 
     private final int value;
 
+    /**
+     * Constructor of a Point type.
+     *
+     * @param value the value of a point type
+     */
     PointType(int value) {
         this.value = value;
     }

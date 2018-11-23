@@ -6,6 +6,9 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+/**
+ * FakeDatabase filled for tests purposes.
+ */
 public final class FilledFakeDatabase extends FakeDatabase {
 
     public static final double FAKE_LATITUDE = 44.34;
@@ -104,11 +107,11 @@ public final class FilledFakeDatabase extends FakeDatabase {
             new Offer.Builder().setUserId("0")
                     .setTitle("Little Droid for ride")
                     .setDescription("I have a little droid with informations"
-                    + " on the rebels care to exchange it against"
-                    + " a ride from Tatooine ?")
+                            + " on the rebels care to exchange it against"
+                            + " a ride from Tatooine ?")
                     .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
-                    + "images/f/ff/Sandcrawler.png/"
-                    + "revision/latest?cb=20130812001443")
+                            + "images/f/ff/Sandcrawler.png/"
+                            + "revision/latest?cb=20130812001443")
                     .setUuid("01").setTag(Category.values()[0])
                     .setCreationDate(DATE).setEndDate(DATE).setLocation(getLocation()).build(),
 
@@ -236,7 +239,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
     private static final User[] USER_ZERO_FOLLOWS = {getUser(0), getUser(1), getUser(2)};
 
     /**
-     * Returns a prefilled FakeDatabase.
+     * Create a FakeDatabase filled with users and offers.
      */
     protected FilledFakeDatabase() {
         super(true);

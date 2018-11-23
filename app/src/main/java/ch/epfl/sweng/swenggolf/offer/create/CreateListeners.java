@@ -20,6 +20,9 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static ch.epfl.sweng.swenggolf.storage.Storage.CAPTURE_IMAGE_REQUEST;
 import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 
+/**
+ * Create Listeners to help the offer creation.
+ */
 class CreateListeners {
 
     private CreateOfferActivity create;
@@ -53,6 +56,16 @@ class CreateListeners {
         }
     };
 
+    CreateListeners(CreateOfferActivity createOfferActivity) {
+        this.create = createOfferActivity;
+    }
+
+    /**
+     * Create a completion listener based on an offer.
+     *
+     * @param offer the corresponding offer
+     * @return the correspondig CompletionListener
+     */
     CompletionListener createWriteOfferListener(final Offer offer) {
         return new CompletionListener() {
             @Override
@@ -70,10 +83,9 @@ class CreateListeners {
         };
     }
 
-    CreateListeners(CreateOfferActivity createOfferActivity) {
-        this.create = createOfferActivity;
-    }
-
+    /**
+     * Set the listeners.
+     */
     void setListeners() {
 
         create.inflated.findViewById(R.id.fetch_picture)

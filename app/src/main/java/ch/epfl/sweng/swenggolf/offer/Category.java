@@ -5,6 +5,9 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Enumeration of the different offer categories.
+ */
 public enum Category {
     OTHER, FOOD, SERVICE, DRINKS, TEST;
 

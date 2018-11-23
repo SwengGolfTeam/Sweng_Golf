@@ -27,6 +27,9 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
+/**
+ * Adapter for the Preference RecyclerView.
+ */
 public class ListPreferenceAdapter
         extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
 
@@ -110,11 +113,16 @@ public class ListPreferenceAdapter
         return mDataset.size();
     }
 
+    /**
+     * Container for displaying a cell of the view.
+     */
     public class PreferenceViewHolder extends ThreeFieldsViewHolder {
 
         /**
          * Create a container for displaying a cell of the view.
          * Container contains user picture, username and preference.
+         *
+         * @param view the view
          */
         public PreferenceViewHolder(View view) {
             super(view, R.id.preference_username,
