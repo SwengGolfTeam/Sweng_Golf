@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 
 /**
- * Fragment which displays only the user related offers.
+ * Fragment which shows user own offers.
  */
 public class ListOwnOfferActivity extends ListOfferActivity {
     @Override

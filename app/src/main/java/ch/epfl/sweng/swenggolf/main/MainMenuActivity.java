@@ -29,6 +29,8 @@ import static ch.epfl.sweng.swenggolf.tools.FragmentConverter.FRAGMENTS_TO_SKIP;
 
 /**
  * Activity which represents the actual main menu.
+ * All the Fragments of the application are displayed in
+ * the center of this activity.
  */
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -134,7 +136,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the loadListOwnOfferActivity.
+     * Launches the ListOwnOfferActivity.
      *
      * @param item the menu item that triggers the activity
      */
@@ -143,7 +145,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the loadLeaderBoardActivity.
+     * Launches the LeaderBoardActivity.
      *
      * @param item the menu item that triggers the activity
      */

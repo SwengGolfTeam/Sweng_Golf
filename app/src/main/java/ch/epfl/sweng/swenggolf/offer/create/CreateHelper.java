@@ -51,7 +51,7 @@ class CreateHelper {
     }
 
     /**
-     * Pre-fill the fields.
+     * Pre-fill the date, category, location fields of the CreateOfferActivity.
      */
     void preFillFields() {
 

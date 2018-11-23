@@ -58,7 +58,7 @@ import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
 
 /**
- * Fragment which shows the offers.
+ * Fragment which shows an offer.
  */
 public class ShowOfferActivity extends FragmentConverter {
     public static final int DISTANCE_GRANULARITY = 100;
