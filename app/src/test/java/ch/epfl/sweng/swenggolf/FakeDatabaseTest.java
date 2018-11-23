@@ -254,7 +254,6 @@ public class FakeDatabaseTest {
         return new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> value) {
-
                 fail();
             }
 

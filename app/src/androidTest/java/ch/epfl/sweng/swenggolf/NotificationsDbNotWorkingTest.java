@@ -39,7 +39,7 @@ public class NotificationsDbNotWorkingTest {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Test
-    public void showsToastIfErrorLoadingNotifications() {
+    public void irebaseshowsToastIfErrorLoadingNotifications() {
         Database.setDebugDatabase(new FakeDatabase(false));
         goToNotifications();
         TestUtility.testToastShow(activityTestRule, R.string.notif_error);

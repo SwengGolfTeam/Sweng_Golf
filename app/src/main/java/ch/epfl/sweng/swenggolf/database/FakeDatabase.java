@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,11 +122,16 @@ public class FakeDatabase extends Database {
         }
     }
 
+    private String getGetter(String attribute) {
+        return "get" + Character.toUpperCase(attribute.charAt(0))
+                + attribute.substring(1,attribute.length());
+    }
+
     @NonNull
     private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
                                  List<T> unsortedList) {
         final Method method;
-        final String getterName = "get" + ordering.getAttribute();
+        String getterName = getGetter(ordering.getAttribute());
         try {
             method = c.getDeclaredMethod(getterName);
         } catch (NoSuchMethodException e) {
@@ -141,17 +147,19 @@ public class FakeDatabase extends Database {
     }
 
     @NonNull
-    private <T> Comparator<T> getComparator(final Method field) {
+    private <T> Comparator<T> getComparator(final Method method) {
         return new Comparator<T>() {
             @Override
             public int compare(T o1, T o2) {
                 Object attribute1;
                 Object attribute2;
                 try {
-                    attribute1 = field.get(o1);
-                    attribute2 = field.get(o2);
+                    attribute1 = method.invoke(o1);
+                    attribute2 = method.invoke(o2);
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException("Can't access the attribute");
+                } catch (InvocationTargetException e) {
+                    throw new IllegalArgumentException("Cannot call method on generic parameter T");
                 }
                 if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
                     return ((Comparable) attribute1).compareTo(attribute2);
@@ -167,20 +175,20 @@ public class FakeDatabase extends Database {
         try {
 
             //Use reflection to check the attribute
-            Field field = c.getDeclaredField(attribute);
-            field.setAccessible(true);
+            Method method = c.getDeclaredMethod(getGetter(attribute));
 
             for (T object : list) {
-                if (field.get(object).equals(value)) {
+                if (method.invoke(object).equals(value)) {
                     newList.add(object);
                 }
             }
-            field.setAccessible(false);
 
-        } catch (NoSuchFieldException e) {
-            handleError(attribute);
         } catch (IllegalAccessException e) {
             handleError(attribute);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("No getter for " + attribute + " attribute");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Generic type T has no getter for this attribute");
         }
         return newList;
     }

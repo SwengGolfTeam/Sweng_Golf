@@ -49,7 +49,7 @@ public class OfferTest {
     @Test
     public void testEmptyConstructor() {
         Offer offer = new Offer();
-        assertEquals("Wrong uuid", "createdByEmptyConstructor", offer.getUuid());
+        assertEquals("Wrong uuid", "", offer.getUuid());
     }
 
     private static Offer.Builder buildPartially() {
