@@ -117,7 +117,8 @@ public class PointGainTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createOfferActivityWithOffer(offer)).commit();
         CreateOfferActivityTest.fillOffer();
-        testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(), Config.getUser());
+        testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(),
+                Config.getUser());
     }
 
     @Test
@@ -160,7 +161,8 @@ public class PointGainTest {
     @Test
     public void removeOfferDecreasesPoints() {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(createFakeOffer()))
+                .replace(R.id.centralFragment, FragmentConverter
+                        .createShowOfferWithOffer(createFakeOffer()))
                 .commit();
 
         //TODO: find why the test fail if we have this line
@@ -168,7 +170,8 @@ public class PointGainTest {
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException | PerformException e) {
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(click());
+            onData(hasToString("Delete offer")).inRoot(isPlatformPopup())
+                    .perform(click());
         }
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
         testUserPoints(-createFakeOffer().offerValue(), Config.getUser());
