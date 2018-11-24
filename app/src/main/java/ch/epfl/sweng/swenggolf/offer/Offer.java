@@ -381,17 +381,9 @@ public class Offer implements Parcelable {
             uuid = UUID.randomUUID().toString();
         }
 
-        public Category getTag() {
-            return this.tag;
-        }
-
         public Builder setTag(Category tag) {
             this.tag = tag;
             return this;
-        }
-
-        public String getUserId() {
-            return this.userId;
         }
 
         public Builder setUserId(String userId) {
@@ -399,17 +391,9 @@ public class Offer implements Parcelable {
             return this;
         }
 
-        public String getTitle() {
-            return this.title;
-        }
-
         public Builder setTitle(String title) {
             this.title = title;
             return this;
-        }
-
-        public String getDescription() {
-            return this.description;
         }
 
         public Builder setDescription(String description) {
@@ -417,17 +401,9 @@ public class Offer implements Parcelable {
             return this;
         }
 
-        public String getLinkPicture() {
-            return this.linkPicture;
-        }
-
         public Builder setLinkPicture(String linkPicture) {
             this.linkPicture = linkPicture;
             return this;
-        }
-
-        public String getUuid() {
-            return uuid;
         }
 
         public Builder setUuid(String uuid) {
@@ -435,17 +411,9 @@ public class Offer implements Parcelable {
             return this;
         }
 
-        public double getLatitude() {
-            return this.latitude;
-        }
-
         public Builder setLatitude(double latitude) {
             this.latitude = latitude;
             return this;
-        }
-
-        public double getLongitude() {
-            return this.longitude;
         }
 
         public Builder setLongitude(double longitude) {
@@ -466,17 +434,9 @@ public class Offer implements Parcelable {
             return this;
         }
 
-        public long getCreationDate() {
-            return this.creationDate;
-        }
-
         public Builder setCreationDate(long creationDate) {
             this.creationDate = creationDate;
             return this;
-        }
-
-        public long getEndDate() {
-            return this.endDate;
         }
 
         public Builder setEndDate(long endDate) {

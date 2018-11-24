@@ -14,66 +14,67 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OfferBuilderTest {
 
-    private static final Offer.Builder builder = new Offer.Builder();
+    private static final Offer.Builder builder = new Offer.Builder().setDescription("test")
+            .setTitle("test").setUserId("test").setLinkPicture("test");
 
     @Test
     public void setAndGetUUID() {
-        builder.setUuid("uuid");
-        assertThat(builder.getUuid() , is("uuid"));
+        Offer offer = builder.setUuid("uuid").build();
+        assertThat(offer.getUuid() , is("uuid"));
     }
 
     @Test
     public void setAndGetLinkPicture() {
-        builder.setLinkPicture("link");
-        assertThat(builder.getLinkPicture(), is("link"));
+        Offer offer = builder.setLinkPicture("link").build();
+        assertThat(offer.getLinkPicture(), is("link"));
     }
 
     @Test
     public void setAndGetCreationDate() {
-        builder.setCreationDate(123);
-        assertThat(builder.getCreationDate(), is((long) 123));
+        Offer offer = builder.setCreationDate(123).build();
+        assertThat(offer.getCreationDate(), is((long) 123));
     }
 
     @Test
     public void setAndGetEndDate() {
-        builder.setEndDate(123);
-        assertThat(builder.getEndDate(), is((long) 123));
+        Offer offer = builder.setEndDate(123).build();
+        assertThat(offer.getEndDate(), is((long) 123));
     }
 
     @Test
     public void setAndGetUserId() {
-        builder.setUserId("user");
-        assertThat(builder.getUserId(), is("user"));
+        Offer offer = builder.setUserId("user").build();
+        assertThat(offer.getUserId(), is("user"));
     }
 
     @Test
     public void setAndGetLongitude() {
-        builder.setLongitude(23.3);
-        assertEquals(23.3, builder.getLongitude(), 0.05);
+        Offer offer = builder.setLongitude(23.3).build();
+        assertEquals(23.3, offer.getLongitude(), 0.05);
     }
 
     @Test
     public void setAndGetLatitude() {
-        builder.setLatitude(23.3);
-        assertEquals(23.3, builder.getLatitude(), 0.05);
+        Offer offer = builder.setLatitude(23.3).build();
+        assertEquals(23.3, offer.getLatitude(), 0.05);
     }
 
     @Test
     public void setAndGetTitle() {
-        builder.setTitle("title");
-        assertThat(builder.getTitle(), is("title"));
+        Offer offer = builder.setTitle("title").build();
+        assertThat(offer.getTitle(), is("title"));
     }
 
     @Test
     public void setAndGetDescription() {
-        builder.setDescription("description");
-        assertThat(builder.getDescription(), is("description"));
+        Offer offer = builder.setDescription("description").build();
+        assertThat(offer.getDescription(), is("description"));
     }
 
     @Test
     public void setAndGetTag() {
-        builder.setTag(Category.TEST);
-        assertThat(builder.getTag(), is(Category.TEST));
+        Offer offer = builder.setTag(Category.TEST).build();
+        assertThat(offer.getTag(), is(Category.TEST));
     }
 
     @Test
@@ -81,8 +82,9 @@ public class OfferBuilderTest {
         Location loc = new Location("provider");
         loc.setLongitude(36.2);
         loc.setLatitude(23.4);
-        assertEquals(loc.getLatitude(), builder.getLatitude(), 0.05);
-        assertEquals(loc.getLongitude(), builder.getLongitude(), 0.05);
+        Offer offer = builder.build();
+        assertEquals(loc.getLatitude(), offer.getLatitude(), 0.05);
+        assertEquals(loc.getLongitude(), offer.getLongitude(), 0.05);
     }
 
     @Test
