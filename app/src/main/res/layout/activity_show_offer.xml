@@ -149,8 +149,8 @@
                     android:id="@+id/react_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_rounded"
-                    android:theme="@style/ButtonTheme"
+                    android:color="@color/colorPrimary"
+                    android:textColor="@android:color/white"
                     android:layout_marginLeft="16dp"
                     android:text="@string/add_answer"
                     android:textAllCaps="false" />

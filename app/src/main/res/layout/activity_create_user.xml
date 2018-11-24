@@ -14,30 +14,35 @@
 
         <ImageView
             android:id="@+id/photo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="151dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:contentDescription="@string/profile_image"
-            android:layout_gravity="center"/>
+            android:contentDescription="@string/profile_image" />
 
         <TextView
             android:id="@+id/presentation"
             android:layout_width="match_parent"
             android:layout_marginBottom="10dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/presentation"/>
 
         <TextView
             android:id="@+id/name_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/name" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/username_presentation" />
 
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType=""
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="20dp"
+            android:hint="@string/username"
             android:singleLine="true"/>
 
         <Button

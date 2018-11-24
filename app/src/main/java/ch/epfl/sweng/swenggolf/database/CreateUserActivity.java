@@ -25,10 +25,7 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText name;
     private ImageView photo;
     private User user;
-    private static final String PRESENTATION_TEXT = "Welcome"
-            + " to Polytroc, please put your username. You can"
-            + " change your picture, your description an many"
-            + " other things after this step.";
+
 
 
     @Override
@@ -37,8 +34,6 @@ public class CreateUserActivity extends AppCompatActivity {
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_create_user);
         name = findViewById(ch.epfl.sweng.swenggolf.R.id.name);
         name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(User.USERNAME_MAX_LENGTH)});
-        TextView presentation = findViewById(R.id.presentation);
-        presentation.setText(PRESENTATION_TEXT);
         photo = findViewById(ch.epfl.sweng.swenggolf.R.id.photo);
         user = Config.getUser();
         displayInformation(user);
