@@ -26,12 +26,21 @@ public class LocalDatabaseTest {
 
 
     @Test
-    public void writeAndReadTest() {
+    public void writeAndReadCategoriesTest() {
         LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
         List<Category> readCategories = localDb.readCategories();
         assertEquals(allCategories, readCategories);
+    }
+
+    @Test
+    public void writeAndReadLevelTest() {
+        LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
+        int level = 5;
+        localDb.writeLevel(level);
+        int readLevel = localDb.readLevel();
+        assertEquals(level, readLevel);
     }
 
     @Test
