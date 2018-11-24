@@ -2,9 +2,6 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
-import java.util.logging.Logger;
-
-import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
@@ -21,6 +18,11 @@ public class OfferTest {
     private static final String id = "id_Patrick", title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
 
+    private static Offer.Builder buildPartially() {
+        return (new Offer.Builder()).setTitle(title).setDescription(description)
+                .setUserId(id);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyUserId() {
         (new Offer.Builder()).setTitle(title).setDescription(description).build();
@@ -36,7 +38,6 @@ public class OfferTest {
         (new Offer.Builder()).setUserId(id).setTitle(title).build();
     }
 
-
     @Test
     public void testGetter() {
         Offer offer = (new Offer.Builder()).setUserId(id).setTitle(title)
@@ -50,11 +51,6 @@ public class OfferTest {
     public void testEmptyConstructor() {
         Offer offer = new Offer();
         assertEquals("Wrong uuid", "", offer.getUuid());
-    }
-
-    private static Offer.Builder buildPartially() {
-        return (new Offer.Builder()).setTitle(title).setDescription(description)
-                .setUserId(id);
     }
 
     @Test(expected = IllegalArgumentException.class)

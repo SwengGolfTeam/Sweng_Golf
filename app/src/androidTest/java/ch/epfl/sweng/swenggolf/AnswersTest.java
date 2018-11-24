@@ -57,6 +57,21 @@ public class AnswersTest {
     private User otherUser = FilledFakeDatabase.getUser(1);
 
     /**
+     * Posts an answer on the current offer.
+     *
+     * @param answer the message to be posted
+     */
+    public static void addAnswer(String answer) {
+
+        onView(withId(R.id.react_button)).perform(scrollTo(), click());
+
+        onView(withId(R.id.your_answer_description))
+                .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
+        onView(withId(R.id.post_button)).perform(scrollTo(), click());
+
+    }
+
+    /**
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
@@ -139,19 +154,5 @@ public class AnswersTest {
         onView(withId(R.id.your_answer_description)).check(matches(
                 hasErrorText(activity
                         .getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH))));
-    }
-
-    /**
-     * Posts an answer on the current offer.
-     * @param answer the message to be posted
-     */
-    public static void addAnswer(String answer) {
-
-        onView(withId(R.id.react_button)).perform(scrollTo(), click());
-
-        onView(withId(R.id.your_answer_description))
-                .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
-        onView(withId(R.id.post_button)).perform(scrollTo(), click());
-
     }
 }

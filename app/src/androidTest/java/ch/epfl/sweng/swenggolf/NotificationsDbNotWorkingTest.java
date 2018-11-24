@@ -22,6 +22,9 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class NotificationsDbNotWorkingTest {
+    @Rule
+    public IntentsTestRule<MainMenuActivity> activityTestRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
     private User user = FilledFakeDatabase.getUser(0);
 
     /**
@@ -33,10 +36,6 @@ public class NotificationsDbNotWorkingTest {
         // wait for last toast to disappear
         waitFor(1000);
     }
-
-    @Rule
-    public IntentsTestRule<MainMenuActivity> activityTestRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     @Test
     public void firebaseshowsToastIfErrorLoadingNotifications() {

@@ -344,6 +344,7 @@ public class Offer implements Parcelable {
 
         /**
          * Creates a new Builder with his fields initialized to the ones of another offer.
+         *
          * @param offer the source offer to serve as base values for the new builder.
          */
         public Builder(Offer offer) {
@@ -485,8 +486,9 @@ public class Offer implements Parcelable {
 
         /**
          * Creates a new Offer which fields value are equal to the ones of the builder.
-         * @throws IllegalArgumentException if the fields are null or don't comply to the format.
+         *
          * @return a new Offer object.
+         * @throws IllegalArgumentException if the fields are null or don't comply to the format.
          */
         public Offer build() {
             if (creationDate < 0 || endDate < 0 || creationDate > endDate) {

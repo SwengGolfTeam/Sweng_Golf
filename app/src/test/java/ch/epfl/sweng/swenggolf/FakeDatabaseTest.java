@@ -35,7 +35,7 @@ public class FakeDatabaseTest {
     private final Offer offer1 = (new Offer.Builder()).setUserId("uid1").setTitle("title")
             .setDescription("description").build();
     private final Offer offer2 = (new Offer.Builder(offer1)).setUserId("uid2").build();
-    private final List<Offer> LIST = Arrays.asList(offer1,offer2);
+    private final List<Offer> LIST = Arrays.asList(offer1, offer2);
 
     @Test
     public void writeAndReadReturnGoodValues() {
@@ -235,8 +235,8 @@ public class FakeDatabaseTest {
 
     @Test
     public void readListenerListOrderingHasError() {
-        Database d  = new FakeDatabase(false);
-        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("y",42);
+        Database d = new FakeDatabase(false);
+        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("y", 42);
         d.readList(PATH, getListValueListener(), Offer.class, ordering);
     }
 

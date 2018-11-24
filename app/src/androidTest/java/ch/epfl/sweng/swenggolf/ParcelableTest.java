@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import org.junit.Test;
 
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
-import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.profile.User;

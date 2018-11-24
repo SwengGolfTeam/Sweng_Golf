@@ -15,12 +15,12 @@ public class AttributeOrderingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionOnNullAttribute() {
-        AttributeOrdering.ascendingOrdering(null,10);
+        AttributeOrdering.ascendingOrdering(null, 10);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionOnEmptyAttribute() {
-        AttributeOrdering.ascendingOrdering("",10);
+        AttributeOrdering.ascendingOrdering("", 10);
     }
 
     @Test(expected = IllegalArgumentException.class)

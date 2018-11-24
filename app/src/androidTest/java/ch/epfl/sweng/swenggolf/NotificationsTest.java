@@ -42,13 +42,12 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class NotificationsTest {
 
-    private User user1 = FilledFakeDatabase.getUser(2);
-    private User user2 = FilledFakeDatabase.getUser(3);
-    private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
-
     @Rule
     public IntentsTestRule<MainMenuActivity> activityTestRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    private User user1 = FilledFakeDatabase.getUser(2);
+    private User user2 = FilledFakeDatabase.getUser(3);
+    private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
 
     /**
      * Set up a fake database, a fake user, and launches activity.
@@ -115,19 +114,19 @@ public class NotificationsTest {
         onView(withId(R.id.clear)).perform(click());
         Database.getInstance().readList(NotificationManager.getNotificationPath(user2.getUserId()),
                 new ValueListener<List<Notification>>() {
-            @Override
-            public void onDataChange(List<Notification> value) {
-                assertTrue(value.isEmpty());
-            }
+                    @Override
+                    public void onDataChange(List<Notification> value) {
+                        assertTrue(value.isEmpty());
+                    }
 
-            @Override
-            public void onCancelled(DbError error) {
-                // db should work
-            }
-        }, Notification.class);
+                    @Override
+                    public void onCancelled(DbError error) {
+                        // db should work
+                    }
+                }, Notification.class);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void cannotCreateAdapterWithNullList() {
         new NotificationsAdapter(null, null);
     }

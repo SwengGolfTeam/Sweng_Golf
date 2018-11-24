@@ -1,10 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -250,7 +248,7 @@ public class FireDatabaseTest {
         ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-               assertEquals(0, offers.size());
+                assertEquals(0, offers.size());
             }
 
             @Override
@@ -271,7 +269,7 @@ public class FireDatabaseTest {
         when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
         when(tagQuery.limitToLast(anyInt())).thenReturn(idQuery);
         when(tagQuery.limitToFirst(anyInt())).thenReturn(idQuery);
-        
+
         Answer<Void> queryListener = setUpListDataSnapshot();
         doAnswer(queryListener).when(idQuery)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));

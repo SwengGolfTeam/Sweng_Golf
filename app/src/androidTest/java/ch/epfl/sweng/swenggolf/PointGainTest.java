@@ -21,17 +21,15 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -61,6 +59,12 @@ public class PointGainTest {
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+    private static Offer createFakeOffer() {
+        return (new Offer.Builder()).setUserId(Config.getUser().getUserId()).setTitle("test")
+                .setDescription("title").setUuid("23").setTag(Category.values()[3])
+                .setLatitude(23.4).setLongitude(23.4).build();
+    }
 
     /**
      * Sets up the database and the location.
@@ -101,12 +105,6 @@ public class PointGainTest {
                 + ADD_PICTURE.getValue()
                 + ADD_LOCALISATION.getValue();
         testUserPoints(scoredPoints, Config.getUser());
-    }
-
-    private static Offer createFakeOffer() {
-        return (new Offer.Builder()).setUserId(Config.getUser().getUserId()).setTitle("test")
-                .setDescription("title").setUuid("23").setTag(Category.values()[3])
-                .setLatitude(23.4).setLongitude(23.4).build();
     }
 
     @Test
@@ -166,7 +164,7 @@ public class PointGainTest {
                 .commit();
 
         //TODO: find why the test fail if we have this line
-       // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException | PerformException e) {

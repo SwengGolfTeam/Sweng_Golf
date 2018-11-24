@@ -31,10 +31,9 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -102,6 +101,13 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
     }
 
+    private static void fillNameAndDescription() {
+        onView(withId(R.id.offer_name)).perform(typeText("title test"))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.offer_description)).perform(typeText("description test"))
+                .perform(closeSoftKeyboard());
+    }
+
     /**
      * Sets up a fake database and a fake storage, enables TestMode and launches activity.
      */
@@ -121,7 +127,7 @@ public class CreateOfferActivityTest {
         if (hasOffer) {
             Bundle bundle = new Bundle();
             Offer offer = (new Offer.Builder()).setUserId(Config.getUser().getUserId())
-                .setTitle("20").setDescription("20").setLinkPicture("20").setUuid("20")
+                    .setTitle("20").setDescription("20").setLinkPicture("20").setUuid("20")
                     .setTag(Category.FOOD).setCreationDate(beginingTime)
                     .setEndDate(beginingTime + timeDiff).build();
 
@@ -147,13 +153,6 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.error_message))
 
                 .check(matches(withText(R.string.error_create_offer_invalid)));
-    }
-
-    private static void fillNameAndDescription() {
-        onView(withId(R.id.offer_name)).perform(typeText("title test"))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform(typeText("description test"))
-                .perform(closeSoftKeyboard());
     }
 
     private void assertDisplayedFragment(Class expectedClass) {
@@ -221,7 +220,6 @@ public class CreateOfferActivityTest {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         assertDisplayedFragment(expectedDisplayedClass);
     }
-
 
 
     @Test

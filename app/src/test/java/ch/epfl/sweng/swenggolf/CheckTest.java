@@ -13,6 +13,6 @@ public class CheckTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void checkStringExceptionOnNullInput() {
-        checkString(null, "null", 1,23);
+        checkString(null, "null", 1, 23);
     }
 }

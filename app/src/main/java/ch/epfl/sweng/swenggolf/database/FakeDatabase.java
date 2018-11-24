@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -28,7 +27,6 @@ public class FakeDatabase extends Database {
 
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
-     *
      *
      * @param working the working state of the Database, the DataBase will send
      *                error when working is set at false and will work as
@@ -51,6 +49,41 @@ public class FakeDatabase extends Database {
      */
     public static Database fakeDatabaseCreator() {
         return new FilledFakeDatabase();
+    }
+
+    private static String getGetter(String attribute) {
+        return "get" + Character.toUpperCase(attribute.charAt(0))
+                + attribute.substring(1, attribute.length());
+    }
+
+    @NonNull
+    private static <T> Comparator<T> getComparator(final Method method) {
+        return new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                Object attribute1 = invokeGetter(method, o1);
+                Object attribute2 = invokeGetter(method, o2);
+
+                return compareAttributes(attribute1, attribute2);
+            }
+        };
+    }
+
+    private static <T> Object invokeGetter(Method method, T invokedOn) {
+        try {
+            return method.invoke(invokedOn);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Can't access the attribute");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Cannot call method on generic parameter T");
+        }
+    }
+
+    private static <T> int compareAttributes(T attribute1, T attribute2) {
+        if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
+            return ((Comparable) attribute1).compareTo(attribute2);
+        }
+        throw new IllegalArgumentException("The attribute is not comparable");
     }
 
     @Override
@@ -128,11 +161,6 @@ public class FakeDatabase extends Database {
         }
     }
 
-    private static String getGetter(String attribute) {
-        return "get" + Character.toUpperCase(attribute.charAt(0))
-                + attribute.substring(1,attribute.length());
-    }
-
     @NonNull
     private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
                                  List<T> unsortedList) {
@@ -150,36 +178,6 @@ public class FakeDatabase extends Database {
         }
         int minSize = Math.min(ordering.getNumberOfElements(), unsortedList.size());
         return unsortedList.subList(0, minSize);
-    }
-
-    @NonNull
-    private static <T> Comparator<T> getComparator(final Method method) {
-        return new Comparator<T>() {
-            @Override
-            public int compare(T o1, T o2) {
-                Object attribute1 = invokeGetter(method, o1);
-                Object attribute2 = invokeGetter(method, o2);
-
-                return compareAttributes(attribute1, attribute2);
-            }
-        };
-    }
-
-    private static <T> Object invokeGetter(Method method, T invokedOn) {
-        try {
-            return  method.invoke(invokedOn);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Can't access the attribute");
-        } catch (InvocationTargetException e) {
-            throw new IllegalArgumentException("Cannot call method on generic parameter T");
-        }
-    }
-
-    private static <T>  int compareAttributes(T attribute1, T attribute2) {
-        if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
-            return ((Comparable) attribute1).compareTo(attribute2);
-        }
-        throw new IllegalArgumentException("The attribute is not comparable");
     }
 
     private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
@@ -261,8 +259,8 @@ public class FakeDatabase extends Database {
      * Set working state of the Database.
      *
      * @param w the working state of the Database, the DataBase will send
-     *                error when working is set at false and will work as
-     *                expected otherwise.
+     *          error when working is set at false and will work as
+     *          expected otherwise.
      */
     public void setWorking(boolean w) {
         working = w;
