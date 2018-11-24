@@ -359,6 +359,14 @@ public class Offer implements Parcelable {
             this.uuid = offer.uuid;
         }
 
+        /**
+         * Creates a default builder.
+         * The strings are set to empty.
+         * The dates are set to the current date.
+         * The location values are set to 0.
+         * The tag is set to default.
+         * The uuid is set to a new uuid.
+         */
         public Builder() {
             creationDate = Calendar.getInstance().getTimeInMillis();
             endDate = Calendar.getInstance().getTimeInMillis();
@@ -475,6 +483,11 @@ public class Offer implements Parcelable {
             return this;
         }
 
+        /**
+         * Creates a new Offer which fields value are equal to the ones of the builder.
+         * @throws IllegalArgumentException if the fields are null or don't comply to the format.
+         * @return a new Offer object.
+         */
         public Offer build() {
             if (creationDate < 0 || endDate < 0 || creationDate > endDate) {
                 throw new IllegalArgumentException("CreationDate, endDate must be positive and"

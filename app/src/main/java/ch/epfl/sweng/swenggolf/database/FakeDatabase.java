@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -129,7 +128,7 @@ public class FakeDatabase extends Database {
         }
     }
 
-    private String getGetter(String attribute) {
+    private static String getGetter(String attribute) {
         return "get" + Character.toUpperCase(attribute.charAt(0))
                 + attribute.substring(1,attribute.length());
     }
@@ -154,19 +153,19 @@ public class FakeDatabase extends Database {
     }
 
     @NonNull
-    private <T> Comparator<T> getComparator(final Method method) {
+    private static <T> Comparator<T> getComparator(final Method method) {
         return new Comparator<T>() {
             @Override
             public int compare(T o1, T o2) {
                 Object attribute1 = invokeGetter(method, o1);
                 Object attribute2 = invokeGetter(method, o2);
 
-                return compareGotAttributes(attribute1, attribute2);
+                return compareAttributes(attribute1, attribute2);
             }
         };
     }
 
-    private <T> Object invokeGetter(Method method, T invokedOn) {
+    private static <T> Object invokeGetter(Method method, T invokedOn) {
         try {
             return  method.invoke(invokedOn);
         } catch (IllegalAccessException e) {
@@ -176,7 +175,7 @@ public class FakeDatabase extends Database {
         }
     }
 
-    private <T>  int compareGotAttributes(T attribute1, T attribute2) {
+    private static <T>  int compareAttributes(T attribute1, T attribute2) {
         if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
             return ((Comparable) attribute1).compareTo(attribute2);
         }
