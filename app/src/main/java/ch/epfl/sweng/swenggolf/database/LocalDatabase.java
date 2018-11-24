@@ -97,7 +97,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
     public List<Category> readCategories() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "Select * FROM " + TABLE_NAME_FILTERS + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
+        String query = "Select * FROM " + TABLE_NAME_FILTERS + " ORDER BY "
+                + COLUMN_ID + " DESC LIMIT 1";
         Cursor cursor = db.rawQuery(query, null);
 
         String categories = "";
@@ -112,14 +113,15 @@ public class LocalDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Reads the saved reputation level and returns it
+     * Reads the saved reputation level and returns it.
      *
      * @return the level saved in the database
      */
     public int readLevel() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "Select * FROM " + TABLE_NAME_LEVEL + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
+        String query = "Select * FROM " + TABLE_NAME_LEVEL + " ORDER BY "
+                + COLUMN_ID + " DESC LIMIT 1";
         Cursor cursor = db.rawQuery(query, null);
 
         int level = 0;
