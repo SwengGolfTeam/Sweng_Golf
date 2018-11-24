@@ -84,4 +84,35 @@ public class OfferBuilderTest {
         assertEquals(loc.getLatitude(), builder.getLatitude(), 0.05);
         assertEquals(loc.getLongitude(), builder.getLongitude(), 0.05);
     }
+
+    @Test
+    public void buildCorrectOffer() {
+        Offer builded = new Offer.Builder().setLatitude(23.3).setLongitude(23.4).setTitle("title")
+                .setCreationDate(23).setEndDate(26).setUuid("uuid").setUserId("userid")
+                .setDescription("description").setTag(Category.TEST).setLinkPicture("link").build();
+        assertThat(builded.getLatitude(), is(23.3));
+        assertThat(builded.getLongitude(), is(23.4));
+        assertThat(builded.getTitle(), is("title"));
+        assertThat(builded.getCreationDate(), is((long) 23));
+        assertThat(builded.getEndDate(), is((long) 26));
+        assertThat(builded.getUuid(), is("uuid"));
+        assertThat(builded.getUserId(), is("userid"));
+        assertThat(builded.getTag(), is(Category.TEST));
+        assertThat(builded.getLinkPicture(), is("link"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildFailsOnNullString() {
+        new Offer.Builder().setLinkPicture(null).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildFailsOnEmptyString() {
+        new Offer.Builder().build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildFailsOnDateFormatError() {
+        new Offer.Builder().setCreationDate(23).setEndDate(22).build();
+    }
 }
