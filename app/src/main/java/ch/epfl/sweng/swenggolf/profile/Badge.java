@@ -103,7 +103,7 @@ public final class Badge {
      * @param points the amount of points of the user
      * @return the level of the corresponding Badge
      */
-    private static int computeLevel(int points){
+    public static int computeLevel(int points) {
         int level = (points+1)/7;
         return (level > MAX_LEVEL)? MAX_LEVEL : level;
     }

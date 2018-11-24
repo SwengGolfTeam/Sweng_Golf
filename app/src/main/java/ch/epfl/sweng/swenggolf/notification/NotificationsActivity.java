@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.notification;
 
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,8 +21,10 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -64,6 +67,8 @@ public class NotificationsActivity extends FragmentConverter {
         mAdapter = new NotificationsAdapter(notifications, getClickListener());
         mRecyclerView.setAdapter(mAdapter);
 
+        checkUserPoints();
+
         fetchNotifications(inflated);
 
         // Add dividing line
@@ -99,6 +104,23 @@ public class NotificationsActivity extends FragmentConverter {
                 .readList(NotificationManager.getNotificationPath(
                         currentUser.getUserId()), listener, Notification.class);
 
+    }
+
+    private void checkUserPoints() {
+        LocalDatabase localDb = new LocalDatabase(getContext(), null, 1);
+        int currentLevel = Badge.computeLevel(Config.getUser().getPoints());
+        int previousLevel = currentLevel;
+        try {
+            previousLevel = localDb.readLevel();
+        } catch (SQLiteException e) {
+            localDb.writeLevel(currentLevel);
+            Log.wtf("POINTS", "Caught SQLite error!");
+        }
+        if (currentLevel > previousLevel) {
+            Notification n = new Notification(NotificationType.LEVEL_GAINED, null, null);
+            NotificationManager.addPendingNotification(Config.getUser().getUserId(), n);
+            localDb.writeLevel(currentLevel);
+        }
     }
 
     private ItemClickListener getClickListener() {
