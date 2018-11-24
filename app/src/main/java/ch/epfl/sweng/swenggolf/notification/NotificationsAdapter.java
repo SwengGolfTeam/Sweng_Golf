@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -86,6 +87,7 @@ public class NotificationsAdapter
      */
     public void setNotifications(List<Notification> notifications) {
         this.notifications = new ArrayList<>(notifications);
+        Collections.reverse(this.notifications); // so that they appear the most recent on top
         notifyDataSetChanged();
     }
 
