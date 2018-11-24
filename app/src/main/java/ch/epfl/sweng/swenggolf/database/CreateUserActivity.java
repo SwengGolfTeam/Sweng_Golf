@@ -25,10 +25,10 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText name;
     private ImageView photo;
     private User user;
-    private static final String PRESENTATION_TEXT = "Welcome" +
-            "to Polytroc, please put your username. You can" +
-            " change your picture, your description an many " +
-            "other things after this step.";
+    private static final String PRESENTATION_TEXT = "Welcome"
+            + " to Polytroc, please put your username. You can"
+            + " change your picture, your description an many"
+            + " other things after this step.";
 
 
     @Override
@@ -62,10 +62,6 @@ public class CreateUserActivity extends AppCompatActivity {
         if (!Config.isTest()) {
             Picasso.with(this).load(user.getPhoto()).into(photo);
         }
-    }
-
-    private boolean isEmailValid(CharSequence email) {
-        return EMAIL_ADDRESS.matcher(email).matches();
     }
 
 
