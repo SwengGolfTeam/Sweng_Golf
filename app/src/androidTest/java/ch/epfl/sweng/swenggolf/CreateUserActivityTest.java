@@ -58,15 +58,12 @@ public class CreateUserActivityTest {
 
     @Test
     public void canDisplay() {
-        onView(withId(R.id.mail)).check(matches(withText(MAIL)));
-        onView(withId(R.id.mail)).perform(typeText("api"));
         onView(withId(R.id.name)).check(matches(withText(NAME)));
         onView(withId(R.id.name)).perform(typeText(" World"), closeSoftKeyboard());
         onView(withId(R.id.create_account)).perform(scrollTo(), click());
         DatabaseUser.getUser(new ValueListener() {
             @Override
             public void onDataChange(Object value) {
-                assertEquals("mail test", ((User) (value)).getEmail(), MAIL_CHANGED);
                 assertEquals("NAME test", ((User) (value)).getUserName(), NAME_CHANGED);
             }
 
@@ -75,18 +72,6 @@ public class CreateUserActivityTest {
 
             }
         }, Config.getUser());
-    }
-
-    @Test
-    public void errorCorrectlyDisplayed() {
-        onView(withId(R.id.mail)).perform(replaceText(""));
-        checkError();
-    }
-
-    @Test
-    public void errorDisplayedWheninvalidEmailGiven() {
-        onView(withId(R.id.mail)).perform(replaceText("whatever"), closeSoftKeyboard());
-        checkError();
     }
 
     private void checkError() {
