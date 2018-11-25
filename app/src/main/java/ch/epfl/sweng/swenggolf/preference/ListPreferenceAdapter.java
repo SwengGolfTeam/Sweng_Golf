@@ -121,6 +121,7 @@ public class ListPreferenceAdapter
         /**
          * Create a container for displaying a cell of the view.
          * Container contains user picture, username and preference.
+         *
          * @param view the view
          */
         public PreferenceViewHolder(View view) {

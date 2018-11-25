@@ -58,12 +58,7 @@ public class CreateOfferActivity extends FragmentConverter
 
     static final boolean ON = true;
     static final boolean OFF = false;
-    private TextView dateText;
-    private Uri photoDestination = null;
-    private int fragmentsToSkip;
-
     CreateHelper createHelper;
-
     View inflated;
     Offer offerToModify;
     long creationDate;
@@ -75,9 +70,13 @@ public class CreateOfferActivity extends FragmentConverter
     Spinner categorySpinner;
     Uri tempPicturePath = null;
     TextView errorMessage;
+    private TextView dateText;
+    private Uri photoDestination = null;
+    private int fragmentsToSkip;
 
     /**
      * Replace the central fragment by an Offer.
+     *
      * @param offer the offer which will replace the central fragment
      */
     void replaceCentralFragmentWithOffer(Offer offer) {
@@ -110,8 +109,6 @@ public class CreateOfferActivity extends FragmentConverter
         offerToModify = null;
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable(Offer.OFFER);
-        } else {
-            offerToModify = null;
         }
 
         createHelper.preFillFields();

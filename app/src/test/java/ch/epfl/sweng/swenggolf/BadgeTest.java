@@ -11,15 +11,16 @@ public class BadgeTest {
     /**
      * Helper function to get the amount of points corresponding to a level.
      * Must be the inverse function of computeLevel() in the Badge.java file
+     *
      * @param level the level for which we want to get the points
      * @return the amount of points corresponding to the level
      */
-    private int levelToPoints(int level){
-        return level*7-1;
+    private int levelToPoints(int level) {
+        return level * 7 - 1;
     }
 
     @Test
-    public void correctBadgeForPointsTest(){
+    public void correctBadgeForPointsTest() {
         assertEquals(R.drawable.badge00, Badge.getDrawable(0));
         assertEquals(R.drawable.badge01, Badge.getDrawable(levelToPoints(1)));
         assertEquals(R.drawable.badge02, Badge.getDrawable(levelToPoints(2)));
@@ -39,7 +40,7 @@ public class BadgeTest {
     }
 
     @Test
-    public void correctColorForPointsTest(){
+    public void correctColorForPointsTest() {
         assertEquals(Badge.BRONZE, Badge.getColor(levelToPoints(3)));
         assertEquals(Badge.SILVER, Badge.getColor(levelToPoints(8)));
         assertEquals(Badge.GOLD, Badge.getColor(levelToPoints(13)));

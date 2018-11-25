@@ -22,6 +22,9 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class NotificationsDbNotWorkingTest {
+    @Rule
+    public IntentsTestRule<MainMenuActivity> activityTestRule =
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
     private User user = FilledFakeDatabase.getUser(0);
 
     /**
@@ -34,12 +37,8 @@ public class NotificationsDbNotWorkingTest {
         waitFor(1000);
     }
 
-    @Rule
-    public IntentsTestRule<MainMenuActivity> activityTestRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, false);
-
     @Test
-    public void showsToastIfErrorLoadingNotifications() {
+    public void firebaseshowsToastIfErrorLoadingNotifications() {
         Database.setDebugDatabase(new FakeDatabase(false));
         goToNotifications();
         TestUtility.testToastShow(activityTestRule, R.string.notif_error);

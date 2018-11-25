@@ -144,6 +144,7 @@ public class EditProfileActivity extends FragmentConverter {
 
     /**
      * Change the profile picture.
+     *
      * @param view the view
      */
     public void changeProfilePicture(View view) {

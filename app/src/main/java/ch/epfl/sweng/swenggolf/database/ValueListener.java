@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 /**
  * Listener of generic type.
  * Used to read any kind of Data in the Database.
+ *
  * @param <T> the type of the value
  */
 public interface ValueListener<T> {

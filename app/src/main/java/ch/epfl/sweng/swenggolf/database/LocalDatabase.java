@@ -24,9 +24,10 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     /**
      * Create a new Local Database.
-     * @param context the context of the application
-     * @param factory used to allow returning sub-classes of Cursor when calling query
-     * @param dbVersion the Database version
+     *
+     * @param context      the context of the application
+     * @param factory      used to allow returning sub-classes of Cursor when calling query
+     * @param dbVersion    the Database version
      * @param databaseName the Database name
      */
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory,
@@ -36,8 +37,9 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     /**
      * Create a new Local Database with a default name.
-     * @param context the context of the application
-     * @param factory used to allow returning sub-classes of Cursor when calling query
+     *
+     * @param context   the context of the application
+     * @param factory   used to allow returning sub-classes of Cursor when calling query
      * @param dbVersion the Database version
      */
     public LocalDatabase(Context context, SQLiteDatabase.CursorFactory factory, int dbVersion) {

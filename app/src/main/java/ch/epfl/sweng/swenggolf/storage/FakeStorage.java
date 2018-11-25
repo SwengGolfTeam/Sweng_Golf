@@ -24,6 +24,7 @@ public final class FakeStorage extends Storage {
 
     /**
      * Construct a mock Storage.
+     *
      * @param working the working state, the Storage will send
      *                error when working is set at false and will work as
      *                expected otherwise.
@@ -56,7 +57,8 @@ public final class FakeStorage extends Storage {
 
         /**
          * Create a fake Task.
-         * @param uri the uri
+         *
+         * @param uri     the uri
          * @param working the working state, the Storage will send
          *                error when working is set at false and will work as
          *                expected otherwise.

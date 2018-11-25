@@ -34,23 +34,6 @@ public abstract class FragmentConverter extends Fragment {
     public static final String FRAGMENTS_TO_SKIP = "fragmentsToSkip";
     public static final String FUTURE_FRAGMENTS_TO_SKIP = "futureFragmentsToSkip";
 
-    protected void replaceFragment(Fragment fragment, int viewId) {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_empty, menu);
-    }
-
-    public void replaceCentralFragment(Fragment fragment) {
-        replaceFragment(fragment, R.id.centralFragment);
-    }
-
-
     /**
      * Creates a ProfileActivity wit arguments already set.
      *
@@ -155,6 +138,22 @@ public abstract class FragmentConverter extends Fragment {
         bundle.putParcelable(key, p);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    protected void replaceFragment(Fragment fragment, int viewId) {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_empty, menu);
+    }
+
+    public void replaceCentralFragment(Fragment fragment) {
+        replaceFragment(fragment, R.id.centralFragment);
     }
 
     protected <T extends View> T findViewById(int id) {

@@ -123,6 +123,7 @@ public abstract class Storage {
 
     /**
      * Removes an image of the storage.
+     *
      * @param linkPicture the link of the Picture
      */
     public abstract void remove(@NonNull String linkPicture);

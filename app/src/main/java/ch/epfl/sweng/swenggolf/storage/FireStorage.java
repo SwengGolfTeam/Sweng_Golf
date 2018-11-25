@@ -26,6 +26,7 @@ public final class FireStorage extends Storage {
 
     /**
      * Construct a new Firebase Storage with existing Storage.
+     *
      * @param storage the storage
      */
     public FireStorage(FirebaseStorage storage) {

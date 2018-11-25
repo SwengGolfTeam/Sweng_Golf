@@ -9,7 +9,8 @@ public interface ItemClickListener {
 
     /**
      * Make an action when a click is performed.
-     * @param view the view of the item
+     *
+     * @param view     the view of the item
      * @param position the position of the item
      */
     void onClick(View view, int position);

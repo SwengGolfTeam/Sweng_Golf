@@ -13,6 +13,7 @@ public final class NotificationManager {
 
     /**
      * Add pending Notification.
+     *
      * @param destinatorId the id of the destinator
      * @param notification the corresponding notification
      */
@@ -23,9 +24,10 @@ public final class NotificationManager {
 
     /**
      * Remove the pending Notification.
-     * @param destinatorId the id of the destinator
+     *
+     * @param destinatorId   the id of the destinator
      * @param notificationId the id of the notification
-     * @param listener the listener
+     * @param listener       the listener
      */
     public static void removePendingNotification(
             String destinatorId, String notificationId, CompletionListener listener) {
@@ -35,6 +37,7 @@ public final class NotificationManager {
 
     /**
      * Get the path of the Notification.
+     *
      * @param userId the user id
      * @return the corresponding path
      */

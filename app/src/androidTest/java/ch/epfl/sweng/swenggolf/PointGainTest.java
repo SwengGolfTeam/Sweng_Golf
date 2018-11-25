@@ -21,17 +21,15 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -61,6 +59,12 @@ public class PointGainTest {
     @Rule
     public GrantPermissionRule permissionFineGpsRule =
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+    private static Offer createFakeOffer() {
+        return (new Offer.Builder()).setUserId(Config.getUser().getUserId()).setTitle("test")
+                .setDescription("title").setUuid("23").setTag(Category.values()[3])
+                .setLatitude(23.4).setLongitude(23.4).build();
+    }
 
     /**
      * Sets up the database and the location.
@@ -105,14 +109,14 @@ public class PointGainTest {
 
     @Test
     public void modifyingOfferChangesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
+        Offer offer = (new Offer.Builder(createFakeOffer())).setLatitude(0).setLongitude(0)
+                .setLinkPicture("").build();
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
                         FragmentConverter.createOfferActivityWithOffer(offer)).commit();
         CreateOfferActivityTest.fillOffer();
-        testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(), Config.getUser());
+        testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(),
+                Config.getUser());
     }
 
     @Test
@@ -129,12 +133,9 @@ public class PointGainTest {
 
     @Test
     public void acceptingOfferIncreasesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
-                        FragmentConverter.createShowOfferWithOffer(offer)).commit();
+                        FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
         addAnswer();
         performFavoriteAction();
         testUserPoints(RESPOND_OFFER.getValue(), Config.getUser());
@@ -157,21 +158,20 @@ public class PointGainTest {
 
     @Test
     public void removeOfferDecreasesPoints() {
-        Offer offer = new Offer(Config.getUser().getUserId(), "test",
-                "test", "", "23",
-                Category.values()[3], 123123123, 123123123);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                .replace(R.id.centralFragment, FragmentConverter
+                        .createShowOfferWithOffer(createFakeOffer()))
                 .commit();
 
         //TODO: find why the test fail if we have this line
-       // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException | PerformException e) {
-            onData(hasToString("Delete offer")).inRoot(isPlatformPopup()).perform(click());
+            onData(hasToString("Delete offer")).inRoot(isPlatformPopup())
+                    .perform(click());
         }
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
-        testUserPoints(-offer.offerValue(), Config.getUser());
+        testUserPoints(-createFakeOffer().offerValue(), Config.getUser());
     }
 }
