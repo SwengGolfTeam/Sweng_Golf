@@ -72,10 +72,6 @@ public class NotificationsActivity extends FragmentConverter {
 
         fetchNotifications(inflated);
 
-        // Add dividing line
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-
         if (mAdapter.getItemCount() == 0) {
             inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);
         }
@@ -112,12 +108,6 @@ public class NotificationsActivity extends FragmentConverter {
         LocalDatabase localDb = new LocalDatabase(getContext(), null, 1);
         int currentLevel = Badge.computeLevel(Config.getUser().getPoints());
         int previousLevel = localDb.readLevel();
-        /*try {
-            previousLevel = localDb.readLevel();
-        } catch (SQLiteException e) {
-            localDb.writeLevel(currentLevel);
-            Log.wtf("POINTS", "Caught SQLite error!");
-        }*/
         if (currentLevel > previousLevel) {
             Notification n = new Notification(NotificationType.LEVEL_GAINED, null, null);
             NotificationManager.addPendingNotification(Config.getUser().getUserId(), n);
