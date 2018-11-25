@@ -149,10 +149,14 @@
                     android:id="@+id/react_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:color="@color/colorPrimary"
-                    android:background="@color/colorPrimary"
-                    android:textColor="@android:color/white"
-                    android:layout_marginLeft="16dp"
+                    android:theme="@style/ButtonTheme"
+                    android:textColor="@android:color/black"
+                    android:background="@drawable/btn_slightly_rounded"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:drawableLeft="@drawable/ic_comment_black_24dp"
+                    android:drawablePadding="8dp"
                     android:text="@string/add_answer"
                     android:textAllCaps="false" />
 

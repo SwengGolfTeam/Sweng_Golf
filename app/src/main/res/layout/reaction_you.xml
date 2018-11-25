@@ -39,9 +39,10 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:color="@color/colorPrimary"
-        android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
+        android:background="@drawable/btn_rounded"
+        android:theme="@style/ButtonTheme"
         android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/your_answer_description"
         android:text="@string/post" />
 
