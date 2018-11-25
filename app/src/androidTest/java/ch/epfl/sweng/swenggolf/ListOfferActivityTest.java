@@ -66,8 +66,10 @@ public class ListOfferActivityTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = new Offer("user_id", "This is a title", LOREM, "", "idoftheoffer1");
-        Offer offer2 = new Offer("user_id", "This is a title 2", LOREM, "", "idoftheoffer2");
+        Offer offer1 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title")
+                .setDescription(LOREM).setUuid("idoftheoffer1").build();
+        Offer offer2 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title 2")
+                .setDescription(LOREM).setUuid("idoftheoffer2").build();
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);

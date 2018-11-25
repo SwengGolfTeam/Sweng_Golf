@@ -31,10 +31,9 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -102,6 +101,13 @@ public class CreateOfferActivityTest {
         onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
     }
 
+    private static void fillNameAndDescription() {
+        onView(withId(R.id.offer_name)).perform(typeText("title test"))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.offer_description)).perform(typeText("description test"))
+                .perform(closeSoftKeyboard());
+    }
+
     /**
      * Sets up a fake database and a fake storage, enables TestMode and launches activity.
      */
@@ -120,10 +126,10 @@ public class CreateOfferActivityTest {
         CreateOfferActivity fragment = new CreateOfferActivity();
         if (hasOffer) {
             Bundle bundle = new Bundle();
-
-            Offer offer = new Offer(Config.getUser().getUserId(), "20",
-                    "20", "20", "20", Category.FOOD, beginingTime,
-                    beginingTime + timeDiff);
+            Offer offer = (new Offer.Builder()).setUserId(Config.getUser().getUserId())
+                    .setTitle("20").setDescription("20").setLinkPicture("20").setUuid("20")
+                    .setTag(Category.FOOD).setCreationDate(beginingTime)
+                    .setEndDate(beginingTime + timeDiff).build();
 
             bundle.putParcelable(Offer.OFFER, offer);
             fragment.setArguments(bundle);
@@ -149,13 +155,6 @@ public class CreateOfferActivityTest {
                 .check(matches(withText(R.string.error_create_offer_invalid)));
     }
 
-    private static void fillNameAndDescription() {
-        onView(withId(R.id.offer_name)).perform(typeText("title test"))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform(typeText("description test"))
-                .perform(closeSoftKeyboard());
-    }
-
     private void assertDisplayedFragment(Class expectedClass) {
         String currentFragmentName = manager.getFragments().get(0).getClass().getName();
         assertThat(currentFragmentName, is(expectedClass.getName()));
@@ -178,7 +177,9 @@ public class CreateOfferActivityTest {
     }
 
     private void goToShowOffer(boolean setToOtherThanOwner) {
-        Offer testOffer = new Offer(Config.getUser().getUserId(), "Test", "Test");
+
+        Offer testOffer = new Offer.Builder().setUserId(Config.getUser().getUserId())
+                .setTitle("Test").setDescription("Test").build();
         Database.getInstance().write("/offers", testOffer.getUuid(), testOffer);
         Fragment offer = FragmentConverter.createShowOfferWithOffer(testOffer);
         if (setToOtherThanOwner) {
@@ -219,7 +220,6 @@ public class CreateOfferActivityTest {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         assertDisplayedFragment(expectedDisplayedClass);
     }
-
 
 
     @Test

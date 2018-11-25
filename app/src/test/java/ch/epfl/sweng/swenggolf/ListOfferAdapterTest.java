@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.offer.ListOfferAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
@@ -15,7 +16,7 @@ public class ListOfferAdapterTest {
 
     @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     private final List<Offer> offerList =
-            Arrays.asList(new Offer("id_Jim", "Beer", "A lot of beer"));
+            Arrays.asList(FilledFakeDatabase.getOffer(0));
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyList() {

@@ -33,6 +33,7 @@ public class Answer {
 
     /**
      * Get the user id of the Answer.
+     *
      * @return the user id
      */
     public String getUserId() {
@@ -41,6 +42,7 @@ public class Answer {
 
     /**
      * Get the description of an Answer.
+     *
      * @return the description of an Answer
      */
     public String getDescription() {

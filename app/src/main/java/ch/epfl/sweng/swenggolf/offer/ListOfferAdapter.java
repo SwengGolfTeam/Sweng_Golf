@@ -79,6 +79,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
         /**
          * Create a row of the RecyclerView.
+         *
          * @param view the corresponding view
          */
         public MyViewHolder(View view) {

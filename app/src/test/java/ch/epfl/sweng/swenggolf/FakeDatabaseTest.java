@@ -32,9 +32,10 @@ public class FakeDatabaseTest {
     private static final String ID2 = "ID2";
     private static final String CONTENT = "This is a string";
     private static final String CONTENT_2 = "This is a second string";
-    private final Offer offer1 = new Offer("uid1", "title", "description");
-    private final Offer offer2 = new Offer("uid2", "title", "description");
-    private final List<Offer> LIST = Arrays.asList(offer1,offer2);
+    private final Offer offer1 = (new Offer.Builder()).setUserId("uid1").setTitle("title")
+            .setDescription("description").build();
+    private final Offer offer2 = (new Offer.Builder(offer1)).setUserId("uid2").build();
+    private final List<Offer> LIST = Arrays.asList(offer1, offer2);
 
     @Test
     public void writeAndReadReturnGoodValues() {
@@ -234,8 +235,8 @@ public class FakeDatabaseTest {
 
     @Test
     public void readListenerListOrderingHasError() {
-        Database d  = new FakeDatabase(false);
-        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("y",42);
+        Database d = new FakeDatabase(false);
+        AttributeOrdering ordering = AttributeOrdering.ascendingOrdering("y", 42);
         d.readList(PATH, getListValueListener(), Offer.class, ordering);
     }
 
@@ -253,7 +254,6 @@ public class FakeDatabaseTest {
         return new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> value) {
-
                 fail();
             }
 

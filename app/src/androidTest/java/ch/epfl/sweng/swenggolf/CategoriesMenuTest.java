@@ -45,7 +45,9 @@ public class CategoriesMenuTest {
 
     private static void initFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = new Offer("user_id", "This is a title", LOREM, "", "idoftheoffer1");
+        Offer offer1 = (new Offer.Builder()).setUserId("user_id")
+                .setTitle("This is a title").setDescription(LOREM)
+                .setUuid("idoftheoffer1").build();
         database.write("/offers", "idoftheoffer1", offer1);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));

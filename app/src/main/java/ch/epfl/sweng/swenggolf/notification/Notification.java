@@ -12,11 +12,11 @@ import ch.epfl.sweng.swenggolf.profile.User;
  */
 public class Notification {
     private final NotificationType type;
+    private final String uuid;
     private String userName;
     private String userId;
     private String offerName;
     private String offerId;
-    private final String uuid;
 
     /**
      * Create a new notification, in the local sense.
@@ -53,6 +53,7 @@ public class Notification {
 
     /**
      * Get the type of the notification.
+     *
      * @return the type of notification
      */
     public NotificationType getType() {
@@ -61,6 +62,7 @@ public class Notification {
 
     /**
      * Get the notification's user name.
+     *
      * @return the notification's user name
      */
     public String getUserName() {
@@ -69,6 +71,7 @@ public class Notification {
 
     /**
      * Get the notification's user id.
+     *
      * @return the notification's user id
      */
     public String getUserId() {
@@ -77,6 +80,7 @@ public class Notification {
 
     /**
      * Get the notification's offer.
+     *
      * @return the notification's offer
      */
     public String getOfferName() {
@@ -85,6 +89,7 @@ public class Notification {
 
     /**
      * Get the notification's offer id.
+     *
      * @return the notification's offer id
      */
     public String getOfferId() {
@@ -93,6 +98,7 @@ public class Notification {
 
     /**
      * Get the notification's user unique id.
+     *
      * @return the notification's user unique id
      */
     public String getUuid() {

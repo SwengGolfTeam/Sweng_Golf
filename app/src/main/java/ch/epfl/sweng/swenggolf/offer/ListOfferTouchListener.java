@@ -75,14 +75,16 @@ public class ListOfferTouchListener implements RecyclerView.OnItemTouchListener 
 
         /**
          * Actions made when a single click is performed.
-         * @param view the view
+         *
+         * @param view     the view
          * @param position the position of the item on the list.
          */
         void onItemClick(View view, int position);
 
         /**
          * Actions made when a long click is performed.
-         * @param view the view
+         *
+         * @param view     the view
          * @param position the position of the item on the list.
          */
         void onLongItemClick(View view, int position);

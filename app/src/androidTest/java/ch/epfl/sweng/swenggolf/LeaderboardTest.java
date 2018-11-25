@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -21,14 +20,10 @@ import ch.epfl.sweng.swenggolf.profile.User;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static java.lang.Thread.sleep;
-import static junit.framework.TestCase.fail;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -91,11 +86,10 @@ public class LeaderboardTest {
         onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testLeaderBoardAdapter() {
         new LeaderboardAdapter(null, null);
     }
-
 
 
 }
