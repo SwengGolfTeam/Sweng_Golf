@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/notif_height"
     android:paddingBottom="@dimen/row_padding_vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="10dp"
-    android:paddingTop="@dimen/row_padding_vertical">
+    android:paddingLeft="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:id="@+id/notification_icon"
@@ -26,12 +24,12 @@
 
     <ImageButton
         android:id="@+id/clear"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_clear_black_24dp"
-        style="?android:borderlessButtonStyle"/>
+        android:background="@android:color/transparent"/>
 
 </RelativeLayout>
