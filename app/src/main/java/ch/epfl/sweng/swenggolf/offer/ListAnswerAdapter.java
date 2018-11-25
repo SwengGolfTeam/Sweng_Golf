@@ -136,7 +136,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 Dialog alertDialog = answers.getFavoritePos() != pos
                         ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
                 alertDialog.show();
-          }
+            }
         });
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());

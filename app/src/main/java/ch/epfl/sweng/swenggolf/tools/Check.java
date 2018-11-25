@@ -21,6 +21,9 @@ public final class Check {
      */
     public static String checkString(String inputText, String fieldName, int minLength,
                                      int maxLength) {
+        if (inputText == null) {
+            throw new IllegalArgumentException(fieldName + "cannot be null");
+        }
         int length = inputText.length();
         if (length > maxLength
                 || length < minLength) {

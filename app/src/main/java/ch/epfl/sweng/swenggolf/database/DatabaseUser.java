@@ -17,6 +17,7 @@ public class DatabaseUser {
 
     /**
      * Add a User to the Database.
+     *
      * @param user the User to add
      */
     public static void addUser(User user) {
@@ -26,8 +27,9 @@ public class DatabaseUser {
 
     /**
      * Get a User in the Database.
+     *
      * @param listener the listener which will provide the corresponding user
-     * @param userId the id of the user we want to find
+     * @param userId   the id of the user we want to find
      */
     public static void getUser(final ValueListener<User> listener, String userId) {
         Database.getInstance().read(Database.USERS_PATH, userId, listener, User.class);
@@ -35,8 +37,9 @@ public class DatabaseUser {
 
     /**
      * Get a User in the Database.
+     *
      * @param listener the listener which will provide the corresponding user
-     * @param user the user we want to find
+     * @param user     the user we want to find
      */
     public static void getUser(final ValueListener<User> listener, User user) {
         getUser(listener, user.getUserId());
@@ -104,6 +107,7 @@ public class DatabaseUser {
 
     /**
      * Add Points to current User.
+     *
      * @param points the amount of point we want to add
      */
     public static void addPointsToCurrentUser(final int points) {

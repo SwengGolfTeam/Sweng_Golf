@@ -27,8 +27,10 @@ import static ch.epfl.sweng.swenggolf.TestUtility.testToastShow;
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityDbNotWorkingTest {
     private static final FakeDatabase database = new FakeDatabase(true);
-    private static final User user = new User("patrick", "0", "email", "photo", "preference");
-    private static final Offer offer = new Offer("0", "title", "description");
+    private static final User user = new User("patrick", "0", "email",
+            "photo", "preference");
+    private static final Offer offer = (new Offer.Builder()).setUserId("0").setTitle("title")
+            .setDescription("description").build();
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);

@@ -56,8 +56,13 @@ class CreateListeners {
         }
     };
 
+    CreateListeners(CreateOfferActivity createOfferActivity) {
+        this.create = createOfferActivity;
+    }
+
     /**
      * Create a completion listener based on an offer.
+     *
      * @param offer the corresponding offer
      * @return the correspondig CompletionListener
      */
@@ -76,10 +81,6 @@ class CreateListeners {
                 }
             }
         };
-    }
-
-    CreateListeners(CreateOfferActivity createOfferActivity) {
-        this.create = createOfferActivity;
     }
 
     /**

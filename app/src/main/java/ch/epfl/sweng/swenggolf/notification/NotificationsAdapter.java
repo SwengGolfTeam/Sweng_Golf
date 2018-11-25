@@ -30,40 +30,6 @@ public class NotificationsAdapter
     private ItemClickListener viewHolderOnClickListener;
 
     /**
-     * Representation of a row of the recyclerview.
-     */
-    public static class NotificationViewHolder extends ThreeFieldsViewHolder
-            implements View.OnClickListener {
-        private ItemClickListener listener;
-
-        /**
-         * Create a new ThreeFieldsViewHolder.
-         * @param itemView the view of the item
-         * @param notificationTextId the text id of the notification
-         * @param notificationIconId the icon id of the notification
-         * @param crossId the cross id
-         */
-        public NotificationViewHolder(@NonNull View itemView, int notificationTextId,
-                                      int notificationIconId, int crossId) {
-            super(itemView, notificationTextId, notificationIconId, crossId);
-            itemView.setOnClickListener(this);
-        }
-
-        /**
-         * Set the ItemClickListener.
-         * @param listener the corresponding ItemclickListener
-         */
-        public void setItemClickListener(ItemClickListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.onClick(v, getAdapterPosition());
-        }
-    }
-
-    /**
      * Constructs an adapter for the RecyclerView in NotificationsActivity.
      *
      * @param notifications             the list of notifications to be displayed
@@ -168,10 +134,45 @@ public class NotificationsAdapter
                 notification.getOfferName());
     }
 
-
     @Override
     public int getItemCount() {
         return notifications.size();
+    }
+
+    /**
+     * Representation of a row of the recyclerview.
+     */
+    public static class NotificationViewHolder extends ThreeFieldsViewHolder
+            implements View.OnClickListener {
+        private ItemClickListener listener;
+
+        /**
+         * Create a new ThreeFieldsViewHolder.
+         *
+         * @param itemView           the view of the item
+         * @param notificationTextId the text id of the notification
+         * @param notificationIconId the icon id of the notification
+         * @param crossId            the cross id
+         */
+        public NotificationViewHolder(@NonNull View itemView, int notificationTextId,
+                                      int notificationIconId, int crossId) {
+            super(itemView, notificationTextId, notificationIconId, crossId);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Set the ItemClickListener.
+         *
+         * @param listener the corresponding ItemclickListener
+         */
+        public void setItemClickListener(ItemClickListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onClick(v, getAdapterPosition());
+        }
     }
 
 

@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -42,7 +41,8 @@ class CreateHelper {
 
     /**
      * Initialize the create helper.
-     * @param create the CreateOfferActivity to help
+     *
+     * @param create    the CreateOfferActivity to help
      * @param listeners the CreateListeners
      */
     protected CreateHelper(CreateOfferActivity create, CreateListeners listeners) {
@@ -112,19 +112,17 @@ class CreateHelper {
      * @param description the description of the offer
      */
     void createOfferObject(String name, String description, Category tag) {
-        String uuid;
-        String link;
+        Offer.Builder builder;
         if (create.offerToModify != null) {
-            uuid = create.offerToModify.getUuid();
-            link = create.offerToModify.getLinkPicture();
+            builder = new Offer.Builder(create.offerToModify);
         } else {
-            uuid = UUID.randomUUID().toString();
-            link = "";
+            builder = new Offer.Builder();
         }
 
-        final Offer newOffer = new Offer(Config.getUser().getUserId(), name, description,
-                link, uuid, tag, create.creationDate, create.endDate, create.location);
-
+        final Offer newOffer = builder.setUserId(Config.getUser().getUserId())
+                .setTitle(name).setDescription(description)
+                .setTag(tag).setCreationDate(create.creationDate)
+                .setEndDate(create.endDate).setLocation(create.location).build();
 
         if (create.filePath == null) {
             writeOffer(newOffer);
@@ -163,8 +161,9 @@ class CreateHelper {
 
     /**
      * Update the User score.
+     *
      * @param offerToModify the offer to modify
-     * @param offer the offer
+     * @param offer         the offer
      */
     void updateUserScore(Offer offerToModify, Offer offer) {
         int scoreToAdd = 0;

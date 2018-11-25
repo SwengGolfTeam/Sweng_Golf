@@ -22,6 +22,7 @@ public class FakeLocation extends AppLocation {
 
     /**
      * Create a Fake location with predefined fields.
+     *
      * @return the corresponding FakeLocation
      */
     public static FakeLocation fakeLocationCreator() {

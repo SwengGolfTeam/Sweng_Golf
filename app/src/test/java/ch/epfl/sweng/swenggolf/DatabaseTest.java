@@ -26,8 +26,8 @@ public class DatabaseTest {
     private static final String CONTENT_2 = "This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string."
             + "This is a long string. This is a long string. This is a long string. This is a long string.";
-    private static final Offer OFFER_1 = new Offer("user", "offer1", CONTENT, "", ID);
-    private static final Offer OFFER_2 = new Offer("user", "offer1", CONTENT, "", ID);
+    private static final Offer OFFER_1 = (new Offer.Builder()).setUserId("user").setTitle("offer1").setDescription(CONTENT).setUuid(ID).build();
+    private static final Offer OFFER_2 = (new Offer.Builder(OFFER_1)).build();
 
 
     @Test

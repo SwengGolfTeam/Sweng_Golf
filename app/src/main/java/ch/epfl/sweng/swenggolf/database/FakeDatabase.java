@@ -3,7 +3,8 @@ package ch.epfl.sweng.swenggolf.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,12 +22,11 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
  */
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
-    Set<String> workingOnEntry;
+    private Set<String> workingOnEntry;
     private boolean working;
 
     /**
      * Create a new FakeDatabase that can be used to mock the Database.
-     *
      *
      * @param working the working state of the Database, the DataBase will send
      *                error when working is set at false and will work as
@@ -49,6 +49,41 @@ public class FakeDatabase extends Database {
      */
     public static Database fakeDatabaseCreator() {
         return new FilledFakeDatabase();
+    }
+
+    private static String getGetter(String attribute) {
+        return "get" + Character.toUpperCase(attribute.charAt(0))
+                + attribute.substring(1, attribute.length());
+    }
+
+    @NonNull
+    private static <T> Comparator<T> getComparator(final Method method) {
+        return new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                Object attribute1 = invokeGetter(method, o1);
+                Object attribute2 = invokeGetter(method, o2);
+
+                return compareAttributes(attribute1, attribute2);
+            }
+        };
+    }
+
+    private static <T> Object invokeGetter(Method method, T invokedOn) {
+        try {
+            return method.invoke(invokedOn);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Can't access the attribute");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Cannot call method on generic parameter T");
+        }
+    }
+
+    private static <T> int compareAttributes(T attribute1, T attribute2) {
+        if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
+            return ((Comparable) attribute1).compareTo(attribute2);
+        }
+        throw new IllegalArgumentException("The attribute is not comparable");
     }
 
     @Override
@@ -129,14 +164,14 @@ public class FakeDatabase extends Database {
     @NonNull
     private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
                                  List<T> unsortedList) {
-        final Field field;
+        final Method method;
+        String getterName = getGetter(ordering.getAttribute());
         try {
-            field = c.getDeclaredField(ordering.getAttribute());
-        } catch (NoSuchFieldException e) {
-            throw new IllegalArgumentException("The attribute does not exist");
+            method = c.getDeclaredMethod(getterName);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("The getter for the attribute does not exist");
         }
-        field.setAccessible(true);
-        Comparator<T> comparator = getComparator(field);
+        Comparator<T> comparator = getComparator(method);
         Collections.sort(unsortedList, comparator);
         if (ordering.isDescending()) {
             Collections.reverse(unsortedList);
@@ -145,47 +180,32 @@ public class FakeDatabase extends Database {
         return unsortedList.subList(0, minSize);
     }
 
-    @NonNull
-    private <T> Comparator<T> getComparator(final Field field) {
-        return new Comparator<T>() {
-            @Override
-            public int compare(T o1, T o2) {
-                Object attribute1;
-                Object attribute2;
-                try {
-                    attribute1 = field.get(o1);
-                    attribute2 = field.get(o2);
-                } catch (IllegalAccessException e) {
-                    throw new IllegalArgumentException("Can't access the attribute");
-                }
-                if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
-                    return ((Comparable) attribute1).compareTo(attribute2);
-                }
-                throw new IllegalArgumentException("The attribute is not comparable");
-            }
-        };
-    }
-
     private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
                                    List<T> list) {
-        List<T> newList = new ArrayList<>();
+        List<T> filtered = new ArrayList<>();
         try {
 
             //Use reflection to check the attribute
-            Field field = c.getDeclaredField(attribute);
-            field.setAccessible(true);
+            Method method = c.getDeclaredMethod(getGetter(attribute));
+            filtered = createFilteredList(method, list, value);
 
-            for (T object : list) {
-                if (field.get(object).equals(value)) {
-                    newList.add(object);
-                }
-            }
-            field.setAccessible(false);
-
-        } catch (NoSuchFieldException e) {
-            handleError(attribute);
         } catch (IllegalAccessException e) {
             handleError(attribute);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("No getter for " + attribute + " attribute");
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException("Generic type T has no getter for this attribute");
+        }
+        return filtered;
+    }
+
+    private <T> List<T> createFilteredList(Method getter, List<T> list, String value)
+            throws InvocationTargetException, IllegalAccessException {
+        List<T> newList = new ArrayList<>();
+        for (T object : list) {
+            if (getter.invoke(object).equals(value)) {
+                newList.add(object);
+            }
         }
         return newList;
     }
@@ -239,8 +259,8 @@ public class FakeDatabase extends Database {
      * Set working state of the Database.
      *
      * @param w the working state of the Database, the DataBase will send
-     *                error when working is set at false and will work as
-     *                expected otherwise.
+     *          error when working is set at false and will work as
+     *          expected otherwise.
      */
     public void setWorking(boolean w) {
         working = w;

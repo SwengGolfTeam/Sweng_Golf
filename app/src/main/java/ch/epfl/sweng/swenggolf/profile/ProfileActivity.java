@@ -207,8 +207,9 @@ public class ProfileActivity extends FragmentConverter {
 
     /**
      * Returns <code>true</code> if the profile is followed.
+     *
      * @return <code>true</code> if the profile is followed;
-     *         <code>false</code> otherwise
+     * <code>false</code> otherwise
      */
     public boolean isFollowing() {
         return isFollowing;

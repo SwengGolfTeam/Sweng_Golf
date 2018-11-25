@@ -28,12 +28,12 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class Leaderboard extends FragmentConverter {
 
-    private LeaderboardAdapter mAdapter;
+    private static final int LEADERBOARD_SIZE = 10;
+    private final List<User> userList = new ArrayList<>();
     protected RecyclerView.LayoutManager mLayoutManager;
+    private LeaderboardAdapter mAdapter;
     private TextView errorMessage;
     private TextView noUser;
-    private final List<User> userList = new ArrayList<>();
-    private static final int LEADERBOARD_SIZE = 10;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

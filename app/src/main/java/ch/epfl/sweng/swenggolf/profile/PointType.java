@@ -17,6 +17,7 @@ public enum PointType {
 
     /**
      * Constructor of a Point type.
+     *
      * @param value the value of a point type
      */
     PointType(int value) {

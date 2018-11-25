@@ -1,10 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -42,13 +40,13 @@ import static org.mockito.Mockito.when;
 
 
 public class FireDatabaseTest {
-
-    public static final Offer OFFER = new Offer("id", "title", "description");
     private static final String PATH = "path";
     private static final String ID = "id";
 
-    private static final Offer OFFER1 = new Offer("id", "title", "description");
-    private static final Offer OFFER2 = new Offer("id2", "title2", "description2");
+    private static final Offer OFFER1 = (new Offer.Builder()).setUserId("id").setTitle("title")
+            .setDescription("description").build();
+    private static final Offer OFFER2 = (new Offer.Builder()).setUserId("id2").setTitle("title2")
+            .setDescription("description2").build();
 
     private static final List<Offer> LIST = Arrays.asList(OFFER1, OFFER2);
 
@@ -250,7 +248,7 @@ public class FireDatabaseTest {
         ValueListener<List<Offer>> listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
-               assertEquals(0, offers.size());
+                assertEquals(0, offers.size());
             }
 
             @Override
@@ -271,7 +269,7 @@ public class FireDatabaseTest {
         when(tagQuery.equalTo(anyString())).thenReturn(idQuery);
         when(tagQuery.limitToLast(anyInt())).thenReturn(idQuery);
         when(tagQuery.limitToFirst(anyInt())).thenReturn(idQuery);
-        
+
         Answer<Void> queryListener = setUpListDataSnapshot();
         doAnswer(queryListener).when(idQuery)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));

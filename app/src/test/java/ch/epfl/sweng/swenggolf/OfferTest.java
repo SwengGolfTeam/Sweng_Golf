@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
 import static ch.epfl.sweng.swenggolf.profile.PointType.ADD_LOCALISATION;
@@ -16,28 +15,33 @@ import static org.junit.Assert.assertThat;
 public class OfferTest {
 
     private static final String LUMIERE = "https://lumiere-a.akamaihd.net/v1/images/";
-    private final String id = "id_Patrick", title = "Echange un panda",
+    private static final String id = "id_Patrick", title = "Echange un panda",
             description = "Echange un panda contre l'animal de votre choix";
 
+    private static Offer.Builder buildPartially() {
+        return (new Offer.Builder()).setTitle(title).setDescription(description)
+                .setUserId(id);
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyId() {
-        new Offer("", title, description);
+    public void testEmptyUserId() {
+        (new Offer.Builder()).setTitle(title).setDescription(description).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyTitle() {
-        new Offer(id, "", description);
+        (new Offer.Builder()).setUserId(id).setDescription(description).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testEmptyDescription() {
-        new Offer(id, title, "");
+        (new Offer.Builder()).setUserId(id).setTitle(title).build();
     }
-
 
     @Test
     public void testGetter() {
-        Offer offer = new Offer(id, title, description);
+        Offer offer = (new Offer.Builder()).setUserId(id).setTitle(title)
+                .setDescription(description).build();
         assertEquals("Ids are not equal", id, offer.getUserId());
         assertEquals("Titles are not equal", title, offer.getTitle());
         assertEquals("Descriptions are not equal", description, offer.getDescription());
@@ -46,94 +50,64 @@ public class OfferTest {
     @Test
     public void testEmptyConstructor() {
         Offer offer = new Offer();
-        assertEquals("Wrong uuid", "createdByEmptyConstructor", offer.getUuid());
+        assertEquals("Wrong uuid", "", offer.getUuid());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDateSmaller() {
-        new Offer("9", "bipbupbap",
-                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                LUMIERE
-                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                "09", Category.values()[3], 123123123, 123123122);
+        buildPartially().setCreationDate(123123123).setEndDate(123123122).build();
     }
 
     @Test
     public void testsameDate() {
-        new Offer("9", "bipbupbap",
-                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                LUMIERE
-                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                "09", Category.values()[3], 123123123, 123123123);
-
-        new Offer("9", "bipbupbap",
-                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                LUMIERE
-                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                "09", Category.values()[3], 123123123, 234234234);
+        buildPartially().setCreationDate(2).setEndDate(2).build();
     }
 
     @Test
     public void testUpdateLink() {
-        Offer offer = new Offer("9", "bipbupbap",
-                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                LUMIERE
-                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                "09", Category.values()[3], 123123123, 123123123);
-        String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
+        Offer offer = buildPartially().setLinkPicture("oldLink").build();
+        String newLink = "newLink";
         offer = offer.updateLinkToPicture(newLink);
         assertEquals(newLink, offer.getLinkPicture());
     }
 
     @Test
-    public void testSetOffer() {
-        Offer offer = new Offer("9", "bipbupbap",
-                "titut bip bop tilit tut tut tat dut dut ! Mip zat zat !",
-                LUMIERE
-                        + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768",
-                "09", Category.values()[3], 123123123, 123123123);
-        String newLink = "jawas_42e63e07.jpeg?region=123%2C10%2C1068%2C601&width=123";
-        offer.setLocation(1, 2);
+    public void testLocation() {
+        Offer offer = buildPartially().setLongitude(2).setLatitude(1).build();
         assertEquals(1, offer.getLatitude(), 0.05);
         assertEquals(2, offer.getLongitude(), 0.05);
     }
 
     @Test
     public void testOfferValueWithNoExtras() {
-        Offer offer = new Offer(id, title, description, "", "23",
-                Category.values()[3], 123123123, 123123123);
+        Offer offer = buildPartially().build();
         assertThat(offer.offerValue(), is(POST_OFFER.getValue()));
     }
 
     @Test
     public void testOfferValueWithLocation() {
-        Offer offer = new Offer(id, title, description, "", "23",
-                Category.values()[3], 123123123, 123123123);
-        offer.setLocation(12, 13);
+        Offer offer = buildPartially().setLongitude(12).setLatitude(13).build();
         assertThat(offer.offerValue(),
                 is(POST_OFFER.getValue() + ADD_LOCALISATION.getValue()));
     }
 
     @Test
     public void testOfferValueWithLinkPicture() {
-        Offer offer = new Offer(id, title, description, "mypicture", "23",
-                Category.values()[3], 123123123, 123123123);
+        Offer offer = buildPartially().setLinkPicture("myPicture").build();
         assertThat(offer.offerValue(), is(POST_OFFER.getValue() + ADD_PICTURE.getValue()));
     }
 
     @Test
     public void testOfferValueWithAllExtras() {
-        Offer offer = new Offer(id, title, description, "mypicture", "23",
-                Category.values()[3], 123123123, 123123123);
-        offer.setLocation(23, 23);
+        Offer offer = buildPartially().setLinkPicture("myPicture")
+                .setLongitude(23).setLatitude(24).build();
         assertThat(offer.offerValue(), is(POST_OFFER.getValue() + ADD_PICTURE.getValue()
                 + ADD_LOCALISATION.getValue()));
     }
 
     @Test
     public void testSameOfferHaveNoDiff() {
-        Offer offer = new Offer(id, title, description, "mypicture", "23",
-                Category.values()[3], 123123123, 123123123);
+        Offer offer = buildPartially().build();
         assertThat(offer.offerValueDiff(offer), is(0));
     }
 
@@ -145,10 +119,8 @@ public class OfferTest {
 
     @Test
     public void testDiffOnDifferentOffers() {
-        Offer offer = new Offer(id, title, description, "mypicture", "23",
-                Category.values()[3], 123123123, 123123123);
-        Offer offer1 = new Offer(offer);
-        offer1.setLocation(123, 123);
+        Offer offer = buildPartially().build();
+        Offer offer1 = buildPartially().setLatitude(123).setLongitude(123).build();
         assertThat(offer.offerValueDiff(offer1), is(ADD_LOCALISATION.getValue()));
     }
 }

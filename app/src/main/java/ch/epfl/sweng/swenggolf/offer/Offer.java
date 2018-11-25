@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.UUID;
 
 import ch.epfl.sweng.swenggolf.profile.PointType;
 
@@ -31,166 +32,48 @@ public class Offer implements Parcelable {
             return new Offer[size];
         }
     };
-    private static final int DESCRIPTION_LIMIT = 140;
     public static final String OFFER = "ch.epfl.sweng.swenggolf.offer";
-    private final Category tag;
-    private final String userId;
+    private static final int DESCRIPTION_LIMIT = 140;
+    private final String uuid;
     private final String title;
     private final String description;
+    private final long creationDate;
+    private final long endDate;
     private final String linkPicture;
-    private final String uuid;
-    private double latitude;
-    private double longitude;
-    private long creationDate;
-    private long endDate;
+    private final String userId;
+    private final Category tag;
+    private final double longitude;
+    private final double latitude;
 
-    /**
-     * Contains the data of an offer.
-     *
-     * @param title        the title of the offer. Should not be empty
-     * @param description  the description of the offer. Should not be empty
-     * @param linkPicture  the link of the offer's picture
-     * @param userId       the user id. Should not be empty
-     * @param uuid         offer identifier
-     * @param tag          the category of the offer
-     * @param creationDate the creation date in ms
-     * @param endDate      the offers's end date in ms
-     * @param location     the location of the creation of the offer
-     */
-    public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag,
-                 long creationDate, long endDate, Location location) {
-
-        if (userId == null || userId.isEmpty()) {
-            throw new IllegalArgumentException("UserId of the offer can't be empty.");
-        }
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Name of the offer can't be empty.");
-        }
-        if (description == null || description.isEmpty()) {
-            throw new IllegalArgumentException("Description of the offer can't be empty.");
-        }
-        if (linkPicture == null) {
-            throw new IllegalArgumentException("PictureLink cannot be null."
-                    + " For absence of picture use empty.");
-        }
-        if (tag == null) {
-            throw new IllegalArgumentException("Tag must be indicated or use other constructor");
-        }
-        if (creationDate > endDate) {
-            throw new IllegalArgumentException("Creation date must be before the end date");
-        }
-
-        this.tag = tag;
-        this.userId = userId;
-        this.title = checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH);
-        this.description = checkString(description, "description", DESCRIPTION_MIN_LENGTH,
-                DESCRIPTION_MAX_LENGTH);
-        this.linkPicture = linkPicture;
+    private Offer(String uuid, String title, String description, long creationDate, long endDate,
+                  String linkPicture, String userId, Category tag,
+                  double longitude, double latitude) {
         this.uuid = uuid;
+        this.title = title;
+        this.description = description;
         this.creationDate = creationDate;
         this.endDate = endDate;
-        this.latitude = location.getLatitude();
-        this.longitude = location.getLongitude();
+        this.linkPicture = linkPicture;
+        this.userId = userId;
+        this.tag = tag;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     /**
-     * Constructor with default location.
-     *
-     * @param title       the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
-     * @param linkPicture the link of the offer's picture
-     * @param userId      the user id. Should not be empty
-     * @param uuid        offer identifier
-     * @param tag         the category of the offer
-     */
-    public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag, long creationDate, long endDate) {
-
-        this(userId, title, description, linkPicture, uuid, tag,
-                creationDate,
-                endDate,
-                new Location("default"));
-
-    }
-
-
-    /**
-     * Constructor with default dates and location.
-     *
-     * @param title        the title of the offer. Should not be empty
-     * @param description  the description of the offer. Should not be empty
-     * @param linkPicture  the link of the offer's picture
-     * @param userId       the user id. Should not be empty
-     * @param uuid         offer identifier
-     * @param tag          the category of the offer
-     * @param creationDate the creation date in with Calendar notation
-     * @param endDate      the offers's end date in with Calendar notation
-     */
-    public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid, Category tag,
-                 Calendar creationDate, Calendar endDate) {
-        this(userId, title, description, linkPicture, uuid, tag,
-                creationDate.getTimeInMillis(),
-                endDate.getTimeInMillis());
-    }
-
-    /**
-     * Constructor with default dates, location and categories.
-     *
-     * @param userId      the user id. Should not be empty
-     * @param title       the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
-     * @param linkPicture the link of the offer's picture
-     * @param uuid        offer identifier
-     */
-    public Offer(String userId, String title, String description,
-                 String linkPicture, String uuid) {
-        this(userId, title, description, linkPicture, uuid,
-                Category.getDefault(), Calendar.getInstance(), Calendar.getInstance());
-    }
-
-    /**
-     * Constructor with default dates, location and categories, linkPicture and uuid.
-     *
-     * @param userId      the id of the user.
-     * @param title       the title of the offer. Should not be empty
-     * @param description the description of the offer. Should not be empty
-     */
-    public Offer(String userId, String title, String description) {
-        this(userId, title, description, "", "");
-    }
-
-    /**
-     * Empty builder for the listener of Firebase.
+     * Empty constructor for the listener of Firebase.
      */
     public Offer() {
-        this.userId = "";
-        this.title = "";
-        this.description = "";
-        this.linkPicture = "";
-        this.uuid = "createdByEmptyConstructor";
-        this.tag = Category.getDefault();
-        creationDate = Calendar.getInstance().getTimeInMillis();
-        endDate = Calendar.getInstance().getTimeInMillis();
-    }
-
-    /**
-     * Copy constructor.
-     *
-     * @param that an offer
-     */
-    public Offer(Offer that) {
-        userId = that.userId;
-        title = that.title;
-        description = that.description;
-        linkPicture = that.linkPicture;
-        uuid = that.uuid;
-        tag = that.tag;
-        creationDate = that.creationDate;
-        endDate = that.endDate;
-        latitude = that.latitude;
-        longitude = that.longitude;
+        creationDate = 0;
+        endDate = 0;
+        description = "";
+        linkPicture = "";
+        title = "";
+        userId = "";
+        tag = Category.getDefault();
+        longitude = 0;
+        latitude = 0;
+        uuid = "";
     }
 
     private Offer(Parcel in) {
@@ -209,6 +92,22 @@ public class Offer implements Parcelable {
         this.longitude = Double.parseDouble(data[9]);
     }
 
+    //Objects.requireNonNull API level is 19
+    private static <T> T checkNullity(T toCheck, String erroredAttribute) {
+        if (toCheck == null) {
+            throw new IllegalArgumentException(erroredAttribute + " cannot be null");
+        }
+        return toCheck;
+    }
+
+    private static String checkStringValidity(String toCheck, String erroredAttribute) {
+        checkNullity(toCheck, erroredAttribute);
+        if (toCheck.isEmpty()) {
+            throw new IllegalArgumentException(erroredAttribute + " cannot be empty");
+        }
+        return toCheck;
+    }
+
     /**
      * Creates the format for the Date.
      *
@@ -222,17 +121,30 @@ public class Offer implements Parcelable {
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof Offer) {
             Offer other = (Offer) obj;
-            boolean userIdEquality = userId.equals(other.userId);
-            boolean titleEquality = title.equals(other.title);
-            boolean descriptionEquality = description.equals(other.description);
-            boolean linkPictureEquality = linkPicture.equals(other.linkPicture);
-            boolean uuidEquality = uuid.equals(other.uuid);
-            boolean tagEquality = tag.equals(other.tag);
-            boolean locationEquality = longitude == other.longitude && latitude == other.latitude;
-            return userIdEquality && titleEquality && descriptionEquality
-                    && linkPictureEquality && uuidEquality && tagEquality && locationEquality;
+            return equalsDate(other)
+                    && equalsExtras(other)
+                    && equalsDescription(other)
+                    && this.uuid.equals(other.uuid);
         }
         return false;
+    }
+
+    private boolean equalsDescription(Offer other) {
+        return this.description.equals(other.description)
+                && this.title.equals(other.title)
+                && this.userId.equals(other.userId)
+                && this.tag.equals(other.tag);
+    }
+
+    private boolean equalsExtras(Offer other) {
+        return this.longitude == other.longitude
+                && this.latitude == other.latitude
+                && this.linkPicture.equals(other.linkPicture);
+    }
+
+    private boolean equalsDate(Offer other) {
+        return this.creationDate == other.creationDate
+                && this.endDate == other.endDate;
     }
 
     /**
@@ -277,9 +189,9 @@ public class Offer implements Parcelable {
      * @return the shortened description of the offer
      */
     public String getShortDescription() {
-        return description.length() > DESCRIPTION_LIMIT
-                ? description.substring(0, DESCRIPTION_LIMIT) + "..."
-                : description;
+        return getDescription().length() > DESCRIPTION_LIMIT
+                ? getDescription().substring(0, DESCRIPTION_LIMIT) + "..."
+                : getDescription();
     }
 
     /**
@@ -319,18 +231,18 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Returns the offer's latitude.
+     * Returns the offer's locationLatitude.
      *
-     * @return the latitude of the offer
+     * @return the locationLatitude of the offer
      */
     public double getLatitude() {
         return latitude;
     }
 
     /**
-     * Returns the offer's longitude.
+     * Returns the offer's locationLongitude.
      *
-     * @return the longitude of the offer
+     * @return the locationLongitude of the offer
      */
     public double getLongitude() {
         return longitude;
@@ -342,24 +254,22 @@ public class Offer implements Parcelable {
      * @param newLinkPicture the new picture's link
      */
     public Offer updateLinkToPicture(String newLinkPicture) {
-
-        Location location = new Location("");
-        location.setLatitude(getLatitude());
-        location.setLongitude(getLongitude());
-        return new Offer(getUserId(), getTitle(), getDescription(), newLinkPicture,
-                getUuid(), getTag(), getCreationDate(), getEndDate(), location);
+        Offer.Builder builder = new Offer.Builder(this);
+        builder.setLinkPicture(newLinkPicture);
+        return builder.build();
     }
 
     /**
      * Sets the location of the offer.
      *
-     * @param latitude  the latitude
-     * @param longitude the longitude
+     * @param latitude  the locationLatitude
+     * @param longitude the locationLongitude
      */
-    public void setLocation(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-
+    public Offer setLocation(double latitude, double longitude) {
+        Offer.Builder builder = new Offer.Builder(this);
+        builder.setLatitude(latitude);
+        builder.setLongitude(longitude);
+        return builder.build();
     }
 
     /* Implements Parcelable */
@@ -371,16 +281,16 @@ public class Offer implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{
-                this.userId,
-                this.title,
-                this.description,
-                this.linkPicture,
-                this.uuid,
-                this.tag.toString(),
-                Long.toString(this.creationDate),
-                Long.toString(this.endDate),
-                Double.toString(this.latitude),
-                Double.toString(this.longitude)});
+                getUserId(),
+                getTitle(),
+                getDescription(),
+                getLinkPicture(),
+                getUuid(),
+                getTag().toString(),
+                Long.toString(getCreationDate()),
+                Long.toString(getEndDate()),
+                Double.toString(getLatitude()),
+                Double.toString(getLongitude())});
     }
 
     /**
@@ -390,10 +300,10 @@ public class Offer implements Parcelable {
      */
     public int offerValue() {
         int value = PointType.POST_OFFER.getValue();
-        if (!linkPicture.isEmpty()) {
+        if (!this.linkPicture.isEmpty()) {
             value += PointType.ADD_PICTURE.getValue();
         }
-        if (latitude != 0 || longitude != 0) {
+        if (this.latitude != 0 || this.longitude != 0) {
             value += PointType.ADD_LOCALISATION.getValue();
         }
         return value;
@@ -411,6 +321,153 @@ public class Offer implements Parcelable {
             throw new IllegalArgumentException("The offer cannot be modified to null");
         }
         return modifiedOffer.offerValue() - this.offerValue();
+    }
+
+    /**
+     * Class used to create an offer.
+     * If the fields are strings they are initially set to an empty string.
+     * Location values are set to  0.
+     * Date value are set to the current time.
+     * Tag is set to default.
+     */
+    public static final class Builder {
+        private long creationDate;
+        private String linkPicture;
+        private long endDate;
+        private String description;
+        private String title;
+        private String userId;
+        private Category tag;
+        private double longitude;
+        private double latitude;
+        private String uuid;
+
+        /**
+         * Creates a new Builder with his fields initialized to the ones of another offer.
+         *
+         * @param offer the source offer to serve as base values for the new builder.
+         */
+        public Builder(Offer offer) {
+            this.creationDate = offer.creationDate;
+            this.endDate = offer.endDate;
+            this.description = offer.description;
+            this.title = offer.title;
+            this.userId = offer.userId;
+            this.linkPicture = offer.linkPicture;
+            this.tag = offer.tag;
+            this.longitude = offer.longitude;
+            this.latitude = offer.latitude;
+            this.uuid = offer.uuid;
+        }
+
+        /**
+         * Creates a default builder.
+         * The strings are set to empty.
+         * The dates are set to the current date.
+         * The location values are set to 0.
+         * The tag is set to default.
+         * The uuid is set to a new uuid.
+         */
+        public Builder() {
+            creationDate = Calendar.getInstance().getTimeInMillis();
+            endDate = Calendar.getInstance().getTimeInMillis();
+            description = "";
+            title = "";
+            userId = "";
+            tag = Category.getDefault();
+            longitude = 0;
+            latitude = 0;
+            linkPicture = "";
+            uuid = UUID.randomUUID().toString();
+        }
+
+        public Builder setTag(Category tag) {
+            this.tag = tag;
+            return this;
+        }
+
+        public Builder setUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder setLinkPicture(String linkPicture) {
+            this.linkPicture = linkPicture;
+            return this;
+        }
+
+        public Builder setUuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public Builder setLatitude(double latitude) {
+            this.latitude = latitude;
+            return this;
+        }
+
+        public Builder setLongitude(double longitude) {
+            this.longitude = longitude;
+            return this;
+        }
+
+        /**
+         * Performs identically as calling setLongitude and setLatitude.
+         * latitude and longitude are extracted from a location.
+         *
+         * @param location the location that gives latitude and longitude
+         * @return this
+         */
+        public Builder setLocation(Location location) {
+            this.latitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+            return this;
+        }
+
+        public Builder setCreationDate(long creationDate) {
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        public Builder setEndDate(long endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        /**
+         * Creates a new Offer which fields value are equal to the ones of the builder.
+         *
+         * @return a new Offer object.
+         * @throws IllegalArgumentException if the fields are null or don't comply to the format.
+         */
+        public Offer build() {
+            if (creationDate < 0 || endDate < 0 || creationDate > endDate) {
+                throw new IllegalArgumentException("CreationDate, endDate must be positive and"
+                        + " creation must precede end");
+            }
+            return new Offer(
+                    checkNullity(uuid, "UUID"),
+                    checkString(title, "title", TITLE_MIN_LENGTH, TITLE_MAX_LENGTH),
+                    checkString(description, "description", DESCRIPTION_MIN_LENGTH,
+                            DESCRIPTION_MAX_LENGTH),
+                    creationDate, endDate,
+                    checkNullity(linkPicture, "picture link"),
+                    checkStringValidity(userId, "user ID"),
+                    checkNullity(tag, "tag"),
+                    longitude, latitude
+            );
+        }
+
     }
 
 }
