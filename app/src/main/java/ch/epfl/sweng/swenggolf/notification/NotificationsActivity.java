@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
@@ -90,7 +91,8 @@ public class NotificationsActivity extends FragmentConverter {
                     if (value.size() != 0) {
                         inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
                     }
-                    mAdapter.setNotifications(value);
+                    Collections.reverse(notifications); // so that they appear the most recent on top
+                    mAdapter.setNotifications(notifications);
                 }
             }
 
@@ -109,13 +111,13 @@ public class NotificationsActivity extends FragmentConverter {
     private void checkUserPoints() {
         LocalDatabase localDb = new LocalDatabase(getContext(), null, 1);
         int currentLevel = Badge.computeLevel(Config.getUser().getPoints());
-        int previousLevel = currentLevel;
-        try {
+        int previousLevel = localDb.readLevel();
+        /*try {
             previousLevel = localDb.readLevel();
         } catch (SQLiteException e) {
             localDb.writeLevel(currentLevel);
             Log.wtf("POINTS", "Caught SQLite error!");
-        }
+        }*/
         if (currentLevel > previousLevel) {
             Notification n = new Notification(NotificationType.LEVEL_GAINED, null, null);
             NotificationManager.addPendingNotification(Config.getUser().getUserId(), n);
@@ -133,6 +135,8 @@ public class NotificationsActivity extends FragmentConverter {
                     lookUpAndGoTo(notification.getOfferId(), Database.OFFERS_PATH);
                 } else if (notification.getUserId() != null) {
                     lookUpAndGoTo(notification.getUserId(), Database.USERS_PATH);
+                } else {
+                    replaceCentralFragment(createShowProfileWithProfile(Config.getUser()));
                 }
             }
         };

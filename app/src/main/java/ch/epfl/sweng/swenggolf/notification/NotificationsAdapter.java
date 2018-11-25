@@ -88,7 +88,6 @@ public class NotificationsAdapter
      */
     public void setNotifications(List<Notification> notifications) {
         this.notifications = new ArrayList<>(notifications);
-        Collections.reverse(this.notifications); // so that they appear the most recent on top
         notifyDataSetChanged();
     }
 
@@ -145,7 +144,7 @@ public class NotificationsAdapter
     private void setContent(Notification notification, TextView text,
                             ImageView icon, Context context) {
         switch (notification.getType()) {
-            case ANSWER_CHOSEN: // TODO too similar to ANSWER_POSTED ?!
+            case ANSWER_CHOSEN:
                 text.setText(getAnswerText(true, context, notification));
                 icon.setImageResource(R.drawable.ic_favorite_black_24dp);
                 break;
@@ -159,8 +158,7 @@ public class NotificationsAdapter
                 icon.setImageResource(R.drawable.ic_star_black_24dp);
                 break;
             case LEVEL_GAINED:
-                int level = Badge.computeLevel(Config.getUser().getPoints());
-                text.setText(context.getString(R.string.notif_level_gained, level));
+                text.setText(context.getString(R.string.notif_level_gained));
                 icon.setImageResource(R.drawable.ic_exposure_plus_1_black_24dp);
                 break;
             default:

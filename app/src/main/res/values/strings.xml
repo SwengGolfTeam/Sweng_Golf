@@ -59,7 +59,7 @@
     <string name="notif_answer_chosen">%s has accepted your answer on offer \"%s\"</string>
     <string name="notif_follow">%s is now following you</string>
     <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
-    <string name="notif_level_gained">You are now level %d! Keep up!</string>
+    <string name="notif_level_gained">You leveled up! Congrats!</string>
     <string name="no_notifications">You currently don\'t have any notification</string>
     <string name="notif_error">There has been an error loading the notifications</string>
     <string name="notif_delete_error">The notification couldn\'t be deleted</string>
