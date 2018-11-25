@@ -130,6 +130,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="56dp"
                 android:layout_marginRight="56dp"
+                android:background="@drawable/btn_rounded"
+                android:theme="@style/ButtonTheme"
                 app:layout_constraintBottom_toBottomOf="@+id/take_picture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_gallery" />
@@ -141,6 +143,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="76dp"
                 android:layout_marginRight="76dp"
+                android:background="@drawable/btn_rounded"
+                android:theme="@style/ButtonTheme"
                 app:layout_constraintEnd_toStartOf="@+id/fetch_picture"
                 app:layout_constraintTop_toBottomOf="@+id/category_spinner"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
@@ -153,6 +157,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/button_create_offer"
+                android:background="@drawable/btn_rounded"
+                android:theme="@style/ButtonTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -222,6 +228,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:background="@drawable/btn_rounded"
+                    android:theme="@style/ButtonTheme"
                     android:text="@string/pick_date" />
             </LinearLayout>
 

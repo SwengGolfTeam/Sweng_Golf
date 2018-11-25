@@ -14,7 +14,7 @@
     <string name="edit_profile_activity_name">Edit Profile</string>
     <string name="user_reputation">Reputation:</string>
     <string name="user_preferences">Preferences:</string>
-    <string name="username">username</string>
+    <string name="username">Username</string>
     <string name="change_pic">Change profile picture</string>
     <string name="save">Save</string>
     <string name="offer_name">Offer name:</string>
@@ -25,6 +25,7 @@
     <string name="button_show_offers">Show offer</string>
     <string name="error_create_offer">The name and the description cannot be empty.</string>
     <string name="name">Name:</string>
+    <string name="username_presentation">Username:</string>
     <string name="mail">Mail:</string>
     <string name="create_account">Create Account</string>
     <string name="error_create_offer_invalid">The name and the description can\'t be empty.</string>
@@ -70,4 +71,5 @@
     <string name="accept_favorite_question">Do you want to accept this answer?</string>
     <string name="remove_favorite">Did you change your mind?</string>
     <string name="remove_favorite_question">Do you really want to remove your approval?</string>
+    <string name="presentation">Welcome to Polytroc, please put your username. You can change your picture, your description and many other things after this step.</string>
 </resources>
