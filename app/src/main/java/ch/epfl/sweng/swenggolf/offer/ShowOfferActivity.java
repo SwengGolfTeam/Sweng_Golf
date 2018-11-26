@@ -81,17 +81,7 @@ public class ShowOfferActivity extends FragmentConverter {
         assert getArguments() != null;
         inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
-        if(userIsCreator && ! offer.getIsClosed()) {
-            final Button closeButton = inflated.findViewById(R.id.close_offer_button);
-            closeButton.setVisibility(View.VISIBLE);
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    closeOffer();
-                    closeButton.setVisibility(View.GONE);
-                }
-            });
-        }
+        setButtonCloseOffer();
         errorMessage = inflated.findViewById(R.id.error_message);
         mLayout = inflated.findViewById(R.id.list_answers);
         LayoutInflater mInflater = getLayoutInflater();
@@ -107,6 +97,20 @@ public class ShowOfferActivity extends FragmentConverter {
         }
         fetchAnswers();
         return inflated;
+    }
+
+    private void setButtonCloseOffer() {
+        if(userIsCreator && ! offer.getIsClosed()) {
+            final Button closeButton = inflated.findViewById(R.id.close_offer_button);
+            closeButton.setVisibility(View.VISIBLE);
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeOffer();
+                    closeButton.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     @Override
