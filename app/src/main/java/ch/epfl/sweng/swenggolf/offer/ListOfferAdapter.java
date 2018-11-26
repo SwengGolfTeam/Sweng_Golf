@@ -31,7 +31,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         }
         this.offerList = offerList;
         ViewUserFiller.clearMap();
-        notifyDataSetChanged();
     }
 
     @Override
