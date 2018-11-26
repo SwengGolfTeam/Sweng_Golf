@@ -54,4 +54,13 @@ public class Answers {
     public List<Answer> getAnswerList() {
         return answerList;
     }
+
+    /**
+     * Get the UserId of the Author of the position.
+     *
+     * @return the userId
+     */
+    public String getUserOfPosition(int pos) {
+        return answerList.get(pos).getUserId();
+    }
 }
