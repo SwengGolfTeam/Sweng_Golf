@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,7 +31,8 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class ListOfferActivity extends FragmentConverter {
 
-    private List<Offer> offerList;
+    // The list is public, static and final so that it can be used in tests.
+    public static final List<Offer> OFFER_LIST = new ArrayList<>();
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
@@ -42,7 +42,7 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    Offer showOffer = offerList.get(position);
+                    Offer showOffer = OFFER_LIST.get(position);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
 
@@ -50,7 +50,7 @@ public class ListOfferActivity extends FragmentConverter {
                 public void onLongItemClick(View view, int position) {
                     // Expands or retract the description
                     TextView descriptionView = view.findViewById(R.id.offer_description);
-                    Offer currentOffer = offerList.get(position);
+                    Offer currentOffer = OFFER_LIST.get(position);
                     expandOrRetractOffer(descriptionView, currentOffer);
                 }
 
@@ -99,7 +99,7 @@ public class ListOfferActivity extends FragmentConverter {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
 
-        offerList = new ArrayList<>();
+        OFFER_LIST.clear();
 
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
@@ -178,7 +178,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-        mAdapter = new ListOfferAdapter(offerList);
+        mAdapter = new ListOfferAdapter(OFFER_LIST);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
