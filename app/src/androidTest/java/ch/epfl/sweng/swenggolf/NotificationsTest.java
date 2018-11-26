@@ -76,7 +76,7 @@ public class NotificationsTest {
         goToOfferAndPostAnswer("I can help you!");
 
         // change user
-        changeUserAndGoToNotifications(user2);
+        setUserAndGoToNotifications(user2);
         String answerMessage = activityTestRule.getActivity()
                 .getString(R.string.notif_answer_posted, user1.getUserName(), offer.getTitle());
         checkNotificationIsThereAndLeadsToOffer(answerMessage);
@@ -91,7 +91,7 @@ public class NotificationsTest {
         onView(withContentDescription("fav0")).perform(scrollTo(), click());
         onView(withText(android.R.string.yes)).perform(click());
         // go back to user1 to check notification
-        changeUserAndGoToNotifications(user1);
+        setUserAndGoToNotifications(user1);
         String answerChosenMessage = activityTestRule.getActivity()
                 .getString(R.string.notif_answer_chosen, user2.getUserName(), offer.getTitle());
         checkNotificationIsThereAndLeadsToOffer(answerChosenMessage);
@@ -99,7 +99,7 @@ public class NotificationsTest {
 
     @Test
     public void displayMessageIfNoNotification() {
-        changeUserAndGoToNotifications(user1);
+        setUserAndGoToNotifications(user1);
         onView(withId(R.id.message_empty)).check(matches(isDisplayed()));
     }
 
@@ -127,8 +127,29 @@ public class NotificationsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void cannotCreateAdapterWithNullList() {
-        new NotificationsAdapter(null, null);
+    public void cannotCreateAdapterWithNullListener() {
+        new NotificationsAdapter( null);
+    }
+
+    @Test
+    public void levelUpNotificationWorks() {
+        // reset count
+        addPointsToUser(-user1.getPoints(), user1);
+        addPointsToUser(20, user1);
+        onView(withText(activityTestRule.getActivity().getString(R.string.notif_level_gained)))
+               .check(matches(isDisplayed())).perform(click());
+        checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
+    }
+
+    private void addPointsToUser(int numPoints, User user) {
+        user.addPoints(numPoints);
+        setUserAndGoToNotifications(user);
+        // let it sink in, otherwise it goes too fast
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void postFollowNotification() {
@@ -142,10 +163,10 @@ public class NotificationsTest {
         assertTrue(user2Profile.isFollowing());
 
         // change to other user
-        changeUserAndGoToNotifications(user2);
+        setUserAndGoToNotifications(user2);
     }
 
-    private void changeUserAndGoToNotifications(User otherUser) {
+    private void setUserAndGoToNotifications(User otherUser) {
         Config.setUser(otherUser);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, new NotificationsActivity())
