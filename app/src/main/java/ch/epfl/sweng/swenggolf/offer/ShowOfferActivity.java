@@ -66,7 +66,7 @@ public class ShowOfferActivity extends FragmentConverter {
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
     private boolean userIsCreator;
     private Offer offer;
-    private ListAnswerAdapter mAdapter;
+    private ListAnswerAdapter listAnswerAdapter;
     private int fragmentsToSkip;
 
     private View inflated;
@@ -81,15 +81,31 @@ public class ShowOfferActivity extends FragmentConverter {
         assert getArguments() != null;
         inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
-
+        if(userIsCreator && ! offer.getIsClosed()) {
+            final Button closeButton = inflated.findViewById(R.id.close_offer_button);
+            closeButton.setVisibility(View.VISIBLE);
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeOffer();
+                    closeButton.setVisibility(View.GONE);
+                }
+            });
+        }
         errorMessage = inflated.findViewById(R.id.error_message);
         mLayout = inflated.findViewById(R.id.list_answers);
         LayoutInflater mInflater = getLayoutInflater();
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents();
         setRecyclerView();
+        if(offer.getIsClosed()) {
+            hideReactButton();
+            listAnswerAdapter.closeAnswers();
+        }
+        else {
+            setAnswerToPost();
+        }
         fetchAnswers();
-        setAnswerToPost();
         return inflated;
     }
 
@@ -209,9 +225,9 @@ public class ShowOfferActivity extends FragmentConverter {
             @Override
             public void onDataChange(Answers value) {
                 if (value != null) {
-                    mAdapter.setAnswers(value);
+                    listAnswerAdapter.setAnswers(value);
                 } else {
-                    mAdapter.setAnswers(defaultAnswers);
+                    listAnswerAdapter.setAnswers(defaultAnswers);
                 }
             }
 
@@ -283,7 +299,7 @@ public class ShowOfferActivity extends FragmentConverter {
         if (editText.length() < Answer.COMMENT_MIN_LENGTH) {
             editText.setError(getString(R.string.answer_limit, Answer.COMMENT_MIN_LENGTH));
         } else {
-            Answers answers = mAdapter.getAnswers();
+            Answers answers = listAnswerAdapter.getAnswers();
             answers.getAnswerList()
                     .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
             Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
@@ -294,7 +310,7 @@ public class ShowOfferActivity extends FragmentConverter {
             NotificationManager.addPendingNotification(offer.getUserId(),
                     new Notification(NotificationType.ANSWER_POSTED,
                             Config.getUser(), offer));
-            mAdapter.notifyDataSetChanged();
+            listAnswerAdapter.notifyDataSetChanged();
 
         }
 
@@ -310,17 +326,17 @@ public class ShowOfferActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new ListAnswerAdapter(defaultAnswers, offer);
+        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(listAnswerAdapter);
 
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (userIsCreator) {
+        if (userIsCreator && ! offer.getIsClosed()) {
             inflater.inflate(R.menu.menu_show_offer, menu);
         } else {
             inflater.inflate(R.menu.menu_empty, menu);
@@ -423,6 +439,22 @@ public class ShowOfferActivity extends FragmentConverter {
                              },
                 offer.getUserId());
 
+    }
+
+    private void hideReactButton() {
+        Button reactButton = inflated.findViewById(R.id.react_button);
+        reactButton.setVisibility(View.GONE);
+        TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
+        closedMessage.setVisibility(View.VISIBLE);
+    }
+    public void closeOffer() {
+        offer = new Offer.Builder(offer).setIsClosed(true).build();
+        Database.getInstance().write(Database.OFFERS_PATH, offer.getUuid(), offer);
+        hideReactButton();
+        getActivity().invalidateOptionsMenu();
+        listAnswerAdapter.closeAnswers();
+        //TODO : add listener
+        
     }
 
 }

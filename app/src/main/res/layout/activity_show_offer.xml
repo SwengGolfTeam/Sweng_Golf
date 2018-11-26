@@ -131,6 +131,17 @@
                 app:layout_constraintTop_toBottomOf="@id/line">
 
                 <TextView
+                    android:id="@+id/offer_is_closed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/the_offer_is_closed"
+                    android:visibility="gone"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:paddingBottom="15dp"
+                    android:textSize="17sp"
+                    />
+                <TextView
                     android:id="@+id/error_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -152,6 +163,14 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/add_answer"
                     android:textAllCaps="false" />
+                <Button
+                    android:id="@+id/close_offer_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/close_the_offer"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="16dp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

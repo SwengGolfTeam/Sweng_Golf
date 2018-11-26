@@ -42,6 +42,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private static final int HEART_EMPTY = R.drawable.ic_favorite_border;
     private Answers answers;
     private Offer offer;
+    private boolean isClosed;
 
     /**
      * Constructs a ListAnswerAdapter for the RecyclerView.
@@ -54,6 +55,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         }
         this.answers = answers;
         this.offer = offer;
+        this.isClosed = false;
     }
 
     /**
@@ -73,6 +75,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     public void setAnswers(Answers answers) {
         this.answers = answers;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Close the answers so that we can't choose a favorite anymore.
+     */
+    public void closeAnswers() {
+        isClosed = true;
+        notifyDataSetChanged();
+        Log.d("ANSWERS", "Answers are now closed");
     }
 
     @Override
@@ -127,28 +138,34 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private void setupFavorite(final AnswerViewHolder holder, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
         favButton.setContentDescription("fav" + Integer.toString(position));
-        favButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(!isClosed) {
+            favButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Context context = holder.getContainer().getContext();
-                int pos = holder.getAdapterPosition();
-                Dialog alertDialog = answers.getFavoritePos() != pos
-                        ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
-                alertDialog.show();
-            }
-        });
+                    Context context = holder.getContainer().getContext();
+                    int pos = holder.getAdapterPosition();
+                    Dialog alertDialog = answers.getFavoritePos() != pos
+                            ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
+                    alertDialog.show();
+                }
+            });
+        }
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());
-        if (!isAuthor) {
+        if (!isAuthor || isClosed) {
             favButton.setClickable(false);
         }
         if (answers.getFavoritePos() == position) {
             favButton.setImageResource(HEART_FULL);
             favButton.setTag(HEART_FULL);
-        } else if (isAuthor) {
+        } else if (isAuthor && !isClosed) {
             favButton.setImageResource(HEART_EMPTY);
             favButton.setTag(HEART_EMPTY);
+        }
+        else{
+            favButton.setImageResource(android.R.color.transparent);
+            //TODO : maybe we need to add a tag
         }
     }
 
