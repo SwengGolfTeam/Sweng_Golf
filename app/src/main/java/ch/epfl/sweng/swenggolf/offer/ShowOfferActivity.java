@@ -88,11 +88,10 @@ public class ShowOfferActivity extends FragmentConverter {
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents();
         setRecyclerView();
-        if(offer.getIsClosed()) {
+        if (offer.getIsClosed()) {
             hideReactButton();
             listAnswerAdapter.closeAnswers();
-        }
-        else {
+        } else {
             setAnswerToPost();
         }
         fetchAnswers();
@@ -100,7 +99,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setButtonCloseOffer() {
-        if(userIsCreator && ! offer.getIsClosed()) {
+        if (userIsCreator && !offer.getIsClosed()) {
             final Button closeButton = inflated.findViewById(R.id.close_offer_button);
             closeButton.setVisibility(View.VISIBLE);
             closeButton.setOnClickListener(new View.OnClickListener() {
@@ -340,7 +339,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (userIsCreator && ! offer.getIsClosed()) {
+        if (userIsCreator && !offer.getIsClosed()) {
             inflater.inflate(R.menu.menu_show_offer, menu);
         } else {
             inflater.inflate(R.menu.menu_empty, menu);
@@ -451,6 +450,7 @@ public class ShowOfferActivity extends FragmentConverter {
         TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
         closedMessage.setVisibility(View.VISIBLE);
     }
+
     public void closeOffer() {
         offer = new Offer.Builder(offer).setIsClosed(true).build();
         Database.getInstance().write(Database.OFFERS_PATH, offer.getUuid(), offer);
@@ -458,7 +458,7 @@ public class ShowOfferActivity extends FragmentConverter {
         getActivity().invalidateOptionsMenu();
         listAnswerAdapter.closeAnswers();
         //TODO : add listener
-        
+
     }
 
 }

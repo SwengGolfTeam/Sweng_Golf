@@ -20,8 +20,8 @@
                 android:id="@+id/show_offer_author"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_marginStart="50dp"
                 android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="20dp"
                 android:text="@android:string/untitled"
                 android:textColor="@color/offer_list_author"
@@ -44,11 +44,11 @@
                 android:id="@+id/show_offer_title"
                 android:layout_width="322dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/offer_list_name"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -59,11 +59,11 @@
                 android:id="@+id/saved_location_offer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="72dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="72dp"
                 app:layout_constraintEnd_toStartOf="@+id/show_offer_tag"
                 app:layout_constraintStart_toEndOf="@+id/show_offer_author"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,11 +72,11 @@
                 android:id="@+id/show_offer_description"
                 android:layout_width="322dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,9 +98,9 @@
                 android:id="@+id/show_offer_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginEnd="50dp"
                 android:layout_marginRight="50dp"
+                android:layout_marginTop="20dp"
                 android:text="@android:string/unknownName"
                 android:textColor="@color/offer_list_author"
                 android:textSize="12sp"
@@ -121,10 +121,10 @@
                 android:id="@+id/list_answers"
                 android:layout_width="380dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,13 +134,13 @@
                     android:id="@+id/offer_is_closed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/the_offer_is_closed"
-                    android:visibility="gone"
                     android:layout_gravity="center_horizontal"
-                    android:textStyle="bold"
                     android:paddingBottom="15dp"
+                    android:text="@string/the_offer_is_closed"
                     android:textSize="17sp"
-                    />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/error_message"
                     android:layout_width="match_parent"
@@ -154,23 +154,46 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/answers_recycler_view"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
 
-                <Button
-                    android:id="@+id/react_button"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:text="@string/add_answer"
-                    android:textAllCaps="false" />
-                <Button
-                    android:id="@+id/close_offer_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/close_the_offer"
-                    android:textAllCaps="false"
-                    android:layout_marginLeft="16dp"
-                    android:visibility="gone"/>
+                    android:gravity="center_horizontal">
+
+                    <Button
+                        android:id="@+id/react_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/btn_slightly_rounded"
+                        android:drawableLeft="@drawable/ic_comment_black_24dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/add_answer"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/black"
+                        android:theme="@style/ButtonTheme" />
+
+                    <Button
+                        android:id="@+id/close_offer_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/btn_slightly_rounded"
+                        android:drawableLeft="@drawable/ic_close_black_24dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/close_the_offer"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/black"
+                        android:theme="@style/ButtonTheme"
+                        android:visibility="gone"
+                        android:layout_toRightOf="@+id/react_button"/>
+                </RelativeLayout>
 
             </LinearLayout>
 

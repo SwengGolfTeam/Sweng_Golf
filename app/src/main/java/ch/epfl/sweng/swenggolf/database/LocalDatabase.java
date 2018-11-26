@@ -83,7 +83,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
      *
      * @param level The current level
      */
-    public void writeLevel(int level){
+    public void writeLevel(int level) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_REPUTATION, level);

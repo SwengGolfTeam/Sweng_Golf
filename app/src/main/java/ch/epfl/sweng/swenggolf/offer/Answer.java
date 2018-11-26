@@ -2,6 +2,9 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import ch.epfl.sweng.swenggolf.tools.Check;
 
+/**
+ * Class which represents an Answer of an Offer.
+ */
 public class Answer {
     public static final int COMMENT_MAX_LENGTH = 200;
     public static final int COMMENT_MIN_LENGTH = 4;

@@ -138,7 +138,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private void setupFavorite(final AnswerViewHolder holder, int position) {
         ImageButton favButton = holder.getContainer().findViewById(R.id.favorite);
         favButton.setContentDescription("fav" + Integer.toString(position));
-        if(!isClosed) {
+        if (!isClosed) {
             favButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -156,16 +156,26 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         if (!isAuthor || isClosed) {
             favButton.setClickable(false);
         }
+
         if (answers.getFavoritePos() == position) {
             favButton.setImageResource(HEART_FULL);
             favButton.setTag(HEART_FULL);
         } else if (isAuthor && !isClosed) {
             favButton.setImageResource(HEART_EMPTY);
             favButton.setTag(HEART_EMPTY);
-        }
-        else{
+        } else {
             favButton.setImageResource(android.R.color.transparent);
             //TODO : maybe we need to add a tag
+        }
+
+        ownAnswerNotClickable(favButton, position);
+    }
+
+
+    private void ownAnswerNotClickable(ImageButton favButton, int position) {
+        if (answers.getUserOfPosition(position).equals(offer.getUserId())) {
+            favButton.setVisibility(View.INVISIBLE);
+            favButton.setClickable(false);
         }
     }
 
