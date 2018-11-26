@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -31,8 +32,9 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class ListOfferActivity extends FragmentConverter {
 
-    public static final List<Offer> offerList = new ArrayList<>();
+    private List<Offer> offerList;
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
+
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
                 private TextView offerOpenedView = null;
@@ -84,17 +86,21 @@ public class ListOfferActivity extends FragmentConverter {
                     }
                 }
             };
-    protected RecyclerView.LayoutManager mLayoutManager;
+
     private ListOfferAdapter mAdapter;
     private Menu mOptionsMenu;
     private TextView errorMessage;
     private TextView noOffers;
     private LocalDatabase localDb;
     private List<Category> checkedCategories = Arrays.asList(Category.values());
+    private RecyclerView mRecyclerView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
+
+        offerList = new ArrayList<>();
+
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
@@ -166,18 +172,16 @@ public class ListOfferActivity extends FragmentConverter {
 
     private void setRecyclerView(View inflated, final List<Category> categories) {
         noOffers.setVisibility(View.VISIBLE);
-        RecyclerView mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
-        mLayoutManager = new LinearLayoutManager(this.getContext());
+        mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
         mAdapter = new ListOfferAdapter(offerList);
         // Add dividing line
         mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(mAdapter);
-
-        offerList.clear();
+                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
         DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
             @Override
@@ -202,6 +206,7 @@ public class ListOfferActivity extends FragmentConverter {
                                     DatabaseOfferConsumer dbConsumer, List<Category> categories) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
+
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
@@ -209,6 +214,7 @@ public class ListOfferActivity extends FragmentConverter {
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
+                    mRecyclerView.setAdapter(mAdapter);
                 }
 
             }
