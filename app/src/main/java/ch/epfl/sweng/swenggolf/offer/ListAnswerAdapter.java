@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -140,15 +141,27 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         });
 
         boolean isAuthor = offer.getUserId().equals(Config.getUser().getUserId());
-        if (!isAuthor) {
-            favButton.setClickable(false);
-        }
+
         if (answers.getFavoritePos() == position) {
             favButton.setImageResource(HEART_FULL);
             favButton.setTag(HEART_FULL);
         } else if (isAuthor) {
             favButton.setImageResource(HEART_EMPTY);
             favButton.setTag(HEART_EMPTY);
+        }
+
+        if (!isAuthor){
+            favButton.setClickable(false);
+        }
+
+        ownAnswerNotClickable(favButton, position);
+    }
+
+
+    private void ownAnswerNotClickable(ImageButton favButton, int position){
+        if (answers.getUserOfPosition(position).equals(offer.getUserId())){
+            favButton.setVisibility(View.INVISIBLE);
+            favButton.setClickable(false);
         }
     }
 
