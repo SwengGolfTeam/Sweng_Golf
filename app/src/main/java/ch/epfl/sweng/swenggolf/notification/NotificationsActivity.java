@@ -33,7 +33,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
-    private List<Notification> notifications;
+    //private List<Notification> notifications;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -62,9 +62,7 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        notifications = new ArrayList<>();
-
-        mAdapter = new NotificationsAdapter(notifications, getClickListener());
+        mAdapter = new NotificationsAdapter(new ArrayList<Notification>(), getClickListener());
         mRecyclerView.setAdapter(mAdapter);
 
         checkUserPoints();
@@ -82,12 +80,11 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    notifications = value;
                     if (value.size() != 0) {
                         inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
                     }
-                    Collections.reverse(notifications); // so that they appear the most recent on top
-                    mAdapter.setNotifications(notifications);
+                    Collections.reverse(value); // so that they appear the most recent on top
+                    mAdapter.setNotifications(value);
                 }
             }
 
@@ -119,7 +116,7 @@ public class NotificationsActivity extends FragmentConverter {
 
             @Override
             public void onClick(View view, int position) {
-                Notification notification = notifications.get(position);
+                Notification notification = mAdapter.getNotifications().get(position);
                 if (notification.getOfferId() != null) {
                     lookUpAndGoTo(notification.getOfferId(), Database.OFFERS_PATH);
                 } else if (notification.getUserId() != null) {

@@ -57,6 +57,15 @@ public class NotificationsAdapter
         notifyDataSetChanged();
     }
 
+    /**
+     * Returns the list of notification, immutable
+     *
+     * @return
+     */
+    public List<Notification> getNotifications() {
+        return Collections.unmodifiableList(this.notifications);
+    }
+
     @Override
     public NotificationsAdapter.NotificationViewHolder onCreateViewHolder(ViewGroup parent,
                                                                           int viewType) {
