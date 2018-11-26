@@ -32,4 +32,10 @@ public class CloseOfferTest extends ShowOfferActivityTest {
     public void closeButtonVisibleWhenOfferIsOpen() {
         onView(withId(R.id.close_offer_button)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void canNotAddAnswersWhenClosed() {
+        closeOffer();
+        onView(withId(R.id.react_button)).check(matches(not(isDisplayed())));
+    }
 }
