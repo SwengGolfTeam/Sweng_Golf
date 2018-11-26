@@ -23,6 +23,7 @@ import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.notification.NotificationsAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -135,7 +136,7 @@ public class NotificationsTest {
     public void levelUpNotificationWorks() {
         // reset count
         addPointsToUser(-user1.getPoints(), user1);
-        addPointsToUser(20, user1);
+        addPointsToUser(Badge.LEVEL_SPACE, user1);
         onView(withText(activityTestRule.getActivity().getString(R.string.notif_level_gained)))
                .check(matches(isDisplayed())).perform(click());
         checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
