@@ -157,6 +157,12 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             favButton.setClickable(false);
         }
 
+        setupImageFavorite(position, favButton, isAuthor);
+
+        ownAnswerNotClickable(favButton, position);
+    }
+
+    private void setupImageFavorite(int position, ImageButton favButton, boolean isAuthor) {
         if (answers.getFavoritePos() == position) {
             favButton.setImageResource(HEART_FULL);
             favButton.setTag(HEART_FULL);
@@ -165,10 +171,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
             favButton.setTag(HEART_EMPTY);
         } else {
             favButton.setImageResource(android.R.color.transparent);
-            //TODO : maybe we need to add a tag
         }
-
-        ownAnswerNotClickable(favButton, position);
     }
 
 

@@ -1,9 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
-
 import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
-import android.view.View;
 
 import org.junit.Test;
 

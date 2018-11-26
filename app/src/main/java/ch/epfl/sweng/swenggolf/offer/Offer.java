@@ -253,7 +253,7 @@ public class Offer implements Parcelable {
     }
 
     /**
-     * Return true if the offer is closed, false otherwise
+     * Return true if the offer is closed, false otherwise.
      *
      * @return true if the offer is closed, false otherwise
      */

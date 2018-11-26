@@ -451,6 +451,10 @@ public class ShowOfferActivity extends FragmentConverter {
         closedMessage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Close the offer. This include writing the modifications on the database, disable the
+     * reaction button and disable the possibility to add answers.
+     */
     public void closeOffer() {
         offer = new Offer.Builder(offer).setIsClosed(true).build();
         Database.getInstance().write(Database.OFFERS_PATH, offer.getUuid(), offer);
