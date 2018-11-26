@@ -33,7 +33,6 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
-    //private List<Notification> notifications;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -62,7 +61,7 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new NotificationsAdapter(new ArrayList<Notification>(), getClickListener());
+        mAdapter = new NotificationsAdapter(getClickListener());
         mRecyclerView.setAdapter(mAdapter);
 
         checkUserPoints();
@@ -83,7 +82,8 @@ public class NotificationsActivity extends FragmentConverter {
                     if (value.size() != 0) {
                         inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
                     }
-                    Collections.reverse(value); // so that they appear the most recent on top
+                    // so that they appear the most recent on top
+                    Collections.reverse(value);
                     mAdapter.setNotifications(value);
                 }
             }

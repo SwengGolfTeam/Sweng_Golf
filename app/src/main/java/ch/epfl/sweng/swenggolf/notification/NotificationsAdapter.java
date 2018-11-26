@@ -34,16 +34,14 @@ public class NotificationsAdapter
     /**
      * Constructs an adapter for the RecyclerView in NotificationsActivity.
      *
-     * @param notifications             the list of notifications to be displayed
      * @param viewHolderOnClickListener a listener indicating what to do when clicking
      *                                  on items of the recycler view
      */
-    public NotificationsAdapter(List<Notification> notifications,
-                                ItemClickListener viewHolderOnClickListener) {
-        if (notifications == null || viewHolderOnClickListener == null) {
+    public NotificationsAdapter(ItemClickListener viewHolderOnClickListener) {
+        if (viewHolderOnClickListener == null) {
             throw new IllegalArgumentException();
         }
-        this.notifications = new ArrayList<>(notifications);
+        this.notifications = new ArrayList<>();
         this.viewHolderOnClickListener = viewHolderOnClickListener;
     }
 
@@ -58,9 +56,9 @@ public class NotificationsAdapter
     }
 
     /**
-     * Returns the list of notification, immutable
+     * Returns the list of notifications.
      *
-     * @return
+     * @return the list of notifications, immutable
      */
     public List<Notification> getNotifications() {
         return Collections.unmodifiableList(this.notifications);
