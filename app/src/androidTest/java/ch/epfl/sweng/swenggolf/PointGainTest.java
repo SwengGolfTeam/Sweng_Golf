@@ -95,6 +95,21 @@ public class PointGainTest {
                 }, Integer.class);
     }
 
+    private void testUserPointsDbOnly(final int newPoints, final User user) {
+        Database.getInstance().read(Database.USERS_PATH + "/" + user.getUserId(),
+                POINTS, new ValueListener<Integer>() {
+                    @Override
+                    public void onDataChange(Integer value) {
+                        assertThat(value, is(newPoints));
+                    }
+
+                    @Override
+                    public void onCancelled(DbError error) {
+                        fail();
+                    }
+                }, Integer.class);
+    }
+
     @Test
     public void createOfferYieldsPoints() {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
@@ -136,11 +151,18 @@ public class PointGainTest {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
+        // User A adds answer
+        Config.setUser(FilledFakeDatabase.getUser(2));
         addAnswer();
+        // User B accepts it
+        Config.setUser(FilledFakeDatabase.getUser(0));
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment,
+                        FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
         performFavoriteAction();
-        testUserPoints(RESPOND_OFFER.getValue(), Config.getUser());
+        testUserPointsDbOnly(RESPOND_OFFER.getValue(), FilledFakeDatabase.getUser(2));
         performFavoriteAction();
-        testUserPoints(0, Config.getUser());
+        testUserPointsDbOnly(0, FilledFakeDatabase.getUser(2));
     }
 
     private void addAnswer() {
