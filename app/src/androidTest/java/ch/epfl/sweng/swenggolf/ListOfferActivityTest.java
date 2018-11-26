@@ -122,7 +122,8 @@ public class ListOfferActivityTest {
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(ListOfferActivity.getOfferList().get(0).getTitle())), click()));
+                ViewMatchers.withText(ListOfferActivity.getOfferList().get(0).getTitle())),
+                click()));
     }
 
     @Test
