@@ -70,7 +70,7 @@ public class CategoriesMenuTest {
         clickOnCategoryInMenu(Category.getDefault());
         clickOnCategoryInMenu(Category.getDefault());
 
-        Offer offer = ListOfferActivity.OFFER_LIST.get(0);
+        Offer offer = ListOfferActivity.getOfferList().get(0);
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(offer.getTitle()))));

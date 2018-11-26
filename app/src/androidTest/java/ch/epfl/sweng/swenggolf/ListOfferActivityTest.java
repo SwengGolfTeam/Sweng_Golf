@@ -92,7 +92,7 @@ public class ListOfferActivityTest {
 
     @Test
     public void offerCorrectlyDisplayedInTheList() {
-        Offer offer = ListOfferActivity.OFFER_LIST.get(0);
+        Offer offer = ListOfferActivity.getOfferList().get(0);
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(offer.getTitle()))));
@@ -122,13 +122,13 @@ public class ListOfferActivityTest {
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(ListOfferActivity.OFFER_LIST.get(0).getTitle())), click()));
+                ViewMatchers.withText(ListOfferActivity.getOfferList().get(0).getTitle())), click()));
     }
 
     @Test
     public void offerCorrectlyExpandedAndRetractedAfterLongPressOnList() {
-        Offer offerToTest = ListOfferActivity.OFFER_LIST.get(0);
-        Offer otherOffer = ListOfferActivity.OFFER_LIST.get(1);
+        Offer offerToTest = ListOfferActivity.getOfferList().get(0);
+        Offer otherOffer = ListOfferActivity.getOfferList().get(1);
 
         String longDescription = offerToTest.getDescription();
         String shortDescription = offerToTest.getShortDescription();

@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.profile.User;
 /**
  * Tool class which enables to fill a view with data.
  */
-public class ViewUserFiller {
+public final class ViewUserFiller {
 
     private static Map<String, String> userMap = new HashMap<>();
 
