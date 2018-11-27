@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +42,6 @@ public class Leaderboard extends FragmentConverter {
         userList.clear();
 
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.leaderboard);
-        super.onCreate(savedInstance);
         View inflated = inflater.inflate(R.layout.activity_leaderboard, container, false);
         errorMessage = inflated.findViewById(R.id.error_message);
         noUser = inflated.findViewById(R.id.no_user_to_show);
