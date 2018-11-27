@@ -24,7 +24,14 @@ public final class CreatePictureHelper {
 
     private CreatePictureHelper(){}
 
-    public static Uri compressImageFromPath(Context context, String filePath, String filename) {
+    /**
+     * Creates a compressed version of a file given its path.
+     * @param context the context from which the cache is taken.
+     * @param filePath the path of the file to be compressed.
+     * @param filename the name of the compressed file.
+     * @return the Uri where the compressed file is stored.
+     */
+     public static Uri compressImageFromPath(Context context, String filePath, String filename) {
         // First decode with inJustDecodeBounds=true to check dimensions of image
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;

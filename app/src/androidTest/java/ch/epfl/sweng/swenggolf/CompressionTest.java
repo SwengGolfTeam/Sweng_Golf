@@ -33,8 +33,8 @@ public class CompressionTest {
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bm = BitmapFactory.decodeResource(activity.getResources(),
                 R.drawable.img, options);
-        Uri compressionResult = CreatePictureHelper.compressImageIntoCache(bm, activity.getApplicationContext(),
-                "test_compression");
+        Uri compressionResult = CreatePictureHelper.compressImageIntoCache(bm,
+                activity.getApplicationContext(), "test_compression");
         File result = new File(activity.getCacheDir(), compressionResult.getLastPathSegment());
         assertThat(result.exists(), is(true));
         assertThat(result.length(), lessThan((long) CreatePictureHelper.MAX_IMAGE_SIZE*1024));
