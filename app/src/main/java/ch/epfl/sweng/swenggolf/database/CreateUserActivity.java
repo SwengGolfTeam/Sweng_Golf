@@ -7,7 +7,6 @@ import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -17,15 +16,12 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
-import static android.util.Patterns.EMAIL_ADDRESS;
-
 
 public class CreateUserActivity extends AppCompatActivity {
 
     private EditText name;
     private ImageView photo;
     private User user;
-
 
 
     @Override

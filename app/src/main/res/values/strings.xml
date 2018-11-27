@@ -71,5 +71,8 @@
     <string name="accept_favorite_question">Do you want to accept this answer?</string>
     <string name="remove_favorite">Did you change your mind?</string>
     <string name="remove_favorite_question">Do you really want to remove your approval?</string>
+    <string name="close_the_offer">Close the offer</string>
+    <string name="the_offer_is_closed">The offer is closed.</string>
     <string name="presentation">Welcome to Polytroc, please put your username. You can change your picture, your description and many other things after this step.</string>
+
 </resources>

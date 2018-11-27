@@ -44,10 +44,11 @@ public class Offer implements Parcelable {
     private final Category tag;
     private final double longitude;
     private final double latitude;
+    private final boolean isClosed;
 
     private Offer(String uuid, String title, String description, long creationDate, long endDate,
                   String linkPicture, String userId, Category tag,
-                  double longitude, double latitude) {
+                  double longitude, double latitude, boolean isClosed) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
@@ -58,6 +59,7 @@ public class Offer implements Parcelable {
         this.tag = tag;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.isClosed = isClosed;
     }
 
     /**
@@ -74,10 +76,11 @@ public class Offer implements Parcelable {
         longitude = 0;
         latitude = 0;
         uuid = "";
+        isClosed = false;
     }
 
     private Offer(Parcel in) {
-        String[] data = new String[10];
+        String[] data = new String[11];
 
         in.readStringArray(data);
         this.userId = data[0];
@@ -90,6 +93,7 @@ public class Offer implements Parcelable {
         this.endDate = Long.parseLong(data[7]);
         this.latitude = Double.parseDouble(data[8]);
         this.longitude = Double.parseDouble(data[9]);
+        this.isClosed = Boolean.parseBoolean(data[10]);
     }
 
     //Objects.requireNonNull API level is 19
@@ -249,6 +253,15 @@ public class Offer implements Parcelable {
     }
 
     /**
+     * Return true if the offer is closed, false otherwise.
+     *
+     * @return true if the offer is closed, false otherwise
+     */
+    public boolean getIsClosed() {
+        return isClosed;
+    }
+
+    /**
      * Creates a new offer in the database using the new picture's link given.
      *
      * @param newLinkPicture the new picture's link
@@ -290,7 +303,8 @@ public class Offer implements Parcelable {
                 Long.toString(getCreationDate()),
                 Long.toString(getEndDate()),
                 Double.toString(getLatitude()),
-                Double.toString(getLongitude())});
+                Double.toString(getLongitude()),
+                Boolean.toString(isClosed)});
     }
 
     /**
@@ -341,6 +355,7 @@ public class Offer implements Parcelable {
         private double longitude;
         private double latitude;
         private String uuid;
+        private boolean isClosed;
 
         /**
          * Creates a new Builder with his fields initialized to the ones of another offer.
@@ -358,6 +373,7 @@ public class Offer implements Parcelable {
             this.longitude = offer.longitude;
             this.latitude = offer.latitude;
             this.uuid = offer.uuid;
+            this.isClosed = offer.isClosed;
         }
 
         /**
@@ -367,6 +383,7 @@ public class Offer implements Parcelable {
          * The location values are set to 0.
          * The tag is set to default.
          * The uuid is set to a new uuid.
+         * The isClosed boolean is set to false.
          */
         public Builder() {
             creationDate = Calendar.getInstance().getTimeInMillis();
@@ -379,6 +396,7 @@ public class Offer implements Parcelable {
             latitude = 0;
             linkPicture = "";
             uuid = UUID.randomUUID().toString();
+            isClosed = false;
         }
 
         public Builder setTag(Category tag) {
@@ -418,6 +436,11 @@ public class Offer implements Parcelable {
 
         public Builder setLongitude(double longitude) {
             this.longitude = longitude;
+            return this;
+        }
+
+        public Builder setIsClosed(boolean isClosed) {
+            this.isClosed = isClosed;
             return this;
         }
 
@@ -464,7 +487,7 @@ public class Offer implements Parcelable {
                     checkNullity(linkPicture, "picture link"),
                     checkStringValidity(userId, "user ID"),
                     checkNullity(tag, "tag"),
-                    longitude, latitude
+                    longitude, latitude, isClosed
             );
         }
 
