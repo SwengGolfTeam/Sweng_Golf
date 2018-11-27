@@ -28,10 +28,17 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityTest {
@@ -89,10 +96,11 @@ public class ShowOfferActivityTest {
                 .check(matches(withText(expectedDistance)));
     }
 
-
+    @Test
     public void correctIntentSentWhenClickedOnDistance() {
         onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
         // FIXME travis doesn't detect the intent, locally yes
-        //intended(hasPackage("com.google.android.apps.maps"));
+        intended(hasPackage("com.google.android.apps.maps"));
+
     }
 }
