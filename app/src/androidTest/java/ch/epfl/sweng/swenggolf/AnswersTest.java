@@ -109,7 +109,17 @@ public class AnswersTest {
 
     @Test
     public void authorCanSelectAndDeselectFavorite() {
+        // user A adds answer
+        Config.setUser(FilledFakeDatabase.getUser(1));
         addAnswer("test");
+
+        // user B selects Answer as favorite (with refresh of Activity to generate buttons)
+        Config.setUser(author);
+        mActivityRule.getActivity()
+                .getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment,
+                        FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));

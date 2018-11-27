@@ -12,12 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -32,16 +34,14 @@ public class NotificationsAdapter
     /**
      * Constructs an adapter for the RecyclerView in NotificationsActivity.
      *
-     * @param notifications             the list of notifications to be displayed
      * @param viewHolderOnClickListener a listener indicating what to do when clicking
      *                                  on items of the recycler view
      */
-    public NotificationsAdapter(List<Notification> notifications,
-                                ItemClickListener viewHolderOnClickListener) {
-        if (notifications == null || viewHolderOnClickListener == null) {
+    public NotificationsAdapter(ItemClickListener viewHolderOnClickListener) {
+        if (viewHolderOnClickListener == null) {
             throw new IllegalArgumentException();
         }
-        this.notifications = new ArrayList<>(notifications);
+        this.notifications = new ArrayList<>();
         this.viewHolderOnClickListener = viewHolderOnClickListener;
     }
 
@@ -53,6 +53,15 @@ public class NotificationsAdapter
     public void setNotifications(List<Notification> notifications) {
         this.notifications = new ArrayList<>(notifications);
         notifyDataSetChanged();
+    }
+
+    /**
+     * Returns the list of notifications.
+     *
+     * @return the list of notifications, immutable
+     */
+    public List<Notification> getNotifications() {
+        return Collections.unmodifiableList(this.notifications);
     }
 
     @Override
@@ -108,7 +117,7 @@ public class NotificationsAdapter
     private void setContent(Notification notification, TextView text,
                             ImageView icon, Context context) {
         switch (notification.getType()) {
-            case ANSWER_CHOSEN: // TODO too similar to ANSWER_POSTED ?!
+            case ANSWER_CHOSEN:
                 text.setText(getAnswerText(true, context, notification));
                 icon.setImageResource(R.drawable.ic_favorite_black_24dp);
                 break;
@@ -120,6 +129,10 @@ public class NotificationsAdapter
                 text.setText(context.getString(R.string.notif_follow,
                         notification.getUserName()));
                 icon.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case LEVEL_GAINED:
+                text.setText(context.getString(R.string.notif_level_gained));
+                icon.setImageResource(R.drawable.ic_exposure_plus_1_black_24dp);
                 break;
             default:
                 text.setText("TEST");

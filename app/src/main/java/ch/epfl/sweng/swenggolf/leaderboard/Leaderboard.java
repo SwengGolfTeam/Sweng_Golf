@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf;
+package ch.epfl.sweng.swenggolf.leaderboard;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
@@ -38,12 +40,22 @@ public class Leaderboard extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
+        userList.clear();
+
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.leaderboard);
         View inflated = inflater.inflate(R.layout.activity_leaderboard, container, false);
         errorMessage = inflated.findViewById(R.id.error_message);
         noUser = inflated.findViewById(R.id.no_user_to_show);
         setRecyclerView(inflated);
         return inflated;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        openDrawer();
+        return true;
     }
 
 

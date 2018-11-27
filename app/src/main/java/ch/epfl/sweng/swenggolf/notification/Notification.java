@@ -36,7 +36,7 @@ public class Notification {
             this.offerName = concernedOffer.getTitle();
             this.offerId = concernedOffer.getUuid();
         }
-        uuid = UUID.randomUUID().toString();
+        uuid = Long.toString(System.currentTimeMillis());
     }
 
     /**

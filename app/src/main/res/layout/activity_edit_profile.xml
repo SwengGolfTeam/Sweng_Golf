@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -30,12 +31,14 @@
 
         <Button
             android:id="@+id/photoButton"
-            android:layout_width="126dp"
+            android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
             android:text="@string/change_pic"
-            android:textSize="8sp"
+            android:background="@drawable/btn_rounded"
+            android:theme="@style/ButtonTheme"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
@@ -80,10 +83,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:orientation="horizontal"></LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/descriptionLinearLayout"
@@ -109,10 +109,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:orientation="horizontal"></LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/prefLinearLayout"
@@ -146,10 +143,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/btn_rounded"
             android:text="@string/save"
+            android:theme="@style/ButtonTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.445"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dataLinearLayout"
             app:layout_constraintVertical_bias="0.432" />

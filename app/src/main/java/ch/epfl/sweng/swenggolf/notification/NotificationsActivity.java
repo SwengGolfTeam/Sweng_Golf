@@ -3,7 +3,6 @@ package ch.epfl.sweng.swenggolf.notification;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -29,7 +30,6 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
-    private List<Notification> notifications;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -58,16 +58,12 @@ public class NotificationsActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        notifications = new ArrayList<>();
-
-        mAdapter = new NotificationsAdapter(notifications, getClickListener());
+        mAdapter = new NotificationsAdapter(getClickListener());
         mRecyclerView.setAdapter(mAdapter);
 
-        fetchNotifications(inflated);
+        checkUserPoints();
 
-        // Add dividing line
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
+        fetchNotifications(inflated);
 
         if (mAdapter.getItemCount() == 0) {
             inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);
@@ -80,10 +76,11 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    notifications = value;
                     if (value.size() != 0) {
                         inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
                     }
+                    // so that they appear the most recent on top
+                    Collections.reverse(value);
                     mAdapter.setNotifications(value);
                 }
             }
@@ -100,16 +97,29 @@ public class NotificationsActivity extends FragmentConverter {
 
     }
 
+    private void checkUserPoints() {
+        LocalDatabase localDb = new LocalDatabase(getContext(), null, 1);
+        int currentLevel = Badge.computeLevel(Config.getUser().getPoints());
+        int previousLevel = localDb.readLevel();
+        if (currentLevel > previousLevel) {
+            Notification n = new Notification(NotificationType.LEVEL_GAINED, null, null);
+            NotificationManager.addPendingNotification(Config.getUser().getUserId(), n);
+        }
+        localDb.writeLevel(currentLevel);
+    }
+
     private ItemClickListener getClickListener() {
         return new ItemClickListener() {
 
             @Override
             public void onClick(View view, int position) {
-                Notification notification = notifications.get(position);
+                Notification notification = mAdapter.getNotifications().get(position);
                 if (notification.getOfferId() != null) {
                     lookUpAndGoTo(notification.getOfferId(), Database.OFFERS_PATH);
                 } else if (notification.getUserId() != null) {
                     lookUpAndGoTo(notification.getUserId(), Database.USERS_PATH);
+                } else {
+                    replaceCentralFragment(createShowProfileWithProfile(Config.getUser()));
                 }
             }
         };

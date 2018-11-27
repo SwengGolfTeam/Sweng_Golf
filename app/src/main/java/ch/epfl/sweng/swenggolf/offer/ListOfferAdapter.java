@@ -30,6 +30,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
             throw new IllegalArgumentException();
         }
         this.offerList = offerList;
+        ViewUserFiller.clearMap();
     }
 
     @Override
@@ -47,16 +48,17 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         TextView title = (TextView) holder.getFieldOne();
         title.setText(offer.getTitle());
 
+        TextView author = (TextView) holder.getFieldTwo();
+        author.setText("");
+        ViewUserFiller.fillWithUsername(author, offer.getUserId());
+
         // Get short description
         String description = offer.getShortDescription();
         TextView mainContent = (TextView) holder.getFieldThree();
         mainContent.setText(description);
-
-        TextView author = (TextView) holder.getFieldTwo();
-        ViewUserFiller.fillWithUsername(author, offer.getUserId());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return offerList.size();
