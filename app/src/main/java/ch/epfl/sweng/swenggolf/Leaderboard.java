@@ -55,15 +55,9 @@ public class Leaderboard extends FragmentConverter {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                openDrawer();
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
-        }
+        super.onOptionsItemSelected(item);
+        openDrawer();
+        return true;
     }
 
 
