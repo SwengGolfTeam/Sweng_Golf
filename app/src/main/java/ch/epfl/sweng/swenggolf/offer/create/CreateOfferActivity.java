@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -17,9 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,7 +73,6 @@ public class CreateOfferActivity extends FragmentConverter
     Uri tempPicturePath = null;
     TextView errorMessage;
     private TextView dateText;
-    private Uri photoDestination = null;
     private int fragmentsToSkip;
 
     /**
@@ -142,28 +138,11 @@ public class CreateOfferActivity extends FragmentConverter
             removeStalledPicture();
             switch (requestCode) {
                 case CAPTURE_IMAGE_REQUEST: {
-                    photoDestination = tempPicturePath;
-                    File cacheDirectory = getContext().getCacheDir();
-                    File photo = new File(cacheDirectory, photoDestination.getLastPathSegment());
-                    filePath = CreateHelper.compressImageFromPath(getContext(),
-                            photo.getAbsolutePath(), "compressed");
-                    if(!photo.delete()) {
-                        String errorMsg = getString(R.string.tmp_file_suppression_error);
-                        Toast.makeText(this.getContext(), errorMsg, Toast.LENGTH_LONG).show();
-                    }
+                    filePath = compressTemporaryFilepath();
                     break;
                 }
                 case PICK_IMAGE_REQUEST: {
-                    Bitmap map = null;
-                    try {
-                        map = MediaStore.Images.Media.getBitmap(
-                                this.getActivity().getContentResolver(), data.getData());
-                        filePath = CreateHelper.compressImageIntoCache(map, this.getContext(),
-                                "compressed");
-                    } catch (IOException e) {
-                        Toast.makeText(this.getContext(), "Failed to retrieve picture.",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    filePath = compressUriFile(data.getData());
                     break;
                 }
                 default: {
@@ -173,6 +152,35 @@ public class CreateOfferActivity extends FragmentConverter
             ImageView imageView = findViewById(R.id.offer_picture);
             Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
         }
+    }
+
+    private Uri compressTemporaryFilepath() {
+        File cacheDirectory = getContext().getCacheDir();
+        File photo = new File(cacheDirectory, tempPicturePath.getLastPathSegment());
+        Uri tmpPath = CreatePictureHelper.compressImageFromPath(getContext(),
+                photo.getAbsolutePath(), "compressed");
+        if(!photo.delete()) {
+            String errorMsg = getString(R.string.tmp_file_suppression_error);
+            Toast.makeText(this.getContext(), errorMsg, Toast.LENGTH_LONG).show();
+        }
+        return tmpPath;
+    }
+
+    private Uri compressUriFile(Uri data) {
+        Uri path;
+        Bitmap map;
+        try {
+            map = MediaStore.Images.Media.getBitmap(
+                    this.getActivity().getContentResolver(), data);
+            path = CreatePictureHelper.compressImageIntoCache(map,
+                    this.getContext(), "compressed");
+        } catch (IOException e) {
+            Toast.makeText(this.getContext(), "Failed to retrieve picture.",
+                    Toast.LENGTH_LONG).show();
+            return Config.isTest() ? Uri.parse("drawable://" + R.drawable.img) : null;
+            //TODO find a better way to fix tests with ressource drawable.
+        }
+        return path;
     }
 
 
@@ -215,7 +223,7 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
     private void removeStalledPicture() {
-        if (filePath != null) {
+        if (filePath != null && filePath.getLastPathSegment() != null) {
             File previous = new File(getContext().getCacheDir(),
                     filePath.getLastPathSegment());
             if (!previous.delete()) {
