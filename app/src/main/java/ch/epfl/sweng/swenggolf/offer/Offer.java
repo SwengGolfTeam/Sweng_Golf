@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import com.google.firebase.database.Exclude;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -188,6 +190,7 @@ public class Offer implements Parcelable {
      *
      * @return the shortened description of the offer
      */
+    @Exclude
     public String getShortDescription() {
         return getDescription().length() > DESCRIPTION_LIMIT
                 ? getDescription().substring(0, DESCRIPTION_LIMIT) + "..."
