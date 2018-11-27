@@ -383,6 +383,7 @@ public class Offer implements Parcelable {
          * The location values are set to 0.
          * The tag is set to default.
          * The uuid is set to a new uuid.
+         * The isClosed boolean is set to false.
          */
         public Builder() {
             creationDate = Calendar.getInstance().getTimeInMillis();
