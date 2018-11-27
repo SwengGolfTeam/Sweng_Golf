@@ -82,7 +82,7 @@ public class WaitingActivityTest {
         Config.setActivityCallback(new ActivityCallback() {
             @Override
             public void isDone() {
-                intended(hasComponent(MainMenuActivity.class.getName()));
+                intended(hasComponent(CreateUserActivity.class.getName()));
             }
         });
     }

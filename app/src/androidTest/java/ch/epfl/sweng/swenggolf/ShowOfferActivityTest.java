@@ -105,11 +105,12 @@ public class ShowOfferActivityTest {
         }
     }
 
-    public boolean isGoogleMapsInstalled()
+    private boolean isGoogleMapsInstalled()
     {
         try
         {
-            ApplicationInfo info = mActivityRule.getActivity().getPackageManager().getApplicationInfo("com.google.android.apps.maps", 0 );
+            ApplicationInfo info = mActivityRule.getActivity().getPackageManager()
+                    .getApplicationInfo("com.google.android.apps.maps", 0 );
             return true;
         }
         catch(PackageManager.NameNotFoundException e)
