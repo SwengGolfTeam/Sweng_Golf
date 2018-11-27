@@ -49,6 +49,9 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
+import ch.epfl.sweng.swenggolf.offer.answer.Answer;
+import ch.epfl.sweng.swenggolf.offer.answer.Answers;
+import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -331,7 +334,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer);
+        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer, this);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
