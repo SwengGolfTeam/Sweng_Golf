@@ -8,6 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -38,12 +41,29 @@ public class Leaderboard extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
+        userList.clear();
+
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.leaderboard);
+        super.onCreate(savedInstance);
         View inflated = inflater.inflate(R.layout.activity_leaderboard, container, false);
         errorMessage = inflated.findViewById(R.id.error_message);
         noUser = inflated.findViewById(R.id.no_user_to_show);
         setRecyclerView(inflated);
         return inflated;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                openDrawer();
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
 
