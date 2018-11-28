@@ -69,23 +69,5 @@ public class WaitingActivityTest {
             }
         });
     }
-
-    @Test
-    public void databaseNotWorking(){
-        //TODO delete probably
-        Config.goToTest();
-        Database database = new FakeDatabase(false);
-        Database.setDebugDatabase(database);
-        DatabaseUser.addUser(USERDB);
-
-        Config.setUser(new User(USERNOTDB));
-        Config.setActivityCallback(new ActivityCallback() {
-            @Override
-            public void isDone() {
-                intended(hasComponent(CreateUserActivity.class.getName()));
-            }
-        });
-    }
-
 }
 
