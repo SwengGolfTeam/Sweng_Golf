@@ -1,6 +1,8 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -28,10 +30,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
+
 
 @RunWith(AndroidJUnit4.class)
 public class ShowOfferActivityTest {
@@ -89,10 +94,28 @@ public class ShowOfferActivityTest {
                 .check(matches(withText(expectedDistance)));
     }
 
-
+    @Test
     public void correctIntentSentWhenClickedOnDistance() {
         onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
-        // FIXME travis doesn't detect the intent, locally yes
-        //intended(hasPackage("com.google.android.apps.maps"));
+
+        if(!isGoogleMapsInstalled()){
+            assert(true); //skip test
+        } else {
+            intended(hasPackage("com.google.android.apps.maps"));
+        }
+    }
+
+    private boolean isGoogleMapsInstalled()
+    {
+        try
+        {
+            ApplicationInfo info = mActivityRule.getActivity().getPackageManager()
+                    .getApplicationInfo("com.google.android.apps.maps", 0 );
+            return true;
+        }
+        catch(PackageManager.NameNotFoundException e)
+        {
+            return false;
+        }
     }
 }
