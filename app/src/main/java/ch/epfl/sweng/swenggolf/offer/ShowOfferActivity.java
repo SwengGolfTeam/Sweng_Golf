@@ -267,13 +267,15 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setAnswerToPost() {
-        final Button reactButton = inflated.findViewById(R.id.react_button);
+        Button reactButton = inflated.findViewById(R.id.react_button);
         reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mLayout.removeView(reactButton);
+                View buttons = inflated.findViewById(R.id.offer_buttons);
+                mLayout.removeView(buttons);
                 mLayout.addView(newReaction);
+
 
                 ValueListener<User> vlUser = createFiller(inflated);
 
