@@ -22,6 +22,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
  */
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
+    private final Map<String, List<ValueListener>> listeners;
     private Set<String> workingOnEntry;
     private boolean working;
 
@@ -34,8 +35,9 @@ public class FakeDatabase extends Database {
      */
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
+        this.listeners = new TreeMap<>();
         this.working = working;
-        workingOnEntry = new HashSet<>();
+        this.workingOnEntry = new HashSet<>();
     }
 
     private static void handleError(String attribute) {
@@ -89,7 +91,13 @@ public class FakeDatabase extends Database {
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         if (working) {
-            database.put(path + "/" + id, object);
+            path = path + "/" + id;
+            database.put(path, object);
+            if(listeners.containsKey(path) && listeners.get(path) != null) {
+                for (ValueListener listener : listeners.get(path)) {
+                    listener.onDataChange(object);
+                }
+            }
         }
     }
 
@@ -117,6 +125,19 @@ public class FakeDatabase extends Database {
             }
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
+    }
+
+    @Override
+    public <T> void listen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
+        path = path + "/" + id;
+        if(listeners.containsKey(path)) {
+            listeners.get(path).add(listener);
+        } else {
+            List<ValueListener> pathListeners = new ArrayList<ValueListener>();
+            pathListeners.add(listener);
+            listeners.put(path, pathListeners);
         }
     }
 
