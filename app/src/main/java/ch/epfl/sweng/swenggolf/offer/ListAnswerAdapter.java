@@ -43,6 +43,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private Answers answers;
     private Offer offer;
     private boolean isClosed;
+    private ValueListener<Answers> updateListener;
 
     /**
      * Constructs a ListAnswerAdapter for the RecyclerView.
@@ -56,6 +57,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         this.answers = answers;
         this.offer = offer;
         this.isClosed = false;
+        this.updateListener = null;
+    }
+
+    public void setUpdateListener(ValueListener<Answers> updateListener) {
+        this.updateListener = updateListener;
+    }
+
+    public ValueListener<Answers> getUpdateListener() {
+        return updateListener;
     }
 
     /**

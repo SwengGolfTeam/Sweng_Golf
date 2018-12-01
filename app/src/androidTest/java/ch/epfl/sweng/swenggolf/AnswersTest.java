@@ -1,11 +1,13 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -13,6 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
@@ -29,10 +34,14 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
@@ -84,6 +93,15 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+    }
+
+    @Test
+    public void testAnswersRefresh() throws InterruptedException {
+        List<Answer> newAnswers = new ArrayList<>();
+        newAnswers.add(new Answer(offer.getUserId(),"hey !"));
+        Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
+        onView(withChild(withText("hey !"))).perform(scrollTo());
     }
 
     @Test

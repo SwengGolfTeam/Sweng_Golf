@@ -94,11 +94,26 @@ public class FakeDatabase extends Database {
         if (working) {
             path = path + "/" + id;
             database.put(path, object);
+            String[] listenningToChildren = path.split("/");
+            notifyChildren(listenningToChildren);
             if(listeners.containsKey(path)) {
-                for (ValueListener listener : listeners.get(path)) {
+                for(ValueListener listener : listeners.get(path)) {
                     listener.onDataChange(object);
                 }
             }
+        }
+    }
+
+    private void notifyChildren(String[] listenningToChildren) {
+        StringBuilder currentLevel = new StringBuilder();
+        for (String level : listenningToChildren) {
+            String current = currentLevel.toString();
+            if(listeners.containsKey(current)) {
+                for (ValueListener listener : listeners.get(current)) {
+                    listener.onDataChange(getList(current));
+                }
+            }
+            currentLevel.append("/").append(level);
         }
     }
 
