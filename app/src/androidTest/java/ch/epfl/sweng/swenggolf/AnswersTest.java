@@ -66,11 +66,6 @@ public class AnswersTest {
      * @param answer the message to be posted
      */
     public static void addAnswer(String answer) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         onView(withId(R.id.react_button)).perform(scrollTo(), click());
         onView(withId(R.id.your_answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());

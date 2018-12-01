@@ -45,11 +45,8 @@ public class FakeDatabase extends DatabaseListHandler {
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         if (working) {
-            database.put(path, object);
-            path = path + "/" + id;
-            String[] listeningToChildren = path.split("/");
-            notifyChildren(listeningToChildren);
-            notifyPathListeners(path, object);
+            database.put(path + "/" + id, object);
+            notifyListeners(path, id, object);
         }
     }
 
@@ -62,6 +59,13 @@ public class FakeDatabase extends DatabaseListHandler {
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    private void notifyListeners(String path, String id, Object object) {
+        path = path + "/" + id;
+        String[] listeningToChildren = path.split("/");
+        notifyChildren(listeningToChildren);
+        notifyPathListeners(path, object);
     }
 
     private void notifyPathListeners(String path, Object object) {
@@ -138,8 +142,8 @@ public class FakeDatabase extends DatabaseListHandler {
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         if (working) {
-            database.remove(path);
-            write(path, id, null);
+            database.remove(path + "/" + id);
+            notifyListeners(path, id, null);
             listener.onComplete(DbError.NONE);
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
