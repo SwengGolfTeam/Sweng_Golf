@@ -46,7 +46,6 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
-import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
@@ -91,7 +90,7 @@ public class ShowOfferActivity extends FragmentConverter {
         LayoutInflater mInflater = getLayoutInflater();
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents();
-        setRecyclerView();
+        setAnswersRecyclerView();
         if (offer.getIsClosed()) {
             hideReactButton();
             listAnswerAdapter.closeAnswers();
@@ -327,7 +326,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
-    private void setRecyclerView() {
+    private void setAnswersRecyclerView() {
         RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
         mRecyclerView.setFocusable(false);
         mRecyclerView.setNestedScrollingEnabled(false);

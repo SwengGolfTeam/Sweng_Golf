@@ -76,4 +76,5 @@
     <string name="the_offer_is_closed">The offer is closed.</string>
     <string name="presentation">Welcome to Polytroc, please put your username. You can change your picture, your description and many other things after this step.</string>
     <string name="open_discussion">Open discussion</string>
+    <string name="hint_greeting">You can now send messages to each other</string>
 </resources>
