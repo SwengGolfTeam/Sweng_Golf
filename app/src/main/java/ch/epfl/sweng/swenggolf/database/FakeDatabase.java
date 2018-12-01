@@ -53,6 +53,17 @@ public class FakeDatabase extends DatabaseListHandler {
         }
     }
 
+    @Override
+    public void write(@NonNull String path, @NonNull String id, @NonNull Object object,
+                      @NonNull CompletionListener listener) {
+        if (working) {
+            write(path, id, object);
+            listener.onComplete(DbError.NONE);
+        } else {
+            listener.onComplete(DbError.UNKNOWN_ERROR);
+        }
+    }
+
     private void notifyPathListeners(String path, Object object) {
         if (listeners.containsKey(path)) {
             List<ValueListener> objectListeners = listeners.get(path);
@@ -81,17 +92,6 @@ public class FakeDatabase extends DatabaseListHandler {
                     listener.onDataChange(getList(level));
                 }
             }
-        }
-    }
-
-    @Override
-    public void write(@NonNull String path, @NonNull String id, @NonNull Object object,
-                      @NonNull CompletionListener listener) {
-        if (working) {
-            write(path, id, object);
-            listener.onComplete(DbError.NONE);
-        } else {
-            listener.onComplete(DbError.UNKNOWN_ERROR);
         }
     }
 
