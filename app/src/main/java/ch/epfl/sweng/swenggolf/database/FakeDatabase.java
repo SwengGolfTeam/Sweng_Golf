@@ -76,7 +76,7 @@ public class FakeDatabase extends DatabaseListHandler {
     private String[] createChildrenPaths(String[] listenningToChildren) {
         String[] paths = new String[listenningToChildren.length];
         StringBuilder currentPath = new StringBuilder();
-        for (int i=0;i<paths.length;++i) {
+        for (int i = 0; i < paths.length; ++i) {
             paths[i] = currentPath.toString();
             currentPath.append("/").append(listenningToChildren[i]);
         }
@@ -86,12 +86,7 @@ public class FakeDatabase extends DatabaseListHandler {
     private void notifyChildren(String[] listenningToChildren) {
         listenningToChildren = createChildrenPaths(listenningToChildren);
         for (String level : listenningToChildren) {
-            if (listeners.containsKey(level)) {
-                List<ValueListener> childrenListeners = listeners.get(level);
-                for (ValueListener listener : childrenListeners) {
-                    listener.onDataChange(getList(level));
-                }
-            }
+            notifyPathListeners(level, getList(level));
         }
     }
 
@@ -139,7 +134,6 @@ public class FakeDatabase extends DatabaseListHandler {
     }
 
 
-
     @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
@@ -151,7 +145,6 @@ public class FakeDatabase extends DatabaseListHandler {
             listener.onComplete(DbError.UNKNOWN_ERROR);
         }
     }
-
 
 
     @Nullable
@@ -166,6 +159,17 @@ public class FakeDatabase extends DatabaseListHandler {
     }
 
     /**
+     * The working state of the Database.
+     *
+     * @return the working state of the Database, the DataBase will send
+     * error when working is set at false and will work as
+     * expected otherwise.
+     */
+    protected boolean isWorking() {
+        return working;
+    }
+
+    /**
      * Set working state of the Database.
      *
      * @param w the working state of the Database, the DataBase will send
@@ -174,17 +178,6 @@ public class FakeDatabase extends DatabaseListHandler {
      */
     public void setWorking(boolean w) {
         working = w;
-    }
-
-    /**
-     * The working state of the Database.
-     *
-     * @return the working state of the Database, the DataBase will send
-     *         error when working is set at false and will work as
-     *         expected otherwise.
-     */
-    protected boolean isWorking() {
-        return working;
     }
 
     /**

@@ -108,13 +108,15 @@ public class ShowOfferActivity extends FragmentConverter {
         closingListener = new ValueListener<Boolean>() {
             @Override
             public void onDataChange(Boolean value) {
-               if(value != null && value) {
-                   closeOffer();
-               }
+                if (value != null && value) {
+                    closeOffer();
+                }
             }
 
             @Override
-            public void onCancelled(DbError error) { }
+            public void onCancelled(DbError error) {
+                //No notification or errored notifications, as such no modification on display.
+            }
         };
         Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
                 "isClosed", closingListener, Boolean.class);
