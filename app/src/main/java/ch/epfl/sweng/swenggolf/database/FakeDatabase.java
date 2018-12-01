@@ -162,8 +162,8 @@ public class FakeDatabase extends DatabaseListHandler {
      * The working state of the Database.
      *
      * @return the working state of the Database, the DataBase will send
-     * error when working is set at false and will work as
-     * expected otherwise.
+     *         error when working is set at false and will work as
+     *         expected otherwise.
      */
     protected boolean isWorking() {
         return working;
