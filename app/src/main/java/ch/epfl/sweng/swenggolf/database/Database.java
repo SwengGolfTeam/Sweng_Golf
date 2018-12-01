@@ -98,6 +98,15 @@ public abstract class Database {
                                     @NonNull ValueListener<T> listener, @NonNull Class<T> c);
 
     /**
+     * Removes a listener from a reference.
+     *
+     * @param listener the listener to be removed.
+     * @param <T> the type of the value.
+     */
+    public abstract <T> void deafen(@NonNull String path, @NonNull String id,
+                                    @NonNull ValueListener<T> listener);
+
+    /**
      * Read a list of value in a given path. It return the list using a listener.
      *
      * @param path     the path where we want to read the list

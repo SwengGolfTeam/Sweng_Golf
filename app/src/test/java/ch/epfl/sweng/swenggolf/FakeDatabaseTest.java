@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -58,8 +59,49 @@ public class FakeDatabaseTest {
 
     }
 
+
+    class ValueTestListener<T> implements ValueListener<T> {
+        public int calls = 0;
+
+        @Override
+        public void onDataChange(T value) {
+            if(calls == 0) {
+                assertThat(value, (Matcher<? super T>) is(CONTENT));
+            } else if(calls == 1){
+                assertThat(value, (Matcher<? super T>) is(CONTENT_2));
+            }
+            ++calls;
+        }
+
+        @Override
+        public void onCancelled(DbError error) {
+            fail();
+        }
+    }
+
     @Test
-    public void readReturnNull() {
+    public void listenIsNotifiedWhenChangeHappens() {
+        final Database d = new FakeDatabase(true);
+        ValueTestListener<String> testListener = new ValueTestListener<>();
+        d.write(PATH, ID, CONTENT);
+        d.listen(PATH, ID, testListener, String.class);
+        d.write(PATH, ID, CONTENT_2);
+        assertThat(testListener.calls, is(2));
+    }
+
+    @Test
+    public void deafenDisablesListenning() {
+        final Database d = new FakeDatabase(true);
+        ValueTestListener<String> testListener = new ValueTestListener<>();
+        d.write(PATH, ID, CONTENT);
+        d.listen(PATH, ID, testListener, String.class);
+        d.deafen(PATH, ID, testListener);
+        d.write(PATH, ID, CONTENT_2);
+        assertThat(testListener.calls, is(1));
+    }
+
+    @Test
+    public void readReturnsNull() {
         Database d = new FakeDatabase(true);
         ValueListener<String> listener = new ValueListener<String>() {
             @Override

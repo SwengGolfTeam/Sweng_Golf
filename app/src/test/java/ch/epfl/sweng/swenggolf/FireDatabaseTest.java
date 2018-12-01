@@ -36,6 +36,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -49,6 +50,27 @@ public class FireDatabaseTest {
             .setDescription("description2").build();
 
     private static final List<Offer> LIST = Arrays.asList(OFFER1, OFFER2);
+
+    @Test
+    public void listenAddsListener() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        FireDatabase d = new FireDatabase(database);
+        final DatabaseReference idReference = setUpPath(database);
+        ValueListener<Offer>  listenerOffer = mockRead(idReference, OFFER1);
+        d.listen(PATH, ID, listenerOffer, Offer.class);
+        verify(idReference).addValueEventListener(any(ValueEventListener.class));
+    }
+
+    @Test
+    public void deafenRemovesListener() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        FireDatabase d = new FireDatabase(database);
+        final DatabaseReference idReference = setUpPath(database);
+        ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER1);
+        d.listen(PATH, ID, listenerOffer, Offer.class);
+        d.deafen(PATH, ID, listenerOffer);
+        verify(idReference).removeEventListener(any(ValueEventListener.class));
+    }
 
     @Test
     public void writeAndReadReturnCorrectValues() {
@@ -277,18 +299,12 @@ public class FireDatabaseTest {
 
     @NonNull
     private ValueListener<Offer> mockRead(DatabaseReference idReference, final Offer offer) {
-        Answer<Void> readAnswer = new Answer<Void>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) {
-                ValueEventListener listener1 = invocation.getArgument(0);
-                DataSnapshot snapshot = mock(DataSnapshot.class);
-                when(snapshot.getValue(Offer.class)).thenReturn(offer);
-                listener1.onDataChange(snapshot);
-                return null;
-            }
-        };
+        Answer<Void> readAnswer = mockGetData(offer);
         doAnswer(readAnswer).when(idReference)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));
+
+        doAnswer(readAnswer).when(idReference)
+                .addValueEventListener(any(ValueEventListener.class));
 
         return new ValueListener<Offer>() {
             @Override
@@ -299,6 +315,20 @@ public class FireDatabaseTest {
             @Override
             public void onCancelled(DbError error) {
 
+            }
+        };
+    }
+
+    @NonNull
+    private Answer<Void> mockGetData(final Offer offer) {
+        return new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                ValueEventListener listener1 = invocation.getArgument(0);
+                DataSnapshot snapshot = mock(DataSnapshot.class);
+                when(snapshot.getValue(Offer.class)).thenReturn(offer);
+                listener1.onDataChange(snapshot);
+                return null;
             }
         };
     }

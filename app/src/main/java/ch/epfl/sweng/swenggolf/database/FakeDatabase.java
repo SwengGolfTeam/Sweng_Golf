@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -93,7 +94,7 @@ public class FakeDatabase extends Database {
         if (working) {
             path = path + "/" + id;
             database.put(path, object);
-            if(listeners.containsKey(path) && listeners.get(path) != null) {
+            if(listeners.containsKey(path)) {
                 for (ValueListener listener : listeners.get(path)) {
                     listener.onDataChange(object);
                 }
@@ -131,13 +132,23 @@ public class FakeDatabase extends Database {
     @Override
     public <T> void listen(@NonNull String path, @NonNull String id,
                            @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
+        String pathToListen = path + "/" + id;
+        if(listeners.containsKey(pathToListen)) {
+            listeners.get(pathToListen).add(listener);
+        } else {
+            List<ValueListener> pathListeners = new ArrayList<>();
+            pathListeners.add(listener);
+            listeners.put(pathToListen, pathListeners);
+        }
+        read(path, id, listener, c);
+    }
+
+    @Override
+    public <T> void deafen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener) {
         path = path + "/" + id;
         if(listeners.containsKey(path)) {
-            listeners.get(path).add(listener);
-        } else {
-            List<ValueListener> pathListeners = new ArrayList<ValueListener>();
-            pathListeners.add(listener);
-            listeners.put(path, pathListeners);
+            listeners.get(path).remove(listener);
         }
     }
 
@@ -235,7 +246,13 @@ public class FakeDatabase extends Database {
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         if (working) {
-            database.remove(path + "/" + id);
+            path = path + "/" + id;
+            database.remove(path);
+            if(listeners.containsKey(path)) {
+                for(ValueListener pathListener : listeners.get(path)) {
+                    pathListener.onDataChange(null);
+                }
+            }
             listener.onComplete(DbError.NONE);
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
