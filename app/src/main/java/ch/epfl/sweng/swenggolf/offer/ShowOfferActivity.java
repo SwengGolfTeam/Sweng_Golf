@@ -46,6 +46,7 @@ import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
@@ -80,7 +81,7 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.show_offer_title);
         assert getArguments() != null;
         inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
@@ -456,6 +457,14 @@ public class ShowOfferActivity extends FragmentConverter {
         reactButton.setVisibility(View.GONE);
         TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
         closedMessage.setVisibility(View.VISIBLE);
+        Button discussionButton = inflated.findViewById(R.id.open_discussion);
+        discussionButton.setVisibility(View.VISIBLE);
+        discussionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceCentralFragment(FragmentConverter.createMessagingActivitywithOfferAndUser(offer, Config.getUser()));
+            }
+        });
     }
 
     /**

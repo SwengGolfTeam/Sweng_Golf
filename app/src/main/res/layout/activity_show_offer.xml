@@ -141,6 +141,22 @@
                     android:textStyle="bold"
                     android:visibility="gone" />
 
+                <Button
+                    android:id="@+id/open_discussion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_slightly_rounded"
+                    android:drawableLeft="@drawable/ic_comment_black_24dp"
+                    android:drawablePadding="8dp"
+                    android:text="@string/open_discussion"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:theme="@style/ButtonTheme"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/error_message"
                     android:layout_width="match_parent"
@@ -195,6 +211,8 @@
                         android:theme="@style/ButtonTheme"
                         android:visibility="gone" />
                 </RelativeLayout>
+
+
 
             </LinearLayout>
 

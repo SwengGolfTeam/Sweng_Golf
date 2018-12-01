@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
@@ -124,6 +125,12 @@ public abstract class FragmentConverter extends Fragment {
         return fragment;
     }
 
+    public static MessagingActivity createMessagingActivitywithOfferAndUser(Offer offer, User user) {
+        MessagingActivity fragment = fillFragment(new MessagingActivity(), Offer.OFFER, offer);
+        fragment.getArguments().putParcelable(User.USER, user);
+        return fragment;
+    }
+
     /**
      * Returns a fragment with a parcelable added as an argument.
      *
@@ -162,10 +169,14 @@ public abstract class FragmentConverter extends Fragment {
 
 
     protected void setToolbar(int homeIconResId, int titleResId) {
+        setToolbar(homeIconResId, getResources().getString(titleResId));
+    }
+
+    protected void setToolbar(int homeIconResId, String title) {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         setHasOptionsMenu(true);
         actionBar.setHomeAsUpIndicator(homeIconResId);
-        actionBar.setTitle(getResources().getString(titleResId));
+        actionBar.setTitle(title);
     }
 
     protected void openDrawer() {
