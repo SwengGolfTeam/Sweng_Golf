@@ -154,10 +154,10 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/answers_recycler_view"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
                 <RelativeLayout
+                    android:id="@+id/offer_buttons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal">
@@ -183,7 +183,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/react_button"
                         android:background="@drawable/btn_slightly_rounded"
                         android:drawableLeft="@drawable/ic_close_black_24dp"
                         android:drawablePadding="8dp"
@@ -191,8 +193,7 @@
                         android:textAllCaps="false"
                         android:textColor="@android:color/black"
                         android:theme="@style/ButtonTheme"
-                        android:visibility="gone"
-                        android:layout_toRightOf="@+id/react_button"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
 
             </LinearLayout>

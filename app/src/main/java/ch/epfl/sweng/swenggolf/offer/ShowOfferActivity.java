@@ -49,6 +49,9 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
+import ch.epfl.sweng.swenggolf.offer.answer.Answer;
+import ch.epfl.sweng.swenggolf.offer.answer.Answers;
+import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -274,13 +277,14 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private void setAnswerToPost() {
         final Button reactButton = inflated.findViewById(R.id.react_button);
-
         reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mLayout.removeView(reactButton);
+                View buttons = inflated.findViewById(R.id.offer_buttons);
+                mLayout.removeView(buttons);
                 mLayout.addView(newReaction);
+
 
                 ValueListener<User> vlUser = createFiller(inflated);
 
@@ -341,7 +345,7 @@ public class ShowOfferActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer);
+        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer, this);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));

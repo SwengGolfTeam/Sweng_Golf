@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf.offer.answer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -27,11 +27,13 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
-import static ch.epfl.sweng.swenggolf.offer.Answers.NO_FAVORITE;
+import static ch.epfl.sweng.swenggolf.offer.answer.Answers.NO_FAVORITE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.RESPOND_OFFER;
 
 /**
@@ -44,19 +46,21 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private Offer offer;
     private boolean isClosed;
     private ValueListener<Answers> updateListener;
+    private FragmentConverter parentActivity;
 
     /**
      * Constructs a ListAnswerAdapter for the RecyclerView.
      *
      * @param answers the objet containing the list of answers to be displayed
      */
-    public ListAnswerAdapter(Answers answers, Offer offer) {
+    public ListAnswerAdapter(Answers answers, Offer offer, FragmentConverter parentActivity) {
         if (answers == null || answers.getAnswerList() == null || offer == null) {
             throw new IllegalArgumentException();
         }
         this.answers = answers;
         this.offer = offer;
         this.isClosed = false;
+        this.parentActivity = parentActivity;
         this.updateListener = null;
     }
 
@@ -127,10 +131,9 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         description.setContentDescription("description" + Integer.toString(position));
 
         setupFavorite(holder, position);
-
     }
 
-    private void setUserData(User value, AnswerViewHolder holder) {
+    private void setUserData(final User value, AnswerViewHolder holder) {
         TextView userName = (TextView) holder.getFieldOne();
         userName.setText(value.getUserName());
         userName.setContentDescription(
@@ -140,8 +143,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .load(Uri.parse(value.getPhoto()))
                 .placeholder(R.drawable.gender_neutral_user1)
                 .fit().into(userPic);
-        userPic.setContentDescription("pic"
-                + Integer.toString(holder.getAdapterPosition()));
+        userPic.setContentDescription(
+                "pic" + Integer.toString(holder.getAdapterPosition()));
+        userPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parentActivity.replaceCentralFragment(
+                        FragmentConverter.createShowProfileWithProfile(value));
+            }
+        });
         holder.itemView.setBackgroundColor(Color.parseColor(Badge.getColor(value.getPoints())));
     }
 
@@ -153,7 +163,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 @Override
                 public void onClick(View v) {
 
-                    Context context = holder.getContainer().getContext();
+                    Context context = parentActivity.getContext();
                     int pos = holder.getAdapterPosition();
                     Dialog alertDialog = answers.getFavoritePos() != pos
                             ? acceptAnswerDialog(context, pos) : stepBackDialog(context);
