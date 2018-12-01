@@ -64,12 +64,12 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         this.updateListener = null;
     }
 
-    public void setUpdateListener(ValueListener<Answers> updateListener) {
-        this.updateListener = updateListener;
-    }
-
     public ValueListener<Answers> getUpdateListener() {
         return updateListener;
+    }
+
+    public void setUpdateListener(ValueListener<Answers> updateListener) {
+        this.updateListener = updateListener;
     }
 
     /**

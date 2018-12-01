@@ -56,7 +56,7 @@ public class FireDatabaseTest {
         FirebaseDatabase database = mock(FirebaseDatabase.class);
         FireDatabase d = new FireDatabase(database);
         final DatabaseReference idReference = setUpPath(database);
-        ValueListener<Offer>  listenerOffer = mockRead(idReference, OFFER1);
+        ValueListener<Offer> listenerOffer = mockRead(idReference, OFFER1);
         d.listen(PATH, ID, listenerOffer, Offer.class);
         verify(idReference).addValueEventListener(any(ValueEventListener.class));
     }

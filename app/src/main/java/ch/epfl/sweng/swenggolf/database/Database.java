@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,12 +86,12 @@ public abstract class Database {
      * Perform changes every time an update is done in the database.
      * It returns the new value using a listener.
      *
-     * @param path where to read the value.
-     * @param id the name of the value field.
+     * @param path     where to read the value.
+     * @param id       the name of the value field.
      * @param listener the onDataChange method will be called at every change of the value if it
      *                 exists and onCancelled will be called otherwise.
-     * @param c the class of the value
-     * @param <T> the type of the value
+     * @param c        the class of the value
+     * @param <T>      the type of the value
      */
     public abstract <T> void listen(@NonNull String path, @NonNull String id,
                                     @NonNull ValueListener<T> listener, @NonNull Class<T> c);
@@ -101,7 +100,7 @@ public abstract class Database {
      * Removes a listener from a reference.
      *
      * @param listener the listener to be removed.
-     * @param <T> the type of the value.
+     * @param <T>      the type of the value.
      */
     public abstract <T> void deafen(@NonNull String path, @NonNull String id,
                                     @NonNull ValueListener<T> listener);

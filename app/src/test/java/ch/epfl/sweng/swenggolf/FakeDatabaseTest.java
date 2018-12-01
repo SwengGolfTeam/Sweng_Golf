@@ -59,26 +59,6 @@ public class FakeDatabaseTest {
 
     }
 
-
-    class ValueTestListener<T> implements ValueListener<T> {
-        public int calls = 0;
-
-        @Override
-        public void onDataChange(T value) {
-            if(calls == 0) {
-                assertThat(value, (Matcher<? super T>) is(CONTENT));
-            } else if(calls == 1){
-                assertThat(value, (Matcher<? super T>) is(CONTENT_2));
-            }
-            ++calls;
-        }
-
-        @Override
-        public void onCancelled(DbError error) {
-            fail();
-        }
-    }
-
     @Test
     public void listenIsNotifiedWhenChangeHappens() {
         final Database d = new FakeDatabase(true);
@@ -234,7 +214,6 @@ public class FakeDatabaseTest {
         writeListenerError(true, DbError.NONE);
     }
 
-
     @Test
     public void writeListenerHasError() {
         writeListenerError(false, DbError.UNKNOWN_ERROR);
@@ -290,7 +269,6 @@ public class FakeDatabaseTest {
         d.readOffers(listener, new ArrayList<Category>(), "user");
     }
 
-
     @NonNull
     private ValueListener<List<Offer>> getListValueListener() {
         return new ValueListener<List<Offer>>() {
@@ -304,6 +282,25 @@ public class FakeDatabaseTest {
                 assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
+    }
+
+    class ValueTestListener<T> implements ValueListener<T> {
+        public int calls = 0;
+
+        @Override
+        public void onDataChange(T value) {
+            if (calls == 0) {
+                assertThat(value, (Matcher<? super T>) is(CONTENT));
+            } else if (calls == 1) {
+                assertThat(value, (Matcher<? super T>) is(CONTENT_2));
+            }
+            ++calls;
+        }
+
+        @Override
+        public void onCancelled(DbError error) {
+            fail();
+        }
     }
 
 

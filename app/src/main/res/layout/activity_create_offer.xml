@@ -156,8 +156,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="@string/button_create_offer"
                 android:background="@drawable/btn_rounded"
+                android:text="@string/button_create_offer"
                 android:theme="@style/ButtonTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -229,8 +229,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:background="@drawable/btn_rounded"
-                    android:theme="@style/ButtonTheme"
-                    android:text="@string/pick_date" />
+                    android:text="@string/pick_date"
+                    android:theme="@style/ButtonTheme" />
             </LinearLayout>
 
 

@@ -113,7 +113,7 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void deafen(@NonNull String path, @NonNull String id, @NonNull ValueListener<T> listener) {
         Pair<String, ValueListener<T>> listenerAtPath = Pair.create(path + "/" + id, listener);
-        if(listeners.containsKey(listenerAtPath)) {
+        if (listeners.containsKey(listenerAtPath)) {
             database.getReference(path).child(id)
                     .removeEventListener(listeners.get(listenerAtPath));
             listeners.remove(listenerAtPath);
