@@ -26,6 +26,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -148,6 +149,7 @@ public class ListOfferActivityTest {
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getShortDescription()))));
 
+        closeSoftKeyboard();
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(otherOffer.getTitle())), longClick()));
 

@@ -48,9 +48,7 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    InputMethodManager imm = (InputMethodManager) getActivity()
-                            .getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+                    closeSoftKeyboard();
                     Offer showOffer = offerList.get(position);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
@@ -96,6 +94,12 @@ public class ListOfferActivity extends FragmentConverter {
                 }
             };
 
+    private void closeSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
+    }
+
     private ListOfferAdapter mAdapter;
     private Menu mOptionsMenu;
     private TextView errorMessage;
@@ -108,9 +112,6 @@ public class ListOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-
-        offerList.clear();
-
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
@@ -127,6 +128,7 @@ public class ListOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
         setRecyclerView(inflated, checkedCategories);
+        closeSoftKeyboard();
         return inflated;
     }
 
@@ -202,14 +204,21 @@ public class ListOfferActivity extends FragmentConverter {
 
     private void updateData(View inflated, List<Category> categories) {
         mAdapter.clear();
-        DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
-            @Override
-            public void accept(Database db, List<Category> categories,
-                               ValueListener<List<Offer>> listener) {
-                db.readOffers(listener, categories);
-            }
-        };
-        prepareOfferData(inflated, dbConsumer, categories);
+        if(categories.isEmpty()){
+            noOffers.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
+                @Override
+                public void accept(Database db, List<Category> categories,
+                                   ValueListener<List<Offer>> listener) {
+                    db.readOffers(listener, categories);
+                }
+            };
+            prepareOfferData(inflated, dbConsumer, categories);
+        }
+
     }
 
     private void setupSearch(View inflated) {
@@ -265,9 +274,5 @@ public class ListOfferActivity extends FragmentConverter {
         };
         dbConsumer.accept(database, categories, listener);
 
-    }
-
-    public List<Offer> getOfferList() {
-        return new ArrayList<>(offerList);
     }
 }
