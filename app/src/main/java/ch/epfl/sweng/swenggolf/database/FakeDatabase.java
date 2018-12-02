@@ -10,10 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+
 /**
  * Mocked Database which works locally.
  */
-public class FakeDatabase extends FakeDatabaseListHandler {
+public class FakeDatabase extends Database {
     private final Map<String, Object> database;
     private final Map<String, List<ValueListener>> listeners;
     private Set<String> workingOnEntry;
@@ -133,6 +136,24 @@ public class FakeDatabase extends FakeDatabaseListHandler {
         }
     }
 
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                             @NonNull Class<T> c) {
+        FakeDatabaseListHandler.<T>readList(working, this.<T>getList(path), listener, c);
+    }
+
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                             @NonNull Class<T> c, AttributeFilter filter) {
+        FakeDatabaseListHandler.readList(working, this.<T>getList(path), listener, c, filter);
+    }
+
+    @Override
+    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+                             @NonNull Class<T> c, AttributeOrdering ordering) {
+        FakeDatabaseListHandler.readList(working, this.<T>getList(path), listener, c, ordering);
+    }
+
     private boolean isWorkingforEntry(String key) {
         return working && !workingOnEntry.contains(key);
     }
@@ -150,9 +171,16 @@ public class FakeDatabase extends FakeDatabaseListHandler {
         }
     }
 
+    @Override
+    public void readOffers(@NonNull ValueListener<List<Offer>> listener,
+                           List<Category> categories) {
+        FakeDatabaseListHandler.readOffers(working, this.<Offer>getList(OFFERS_PATH),
+                listener, categories);
+    }
+
 
     @Nullable
-    protected <T> List<T> getList(@NonNull String path) {
+    private <T> List<T> getList(@NonNull String path) {
         List<T> list = new ArrayList<>();
         for (Map.Entry<String, Object> entry : database.entrySet()) {
             if (entry.getKey().startsWith(path)) {
@@ -160,17 +188,6 @@ public class FakeDatabase extends FakeDatabaseListHandler {
             }
         }
         return list;
-    }
-
-    /**
-     * The working state of the Database.
-     *
-     * @return the working state of the Database, the DataBase will send
-     *         error when working is set at false and will work as
-     *         expected otherwise.
-     */
-    protected boolean isWorking() {
-        return working;
     }
 
     /**

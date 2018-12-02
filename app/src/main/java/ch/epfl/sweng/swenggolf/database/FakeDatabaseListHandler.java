@@ -12,7 +12,9 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
-public abstract class FakeDatabaseListHandler extends Database {
+final class FakeDatabaseListHandler {
+
+    private FakeDatabaseListHandler() { }
 
     private static void handleError(String attribute) {
         throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
@@ -53,20 +55,20 @@ public abstract class FakeDatabaseListHandler extends Database {
         throw new IllegalArgumentException("The attribute is not comparable");
     }
 
-    @Override
-    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
-                           final List<Category> categories) {
-        List<Offer> offers = getList(Database.OFFERS_PATH);
+    public static void readOffers(boolean working, List<Offer> pathContent,
+                                  @NonNull final ValueListener<List<Offer>> listener,
+                                  final List<Category> categories) {
 
-        if (isWorking()) {
-            offers = removeOffersWrongCategories(offers, categories);
-            listener.onDataChange(offers);
+        if (working) {
+            pathContent = removeOffersWrongCategories(pathContent, categories);
+            listener.onDataChange(pathContent);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 
-    private List<Offer> removeOffersWrongCategories(List<Offer> offers, List<Category> categories) {
+    private static List<Offer> removeOffersWrongCategories(List<Offer> offers,
+                                                           List<Category> categories) {
         List<Offer> list = new ArrayList<>();
         for (Offer o : offers) {
             if (categories.contains(o.getTag())) {
@@ -76,37 +78,31 @@ public abstract class FakeDatabaseListHandler extends Database {
         return list;
     }
 
-    @Override
-    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
-                             @NonNull Class<T> c) {
-        if (isWorking()) {
-            List<T> list = getList(path);
-            listener.onDataChange(list);
+    public static <T> void readList(boolean working, List<T> pathContent,
+                                    @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c) {
+        if (working) {
+            listener.onDataChange(pathContent);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 
-    @Override
-    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
+    public static <T> void readList(boolean working, List<T> pathContent,
+                                    @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c, AttributeFilter filter) {
-        if (isWorking()) {
-
-            List<T> list = getList(path);
-
-            List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), list);
+        if (working) {
+            List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), pathContent);
             listener.onDataChange(newList);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }
 
-    @Override
-    public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
-                             @NonNull Class<T> c, AttributeOrdering ordering) {
-        if (isWorking()) {
-            List<T> unsortedList = getList(path);
-            List<T> list = sortList(c, ordering, unsortedList);
+    public static <T> void readList(boolean working, List<T> pathContent,
+                                    @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c,
+                                    AttributeOrdering ordering) {
+        if (working) {
+            List<T> list = sortList(c, ordering, pathContent);
             listener.onDataChange(list);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
@@ -114,7 +110,7 @@ public abstract class FakeDatabaseListHandler extends Database {
     }
 
     @NonNull
-    private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
+    private static <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
                                  List<T> unsortedList) {
         final Method method;
         String getterName = getGetter(ordering.getAttribute());
@@ -132,7 +128,7 @@ public abstract class FakeDatabaseListHandler extends Database {
         return unsortedList.subList(0, minSize);
     }
 
-    private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
+    private static <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
                                    List<T> list) {
         List<T> filtered = new ArrayList<>();
         try {
@@ -151,7 +147,7 @@ public abstract class FakeDatabaseListHandler extends Database {
         return filtered;
     }
 
-    private <T> List<T> createFilteredList(Method getter, List<T> list, String value)
+    private static <T> List<T> createFilteredList(Method getter, List<T> list, String value)
             throws InvocationTargetException, IllegalAccessException {
         List<T> newList = new ArrayList<>();
         for (T object : list) {
@@ -161,8 +157,4 @@ public abstract class FakeDatabaseListHandler extends Database {
         }
         return newList;
     }
-
-    protected abstract <T> List<T> getList(@NonNull String path);
-
-    protected abstract boolean isWorking();
 }
