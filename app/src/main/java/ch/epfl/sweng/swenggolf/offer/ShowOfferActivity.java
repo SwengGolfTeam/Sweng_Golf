@@ -268,8 +268,6 @@ public class ShowOfferActivity extends FragmentConverter {
                     if (offer.getIsClosed()) {
                         offerAccessToDiscussion();
                     }
-                } else {
-                    listAnswerAdapter.setAnswers(defaultAnswers);
                 }
             }
 
@@ -498,10 +496,12 @@ public class ShowOfferActivity extends FragmentConverter {
                     @Override
                     public void onClick(View v) {
                         String otherUserId = userIsCreator ? chosenUserId : offer.getUserId();
-                        Database.getInstance().read(Database.USERS_PATH, otherUserId, new ValueListener<User>() {
+                        Database.getInstance().read(Database.USERS_PATH, otherUserId,
+                                new ValueListener<User>() {
                             @Override
                             public void onDataChange(User value) {
-                                replaceCentralFragment(FragmentConverter.createMessagingActivitywithOfferAndUser(
+                                replaceCentralFragment(
+                                        FragmentConverter.createMessagingActivitywithOfferAndUser(
                                         offer, value));
                             }
 

@@ -25,7 +25,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class MessagingActivity extends FragmentConverter {
     private View inflated;
-    private Offer offer;
+    private String offerId;
     private User otherUser;
     private MessagesAdapter messagesAdapter;
 
@@ -34,8 +34,8 @@ public class MessagingActivity extends FragmentConverter {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle = getArguments();
-        offer = bundle.getParcelable(Offer.OFFER);
         otherUser = bundle.getParcelable(User.USER);
+        offerId = bundle.getString(Offer.OFFER);
         // TODO add fragmentToSkip stuff?
     }
 
@@ -88,13 +88,12 @@ public class MessagingActivity extends FragmentConverter {
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         messagesAdapter.setAnswers(messages);
         // TODO we write all answers each time ?!
-        Database.getInstance().write(Database.MESSAGES_PATH, offer.getUuid(), messages);
+        Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
         editText.getText().clear();
         messagesAdapter.notifyDataSetChanged();
     }
 
     private void fetchMessages() {
-        // TODO refactor with fetchAnswers of ShowOffer
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
@@ -105,10 +104,10 @@ public class MessagingActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-
+                // TODO put a toast or something?
             }
         };
-        Database.getInstance().read(Database.MESSAGES_PATH, offer.getUuid(),
+        Database.getInstance().read(Database.MESSAGES_PATH, offerId,
                 answerListener, Answers.class);
     }
 

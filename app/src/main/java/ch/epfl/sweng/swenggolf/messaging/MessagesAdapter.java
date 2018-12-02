@@ -49,14 +49,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<ListAnswerAdapter.Answ
 
     @NonNull
     @Override
-    public ListAnswerAdapter.AnswerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ListAnswerAdapter.AnswerViewHolder onCreateViewHolder(
+            @NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.reactions_others, viewGroup, false);
         return new ListAnswerAdapter.AnswerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAnswerAdapter.AnswerViewHolder answerViewHolder, int i) {
+    public void onBindViewHolder(
+            @NonNull ListAnswerAdapter.AnswerViewHolder answerViewHolder, int i) {
         final Answer answer = answers.getAnswerList().get(i);
         boolean isYou = answer.getUserId().equals(Config.getUser().getUserId());
         User thisUser = isYou ? Config.getUser() : otherUser;
