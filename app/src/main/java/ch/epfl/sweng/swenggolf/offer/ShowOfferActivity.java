@@ -77,6 +77,8 @@ public class ShowOfferActivity extends FragmentConverter {
     private LinearLayout mLayout;
     private View newReaction;
 
+    private ValueListener<Boolean> closingListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,10 +97,37 @@ public class ShowOfferActivity extends FragmentConverter {
             hideReactButton();
             listAnswerAdapter.closeAnswers();
         } else {
+            setClosingListener();
             setAnswerToPost();
         }
         fetchAnswers();
         return inflated;
+    }
+
+    private void setClosingListener() {
+        closingListener = new ValueListener<Boolean>() {
+            @Override
+            public void onDataChange(Boolean value) {
+                if (value != null && value) {
+                    closeOffer();
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                //No notification or errored notifications, as such no modification on display.
+            }
+        };
+        Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
+                "isClosed", closingListener, Boolean.class);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Database.getInstance().deafen(Database.ANSWERS_PATH, offer.getUuid(),
+                listAnswerAdapter.getUpdateListener());
+        listAnswerAdapter.setUpdateListener(null);
     }
 
     private void setButtonCloseOffer() {
@@ -109,7 +138,6 @@ public class ShowOfferActivity extends FragmentConverter {
                 @Override
                 public void onClick(View v) {
                     closeOffer();
-                    closeButton.setVisibility(View.GONE);
                 }
             });
         }
@@ -242,8 +270,9 @@ public class ShowOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        Database.getInstance().read(Database.ANSWERS_PATH, offer.getUuid(),
+        Database.getInstance().listen(Database.ANSWERS_PATH, offer.getUuid(),
                 answerListener, Answers.class);
+        listAnswerAdapter.setUpdateListener(answerListener);
     }
 
     private ValueListener<User> createFiller(final View inflated) {
@@ -267,7 +296,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setAnswerToPost() {
-        Button reactButton = inflated.findViewById(R.id.react_button);
+        final Button reactButton = inflated.findViewById(R.id.react_button);
         reactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -464,12 +493,16 @@ public class ShowOfferActivity extends FragmentConverter {
      */
     public void closeOffer() {
         offer = new Offer.Builder(offer).setIsClosed(true).build();
+        Database.getInstance().deafen(Database.OFFERS_PATH + "/" + offer.getUuid(),
+                "isClosed", closingListener);
         Database.getInstance().write(Database.OFFERS_PATH, offer.getUuid(), offer);
         hideReactButton();
+        Button closeButton = inflated.findViewById(R.id.close_offer_button);
+        closeButton.setVisibility(View.GONE);
         getActivity().invalidateOptionsMenu();
         listAnswerAdapter.closeAnswers();
         //TODO : add listener
-
     }
+
 
 }

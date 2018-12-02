@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,7 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -23,10 +26,12 @@ import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
  */
 public final class FireDatabase extends Database {
     private final FirebaseDatabase database;
+    private final Map<Pair<String, ValueListener>, ValueEventListener> listeners;
 
 
     protected FireDatabase() {
         database = FirebaseDatabase.getInstance();
+        listeners = new HashMap<>();
     }
 
     /**
@@ -37,6 +42,7 @@ public final class FireDatabase extends Database {
      */
     public FireDatabase(FirebaseDatabase database) {
         this.database = database;
+        listeners = new HashMap<>();
     }
 
     @NonNull
@@ -76,36 +82,60 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void write(String path, String id, Object object) {
-
+    public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         database.getReference(path).child(id).setValue(object);
     }
 
     @Override
-    public void write(String path, String id, Object object, final CompletionListener listener) {
-
+    public void write(@NonNull String path, @NonNull String id, @NonNull Object object,
+                      @NonNull final CompletionListener listener) {
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
         database.getReference(path).child(id).setValue(object, firebaseListener);
     }
 
     @Override
-    public <T> void read(String path, String id, final ValueListener<T> listener,
-                         final Class<T> c) {
+    public <T> void read(@NonNull String path, @NonNull String id,
+                         @NonNull final ValueListener<T> listener, @NonNull final Class<T> c) {
         DatabaseReference ref = database.getReference(path);
+        ref.child(id).addListenerForSingleValueEvent(convertValueListener(listener, c));
+    }
 
-        ValueEventListener firebaseListener = new ValueEventListener() {
+    @Override
+    public <T> void listen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
+        DatabaseReference ref = database.getReference(path);
+        ValueEventListener firebaseEquivalent = convertValueListener(listener, c);
+        ref.child(id).addValueEventListener(firebaseEquivalent);
+        listeners.put(new Pair<String, ValueListener>(path + "/" + id, listener),
+                firebaseEquivalent);
+    }
+
+    @Override
+    public <T> void deafen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener) {
+        Pair<String, ValueListener<T>> listenerAtPath = Pair.create(path + "/" + id, listener);
+        if (listeners.containsKey(listenerAtPath)) {
+            database.getReference(path).child(id)
+                    .removeEventListener(listeners.get(listenerAtPath));
+            listeners.remove(listenerAtPath);
+        }
+    }
+
+    private <T> ValueEventListener convertValueListener(final ValueListener<T> listener,
+                                                        final Class<T> c) {
+
+        return new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 T value = dataSnapshot.getValue(c);
                 listener.onDataChange(value);
             }
 
             @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 listener.onCancelled(DbError.getError(databaseError));
             }
         };
-        ref.child(id).addListenerForSingleValueEvent(firebaseListener);
     }
 
     @Override

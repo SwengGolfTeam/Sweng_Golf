@@ -38,10 +38,10 @@
         android:id="@+id/post_button"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_slightly_rounded"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="16dp"
         android:layout_toRightOf="@id/your_answer_description"
+        android:background="@drawable/btn_slightly_rounded"
         android:text="@string/post" />
 
 </RelativeLayout>

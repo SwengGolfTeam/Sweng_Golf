@@ -2,8 +2,6 @@ package ch.epfl.sweng.swenggolf.notification;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 

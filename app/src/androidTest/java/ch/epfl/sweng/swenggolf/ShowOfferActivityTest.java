@@ -98,23 +98,19 @@ public class ShowOfferActivityTest {
     public void correctIntentSentWhenClickedOnDistance() {
         onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
 
-        if(!isGoogleMapsInstalled()){
-            assert(true); //skip test
+        if (!isGoogleMapsInstalled()) {
+            assert (true); //skip test
         } else {
             intended(hasPackage("com.google.android.apps.maps"));
         }
     }
 
-    private boolean isGoogleMapsInstalled()
-    {
-        try
-        {
+    private boolean isGoogleMapsInstalled() {
+        try {
             ApplicationInfo info = mActivityRule.getActivity().getPackageManager()
-                    .getApplicationInfo("com.google.android.apps.maps", 0 );
+                    .getApplicationInfo("com.google.android.apps.maps", 0);
             return true;
-        }
-        catch(PackageManager.NameNotFoundException e)
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
     }
