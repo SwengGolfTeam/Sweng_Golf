@@ -139,7 +139,7 @@ public class FakeDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c) {
-        FakeDatabaseListHandler.<T>readList(working, this.<T>getList(path), listener, c);
+        FakeDatabaseListHandler.<T>readList(working, this.<T>getList(path), listener);
     }
 
     @Override

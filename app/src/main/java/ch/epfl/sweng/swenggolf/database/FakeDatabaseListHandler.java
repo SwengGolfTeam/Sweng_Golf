@@ -79,7 +79,7 @@ final class FakeDatabaseListHandler {
     }
 
     public static <T> void readList(boolean working, List<T> pathContent,
-                                    @NonNull ValueListener<List<T>> listener, @NonNull Class<T> c) {
+                                    @NonNull ValueListener<List<T>> listener) {
         if (working) {
             listener.onDataChange(pathContent);
         } else {
