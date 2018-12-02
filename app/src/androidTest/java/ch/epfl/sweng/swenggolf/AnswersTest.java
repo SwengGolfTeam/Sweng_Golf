@@ -95,6 +95,7 @@ public class AnswersTest {
         Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
         onView(withChild(withText("hey !"))).perform(scrollTo());
+        onView(withText("hey !")).check(matches(isDisplayed()));
     }
 
     @Test

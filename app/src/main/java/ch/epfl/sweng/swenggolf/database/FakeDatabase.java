@@ -13,7 +13,7 @@ import java.util.TreeMap;
 /**
  * Mocked Database which works locally.
  */
-public class FakeDatabase extends DatabaseListHandler {
+public class FakeDatabase extends FakeDatabaseListHandler {
     private final Map<String, Object> database;
     private final Map<String, List<ValueListener>> listeners;
     private Set<String> workingOnEntry;

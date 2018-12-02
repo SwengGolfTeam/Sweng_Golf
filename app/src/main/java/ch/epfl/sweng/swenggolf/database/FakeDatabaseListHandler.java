@@ -12,7 +12,7 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
-public abstract class DatabaseListHandler extends Database {
+public abstract class FakeDatabaseListHandler extends Database {
 
     private static void handleError(String attribute) {
         throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");

@@ -62,7 +62,7 @@ public class FakeDatabaseTest {
     @Test
     public void listenIsNotifiedWhenChangeHappens() {
         final Database d = new FakeDatabase(true);
-        ValueTestListener<String> testListener = new ValueTestListener<>();
+        ValueTestListener testListener = new ValueTestListener();
         d.write(PATH, ID, CONTENT);
         d.listen(PATH, ID, testListener, String.class);
         d.write(PATH, ID, CONTENT_2);
@@ -72,7 +72,7 @@ public class FakeDatabaseTest {
     @Test
     public void deafenDisablesListenning() {
         final Database d = new FakeDatabase(true);
-        ValueTestListener<String> testListener = new ValueTestListener<>();
+        ValueTestListener testListener = new ValueTestListener();
         d.write(PATH, ID, CONTENT);
         d.listen(PATH, ID, testListener, String.class);
         d.deafen(PATH, ID, testListener);
@@ -284,15 +284,15 @@ public class FakeDatabaseTest {
         };
     }
 
-    class ValueTestListener<T> implements ValueListener<T> {
-        public int calls = 0;
+    class ValueTestListener implements ValueListener<String> {
+        int calls = 0;
 
         @Override
-        public void onDataChange(T value) {
+        public void onDataChange(String value) {
             if (calls == 0) {
-                assertThat(value, (Matcher<? super T>) is(CONTENT));
+                assertThat(value, is(CONTENT));
             } else if (calls == 1) {
-                assertThat(value, (Matcher<? super T>) is(CONTENT_2));
+                assertThat(value, is(CONTENT_2));
             }
             ++calls;
         }
