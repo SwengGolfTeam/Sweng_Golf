@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -176,6 +177,40 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
+    private void offerAccessToDiscussion() {
+        Answers answers = listAnswerAdapter.getAnswers();
+        Log.d("MESSAGES", "We are here + pos="+answers.getFavoritePos());
+        if (answers.getFavoritePos() != Answers.NO_FAVORITE) {
+            Log.d("MESSAGES", "got here");
+            final String chosenUserId = answers.getUserOfPosition(answers.getFavoritePos());
+            if (userIsCreator || chosenUserId.equals(Config.getUser().getUserId())) {
+                Log.d("MESSAGES", "and here");
+                Button discussionButton = inflated.findViewById(R.id.open_discussion);
+                discussionButton.setVisibility(View.VISIBLE);
+                discussionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String otherUserId = userIsCreator ? chosenUserId : offer.getUserId();
+                        Database.getInstance().read(Database.USERS_PATH, otherUserId, new ValueListener<User>() {
+                            @Override
+                            public void onDataChange(User value) {
+                                replaceCentralFragment(FragmentConverter.createMessagingActivitywithOfferAndUser(
+                                        offer, value));
+                            }
+
+                            @Override
+                            public void onCancelled(DbError error) {
+                                // do nothing
+                            }
+                        }, User.class);
+
+
+                    }
+                });
+            }
+        }
+    }
+
     private void setLocation() {
         if (checkLocationPermission(getActivity())) {
             AppLocation currentLocation = AppLocation.getInstance(getActivity());
@@ -232,6 +267,9 @@ public class ShowOfferActivity extends FragmentConverter {
             public void onDataChange(Answers value) {
                 if (value != null) {
                     listAnswerAdapter.setAnswers(value);
+                    if (offer.getIsClosed()) {
+                        offerAccessToDiscussion();
+                    }
                 } else {
                     listAnswerAdapter.setAnswers(defaultAnswers);
                 }
@@ -456,14 +494,6 @@ public class ShowOfferActivity extends FragmentConverter {
         reactButton.setVisibility(View.GONE);
         TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
         closedMessage.setVisibility(View.VISIBLE);
-        Button discussionButton = inflated.findViewById(R.id.open_discussion);
-        discussionButton.setVisibility(View.VISIBLE);
-        discussionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceCentralFragment(FragmentConverter.createMessagingActivitywithOfferAndUser(offer, Config.getUser()));
-            }
-        });
     }
 
     /**

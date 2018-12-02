@@ -1,5 +1,7 @@
 package ch.epfl.sweng.swenggolf.offer.answer;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class Answers {
      * @param newPos the new position
      */
     public void setFavoritePos(int newPos) {
+        Log.d("MESSAGES", "I am set to "+ newPos);
         favoritePos = newPos;
     }
 
