@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf;
 
 import android.location.Location;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -20,7 +19,7 @@ public class OfferBuilderTest {
     @Test
     public void setAndGetUUID() {
         Offer offer = builder.setUuid("uuid").build();
-        assertThat(offer.getUuid() , is("uuid"));
+        assertThat(offer.getUuid(), is("uuid"));
     }
 
     @Test

@@ -5,7 +5,6 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import org.junit.Before;
@@ -15,14 +14,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
-import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -32,15 +33,14 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
@@ -66,9 +66,7 @@ public class AnswersTest {
      * @param answer the message to be posted
      */
     public static void addAnswer(String answer) {
-
         onView(withId(R.id.react_button)).perform(scrollTo(), click());
-
         onView(withId(R.id.your_answer_description))
                 .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(scrollTo(), click());
@@ -88,6 +86,16 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+    }
+
+    @Test
+    public void testAnswersRefresh() {
+        List<Answer> newAnswers = new ArrayList<>();
+        newAnswers.add(new Answer(offer.getUserId(), "hey !"));
+        Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
+        Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
+        onView(withChild(withText("hey !"))).perform(scrollTo());
+        onView(withText("hey !")).check(matches(isDisplayed()));
     }
 
     @Test

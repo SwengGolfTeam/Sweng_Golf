@@ -3,11 +3,7 @@ package ch.epfl.sweng.swenggolf.database;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +18,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
  */
 public class FakeDatabase extends Database {
     private final Map<String, Object> database;
+    private final Map<String, List<ValueListener>> listeners;
     private Set<String> workingOnEntry;
     private boolean working;
 
@@ -34,12 +31,9 @@ public class FakeDatabase extends Database {
      */
     public FakeDatabase(boolean working) {
         this.database = new TreeMap<>();
+        this.listeners = new TreeMap<>();
         this.working = working;
-        workingOnEntry = new HashSet<>();
-    }
-
-    private static void handleError(String attribute) {
-        throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
+        this.workingOnEntry = new HashSet<>();
     }
 
     /**
@@ -51,45 +45,11 @@ public class FakeDatabase extends Database {
         return new FilledFakeDatabase();
     }
 
-    private static String getGetter(String attribute) {
-        return "get" + Character.toUpperCase(attribute.charAt(0))
-                + attribute.substring(1, attribute.length());
-    }
-
-    @NonNull
-    private static <T> Comparator<T> getComparator(final Method method) {
-        return new Comparator<T>() {
-            @Override
-            public int compare(T o1, T o2) {
-                Object attribute1 = invokeGetter(method, o1);
-                Object attribute2 = invokeGetter(method, o2);
-
-                return compareAttributes(attribute1, attribute2);
-            }
-        };
-    }
-
-    private static <T> Object invokeGetter(Method method, T invokedOn) {
-        try {
-            return method.invoke(invokedOn);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Can't access the attribute");
-        } catch (InvocationTargetException e) {
-            throw new IllegalArgumentException("Cannot call method on generic parameter T");
-        }
-    }
-
-    private static <T> int compareAttributes(T attribute1, T attribute2) {
-        if (attribute1 instanceof Comparable && attribute2 instanceof Comparable) {
-            return ((Comparable) attribute1).compareTo(attribute2);
-        }
-        throw new IllegalArgumentException("The attribute is not comparable");
-    }
-
     @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         if (working) {
             database.put(path + "/" + id, object);
+            notifyListeners(path, id, object);
         }
     }
 
@@ -101,6 +61,39 @@ public class FakeDatabase extends Database {
             listener.onComplete(DbError.NONE);
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
+        }
+    }
+
+    private void notifyListeners(String path, String id, Object object) {
+        path = path + "/" + id;
+        String[] listeningToChildren = path.split("/");
+        notifyChildren(listeningToChildren);
+        notifyPathListeners(path, object);
+    }
+
+    private void notifyPathListeners(String path, Object object) {
+        if (listeners.containsKey(path)) {
+            List<ValueListener> objectListeners = listeners.get(path);
+            for (ValueListener listener : objectListeners) {
+                listener.onDataChange(object);
+            }
+        }
+    }
+
+    private String[] createChildrenPaths(String[] listenningToChildren) {
+        String[] paths = new String[listenningToChildren.length];
+        StringBuilder currentPath = new StringBuilder();
+        for (int i = 0; i < paths.length; ++i) {
+            paths[i] = currentPath.toString();
+            currentPath.append("/").append(listenningToChildren[i]);
+        }
+        return paths;
+    }
+
+    private void notifyChildren(String[] listenningToChildren) {
+        listenningToChildren = createChildrenPaths(listenningToChildren);
+        for (String level : listenningToChildren) {
+            notifyPathListeners(level, getList(level));
         }
     }
 
@@ -120,101 +113,58 @@ public class FakeDatabase extends Database {
         }
     }
 
-    private boolean isWorkingforEntry(String key) {
-        return working && !workingOnEntry.contains(key);
+    @Override
+    public <T> void listen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener, @NonNull Class<T> c) {
+        String pathToListen = path + "/" + id;
+        if (listeners.containsKey(pathToListen)) {
+            listeners.get(pathToListen).add(listener);
+        } else {
+            List<ValueListener> pathListeners = new ArrayList<>();
+            pathListeners.add(listener);
+            listeners.put(pathToListen, pathListeners);
+        }
+        read(path, id, listener, c);
+    }
+
+    @Override
+    public <T> void deafen(@NonNull String path, @NonNull String id,
+                           @NonNull ValueListener<T> listener) {
+        path = path + "/" + id;
+        if (listeners.containsKey(path)) {
+            listeners.get(path).remove(listener);
+        }
     }
 
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c) {
-        if (working) {
-            List<T> list = getList(path);
-            listener.onDataChange(list);
-        } else {
-            listener.onCancelled(DbError.UNKNOWN_ERROR);
-        }
+        FakeDatabaseListHandler.readList(working, this.<T>getList(path), listener);
     }
 
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c, AttributeFilter filter) {
-        if (working) {
-
-            List<T> list = getList(path);
-
-            List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), list);
-            listener.onDataChange(newList);
-        } else {
-            listener.onCancelled(DbError.UNKNOWN_ERROR);
-        }
+        FakeDatabaseListHandler.readList(working, this.<T>getList(path), listener, c, filter);
     }
 
     @Override
     public <T> void readList(@NonNull String path, @NonNull ValueListener<List<T>> listener,
                              @NonNull Class<T> c, AttributeOrdering ordering) {
-        if (working) {
-            List<T> unsortedList = getList(path);
-            List<T> list = sortList(c, ordering, unsortedList);
-            listener.onDataChange(list);
-        } else {
-            listener.onCancelled(DbError.UNKNOWN_ERROR);
-        }
+        FakeDatabaseListHandler.readList(working, this.<T>getList(path), listener, c, ordering);
     }
 
-    @NonNull
-    private <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
-                                 List<T> unsortedList) {
-        final Method method;
-        String getterName = getGetter(ordering.getAttribute());
-        try {
-            method = c.getDeclaredMethod(getterName);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("The getter for the attribute does not exist");
-        }
-        Comparator<T> comparator = getComparator(method);
-        Collections.sort(unsortedList, comparator);
-        if (ordering.isDescending()) {
-            Collections.reverse(unsortedList);
-        }
-        int minSize = Math.min(ordering.getNumberOfElements(), unsortedList.size());
-        return unsortedList.subList(0, minSize);
+    private boolean isWorkingforEntry(String key) {
+        return working && !workingOnEntry.contains(key);
     }
 
-    private <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
-                                   List<T> list) {
-        List<T> filtered = new ArrayList<>();
-        try {
-
-            //Use reflection to check the attribute
-            Method method = c.getDeclaredMethod(getGetter(attribute));
-            filtered = createFilteredList(method, list, value);
-
-        } catch (IllegalAccessException e) {
-            handleError(attribute);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("No getter for " + attribute + " attribute");
-        } catch (InvocationTargetException e) {
-            throw new IllegalArgumentException("Generic type T has no getter for this attribute");
-        }
-        return filtered;
-    }
-
-    private <T> List<T> createFilteredList(Method getter, List<T> list, String value)
-            throws InvocationTargetException, IllegalAccessException {
-        List<T> newList = new ArrayList<>();
-        for (T object : list) {
-            if (getter.invoke(object).equals(value)) {
-                newList.add(object);
-            }
-        }
-        return newList;
-    }
 
     @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
         if (working) {
             database.remove(path + "/" + id);
+            notifyListeners(path, id, null);
             listener.onComplete(DbError.NONE);
         } else {
             listener.onComplete(DbError.UNKNOWN_ERROR);
@@ -222,27 +172,12 @@ public class FakeDatabase extends Database {
     }
 
     @Override
-    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
-                           final List<Category> categories) {
-        List<Offer> offers = getList(Database.OFFERS_PATH);
-
-        if (working) {
-            offers = removeOffersWrongCategories(offers, categories);
-            listener.onDataChange(offers);
-        } else {
-            listener.onCancelled(DbError.UNKNOWN_ERROR);
-        }
+    public void readOffers(@NonNull ValueListener<List<Offer>> listener,
+                           List<Category> categories) {
+        FakeDatabaseListHandler.readOffers(working, this.<Offer>getList(OFFERS_PATH),
+                listener, categories);
     }
 
-    private List<Offer> removeOffersWrongCategories(List<Offer> offers, List<Category> categories) {
-        List<Offer> list = new ArrayList<>();
-        for (Offer o : offers) {
-            if (categories.contains(o.getTag())) {
-                list.add(o);
-            }
-        }
-        return list;
-    }
 
     @Nullable
     private <T> List<T> getList(@NonNull String path) {
@@ -265,7 +200,6 @@ public class FakeDatabase extends Database {
     public void setWorking(boolean w) {
         working = w;
     }
-
 
     /**
      * Allow to disable a specific entry for reading. When reading this entry, there will be an

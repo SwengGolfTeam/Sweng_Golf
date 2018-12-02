@@ -34,8 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:layout_marginTop="8dp"
-            android:text="@string/change_pic"
             android:background="@drawable/btn_rounded"
+            android:text="@string/change_pic"
             android:theme="@style/ButtonTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -84,7 +84,6 @@
             </LinearLayout>
 
 
-
             <LinearLayout
                 android:id="@+id/descriptionLinearLayout"
                 android:layout_width="match_parent"
@@ -108,7 +107,6 @@
                     android:inputType="textMultiLine" />
 
             </LinearLayout>
-
 
 
             <LinearLayout
