@@ -36,7 +36,6 @@ public class MessagingActivity extends FragmentConverter {
         final Bundle bundle = getArguments();
         otherUser = bundle.getParcelable(User.USER);
         offerId = bundle.getString(Offer.OFFER);
-        // TODO add fragmentToSkip stuff?
     }
 
     @Override
