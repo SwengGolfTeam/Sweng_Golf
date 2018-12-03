@@ -32,6 +32,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
+import static ch.epfl.sweng.swenggolf.profile.User.USER;
 
 /**
  * Fragment which shows a profile of an User.
@@ -96,7 +97,7 @@ public class ProfileActivity extends FragmentConverter {
                     @Override
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable("user", user);
+                        bundle.putParcelable(USER, user);
 
                         Fragment fragment = new ListOwnOfferActivity();
                         fragment.setArguments(bundle);

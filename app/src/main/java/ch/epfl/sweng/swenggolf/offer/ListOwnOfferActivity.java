@@ -14,6 +14,8 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
 
+import static ch.epfl.sweng.swenggolf.profile.User.USER;
+
 /**
  * Fragment which shows user own offers.
  */
@@ -42,7 +44,7 @@ public class ListOwnOfferActivity extends ListOfferActivity {
         String title;
 
         if (bundle != null) {
-            user = bundle.getParcelable("user");
+            user = bundle.getParcelable(USER);
             title = user.getUserName() + "'s offers";
         } else {
             user = Config.getUser();

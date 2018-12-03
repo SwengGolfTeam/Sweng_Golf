@@ -12,7 +12,7 @@ import static ch.epfl.sweng.swenggolf.tools.Check.checkString;
  */
 public class User implements Parcelable {
 
-    public static final String DEFAULT_DESCRIPTION = "Hello, I'm new Here!";
+    public static final String DEFAULT_DESCRIPTION = "Hello, I'm new here!";
     public static final int USERNAME_MIN_LENGTH = 1;
     public static final int USERNAME_MAX_LENGTH = 25;
     public static final int INFOS_MIN_LENGTH = 0;
