@@ -188,6 +188,7 @@ class CreateHelper {
         }
 
         if (checkLocationPermission(create.getActivity()) & AppLocation.checkLocationActive(create.getContext())){
+            create.location = new Location(""); // temporary location to avoid crash
             AppLocation currentLocation = AppLocation.getInstance(create.getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override
