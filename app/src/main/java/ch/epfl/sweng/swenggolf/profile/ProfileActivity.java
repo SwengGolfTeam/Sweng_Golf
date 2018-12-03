@@ -26,6 +26,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
+import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
@@ -56,6 +57,7 @@ public class ProfileActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.profile_activity_name);
         inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData();
+
         return inflated;
     }
 
@@ -87,6 +89,14 @@ public class ProfileActivity extends FragmentConverter {
         badge.setImageResource(Badge.getDrawable(user.getPoints()));
         TextView points = inflated.findViewById(R.id.points);
         points.setText(Integer.toString(user.getPoints()));
+
+        inflated.findViewById(R.id.ind_offers)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        replaceCentralFragment(new ListOwnOfferActivity(user));
+                    }
+                });
     }
 
     private void showFollowButton() {
