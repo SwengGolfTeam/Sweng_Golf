@@ -57,9 +57,11 @@ public class ListOfferActivityTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
-    private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title")
+    private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title")
             .setDescription(LOREM).setUuid("idoftheoffer1").build();
-    private static final Offer offer2 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title 2")
+    private static final Offer offer2 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title 2")
             .setDescription(LOREM).setUuid("idoftheoffer2").build();
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {

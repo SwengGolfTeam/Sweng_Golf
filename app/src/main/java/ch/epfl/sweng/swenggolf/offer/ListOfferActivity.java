@@ -46,7 +46,7 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    closeSoftKeyboard();
+                    closeSoftKeyboard(ListOfferActivity.this.search);
                     Offer showOffer = offerList.get(position);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
@@ -92,12 +92,6 @@ public class ListOfferActivity extends FragmentConverter {
                 }
             };
 
-    private void closeSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-    }
-
     private ListOfferAdapter mAdapter;
     private Menu mOptionsMenu;
     private TextView errorMessage;
@@ -126,7 +120,7 @@ public class ListOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
         setRecyclerView(inflated, checkedCategories);
-        closeSoftKeyboard();
+        closeSoftKeyboard(search);
         return inflated;
     }
 
@@ -162,7 +156,6 @@ public class ListOfferActivity extends FragmentConverter {
 
         localDb.writeCategories(listCategories);
         Log.d(LOG_LOCAL_DB, "write " + listCategories.toString());
-        // setRecyclerView(getView(), listCategories);
         updateData(getView(), listCategories);
     }
 
@@ -222,7 +215,7 @@ public class ListOfferActivity extends FragmentConverter {
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do nothing
             }
 
             @Override
@@ -232,7 +225,7 @@ public class ListOfferActivity extends FragmentConverter {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do nothing
             }
         });
     }

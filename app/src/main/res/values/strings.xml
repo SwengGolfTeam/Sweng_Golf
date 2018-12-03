@@ -75,5 +75,5 @@
     <string name="close_the_offer">Close the offer</string>
     <string name="the_offer_is_closed">The offer is closed.</string>
     <string name="presentation">Welcome to Polytroc, please put your username. You can change your picture, your description and many other things after this step.</string>
-    <string name="search">Search</string>
+    <string name="search">Search title</string>
 </resources>
