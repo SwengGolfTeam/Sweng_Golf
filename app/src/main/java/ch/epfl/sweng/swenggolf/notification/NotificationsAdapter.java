@@ -19,7 +19,6 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.DbError;
-import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -46,6 +45,15 @@ public class NotificationsAdapter
     }
 
     /**
+     * Returns the list of notifications.
+     *
+     * @return the list of notifications, immutable
+     */
+    public List<Notification> getNotifications() {
+        return Collections.unmodifiableList(this.notifications);
+    }
+
+    /**
      * Sets the notifications field.
      *
      * @param notifications the new notifications
@@ -53,15 +61,6 @@ public class NotificationsAdapter
     public void setNotifications(List<Notification> notifications) {
         this.notifications = new ArrayList<>(notifications);
         notifyDataSetChanged();
-    }
-
-    /**
-     * Returns the list of notifications.
-     *
-     * @return the list of notifications, immutable
-     */
-    public List<Notification> getNotifications() {
-        return Collections.unmodifiableList(this.notifications);
     }
 
     @Override

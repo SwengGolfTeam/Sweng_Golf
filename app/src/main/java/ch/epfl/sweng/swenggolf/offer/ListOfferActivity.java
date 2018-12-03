@@ -31,10 +31,9 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class ListOfferActivity extends FragmentConverter {
 
+    private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
     // The list is public, static and final so that it can be used in tests.
     private static List<Offer> offerList = new ArrayList<>();
-    private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
-
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
                 private TextView offerOpenedView = null;
@@ -94,6 +93,10 @@ public class ListOfferActivity extends FragmentConverter {
     private LocalDatabase localDb;
     private List<Category> checkedCategories = Arrays.asList(Category.values());
     private RecyclerView mRecyclerView;
+
+    public static List<Offer> getOfferList() {
+        return new ArrayList<>(offerList);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -227,9 +230,5 @@ public class ListOfferActivity extends FragmentConverter {
             }
         };
         dbConsumer.accept(database, categories, listener);
-    }
-
-    public static List<Offer> getOfferList() {
-        return new ArrayList<>(offerList);
     }
 }

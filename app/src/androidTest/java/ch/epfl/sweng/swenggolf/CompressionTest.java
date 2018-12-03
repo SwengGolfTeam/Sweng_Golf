@@ -37,7 +37,7 @@ public class CompressionTest {
                 activity.getApplicationContext(), "test_compression");
         File result = new File(activity.getCacheDir(), compressionResult.getLastPathSegment());
         assertThat(result.exists(), is(true));
-        assertThat(result.length(), lessThan((long) CreatePictureHelper.MAX_IMAGE_SIZE*1024));
+        assertThat(result.length(), lessThan((long) CreatePictureHelper.MAX_IMAGE_SIZE * 1024));
         result.delete();
     }
 }

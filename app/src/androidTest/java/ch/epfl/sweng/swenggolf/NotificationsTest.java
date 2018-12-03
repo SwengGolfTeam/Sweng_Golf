@@ -129,7 +129,7 @@ public class NotificationsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotCreateAdapterWithNullListener() {
-        new NotificationsAdapter( null);
+        new NotificationsAdapter(null);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class NotificationsTest {
         addPointsToUser(-user1.getPoints(), user1);
         addPointsToUser(Badge.LEVEL_SPACE, user1);
         onView(withText(activityTestRule.getActivity().getString(R.string.notif_level_gained)))
-               .check(matches(isDisplayed())).perform(click());
+                .check(matches(isDisplayed())).perform(click());
         checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
     }
 
