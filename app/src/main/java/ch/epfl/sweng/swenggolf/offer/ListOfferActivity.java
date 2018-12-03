@@ -120,7 +120,6 @@ public class ListOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
         setRecyclerView(inflated, checkedCategories);
-        closeSoftKeyboard(search);
         return inflated;
     }
 
@@ -191,12 +190,14 @@ public class ListOfferActivity extends FragmentConverter {
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
         setupSearch(inflated);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void updateData(View inflated, List<Category> categories) {
         mAdapter.clear();
         if (categories.isEmpty()) {
             noOffers.setVisibility(View.VISIBLE);
+            inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
         } else {
             DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
                 @Override
@@ -221,6 +222,7 @@ public class ListOfferActivity extends FragmentConverter {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mAdapter.filter(s.toString());
+                Log.d("OFFER", "text has changed");
             }
 
             @Override
@@ -249,7 +251,6 @@ public class ListOfferActivity extends FragmentConverter {
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
-                    mRecyclerView.setAdapter(mAdapter);
                 }
 
             }
