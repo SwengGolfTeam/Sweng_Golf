@@ -40,7 +40,7 @@ public class ProfileActivityOtherUserTest {
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
     final User user = FilledFakeDatabase.getUser(0);
-    final User otherUser = FilledFakeDatabase.getUser(1);
+    final User otherUser = FilledFakeDatabase.getUser(4);
     private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
     private ProfileActivity profile;
 
