@@ -44,7 +44,8 @@ public class MessagingActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, otherUser.getUserName());
         inflated = inflater.inflate(R.layout.activity_messaging, container, false);
         setRecyclerView();
-        inflated.findViewById(R.id.send_message_button).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.send_message_button)
+                .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();

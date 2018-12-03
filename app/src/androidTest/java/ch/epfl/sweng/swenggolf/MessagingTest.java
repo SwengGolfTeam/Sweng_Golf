@@ -38,15 +38,19 @@ public class MessagingTest {
     private static final User author = FilledFakeDatabase.getUser(0);
     private static final User acceptedUser = FilledFakeDatabase.getUser(1);
     private static final User otherUser = FilledFakeDatabase.getUser(2);
-    private static final Offer offer = new Offer.Builder(FilledFakeDatabase.getOfferOfUser(author.getUserId()))
+    private static final Offer offer = new Offer.Builder(
+            FilledFakeDatabase.getOfferOfUser(author.getUserId()))
             .setIsClosed(true).build();
 
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, true);
 
+    /**
+     * Write some answers to the offer in the database, with the first one accepted
+     */
     @BeforeClass
-    public static void writeAnswers() {
+    public static void setUp() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Answers answers = new Answers(Arrays.asList(
                 new Answer(acceptedUser.getUserId(), "I am blue"),

@@ -130,9 +130,9 @@ public abstract class FragmentConverter extends Fragment {
      *
      * @param offer the offer which the discussion is about
      * @param user  the user to talk to
-     * @return
+     * @return a new MessagingActivity with the user and about the offer
      */
-    public static MessagingActivity createMessagingActivitywithOfferAndUser(
+    public static MessagingActivity createMessagingActivityWithOfferAndUser(
             Offer offer, User user) {
         MessagingActivity fragment = fillFragment(new MessagingActivity(), User.USER, user);
         fragment.getArguments().putString(Offer.OFFER, offer.getUuid());

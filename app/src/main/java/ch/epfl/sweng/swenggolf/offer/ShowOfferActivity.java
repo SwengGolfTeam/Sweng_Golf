@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -104,7 +103,6 @@ public class ShowOfferActivity extends FragmentConverter {
         fetchAnswers();
         return inflated;
     }
-
 
 
     @Override
@@ -463,7 +461,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
 
     /* methods to close an offer */
-    
+
     private void setButtonCloseOffer() {
         if (userIsCreator && !offer.getIsClosed()) {
             final Button closeButton = inflated.findViewById(R.id.close_offer_button);
@@ -493,7 +491,6 @@ public class ShowOfferActivity extends FragmentConverter {
         offerAccessToDiscussion();
         listAnswerAdapter.closeAnswers();
     }
-
 
 
     private void setClosingListener() {
@@ -533,26 +530,30 @@ public class ShowOfferActivity extends FragmentConverter {
                 discussionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String otherUserId = userIsCreator ? chosenUserId : offer.getUserId();
-                        Database.getInstance().read(Database.USERS_PATH, otherUserId,
-                                new ValueListener<User>() {
-                            @Override
-                            public void onDataChange(User value) {
-                                replaceCentralFragment(
-                                        FragmentConverter.createMessagingActivitywithOfferAndUser(
-                                        offer, value));
-                            }
-
-                            @Override
-                            public void onCancelled(DbError error) {
-                                // do nothing
-                            }
-                        }, User.class);
+                        goToMessagingWithUser(chosenUserId);
 
 
                     }
                 });
             }
         }
+    }
+
+    private void goToMessagingWithUser(String chosenUserId) {
+        String otherUserId = userIsCreator ? chosenUserId : offer.getUserId();
+        Database.getInstance().read(Database.USERS_PATH, otherUserId,
+                new ValueListener<User>() {
+                    @Override
+                    public void onDataChange(User value) {
+                        replaceCentralFragment(
+                                FragmentConverter.createMessagingActivityWithOfferAndUser(
+                                        offer, value));
+                    }
+
+                    @Override
+                    public void onCancelled(DbError error) {
+                        // do nothing
+                    }
+                }, User.class);
     }
 }
