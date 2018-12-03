@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
@@ -95,8 +94,8 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     }
 
     private void fillFilteredList() {
-        for(Offer offer : offerList) {
-            if(offer.getTitle().toLowerCase().contains(filter)) {
+        for (Offer offer : offerList) {
+            if (offer.getTitle().toLowerCase().contains(filter)) {
                 filteredOfferList.add(offer);
             }
         }
@@ -104,6 +103,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     /**
      * Filter the data to only show data which contains the filter string in their title.
+     *
      * @param filter the string to filter
      */
     public void filter(String filter) {

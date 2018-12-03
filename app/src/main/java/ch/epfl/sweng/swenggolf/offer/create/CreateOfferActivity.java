@@ -159,7 +159,7 @@ public class CreateOfferActivity extends FragmentConverter
         File photo = new File(cacheDirectory, tempPicturePath.getLastPathSegment());
         Uri tmpPath = CreatePictureHelper.compressImageFromPath(getContext(),
                 photo.getAbsolutePath(), "compressed");
-        if(!photo.delete()) {
+        if (!photo.delete()) {
             String errorMsg = getString(R.string.tmp_file_suppression_error);
             Toast.makeText(this.getContext(), errorMsg, Toast.LENGTH_LONG).show();
         }

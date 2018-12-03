@@ -64,14 +64,14 @@ public class SearchOffersTests {
     @Test
     public void showRightOfferWhenSearchingWithBeginningOfTitle() {
         Offer offer = database.getOffer(2);
-        onView(withId(R.id.search_bar)).perform(typeText(offer.getTitle().substring(0,5)));
+        search(offer.getTitle().substring(0,5));
         checkTitle(offer);
     }
 
     @Test
     public void showRightOfferWhenSearchingWithSubstringOfTitle() {
         Offer offer = database.getOffer(10);
-        onView(withId(R.id.search_bar)).perform(typeText(offer.getTitle().substring(4,10)));
+        search(offer.getTitle().substring(4,10));
         checkTitle(offer);
     }
 

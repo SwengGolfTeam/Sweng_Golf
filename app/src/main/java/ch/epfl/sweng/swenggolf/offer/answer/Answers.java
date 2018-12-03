@@ -3,8 +3,6 @@ package ch.epfl.sweng.swenggolf.offer.answer;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.offer.answer.Answer;
-
 /**
  * Class which represents answers.
  */

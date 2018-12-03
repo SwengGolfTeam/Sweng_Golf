@@ -1,7 +1,6 @@
 package ch.epfl.sweng.swenggolf.offer;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -164,7 +163,7 @@ public class ListOfferActivity extends FragmentConverter {
 
         localDb.writeCategories(listCategories);
         Log.d(LOG_LOCAL_DB, "write " + listCategories.toString());
-       // setRecyclerView(getView(), listCategories);
+        // setRecyclerView(getView(), listCategories);
         updateData(getView(), listCategories);
     }
 
@@ -204,11 +203,9 @@ public class ListOfferActivity extends FragmentConverter {
 
     private void updateData(View inflated, List<Category> categories) {
         mAdapter.clear();
-        if(categories.isEmpty()){
+        if (categories.isEmpty()) {
             noOffers.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
                 @Override
                 public void accept(Database db, List<Category> categories,
