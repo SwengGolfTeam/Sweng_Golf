@@ -12,8 +12,11 @@ import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -21,7 +24,11 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -32,8 +39,8 @@ public class ProfileActivityOtherUserTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
-    final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
-    final User otherUser = new User("other", "user", "is", "a", "placeholder");
+    final User user = FilledFakeDatabase.getUser(0);
+    final User otherUser = FilledFakeDatabase.getUser(1);
     private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
     private ProfileActivity profile;
 
@@ -112,6 +119,14 @@ public class ProfileActivityOtherUserTest {
         followButton.perform(click());
         assertFalse(profile.isFollowing());
 
+    }
+
+    @Test
+    public void canOpenListOfOffers() {
+        onView(withId(R.id.ind_offers)).perform(click());
+
+        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
+                .check(matches(hasDescendant(withText(otherUser.getUserName()))));
     }
 
     @Test
