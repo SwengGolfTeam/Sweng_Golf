@@ -179,8 +179,6 @@ class CreateHelper {
      * Attach location to the offer.
      */
     void attachLocation() {
-        if (!AppLocation.checkLocationActive(create.getContext()))
-            return;
         if (create.location.getLatitude() != 0.0 || create.location.getLongitude() != 0.0) {
 
             create.location = new Location("");
@@ -189,7 +187,7 @@ class CreateHelper {
             return;
         }
 
-        if (checkLocationPermission(create.getActivity())) {
+        if (checkLocationPermission(create.getActivity()) & AppLocation.checkLocationActive(create.getContext())){
             AppLocation currentLocation = AppLocation.getInstance(create.getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override

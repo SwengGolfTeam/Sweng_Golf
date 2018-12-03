@@ -1,11 +1,16 @@
 package ch.epfl.sweng.swenggolf.location;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,9 +69,33 @@ public abstract class AppLocation {
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             return true;
         } else {
-            Toast.makeText(context, "Location is not active...", Toast.LENGTH_LONG).show();
-            return false;
+            showGoToSettingsDialog(context);
+            return false; // must retry
         }
+    }
+
+    /**
+     * Display the Alert Dialog for the redirection to settings
+     */
+    public static void showGoToSettingsDialog(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Location disabled")
+                .setMessage("Do you want to go to the settings to enable it?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent GpsIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        context.startActivity(GpsIntent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**
