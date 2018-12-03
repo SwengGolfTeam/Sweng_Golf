@@ -28,5 +28,6 @@ public class NetworkReceiver extends BroadcastReceiver {
      */
     public static void registerReceiver(Context context, BroadcastReceiver broadcastReceiver){
         context.registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        Network.updateStatus(context);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.Config;
+import ch.epfl.sweng.swenggolf.network.Network;
+import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 
 /**
  * Sign-in Activity where the user can log in his
@@ -32,35 +35,35 @@ public class SignInActivity extends AppCompatActivity {
     /*(Random) Number linked with the Sign in process*/
     private static final int RC_SIGN_IN = 9001;
 
-    private FirebaseAuth mAuth;
-
+    private FirebaseAuth mAuth = null;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ch.epfl.sweng.swenggolf.R.layout.activity_sign_in);
+
         if (Config.isTest()) {
             goToLogOut();
         }
 
-        mAuth = FirebaseAuth.getInstance();
         /*Button used to sign in*/
         SignInButton button = findViewById(ch.epfl.sweng.swenggolf.R.id.sign_in_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                Network.updateStatus(SignInActivity.this);
+                Network.checkAndDialog(SignInActivity.this);
+                if (mAuth == null & Network.getStatus()){
+                    mAuth = FirebaseAuth.getInstance();
+                    initializeMAuthListener();
+                    mAuth.addAuthStateListener(mAuthListener);
+                    signIn();
+                }
             }
         });
-        initializeMAuthListener();
+
     }
 
 
@@ -147,7 +150,7 @@ public class SignInActivity extends AppCompatActivity {
                                     "Welcome", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(SignInActivity.this,
-                                    "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                                    "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
