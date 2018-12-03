@@ -55,6 +55,14 @@ public class MessagingActivity extends FragmentConverter {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Database.getInstance().deafen(Database.ANSWERS_PATH, offerId,
+                messagesAdapter.getUpdateListener());
+        messagesAdapter.setUpdateListener(null);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -72,31 +80,30 @@ public class MessagingActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        messagesAdapter = new MessagesAdapter(otherUser);
+        mRecyclerView.setAdapter(messagesAdapter);
         fetchMessages();
 
-        messagesAdapter = new MessagesAdapter(otherUser);
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(messagesAdapter);
     }
 
     private void sendMessage() {
         EditText editText = findViewById(R.id.message_content);
         Answers messages = messagesAdapter.getAnswers();
-        Answer newAnswer = new Answer(Config.getUser().getUserId(), editText.getText().toString());
-        editText.getText().clear();
-        // write only new answer
-        Database.getInstance().write(Database.MESSAGES_PATH + "/" + offerId + "/answerList",
-                Integer.toString(messages.getAnswerList().size()), newAnswer);
+        // we write the whole lists of messages every time because of the listeners
+        // TODO change this and only write message by message
         messages.getAnswerList()
-                .add(newAnswer);
+                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
+        Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
         messagesAdapter.setAnswers(messages);
+        editText.getText().clear();
         messagesAdapter.notifyDataSetChanged();
     }
 
     private void fetchMessages() {
-        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+        ValueListener<Answers> messageListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
                 if (value != null) {
@@ -109,8 +116,9 @@ public class MessagingActivity extends FragmentConverter {
                 // TODO put a toast or something?
             }
         };
-        Database.getInstance().read(Database.MESSAGES_PATH, offerId,
-                answerListener, Answers.class);
+        Database.getInstance().listen(Database.MESSAGES_PATH, offerId,
+                messageListener, Answers.class);
+        messagesAdapter.setUpdateListener(messageListener);
     }
 
 

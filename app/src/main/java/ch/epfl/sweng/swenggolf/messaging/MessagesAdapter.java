@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
@@ -23,9 +24,19 @@ import ch.epfl.sweng.swenggolf.profile.User;
 public class MessagesAdapter extends RecyclerView.Adapter<ListAnswerAdapter.AnswerViewHolder> {
     private Answers answers = new Answers(new ArrayList<Answer>(), -1);
     private User otherUser;
+    private ValueListener<Answers> updateListener;
+
 
     public MessagesAdapter(User otherUser) {
         this.otherUser = otherUser;
+    }
+
+    public ValueListener<Answers> getUpdateListener() {
+        return updateListener;
+    }
+
+    public void setUpdateListener(ValueListener<Answers> updateListener) {
+        this.updateListener = updateListener;
     }
 
     /**

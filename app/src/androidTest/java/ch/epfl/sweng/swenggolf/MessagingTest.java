@@ -47,7 +47,7 @@ public class MessagingTest {
             new IntentsTestRule<>(MainMenuActivity.class, false, true);
 
     /**
-     * Write some answers to the offer in the database, with the first one accepted
+     * Write some answers to the offer in the database, with the first one accepted.
      */
     @BeforeClass
     public static void setUp() {
