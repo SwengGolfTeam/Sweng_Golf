@@ -39,6 +39,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -188,7 +189,7 @@ public class CreateOfferActivity extends FragmentConverter
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS){
             createHelper.attachLocation();
         }
     }

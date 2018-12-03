@@ -1,9 +1,12 @@
 package ch.epfl.sweng.swenggolf.location;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -54,6 +57,16 @@ public abstract class AppLocation {
             return false;
         }
         return true;
+    }
+
+    public static boolean checkLocationActive(Context context){
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return true;
+        } else {
+            Toast.makeText(context, "Location is not active...", Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
 
     /**

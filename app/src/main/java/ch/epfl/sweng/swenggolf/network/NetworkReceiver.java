@@ -7,18 +7,25 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-
+/**
+ * A Receiver that gets called by the System (Android) if there is a change with the Internet
+ * connection.
+ */
 public class NetworkReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean status = Network.getStatus(context);
-        Log.d("NETWORK CHANGE", String.valueOf(status));
-
-        Network.setMessageVisibility(context, status);
+        Network.updateStatus(context);
+        Log.d("NETWORK CHANGE", String.valueOf(Network.getStatus()));
+        Network.setMessageVisibility(context);
     }
 
-    // Needed for API>=24 because receiver in AndroidManifest.xml is deprecated if not registered
-    // See https://developer.android.com/training/monitoring-device-state/connectivity-monitoring#java
+
+    /**
+     * Registers the Receiver at runtime, needed for API>=24 (can not do it in AndroidManifest.xml).
+     * See https://developer.android.com/training/monitoring-device-state/connectivity-monitoring
+     * @param context The Context from where it is registered
+     * @param broadcastReceiver The Receiver to register
+     */
     public static void registerReceiver(Context context, BroadcastReceiver broadcastReceiver){
         context.registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }

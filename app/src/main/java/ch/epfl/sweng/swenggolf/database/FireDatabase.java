@@ -1,6 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
@@ -182,4 +186,15 @@ public final class FireDatabase extends Database {
             }
         });
     }
+
+    //TODO
+    /*private boolean checkInternet(){
+        if (!Network.getStatus()){
+            Log.d("FIREBASE", "no internet connection");
+            return false;
+        } else {
+            Log.d("FIREBASE", "internet ok");
+            return true;
+        }
+    }*/
 }

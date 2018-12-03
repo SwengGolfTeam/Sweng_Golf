@@ -179,6 +179,8 @@ class CreateHelper {
      * Attach location to the offer.
      */
     void attachLocation() {
+        if (!AppLocation.checkLocationActive(create.getContext()))
+            return;
         if (create.location.getLatitude() != 0.0 || create.location.getLongitude() != 0.0) {
 
             create.location = new Location("");
