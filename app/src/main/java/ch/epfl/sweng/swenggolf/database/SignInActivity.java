@@ -50,6 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         if (Config.isTest()) {
             goToLogOut();
         }
+
         mAuth = FirebaseAuth.getInstance();
         /*Button used to sign in*/
         SignInButton button = findViewById(ch.epfl.sweng.swenggolf.R.id.sign_in_button);
