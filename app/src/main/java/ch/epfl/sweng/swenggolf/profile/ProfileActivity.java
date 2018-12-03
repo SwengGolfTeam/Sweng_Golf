@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -94,7 +95,13 @@ public class ProfileActivity extends FragmentConverter {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        replaceCentralFragment(new ListOwnOfferActivity(user));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("user", user);
+
+                        Fragment fragment = new ListOwnOfferActivity();
+                        fragment.setArguments(bundle);
+
+                        replaceCentralFragment(fragment);
                     }
                 });
     }

@@ -168,6 +168,13 @@ public abstract class FragmentConverter extends Fragment {
         actionBar.setTitle(getResources().getString(titleResId));
     }
 
+    protected void setToolbar(int homeIconResId, String title) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        setHasOptionsMenu(true);
+        actionBar.setHomeAsUpIndicator(homeIconResId);
+        actionBar.setTitle(title);
+    }
+
     protected void openDrawer() {
         DrawerLayout drawer = getActivity().findViewById(R.id.side_menu);
         drawer.openDrawer(GravityCompat.START);
