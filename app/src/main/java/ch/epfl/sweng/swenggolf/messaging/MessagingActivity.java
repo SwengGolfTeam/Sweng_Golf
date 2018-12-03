@@ -83,12 +83,14 @@ public class MessagingActivity extends FragmentConverter {
     private void sendMessage() {
         EditText editText = findViewById(R.id.message_content);
         Answers messages = messagesAdapter.getAnswers();
-        messages.getAnswerList()
-                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        messagesAdapter.setAnswers(messages);
-        // TODO we write all answers each time ?!
-        Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
+        Answer newAnswer = new Answer(Config.getUser().getUserId(), editText.getText().toString());
         editText.getText().clear();
+        // write only new answer
+        Database.getInstance().write(Database.MESSAGES_PATH + "/" + offerId + "/answerList",
+                Integer.toString(messages.getAnswerList().size()), newAnswer);
+        messages.getAnswerList()
+                .add(newAnswer);
+        messagesAdapter.setAnswers(messages);
         messagesAdapter.notifyDataSetChanged();
     }
 

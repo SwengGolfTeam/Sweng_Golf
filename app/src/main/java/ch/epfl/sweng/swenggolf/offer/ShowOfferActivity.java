@@ -473,6 +473,7 @@ public class ShowOfferActivity extends FragmentConverter {
         Database.getInstance().write(Database.OFFERS_PATH, offer.getUuid(), offer);
         hideReactButton();
         getActivity().invalidateOptionsMenu();
+        offerAccessToDiscussion();
         listAnswerAdapter.closeAnswers();
         //TODO : add listener
 
