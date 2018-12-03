@@ -9,7 +9,9 @@ exports.removeOldOffers = functions.https.onRequest((req, res) => {
     messagesRef.once('value', (snapshot) => {
         snapshot.forEach((child) => {
             if ((Number(child.val()['endDate'])) <= timeNow) {
-                child.ref.set(null);
+                child.ref.update({
+                    "isClosed": true
+                });
             }
         });
     });
