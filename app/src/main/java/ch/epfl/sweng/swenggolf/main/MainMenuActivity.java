@@ -39,12 +39,11 @@ public class MainMenuActivity extends AppCompatActivity {
     private final User user = Config.getUser();
     private FragmentManager manager;
     private View nav;
-    private NetworkReceiver networkReceiver = new NetworkReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
-        NetworkReceiver.registerReceiver(this, networkReceiver);
+        NetworkReceiver.registerReceiver(this, new NetworkReceiver());
         setContentView(R.layout.activity_main_menu);
         setToolBar();
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
