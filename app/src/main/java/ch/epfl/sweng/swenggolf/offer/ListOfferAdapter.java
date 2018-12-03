@@ -81,7 +81,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         filteredOfferList.clear();
         fillFilteredList();
         notifyDataSetChanged();
-        Log.d("OFFER", "updating " + offers.size());
     }
 
     /**
@@ -91,7 +90,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         offerList.clear();
         filteredOfferList.clear();
         notifyDataSetChanged();
-        Log.d("OFFER", "clearing offers");
     }
 
     private void fillFilteredList() {
@@ -112,7 +110,6 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
         filteredOfferList.clear();
         fillFilteredList();
         notifyDataSetChanged();
-        Log.d("OFFER", "filtering data");
     }
 
     /**

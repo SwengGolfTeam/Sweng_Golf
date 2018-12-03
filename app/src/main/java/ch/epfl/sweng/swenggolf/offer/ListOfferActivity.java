@@ -222,7 +222,6 @@ public class ListOfferActivity extends FragmentConverter {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mAdapter.filter(s.toString());
-                Log.d("OFFER", "text has changed");
             }
 
             @Override
