@@ -1,9 +1,14 @@
 package ch.epfl.sweng.swenggolf.network;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -46,5 +51,39 @@ public class Network {
         } else {
             banner.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Displays the Dialog if no internet connection.
+     * @param context The context of the application
+     */
+    public static void checkAndDialog(Context context){
+        if(!getStatus()){
+            showGoToSettingsDialog(context);
+        }
+    }
+
+    /**
+     * Display the Alert Dialog for the redirection to settings
+     */
+    private static void showGoToSettingsDialog(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("No Internet Connection")
+                .setMessage("Do you want to go to the settings to enable it?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent GpsIntent = new Intent( Settings.ACTION_WIFI_SETTINGS);
+                        context.startActivity(GpsIntent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
