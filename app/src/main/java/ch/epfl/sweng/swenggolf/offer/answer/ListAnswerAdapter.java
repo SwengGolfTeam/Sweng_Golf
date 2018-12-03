@@ -45,6 +45,7 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
     private Answers answers;
     private Offer offer;
     private boolean isClosed;
+    private ValueListener<Answers> updateListener;
     private FragmentConverter parentActivity;
 
     /**
@@ -60,6 +61,15 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
         this.offer = offer;
         this.isClosed = false;
         this.parentActivity = parentActivity;
+        this.updateListener = null;
+    }
+
+    public ValueListener<Answers> getUpdateListener() {
+        return updateListener;
+    }
+
+    public void setUpdateListener(ValueListener<Answers> updateListener) {
+        this.updateListener = updateListener;
     }
 
     /**

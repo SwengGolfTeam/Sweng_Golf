@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -59,7 +60,28 @@ public class FakeDatabaseTest {
     }
 
     @Test
-    public void readReturnNull() {
+    public void listenIsNotifiedWhenChangeHappens() {
+        final Database d = new FakeDatabase(true);
+        ValueTestListener testListener = new ValueTestListener();
+        d.write(PATH, ID, CONTENT);
+        d.listen(PATH, ID, testListener, String.class);
+        d.write(PATH, ID, CONTENT_2);
+        assertThat(testListener.calls, is(2));
+    }
+
+    @Test
+    public void deafenDisablesListenning() {
+        final Database d = new FakeDatabase(true);
+        ValueTestListener testListener = new ValueTestListener();
+        d.write(PATH, ID, CONTENT);
+        d.listen(PATH, ID, testListener, String.class);
+        d.deafen(PATH, ID, testListener);
+        d.write(PATH, ID, CONTENT_2);
+        assertThat(testListener.calls, is(1));
+    }
+
+    @Test
+    public void readReturnsNull() {
         Database d = new FakeDatabase(true);
         ValueListener<String> listener = new ValueListener<String>() {
             @Override
@@ -192,7 +214,6 @@ public class FakeDatabaseTest {
         writeListenerError(true, DbError.NONE);
     }
 
-
     @Test
     public void writeListenerHasError() {
         writeListenerError(false, DbError.UNKNOWN_ERROR);
@@ -248,7 +269,6 @@ public class FakeDatabaseTest {
         d.readOffers(listener, new ArrayList<Category>(), "user");
     }
 
-
     @NonNull
     private ValueListener<List<Offer>> getListValueListener() {
         return new ValueListener<List<Offer>>() {
@@ -262,6 +282,25 @@ public class FakeDatabaseTest {
                 assertThat(error, is(DbError.UNKNOWN_ERROR));
             }
         };
+    }
+
+    class ValueTestListener implements ValueListener<String> {
+        int calls = 0;
+
+        @Override
+        public void onDataChange(String value) {
+            if (calls == 0) {
+                assertThat(value, is(CONTENT));
+            } else if (calls == 1) {
+                assertThat(value, is(CONTENT_2));
+            }
+            ++calls;
+        }
+
+        @Override
+        public void onCancelled(DbError error) {
+            fail();
+        }
     }
 
 

@@ -36,9 +36,8 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class ListOfferActivity extends FragmentConverter {
 
-    // The list is public, static and final so that it can be used in tests.
-    private List<Offer> offerList = new ArrayList<>();
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
+    private List<Offer> offerList = new ArrayList<>();
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
@@ -270,6 +269,5 @@ public class ListOfferActivity extends FragmentConverter {
             }
         };
         dbConsumer.accept(database, categories, listener);
-
     }
 }
