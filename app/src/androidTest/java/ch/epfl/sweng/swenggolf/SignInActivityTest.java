@@ -34,15 +34,4 @@ public class SignInActivityTest {
         intended(hasComponent(SignInActivity.class.getName()));
         Intents.release();
     }
-
-    @Test
-    public void checkDialogOnButtonIfOfflineTest(){
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
-        Network.setFalseforTest();
-        onView(withId(R.id.sign_in_button)).perform(click());
-        onView(withText(android.R.string.yes)).perform(click());
-        intended(toPackage("com.android.settings"));
-        Intents.release();
-    }
 }
