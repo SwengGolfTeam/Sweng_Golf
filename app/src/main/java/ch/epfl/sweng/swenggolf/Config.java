@@ -163,7 +163,6 @@ public class Config {
                         if(settingsIntent.resolveActivity(context.getPackageManager()) != null) {
                             context.startActivity(settingsIntent);
                         }
-                        //context.startActivity(settingsIntent);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
