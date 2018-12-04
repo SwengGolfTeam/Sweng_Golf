@@ -81,11 +81,11 @@ public class FakeDatabase extends Database {
     }
 
     private String[] createChildrenPaths(String[] listenningToChildren) {
-        String[] paths = new String[listenningToChildren.length];
+        String[] paths = new String[listenningToChildren.length-1];
         StringBuilder currentPath = new StringBuilder();
         for (int i = 0; i < paths.length; ++i) {
+            currentPath.append(i == 0 ? "" : "/").append(listenningToChildren[i]);
             paths[i] = currentPath.toString();
-            currentPath.append("/").append(listenningToChildren[i]);
         }
         return paths;
     }

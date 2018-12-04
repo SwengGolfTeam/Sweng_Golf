@@ -81,6 +81,19 @@ public class FakeDatabaseTest {
     }
 
     @Test
+    public void listenNotifiesAllUpperLevels() {
+        final Database d = new FakeDatabase(true);
+        ValueTestListener testListener = new ValueTestListenerString();
+        ValueTestListener<List> testListenerList = new ValueTestListener<>();
+        d.write("x/y", "z", CONTENT);
+        d.listen( "x/y", "z", testListener, String.class);
+        d.listen("x", "y", testListenerList, List.class);
+        d.write("x/y", "z", CONTENT_2);
+        assertThat(testListener.calls, is(2));
+        assertThat(testListenerList.calls, is(2));
+    }
+
+    @Test
     public void readReturnsNull() {
         Database d = new FakeDatabase(true);
         ValueListener<String> listener = new ValueListener<String>() {
@@ -284,8 +297,7 @@ public class FakeDatabaseTest {
         };
     }
 
-    class ValueTestListener implements ValueListener<String> {
-        int calls = 0;
+    class ValueTestListenerString extends ValueTestListener<String> {
 
         @Override
         public void onDataChange(String value) {
@@ -294,6 +306,15 @@ public class FakeDatabaseTest {
             } else if (calls == 1) {
                 assertThat(value, is(CONTENT_2));
             }
+            super.onDataChange(value);
+        }
+    }
+
+    class ValueTestListener<T> implements ValueListener<T> {
+        int calls = 0;
+
+        @Override
+        public void onDataChange(T value) {
             ++calls;
         }
 
@@ -302,6 +323,4 @@ public class FakeDatabaseTest {
             fail();
         }
     }
-
-
 }
