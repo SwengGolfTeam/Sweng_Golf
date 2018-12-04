@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static ch.epfl.sweng.swenggolf.database.DbError.DISCONNECTED;
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 
 /**
@@ -81,13 +80,13 @@ public final class FireDatabase extends Database {
 
     @Override
     public void write(String path, String id, Object object) {
-
+        //TODO
         database.getReference(path).child(id).setValue(object);
     }
 
     @Override
     public void write(String path, String id, Object object, final CompletionListener listener) {
-
+        checkInternetConnection(listener);
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
         database.getReference(path).child(id).setValue(object, firebaseListener);
     }
@@ -95,6 +94,7 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void read(String path, String id, final ValueListener<T> listener,
                          final Class<T> c) {
+        checkInternetConnection(listener);
         DatabaseReference ref = database.getReference(path);
 
         ValueEventListener firebaseListener = new ValueEventListener() {
@@ -115,6 +115,7 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
                              @NonNull final Class<T> c) {
+        checkInternetConnection(listener);
         DatabaseReference ref = database.getReference(path);
         ValueEventListener firebaseListener = getListValueListener(listener, c);
         ref.addListenerForSingleValueEvent(firebaseListener);
@@ -124,6 +125,7 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
                              @NonNull final Class<T> c, AttributeFilter filter) {
+        checkInternetConnection(listener);
         final DatabaseReference ref = database.getReference(path);
         Query query = ref.orderByChild(filter.getAttribute()).equalTo(filter.getValue());
         readListQuery(listener, query, c, false);
@@ -132,6 +134,7 @@ public final class FireDatabase extends Database {
     @Override
     public <T> void readList(@NonNull String path, @NonNull final ValueListener<List<T>> listener,
                              @NonNull final Class<T> c, AttributeOrdering ordering) {
+        checkInternetConnection(listener);
         final DatabaseReference ref = database.getReference(path);
         Query query = ref.orderByChild(ordering.getAttribute());
         if (ordering.isAscending()) {
@@ -145,6 +148,7 @@ public final class FireDatabase extends Database {
     @Override
     public void remove(@NonNull String path, @NonNull String id,
                        @NonNull CompletionListener listener) {
+        checkInternetConnection(listener);
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
         database.getReference(path).child(id).removeValue(firebaseListener);
     }
@@ -152,6 +156,8 @@ public final class FireDatabase extends Database {
     @Override
     public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
                            final List<Category> categories) {
+        checkInternetConnection(listener);
+
         final DatabaseReference ref = database.getReference(OFFERS_PATH);
 
         if (categories.isEmpty()) {
@@ -165,6 +171,7 @@ public final class FireDatabase extends Database {
 
     private <T> void readListQuery(@NonNull final ValueListener<List<T>> listener, Query query,
                                    final Class<T> c, final boolean reverserOrder) {
+        checkInternetConnection(listener);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -187,14 +194,18 @@ public final class FireDatabase extends Database {
         });
     }
 
-    //TODO
-    /*private boolean checkInternet(){
-        if (!Network.getStatus()){
+    private void checkInternetConnection(ValueListener listener){
+        if (!Network.getStatus()) {
             Log.d("FIREBASE", "no internet connection");
-            return false;
-        } else {
-            Log.d("FIREBASE", "internet ok");
-            return true;
+            listener.onCancelled(DISCONNECTED);
         }
-    }*/
+    }
+
+    private void checkInternetConnection(CompletionListener listener){
+        if (!Network.getStatus()) {
+            Log.d("FIREBASE", "no internet connection");
+            listener.onComplete(DISCONNECTED);
+        }
+    }
+
 }

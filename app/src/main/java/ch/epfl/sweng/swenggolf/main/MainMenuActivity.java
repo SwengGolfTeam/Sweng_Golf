@@ -106,7 +106,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void replaceCentralFragment(Fragment fragment) {
-        Network.checkAndDialog(this);
         //drain the backstack
         int backStackSize = manager.getBackStackEntryCount();
         for (int i = 0; i < backStackSize; ++i) {
