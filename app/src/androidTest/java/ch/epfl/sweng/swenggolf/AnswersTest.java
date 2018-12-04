@@ -78,8 +78,8 @@ public class AnswersTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
-        Config.setUser(author);
+    public void init() {
+        Config.goToTest();
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity()
@@ -102,13 +102,15 @@ public class AnswersTest {
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
+        Config.setUser(author);
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
     }
-    
+
     @Test
     public void authorOfAnswerIsCorrect() {
+        Config.setUser(author);
         addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
@@ -152,6 +154,7 @@ public class AnswersTest {
 
     @Test
     public void canPostMultipleAnswers() {
+        Config.setUser(author);
         addAnswer("first answer");
         // change user and reload offer
         Config.setUser(otherUser);
@@ -166,6 +169,7 @@ public class AnswersTest {
 
     @Test
     public void errorMessageWhenAnswerIsTooShort() {
+        Config.setUser(author);
         addAnswer("NO");
         final MainMenuActivity activity = mActivityRule.getActivity();
         onView(withId(R.id.your_answer_description)).check(matches(
