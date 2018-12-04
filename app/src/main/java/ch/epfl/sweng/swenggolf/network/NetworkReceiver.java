@@ -27,7 +27,8 @@ public class NetworkReceiver extends BroadcastReceiver {
      * @param broadcastReceiver The Receiver to register
      */
     public static void registerReceiver(Context context, BroadcastReceiver broadcastReceiver){
-        context.registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        context.registerReceiver(broadcastReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         Network.updateStatus(context);
     }
 }

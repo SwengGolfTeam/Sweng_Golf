@@ -64,18 +64,23 @@ public abstract class AppLocation {
         return true;
     }
 
+    /**
+     * Verifies if the location services are activated.
+     * @param context The Context of the App
+     * @return true if active, false otherwise
+     */
     public static boolean checkLocationActive(Context context){
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             return true;
         } else {
             showGoToSettingsDialog(context);
-            return false; // must retry
+            return false;
         }
     }
 
     /**
-     * Display the Alert Dialog for the redirection to settings
+     * Display the Alert Dialog for the redirection to settings.
      */
     public static void showGoToSettingsDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -84,8 +89,8 @@ public abstract class AppLocation {
                 .setMessage("Do you want to go to the settings to enable it?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent GpsIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        context.startActivity(GpsIntent);
+                        Intent gpsIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        context.startActivity(gpsIntent);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

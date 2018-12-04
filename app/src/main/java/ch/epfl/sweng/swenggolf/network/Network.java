@@ -21,11 +21,17 @@ public class Network {
     private static boolean isConnected = true;
 
     /**
+     * Hidden constructor.
+     */
+    private Network(){}
+
+    /**
      * Checks with the System (Android) if there is an active Internet connection.
      * @param context The context of the application
      */
     public static void updateStatus(Context context){
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager)context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
     }
@@ -43,7 +49,8 @@ public class Network {
      * @param context The context in which the message is
      */
     public static void setMessageVisibility(Context context){
-        View rootView = ((Activity)context).getWindow().getDecorView().findViewById(android.R.id.content);
+        View rootView = ((Activity)context).getWindow().getDecorView()
+                .findViewById(android.R.id.content);
         FrameLayout banner = rootView.findViewById(R.id.banner);
 
         if(isConnected){
@@ -64,17 +71,17 @@ public class Network {
     }
 
     /**
-     * Display the Alert Dialog for the redirection to settings
+     * Display the Alert Dialog for the redirection to settings.
      */
     private static void showGoToSettingsDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
-        builder.setTitle("No Internet Connection")
+        dialogBuilder.setTitle("No Internet Connection")
                 .setMessage("Do you want to go to the settings to enable it?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent GpsIntent = new Intent( Settings.ACTION_WIFI_SETTINGS);
-                        context.startActivity(GpsIntent);
+                        Intent wifiIntent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                        context.startActivity(wifiIntent);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -83,7 +90,7 @@ public class Network {
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert);
-        Dialog alertDialog = builder.create();
+        Dialog alertDialog = dialogBuilder.create();
         alertDialog.show();
     }
 }

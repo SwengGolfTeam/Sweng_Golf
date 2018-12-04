@@ -85,12 +85,12 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void write (@NonNull String path, @NonNull String id, @NonNull Object object){
+    public void write(@NonNull String path, @NonNull String id, @NonNull Object object){
         database.getReference(path).child(id).setValue(object);
     }
 
     @Override
-    public void write (@NonNull String path, @NonNull String id, @NonNull Object object,
+    public void write(@NonNull String path, @NonNull String id, @NonNull Object object,
     @NonNull final CompletionListener listener){
         checkInternetConnection(listener);
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
@@ -98,7 +98,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void read (@NonNull String path, @NonNull String id,
+    public <T> void read(@NonNull String path, @NonNull String id,
     @NonNull final ValueListener<T> listener, @NonNull final Class<T> c){
         checkInternetConnection(listener);
         DatabaseReference ref = database.getReference(path);
@@ -106,7 +106,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void listen (@NonNull String path, @NonNull String id,
+    public <T> void listen(@NonNull String path, @NonNull String id,
             @NonNull ValueListener < T > listener, @NonNull Class < T > c){
         checkInternetConnection(listener);
         DatabaseReference ref = database.getReference(path);
@@ -117,7 +117,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void deafen (@NonNull String path, @NonNull String id,
+    public <T> void deafen(@NonNull String path, @NonNull String id,
             @NonNull ValueListener < T > listener){
         checkInternetConnection(listener);
         Pair<String, ValueListener<T>> listenerAtPath = Pair.create(path + "/" + id, listener);
@@ -128,7 +128,7 @@ public final class FireDatabase extends Database {
         }
     }
 
-    private <T> ValueEventListener convertValueListener (
+    private <T> ValueEventListener convertValueListener(
     final ValueListener<T> listener,
     final Class<T> c){
 
@@ -147,7 +147,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList (@NonNull String path,
+    public <T> void readList(@NonNull String path,
     @NonNull final ValueListener<List<T>> listener,
     @NonNull final Class<T> c){
         checkInternetConnection(listener);
@@ -158,7 +158,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList (@NonNull String path,
+    public <T> void readList(@NonNull String path,
     @NonNull final ValueListener<List<T>> listener,
     @NonNull final Class<T> c, AttributeFilter filter){
         checkInternetConnection(listener);
@@ -168,7 +168,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public <T> void readList (@NonNull String path,
+    public <T> void readList(@NonNull String path,
     @NonNull final ValueListener<List<T>> listener,
     @NonNull final Class<T> c, AttributeOrdering ordering){
         checkInternetConnection(listener);
@@ -183,7 +183,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void remove (@NonNull String path, @NonNull String id,
+    public void remove(@NonNull String path, @NonNull String id,
             @NonNull CompletionListener listener){
         checkInternetConnection(listener);
         DatabaseReference.CompletionListener firebaseListener = getCompletionListener(listener);
@@ -191,7 +191,7 @@ public final class FireDatabase extends Database {
     }
 
     @Override
-    public void readOffers (@NonNull final ValueListener<List<Offer>> listener,
+    public void readOffers(@NonNull final ValueListener<List<Offer>> listener,
     final List<Category> categories){
         checkInternetConnection(listener);
 
@@ -206,7 +206,7 @@ public final class FireDatabase extends Database {
         }
     }
 
-    private <T> void readListQuery (
+    private <T> void readListQuery(
     @NonNull final ValueListener<List<T>> listener, Query query,
     final Class<T> c, final boolean reverserOrder){
         checkInternetConnection(listener);
@@ -232,14 +232,14 @@ public final class FireDatabase extends Database {
         });
     }
 
-    private void checkInternetConnection (ValueListener listener){
+    private void checkInternetConnection(ValueListener listener){
         if (!Network.getStatus()) {
             Log.d("FIREBASE", "no internet connection");
             listener.onCancelled(DISCONNECTED);
         }
     }
 
-    private void checkInternetConnection (CompletionListener listener){
+    private void checkInternetConnection(CompletionListener listener){
         if (!Network.getStatus()) {
             Log.d("FIREBASE", "no internet connection");
             listener.onComplete(DISCONNECTED);
