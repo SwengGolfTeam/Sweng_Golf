@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +32,8 @@ public class NotificationsDbNotWorkingTest {
      * Sets the user and wait a moment.
      */
     @Before
-    public void setUser() {
+    public void init() {
+        Config.goToTest();
         Config.setUser(user);
         // wait for last toast to disappear
         waitFor(1000);
@@ -71,5 +73,11 @@ public class NotificationsDbNotWorkingTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        activityTestRule.finishActivity();
     }
 }

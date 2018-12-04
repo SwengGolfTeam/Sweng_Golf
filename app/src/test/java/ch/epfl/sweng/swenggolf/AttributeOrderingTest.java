@@ -30,7 +30,6 @@ public class AttributeOrderingTest {
 
     @Test
     public void getAttributeIsCorrect() {
-
         AttributeOrdering ordering = AttributeOrdering.ascendingOrdering(attribute, 1);
         assertThat(ordering.getAttribute(), is(attribute));
     }

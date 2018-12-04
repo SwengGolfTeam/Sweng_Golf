@@ -7,6 +7,7 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,11 +55,12 @@ public class NavigationTest {
      * Set up the fake database, the user, the fake storage and launch activity.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Database database = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(database);
         FakeStorage storage = new FakeStorage(true);
         Storage.setDebugStorage(storage);
+        Config.goToTest();
         Config.setUser(FilledFakeDatabase.getUser(0));
         intentRule.launchActivity(new Intent());
     }
@@ -193,6 +195,12 @@ public class NavigationTest {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        intentRule.finishActivity();
     }
 
 }

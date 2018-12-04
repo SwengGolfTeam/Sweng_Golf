@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import org.junit.After;
 import org.junit.Test;
 
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -60,5 +61,10 @@ public class ConfigTest {
         assertEquals(NONE, Config.onRequestPermissionsResult(PERMISSION_FINE_LOCATION,
                 new int[]{PERMISSION_DENIED}));
         assertEquals(NONE, Config.onRequestPermissionsResult(0, null));
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
     }
 }

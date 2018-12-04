@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class WaitingActivityTest {
      * Initialise the Config and the Database for tests.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Config.goToTest();
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
@@ -68,6 +69,12 @@ public class WaitingActivityTest {
                 intended(hasComponent(MainMenuActivity.class.getName()));
             }
         });
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 }
 

@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -112,7 +113,7 @@ public class CreateOfferActivityTest {
      * Sets up a fake database and a fake storage, enables TestMode and launches activity.
      */
     @Before
-    public void setTest() {
+    public void init() {
         ListOfferActivityTest.setUpFakeDatabase();
         Storage.setDebugStorage(new FakeStorage(true));
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
@@ -277,6 +278,12 @@ public class CreateOfferActivityTest {
         goToCreateOffer(false);
         setDate(2000, 1, 1);
 
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        intentsTestRule.finishActivity();
     }
 
 }

@@ -11,6 +11,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class CreateOfferPhotoTest {
      * Set up the environnement to work with CreateOfferActivity.
      */
     @Before
-    public void setUp() {
+    public void init() {
         FragmentManager manager = mActivitiyRule.getActivity().getSupportFragmentManager();
         manager.beginTransaction()
                 .replace(R.id.centralFragment, new CreateOfferActivity()).commit();
@@ -98,6 +99,11 @@ public class CreateOfferPhotoTest {
         onView(withId(R.id.take_picture)).perform(scrollTo(), click());
         File firstPhotoFile = new File(firstUri.getPath());
         assertThat(firstPhotoFile.exists(), is(false));
+    }
+
+    @After
+    public void release(){
+        mActivitiyRule.finishActivity();
     }
 
 }

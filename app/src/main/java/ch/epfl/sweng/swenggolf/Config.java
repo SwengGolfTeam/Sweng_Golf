@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.support.v4.content.ContextCompat.startActivity;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
@@ -65,6 +63,7 @@ public class Config {
     public static void quitTest() {
         onTest = false;
         user = null;
+        resetActivityCallback();
     }
 
     /**

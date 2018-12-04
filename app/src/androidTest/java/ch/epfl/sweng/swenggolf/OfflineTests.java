@@ -6,6 +6,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,32 +35,34 @@ public class OfflineTests {
             new ActivityTestRule<>(MainMenuActivity.class);
 
 
+    @Before
+    public void init(){
+        Config.quitTest(); // to make sure
+        Intents.init();
+        Network.setFalseforTest(true);
+    }
+
     @Test
     public void signInActivityCheckDialog(){
-        Config.quitTest();
-        Intents.init();
         signInRule.launchActivity(new Intent());
-        Network.setFalseforTest(true);
-        Config.goToTest();
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
-        //pressBack();
         signInRule.finishActivity();
-        Network.setFalseforTest(false);
-        Intents.release();
+
     }
 
     @Test
     public void listOfferCheckDialog(){
-        Intents.init();
-        Network.setFalseforTest(true);
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
-        //pressBack();
-        Network.setFalseforTest(false);
         listOfferRule.finishActivity();
+    }
+
+    @After
+    public void release(){
+        Network.setFalseforTest(false);
         Intents.release();
     }
 }

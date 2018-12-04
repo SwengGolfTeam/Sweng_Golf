@@ -1,8 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +27,17 @@ public class LocalDatabaseTest {
     public final ActivityTestRule<MainMenuActivity> activityRule =
             new ActivityTestRule<>(MainMenuActivity.class, false, true);
 
+    private Activity activity = null;
+
+    @Before
+    public void init(){
+        activity = activityRule.getActivity();
+    }
+
 
     @Test
     public void writeAndReadCategoriesTest() {
-        LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
+        LocalDatabase localDb = new LocalDatabase(activity, null, 1);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb.writeCategories(allCategories);
         List<Category> readCategories = localDb.readCategories();
@@ -36,7 +46,7 @@ public class LocalDatabaseTest {
 
     @Test
     public void writeAndReadLevelTest() {
-        LocalDatabase localDb = new LocalDatabase(activityRule.getActivity(), null, 1);
+        LocalDatabase localDb = new LocalDatabase(activity, null, 1);
         int level = 5;
         localDb.writeLevel(level);
         int readLevel = localDb.readLevel();
@@ -46,9 +56,9 @@ public class LocalDatabaseTest {
     @Test
     public void upgradeDatabaseDoesWorkTest() {
         String upgradeDatabaseName = "TEST_DATABASE.db";
-        LocalDatabase localDb1 = new LocalDatabase(activityRule.getActivity(), null,
+        LocalDatabase localDb1 = new LocalDatabase(activity, null,
                 1, upgradeDatabaseName);
-        LocalDatabase localDb2 = new LocalDatabase(activityRule.getActivity(), null,
+        LocalDatabase localDb2 = new LocalDatabase(activity, null,
                 2, upgradeDatabaseName);
         List<Category> allCategories = Arrays.asList(Category.values());
         localDb2.writeCategories(allCategories);
@@ -73,5 +83,10 @@ public class LocalDatabaseTest {
         List<Category> noCategory = new ArrayList<>();
         String stringNoCategory = Category.categoriesToSingleString(noCategory);
         assertEquals(noCategory, Category.singleStringToCategories(stringNoCategory));
+    }
+
+    @After
+    public void release(){
+        activity.finish();
     }
 }

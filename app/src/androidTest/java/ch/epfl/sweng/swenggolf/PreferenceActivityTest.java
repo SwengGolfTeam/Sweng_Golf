@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,9 +47,10 @@ public class PreferenceActivityTest {
      * Enters adapter debug mode.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
+        Config.goToTest();
         Config.setUser(FilledFakeDatabase.getUser(0));
         preferenceRule.launchActivity(new Intent());
         preferenceRule.getActivity().getSupportFragmentManager()
@@ -97,6 +99,12 @@ public class PreferenceActivityTest {
     public void backFromPerferenceIsMenu() {
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         onView(withId(R.id.side_menu)).check(matches(DrawerMatchers.isOpen()));
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        preferenceRule.finishActivity();
     }
 
 }

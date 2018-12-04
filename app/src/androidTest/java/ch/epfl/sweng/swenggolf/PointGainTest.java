@@ -7,6 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -70,7 +71,7 @@ public class PointGainTest {
      * Sets up the database and the location.
      */
     @Before
-    public void setUpDatabase() {
+    public void init() {
         Storage.setDebugStorage(new FakeStorage(true));
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Config.setUser(FilledFakeDatabase.getUser(0));
@@ -195,5 +196,11 @@ public class PointGainTest {
         }
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
         testUserPoints(-createFakeOffer().offerValue(), Config.getUser());
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        activityTestRule.finishActivity();
     }
 }

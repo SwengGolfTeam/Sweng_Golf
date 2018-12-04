@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class CreateUserActivityTest {
      * Initialise the Config and the Database for tests.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Config.goToTest();
         User user1 = new User(NAME, UID, MAIL, PHOTO);
         Config.setUser(new User(user1));
@@ -73,9 +74,10 @@ public class CreateUserActivityTest {
         }, Config.getUser());
     }
 
-    private void checkError() {
-        onView(withId(R.id.create_account)).perform(click());
-        testToastShow(mActivityRule, R.string.incorrect_user_creation);
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 
 }

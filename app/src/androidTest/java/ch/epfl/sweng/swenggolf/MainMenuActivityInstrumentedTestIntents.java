@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,8 +57,9 @@ public class MainMenuActivityInstrumentedTestIntents {
      * Create a fake database, launches the activity and opens the drawer.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+        Config.goToTest();
         Config.setUser(FilledFakeDatabase.getUser(0));
         intentRule.launchActivity(new Intent());
         Matcher v = withId(R.id.side_menu);
@@ -100,6 +102,12 @@ public class MainMenuActivityInstrumentedTestIntents {
     public void testIntentProfileByClickingOnPicture() {
         onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
         testReplacement(ProfileActivity.class, 0, false);
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        intentRule.finishActivity();
     }
 
 }

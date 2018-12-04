@@ -7,6 +7,7 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -78,6 +79,7 @@ public class AnswersTest {
      */
     @Before
     public void setUp() {
+        Config.goToTest();
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
@@ -185,5 +187,11 @@ public class AnswersTest {
         onView(withContentDescription("pic0")).perform(scrollTo(), click());
         // we are in the profile
         onView(withId(R.id.name)).check(matches(withText(otherUser.getUserName())));
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 }

@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class MessagingTest {
      * Write some answers to the offer in the database, with the first one accepted.
      */
     @BeforeClass
-    public static void setUp() {
+    public static void init() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         Answers answers = new Answers(Arrays.asList(
                 new Answer(acceptedUser.getUserId(), "I am blue"),
@@ -88,5 +89,10 @@ public class MessagingTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+    }
+
+    @After
+    public void release(){
+        mActivityRule.finishActivity();
     }
 }

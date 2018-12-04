@@ -3,6 +3,8 @@ package ch.epfl.sweng.swenggolf;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -14,6 +16,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
 
 public class CloseOfferTest extends ShowOfferActivityTest {
+
+    @Before
+    public void init(){
+        super.init();
+    }
 
     @Test
     public void closeButtonNotVisibileWhenClosing() {
@@ -37,5 +44,10 @@ public class CloseOfferTest extends ShowOfferActivityTest {
     public void canNotAddAnswersWhenClosed() {
         closeOffer();
         onView(withId(R.id.react_button)).check(matches(not(isDisplayed())));
+    }
+
+    @After
+    public void release(){
+        super.release();
     }
 }

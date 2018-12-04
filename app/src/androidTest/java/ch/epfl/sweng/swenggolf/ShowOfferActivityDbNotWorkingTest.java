@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,10 +40,11 @@ public class ShowOfferActivityDbNotWorkingTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
+    public void init() {
         database.write(Database.USERS_PATH, "0", user);
         database.write(Database.OFFERS_PATH, "0", offer);
         Database.setDebugDatabase(database);
+        Config.goToTest();
         Config.setUser(user);
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
@@ -63,5 +65,9 @@ public class ShowOfferActivityDbNotWorkingTest {
         onView(withId(R.id.error_message)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
-
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
+    }
 }

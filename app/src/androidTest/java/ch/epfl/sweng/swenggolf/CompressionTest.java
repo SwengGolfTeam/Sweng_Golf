@@ -39,5 +39,6 @@ public class CompressionTest {
         assertThat(result.exists(), is(true));
         assertThat(result.length(), lessThan((long) CreatePictureHelper.MAX_IMAGE_SIZE * 1024));
         result.delete();
+        activity.finish();
     }
 }

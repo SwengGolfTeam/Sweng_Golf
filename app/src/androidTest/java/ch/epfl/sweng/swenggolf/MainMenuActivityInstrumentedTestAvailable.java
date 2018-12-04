@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +40,8 @@ public class MainMenuActivityInstrumentedTestAvailable {
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
     @Before
-    public void setUp() {
+    public void init() {
+        Config.goToTest();
         Config.setUser(new User("usernameValid", "userIdValid", "emailValid", "photoValid"));
         mMenuRule.launchActivity(new Intent());
     }
@@ -76,6 +78,12 @@ public class MainMenuActivityInstrumentedTestAvailable {
         List<Fragment> after = mMenuRule.getActivity().getSupportFragmentManager().getFragments();
         int sizeAfter = after.size();
         assertThat(sizeAfter, is(sizeBefore));
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mMenuRule.finishActivity();
     }
 }
 

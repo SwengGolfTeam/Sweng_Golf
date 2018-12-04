@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,7 +49,8 @@ public class ProfileActivityOtherUserTest {
      * Set up a fake database and user.
      */
     @Before
-    public void setUp() {
+    public void init() {
+        Config.goToTest();
         Config.setUser(user);
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
@@ -113,7 +115,6 @@ public class ProfileActivityOtherUserTest {
 
     @Test
     public void unfollowShowEmptyStar() {
-
         ViewInteraction followButton = onView(withId(R.id.follow));
         followButton.perform(click());
         followButton.perform(click());
@@ -132,6 +133,12 @@ public class ProfileActivityOtherUserTest {
     @Test
     public void showEmptyStarWhenNotFollowing() {
         assertFalse(profile.isFollowing());
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 
 }

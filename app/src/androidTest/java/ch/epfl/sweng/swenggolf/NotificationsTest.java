@@ -5,6 +5,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,7 +55,8 @@ public class NotificationsTest {
      * Set up a fake database, a fake user, and launches activity.
      */
     @Before
-    public void setUp() {
+    public void init() {
+        Config.goToTest();
         Config.setUser(user1);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         activityTestRule.launchActivity(new Intent());
@@ -200,4 +202,9 @@ public class NotificationsTest {
                 R.id.show_offer_title, offer.getTitle());
     }
 
+    @After
+    public void release(){
+        Config.quitTest();
+        activityTestRule.finishActivity();
+    }
 }

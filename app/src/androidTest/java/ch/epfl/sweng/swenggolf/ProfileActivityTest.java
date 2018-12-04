@@ -9,6 +9,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,7 +56,8 @@ public class ProfileActivityTest {
      * Initialise the Config and the Database for tests.
      */
     @Before
-    public void setUp() {
+    public void init() {
+        Config.goToTest();
         Config.setUser(new User(user));
         newUser = new User(user);
         Database database = FakeDatabase.fakeDatabaseCreator();
@@ -146,5 +148,11 @@ public class ProfileActivityTest {
         onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         editName.check(matches(hasErrorText("The username should have at least "
                 + User.USERNAME_MIN_LENGTH + " characters.")));
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 }

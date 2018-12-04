@@ -10,6 +10,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,9 +56,10 @@ public class ShowOfferActivityTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void setUp() {
+    public void init() {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
+        Config.goToTest();
         Config.setUser(user);
         mActivityRule.launchActivity(new Intent());
         FragmentTransaction transaction = mActivityRule.getActivity()
@@ -113,5 +115,11 @@ public class ShowOfferActivityTest {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        mActivityRule.finishActivity();
     }
 }

@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class SearchOffersTests {
     FilledFakeDatabase database = (FilledFakeDatabase) FakeDatabase.fakeDatabaseCreator();
 
     @Before
-    public void setup() {
+    public void init() {
         Database.setDebugDatabase(database);
         mActivityRule.launchActivity(new Intent());
     }
@@ -87,5 +88,10 @@ public class SearchOffersTests {
         Offer offer = database.getOffer(8);
         search(offer.getTitle().toLowerCase());
         checkTitle(offer);
+    }
+
+    @After
+    public void release(){
+        mActivityRule.finishActivity();
     }
 }

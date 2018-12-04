@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class UserTest {
     private User user1;
 
     @Before
-    public void setUp() {
+    public void init() {
         Config.goToTest();
         user1 = new User(USERNAME, ID, EMAIL, PHOTO, PREFERENCE, DESCRIPTION, POINTS);
     }
@@ -149,6 +150,11 @@ public class UserTest {
     @Test(expected = IllegalArgumentException.class)
     public void throwExceptionWithIllegalUsername() {
         new User("This is a very long username that should not be valid", ID, EMAIL, PHOTO);
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
     }
 
 }
