@@ -7,7 +7,6 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentTransaction;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -78,8 +77,7 @@ public class AnswersTest {
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
-    public void init() {
-        Config.goToTest();
+    public void setUp() {
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
@@ -103,7 +101,6 @@ public class AnswersTest {
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
-        Config.setUser(author);
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
@@ -117,7 +114,6 @@ public class AnswersTest {
 
     @Test
     public void authorOfAnswerIsCorrect() {
-        Config.setUser(author);
         addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
@@ -161,7 +157,6 @@ public class AnswersTest {
 
     @Test
     public void canPostMultipleAnswers() {
-        Config.setUser(author);
         addAnswer("first answer");
         // change user and reload offer
         Config.setUser(otherUser);
@@ -176,7 +171,6 @@ public class AnswersTest {
 
     @Test
     public void errorMessageWhenAnswerIsTooShort() {
-        Config.setUser(author);
         addAnswer("NO");
         final MainMenuActivity activity = mActivityRule.getActivity();
         onView(withId(R.id.your_answer_description)).check(matches(
@@ -191,11 +185,5 @@ public class AnswersTest {
         onView(withContentDescription("pic0")).perform(scrollTo(), click());
         // we are in the profile
         onView(withId(R.id.name)).check(matches(withText(otherUser.getUserName())));
-    }
-
-    @After
-    public void release(){
-        Config.quitTest();
-        mActivityRule.finishActivity();
     }
 }
