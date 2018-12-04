@@ -79,7 +79,6 @@ public class AnswersTest {
      */
     @Before
     public void setUp() {
-        Config.goToTest();
         Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());

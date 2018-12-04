@@ -15,6 +15,8 @@ public class Answers {
      * Empty constructor required by Firebase.
      */
     public Answers() {
+        favoritePos = 0;
+        answerList = new ArrayList<>();
     }
 
     /**
