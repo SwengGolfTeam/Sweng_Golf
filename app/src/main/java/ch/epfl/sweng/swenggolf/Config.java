@@ -1,6 +1,12 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -16,6 +22,9 @@ import static ch.epfl.sweng.swenggolf.Permission.NONE;
 public class Config {
 
     public static final int PERMISSION_FINE_LOCATION = 66;
+    public static final String TITLE_WIFI = "No Internet Connection";
+    public static final String TITLE_LOCATION = "Location disabled";
+    public static final String SETTINGS_MESSAGE = "Do you want to go to the settings to enable it?";
     /**
      * onTest must be true for tests and false otherwise.
      */
@@ -130,5 +139,33 @@ public class Config {
             default:
                 return NONE;
         }
+    }
+
+    /**
+     * Display an Alert Dialog for the redirection to settings.
+     * @param context The context of the Dialog
+     * @param title The title of the Dialog
+     * @param message The message of the Dialog
+     * @param settingsAction The action that is to be started by the dialog
+     */
+    public static void settingsDialog(final Context context, String title, String message, final String settingsAction) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+        dialogBuilder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent wifiIntent = new Intent(settingsAction);
+                        context.startActivity(wifiIntent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 }

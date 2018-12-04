@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import ch.epfl.sweng.swenggolf.Config;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -65,7 +67,7 @@ public abstract class AppLocation {
     }
 
     /**
-     * Verifies if the location services are activated.
+     * Displays the Dialog if the location is disabled.
      * @param context The Context of the App
      * @return true if active, false otherwise
      */
@@ -74,33 +76,10 @@ public abstract class AppLocation {
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             return true;
         } else {
-            locationSettingsDialog(context);
+            Config.settingsDialog(context, Config.TITLE_LOCATION,
+                    Config.SETTINGS_MESSAGE, Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             return false;
         }
-    }
-
-    /**
-     * Display the Alert Dialog for the redirection to settings.
-     */
-    public static void locationSettingsDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setTitle("Location disabled")
-                .setMessage("Do you want to go to the settings to enable it?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent gpsIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        context.startActivity(gpsIntent);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // user cancelled the dialog
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
-        Dialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     /**
