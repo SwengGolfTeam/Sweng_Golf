@@ -74,7 +74,7 @@ public abstract class AppLocation {
         if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             return true;
         } else {
-            showGoToSettingsDialog(context);
+            locationSettingsDialog(context);
             return false;
         }
     }
@@ -82,7 +82,7 @@ public abstract class AppLocation {
     /**
      * Display the Alert Dialog for the redirection to settings.
      */
-    public static void showGoToSettingsDialog(final Context context) {
+    public static void locationSettingsDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("Location disabled")

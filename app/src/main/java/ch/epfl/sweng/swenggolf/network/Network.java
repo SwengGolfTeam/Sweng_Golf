@@ -66,14 +66,14 @@ public class Network {
      */
     public static void checkAndDialog(Context context){
         if(!getStatus()){
-            showGoToSettingsDialog(context);
+            wifiSettingsDialog(context);
         }
     }
 
     /**
      * Display the Alert Dialog for the redirection to settings.
      */
-    private static void showGoToSettingsDialog(final Context context) {
+    private static void wifiSettingsDialog(final Context context) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         dialogBuilder.setTitle("No Internet Connection")
