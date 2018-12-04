@@ -18,7 +18,7 @@ import ch.epfl.sweng.swenggolf.R;
  * Class that monitors the Internet connection of the App.
  */
 public class Network {
-    private static boolean isConnected = false;
+    private static boolean isConnected = true;
 
     /**
      * Checks with the System (Android) if there is an active Internet connection.

@@ -80,7 +80,6 @@ public final class FireDatabase extends Database {
 
     @Override
     public void write(String path, String id, Object object) {
-        //TODO
         database.getReference(path).child(id).setValue(object);
     }
 
