@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.tools;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
@@ -160,6 +163,12 @@ public abstract class FragmentConverter extends Fragment {
         FragmentTransaction transaction = manager.beginTransaction().replace(viewId, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected void closeSoftKeyboard(EditText edited) {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edited.getWindowToken(), 0);
     }
 
     @Override

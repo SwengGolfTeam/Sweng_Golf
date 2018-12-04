@@ -76,6 +76,7 @@ public final class CreatePictureHelper {
         File temp = compressAndSave(context, fileName, targetQuality, bmpPic);
         //return the path of resized and compressed file
         if (temp != null) {
+
             return FileProvider.getUriForFile(context,
                     "ch.epfl.sweng.swenggolf.fileprovider", temp);
         } else {
