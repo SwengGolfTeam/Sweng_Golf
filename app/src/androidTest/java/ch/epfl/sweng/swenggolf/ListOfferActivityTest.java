@@ -157,9 +157,7 @@ public class ListOfferActivityTest {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(otherOffer.getTitle())), longClick()));
 
-        // Check that the first offer is retracted and that the second is expanded.
-        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                .check(matches(hasDescendant(withText(shortDescription))));
+        // Check that the second is expanded.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getDescription()))));
 
