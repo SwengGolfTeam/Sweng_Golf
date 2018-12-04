@@ -20,6 +20,7 @@ import ch.epfl.sweng.swenggolf.R;
  */
 public class Network {
     private static boolean isConnected = true;
+    private static boolean isTest = false;
 
     /**
      * Hidden constructor.
@@ -34,7 +35,9 @@ public class Network {
         ConnectivityManager cm = (ConnectivityManager)context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
+        if (!isTest){
+            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
+        }
     }
 
     /**
@@ -70,5 +73,13 @@ public class Network {
             Config.settingsDialog(context, Config.TITLE_WIFI,
                     Config.SETTINGS_MESSAGE, Settings.ACTION_WIFI_SETTINGS);
         }
+    }
+
+    /**
+     * For test purposes only, simulates a not connected device.
+     */
+    public static void setFalseforTest(){
+        isTest = true;
+        isConnected = false;
     }
 }

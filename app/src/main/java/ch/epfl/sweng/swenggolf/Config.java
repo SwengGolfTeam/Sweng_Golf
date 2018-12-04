@@ -148,7 +148,8 @@ public class Config {
      * @param message The message of the Dialog
      * @param settingsAction The action that is to be started by the dialog
      */
-    public static void settingsDialog(final Context context, String title, String message, final String settingsAction) {
+    public static void settingsDialog(final Context context, String title,
+                                      String message, final String settingsAction) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 
         dialogBuilder.setTitle(title)

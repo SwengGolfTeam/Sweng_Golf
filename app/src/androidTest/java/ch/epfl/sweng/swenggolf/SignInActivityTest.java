@@ -10,9 +10,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
+import ch.epfl.sweng.swenggolf.network.Network;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class SignInActivityTest {
@@ -26,6 +32,17 @@ public class SignInActivityTest {
         Intents.init();
         mActivityRule.launchActivity(new Intent());
         intended(hasComponent(SignInActivity.class.getName()));
+        Intents.release();
+    }
+
+    @Test
+    public void checkDialogOnButtonIfOfflineTest(){
+        Intents.init();
+        mActivityRule.launchActivity(new Intent());
+        Network.setFalseforTest();
+        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withText(android.R.string.yes)).perform(click());
+        intended(toPackage("com.android.settings"));
         Intents.release();
     }
 }

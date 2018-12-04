@@ -232,6 +232,10 @@ public final class FireDatabase extends Database {
         });
     }
 
+    /**
+     * Informs the listener of the failure if there is no internet connection.
+     * @param listener a ValueListener
+     */
     private void checkInternetConnection(ValueListener listener){
         if (!Network.getStatus()) {
             Log.d("FIREBASE", "no internet connection");
@@ -239,6 +243,10 @@ public final class FireDatabase extends Database {
         }
     }
 
+    /**
+     * Informs the listener of the failure if there is no internet connection.
+     * @param listener a CompletionListener
+     */
     private void checkInternetConnection(CompletionListener listener){
         if (!Network.getStatus()) {
             Log.d("FIREBASE", "no internet connection");
