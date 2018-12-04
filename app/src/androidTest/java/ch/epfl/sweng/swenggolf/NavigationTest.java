@@ -26,6 +26,7 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -67,6 +68,7 @@ public class NavigationTest {
 
         clickOnDrawer(R.id.my_account);
         //Edit profile multiple times
+        closeSoftKeyboard();
         editMultipleTimes(R.id.edit_profile, R.id.saveButton, 4);
 
         checkFragmentShown(ProfileActivity.class);

@@ -1,11 +1,14 @@
 package ch.epfl.sweng.swenggolf.offer;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -32,8 +37,8 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 public class ListOfferActivity extends FragmentConverter {
 
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
-    // The list is public, static and final so that it can be used in tests.
-    private static List<Offer> offerList = new ArrayList<>();
+    private List<Offer> offerList = new ArrayList<>();
+
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
                 private TextView offerOpenedView = null;
@@ -41,6 +46,7 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
+                    closeSoftKeyboard(ListOfferActivity.this.search);
                     Offer showOffer = offerList.get(position);
                     replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
                 }
@@ -93,17 +99,11 @@ public class ListOfferActivity extends FragmentConverter {
     private LocalDatabase localDb;
     private List<Category> checkedCategories = Arrays.asList(Category.values());
     private RecyclerView mRecyclerView;
-
-    public static List<Offer> getOfferList() {
-        return new ArrayList<>(offerList);
-    }
+    private EditText search;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-
-        offerList.clear();
-
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
@@ -147,7 +147,7 @@ public class ListOfferActivity extends FragmentConverter {
         item.setChecked(!item.isChecked()); // true <-> false
         List<Category> listCategories = new ArrayList<>();
 
-        for (int i = 0; i < Category.values().length; i++) {
+        for (int i = 0; i < Category.values().length; ++i) {
             if (mOptionsMenu.getItem(i).isChecked()) {
                 listCategories.add(Category.values()[i]);
             }
@@ -155,7 +155,7 @@ public class ListOfferActivity extends FragmentConverter {
 
         localDb.writeCategories(listCategories);
         Log.d(LOG_LOCAL_DB, "write " + listCategories.toString());
-        setRecyclerView(getView(), listCategories);
+        updateData(getView(), listCategories);
     }
 
     @Override
@@ -186,16 +186,49 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
-        DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
-            @Override
-            public void accept(Database db, List<Category> categories,
-                               ValueListener<List<Offer>> listener) {
-                db.readOffers(listener, categories);
-            }
-        };
-        prepareOfferData(inflated, dbConsumer, categories);
+        updateData(inflated, categories);
 
         mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
+        setupSearch(inflated);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void updateData(View inflated, List<Category> categories) {
+        mAdapter.clear();
+        if (categories.isEmpty()) {
+            noOffers.setVisibility(View.VISIBLE);
+            inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+        } else {
+            DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
+                @Override
+                public void accept(Database db, List<Category> categories,
+                                   ValueListener<List<Offer>> listener) {
+                    db.readOffers(listener, categories);
+                }
+            };
+            prepareOfferData(inflated, dbConsumer, categories);
+        }
+
+    }
+
+    private void setupSearch(View inflated) {
+        search = inflated.findViewById(R.id.search_bar);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Do nothing
+            }
+        });
     }
 
     private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
@@ -217,7 +250,6 @@ public class ListOfferActivity extends FragmentConverter {
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
-                    mRecyclerView.setAdapter(mAdapter);
                 }
 
             }

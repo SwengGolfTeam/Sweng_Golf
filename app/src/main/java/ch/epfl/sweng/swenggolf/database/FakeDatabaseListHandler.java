@@ -14,7 +14,8 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 
 final class FakeDatabaseListHandler {
 
-    private FakeDatabaseListHandler() { }
+    private FakeDatabaseListHandler() {
+    }
 
     private static void handleError(String attribute) {
         throw new IllegalArgumentException("The attribute " + attribute + " doesn't exist");
@@ -89,7 +90,7 @@ final class FakeDatabaseListHandler {
 
     public static <T> void readList(boolean working, List<T> pathContent,
                                     @NonNull ValueListener<List<T>> listener,
-                             @NonNull Class<T> c, AttributeFilter filter) {
+                                    @NonNull Class<T> c, AttributeFilter filter) {
         if (working) {
             List<T> newList = filterList(c, filter.getAttribute(), filter.getValue(), pathContent);
             listener.onDataChange(newList);
@@ -111,7 +112,7 @@ final class FakeDatabaseListHandler {
 
     @NonNull
     private static <T> List<T> sortList(@NonNull Class<T> c, AttributeOrdering ordering,
-                                 List<T> unsortedList) {
+                                        List<T> unsortedList) {
         final Method method;
         String getterName = getGetter(ordering.getAttribute());
         try {
@@ -129,7 +130,7 @@ final class FakeDatabaseListHandler {
     }
 
     private static <T> List<T> filterList(@NonNull Class<T> c, String attribute, String value,
-                                   List<T> list) {
+                                          List<T> list) {
         List<T> filtered = new ArrayList<>();
         try {
 

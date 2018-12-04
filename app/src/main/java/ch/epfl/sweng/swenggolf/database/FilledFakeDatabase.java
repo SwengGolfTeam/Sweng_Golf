@@ -196,25 +196,25 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setTag(Category.values()[3])
                     .setCreationDate(DATE)
                     .setEndDate(DATE)
-                    .setUuid("010").build(),
+                    .setUuid("10").build(),
 
             new Offer.Builder().setUserId("3")
                     .setTitle("Student job in a farm")
                     .setDescription("I need help to rebuild my spaceship in exchange I can help "
                             + "with farm work since I'm pretty good at farm stuff !")
                     .setLinkPicture("https://www.jedidefender.com/collect92/lukexwing%20anh.jpg")
-                    .setUuid("011").build(),
+                    .setUuid("11").build(),
 
             new Offer.Builder().setUserId("17")
                     .setTitle("Lightsaber to find Jedi")
                     .setDescription("I'm looking for a bold general, care to help me ?")
-                    .setUuid("012").build(),
+                    .setUuid("12").build(),
 
             new Offer.Builder().setUserId("2")
                     .setTitle("Transport some important data")
                     .setDescription("I have some nice crew of people that can help you "
                             + "do anything if you are okay to transport some data !")
-                    .setUuid("013").build(),
+                    .setUuid("13").build(),
 
             new Offer.Builder().setUserId("14")
                     .setTitle("Help to fix me up")
@@ -223,7 +223,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
                             + "scale-to-width-down/800")
-                    .setUuid("014").build(),
+                    .setUuid("14").build(),
 
     };
 
