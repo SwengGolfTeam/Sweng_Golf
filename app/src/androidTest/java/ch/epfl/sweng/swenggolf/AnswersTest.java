@@ -106,13 +106,7 @@ public class AnswersTest {
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
     }
-
-    @Test
-    public void answerHasEmptyConstructorForFirebase() {
-        Answer answer = new Answer();
-        Answers answers = new Answers();
-    }
-
+    
     @Test
     public void authorOfAnswerIsCorrect() {
         addAnswer("I wrote this");
