@@ -135,10 +135,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:paddingBottom="15dp"
                     android:text="@string/the_offer_is_closed"
+                    android:layout_marginBottom="10dp"
                     android:textSize="17sp"
                     android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/open_discussion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_slightly_rounded"
+                    android:drawableLeft="@drawable/ic_comment_black_24dp"
+                    android:drawablePadding="8dp"
+                    android:text="@string/open_discussion"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:theme="@style/ButtonTheme"
                     android:visibility="gone" />
 
                 <TextView
@@ -195,6 +210,8 @@
                         android:theme="@style/ButtonTheme"
                         android:visibility="gone" />
                 </RelativeLayout>
+
+
 
             </LinearLayout>
 

@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
@@ -128,6 +129,20 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
+     * Creates a MessagingActivity with all information needed.
+     *
+     * @param offer the offer which the discussion is about
+     * @param user  the user to talk to
+     * @return a new MessagingActivity with the user and about the offer
+     */
+    public static MessagingActivity createMessagingActivityWithOfferAndUser(
+            Offer offer, User user) {
+        MessagingActivity fragment = fillFragment(new MessagingActivity(), User.USER, user);
+        fragment.getArguments().putString(Offer.OFFER, offer.getUuid());
+        return fragment;
+    }
+
+    /**
      * Returns a fragment with a parcelable added as an argument.
      *
      * @param fragment arguments will be attached to it.
@@ -171,10 +186,7 @@ public abstract class FragmentConverter extends Fragment {
 
 
     protected void setToolbar(int homeIconResId, int titleResId) {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        setHasOptionsMenu(true);
-        actionBar.setHomeAsUpIndicator(homeIconResId);
-        actionBar.setTitle(getResources().getString(titleResId));
+        setToolbar(homeIconResId, getResources().getString(titleResId));
     }
 
     protected void setToolbar(int homeIconResId, String title) {
