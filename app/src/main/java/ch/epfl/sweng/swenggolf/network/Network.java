@@ -73,9 +73,16 @@ public class Network {
 
     /**
      * For test purposes only, simulates a not connected device.
+     * @param activate true to set, false to unset
      */
-    public static void setFalseforTest(){
-        isTest = true;
-        isConnected = false;
+    public static void setFalseforTest(boolean activate){
+        if (activate){
+            isTest = true;
+            isConnected = false;
+        } else {
+            isTest = false;
+            isConnected = true;
+        }
+
     }
 }

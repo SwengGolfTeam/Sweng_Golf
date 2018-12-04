@@ -35,26 +35,29 @@ public class OfflineTests {
 
     @Test
     public void signInActivityCheckDialog(){
+        Config.quitTest();
         Intents.init();
         signInRule.launchActivity(new Intent());
-        Network.setFalseforTest();
+        Network.setFalseforTest(true);
         Config.goToTest();
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
         //pressBack();
         signInRule.finishActivity();
+        Network.setFalseforTest(false);
         Intents.release();
     }
 
     @Test
     public void listOfferCheckDialog(){
         Intents.init();
-        Network.setFalseforTest();
+        Network.setFalseforTest(true);
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
         //pressBack();
+        Network.setFalseforTest(false);
         listOfferRule.finishActivity();
         Intents.release();
     }
