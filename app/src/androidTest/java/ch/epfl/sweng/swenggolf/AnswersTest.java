@@ -80,6 +80,7 @@ public class AnswersTest {
     @Before
     public void init() {
         Config.goToTest();
+        Config.setUser(author);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity()
@@ -106,6 +107,12 @@ public class AnswersTest {
         addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
+    }
+
+    @Test
+    public void answerHasEmptyConstructorForFirebase() {
+        Answer answer = new Answer();
+        Answers answers = new Answers();
     }
 
     @Test

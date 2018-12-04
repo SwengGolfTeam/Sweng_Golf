@@ -28,6 +28,7 @@ public class CompressionTest {
 
     @Test
     public void imageSizeAfterCompressionIsWithinBounds() {
+        Config.goToTest();
         Activity activity = mActivityTestRule.getActivity();
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -40,5 +41,6 @@ public class CompressionTest {
         assertThat(result.length(), lessThan((long) CreatePictureHelper.MAX_IMAGE_SIZE * 1024));
         result.delete();
         activity.finish();
+        Config.quitTest();
     }
 }
