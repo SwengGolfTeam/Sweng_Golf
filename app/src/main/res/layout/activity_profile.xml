@@ -19,10 +19,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.16">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent">
 
             <ImageView
                 android:id="@+id/ivProfile"
@@ -37,8 +36,8 @@
                 android:id="@+id/ivBadge"
                 android:layout_width="200dp"
                 android:layout_height="220dp"
-                android:src="@drawable/badge00"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/badge00" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
@@ -80,8 +79,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
         android:text="@string/user_preferences"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -118,8 +117,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
         android:text="@string/description"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -129,16 +128,16 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="0dp"
         android:layout_below="@id/profilePreferences"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="386dp"
+        android:layout_marginBottom="159dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ind_offers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileDescription"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.014">
 
         <TextView
@@ -154,8 +153,8 @@
         android:id="@+id/profileReputation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         android:text="@string/user_reputation"
         android:textSize="20sp"
@@ -167,8 +166,8 @@
         android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="25dp"
         android:text="@android:string/unknownName"
         android:textSize="16sp"
@@ -176,6 +175,19 @@
         app:layout_constraintStart_toEndOf="@+id/profileReputation"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
+    <Button
+        android:id="@+id/ind_offers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_rounded"
+        android:text="@string/offers"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:theme="@style/ButtonTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

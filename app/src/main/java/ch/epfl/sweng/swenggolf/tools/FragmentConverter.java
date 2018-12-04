@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.tools;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -147,6 +150,12 @@ public abstract class FragmentConverter extends Fragment {
         transaction.commit();
     }
 
+    protected void closeSoftKeyboard(EditText edited) {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edited.getWindowToken(), 0);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_empty, menu);
@@ -166,6 +175,13 @@ public abstract class FragmentConverter extends Fragment {
         setHasOptionsMenu(true);
         actionBar.setHomeAsUpIndicator(homeIconResId);
         actionBar.setTitle(getResources().getString(titleResId));
+    }
+
+    protected void setToolbar(int homeIconResId, String title) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        setHasOptionsMenu(true);
+        actionBar.setHomeAsUpIndicator(homeIconResId);
+        actionBar.setTitle(title);
     }
 
     protected void openDrawer() {

@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.profile;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,10 +27,12 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
+import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
 import static ch.epfl.sweng.swenggolf.profile.PointType.FOLLOW;
+import static ch.epfl.sweng.swenggolf.profile.User.USER;
 
 /**
  * Fragment which shows a profile of an User.
@@ -56,6 +59,7 @@ public class ProfileActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.profile_activity_name);
         inflated = inflater.inflate(R.layout.activity_profile, container, false);
         displayUserData();
+
         return inflated;
     }
 
@@ -87,6 +91,20 @@ public class ProfileActivity extends FragmentConverter {
         badge.setImageResource(Badge.getDrawable(user.getPoints()));
         TextView points = inflated.findViewById(R.id.points);
         points.setText(Integer.toString(user.getPoints()));
+
+        inflated.findViewById(R.id.ind_offers)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(USER, user);
+
+                        Fragment fragment = new ListOwnOfferActivity();
+                        fragment.setArguments(bundle);
+
+                        replaceCentralFragment(fragment);
+                    }
+                });
     }
 
     private void showFollowButton() {

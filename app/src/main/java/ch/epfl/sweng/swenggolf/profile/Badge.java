@@ -106,6 +106,6 @@ public final class Badge {
      */
     public static int computeLevel(int points) {
         int level = points / LEVEL_SPACE;
-        return (level > MAX_LEVEL)? MAX_LEVEL : level;
+        return (level > MAX_LEVEL) ? MAX_LEVEL : level;
     }
 }
