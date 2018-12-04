@@ -39,6 +39,9 @@ public class MainMenuActivityInstrumentedTestAvailable {
     public final ActivityTestRule<MainMenuActivity> mMenuRule =
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
+    /**
+     * Sets the user used in the tests and launches the activity.
+     */
     @Before
     public void init() {
         Config.goToTest();

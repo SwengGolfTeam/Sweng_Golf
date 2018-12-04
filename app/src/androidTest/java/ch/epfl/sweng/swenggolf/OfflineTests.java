@@ -33,7 +33,9 @@ public class OfflineTests {
     public final ActivityTestRule<MainMenuActivity> listOfferRule =
             new ActivityTestRule<>(MainMenuActivity.class);
 
-
+    /**
+     * Configures the offline mode for the tests.
+     */
     @Before
     public void init(){
         Config.quitTest(); // to make sure
