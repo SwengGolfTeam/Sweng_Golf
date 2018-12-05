@@ -65,6 +65,7 @@ public class Config {
     public static void quitTest() {
         onTest = false;
         user = null;
+        resetActivityCallback();
     }
 
     /**
