@@ -115,6 +115,7 @@ public class ShowOfferActivityTest {
             return false;
         }
     }
+
     @Test
     public void imageDisplayOnClick() {
         onView(withId(R.id.show_offer_picture)).perform(scrollTo(), click());
