@@ -7,6 +7,7 @@ import android.location.Location;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -113,5 +114,9 @@ public class ShowOfferActivityTest {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+    @Test
+    public void imageDisplayOnClick() {
+        onView(withId(R.id.show_offer_picture)).perform(scrollTo(), click());
     }
 }
