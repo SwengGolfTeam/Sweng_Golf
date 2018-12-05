@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -90,7 +91,7 @@ public class ListOfferActivity extends FragmentConverter {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
-        View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
+        final View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
         localDb = new LocalDatabase(this.getContext(), null, 1);
         try {
@@ -105,7 +106,19 @@ public class ListOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
         setRecyclerView(inflated, checkedCategories);
+        setRefreshListener(inflated);
         return inflated;
+    }
+
+    private void setRefreshListener(final View inflated) {
+        final SwipeRefreshLayout refresher = inflated.findViewById(R.id.refresh_list_offer);
+        refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData(inflated, checkedCategories);
+                refresher.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -130,7 +143,8 @@ public class ListOfferActivity extends FragmentConverter {
 
     private void onCheck(MenuItem item) {
         item.setChecked(!item.isChecked()); // true <-> false
-        List<Category> listCategories = new ArrayList<>();
+        checkedCategories.clear();
+        List<Category> listCategories = checkedCategories;
 
         for (int i = 0; i < Category.values().length; ++i) {
             if (mOptionsMenu.getItem(i).isChecked()) {

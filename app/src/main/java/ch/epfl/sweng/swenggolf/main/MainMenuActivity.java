@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private final User user = Config.getUser();
     private FragmentManager manager;
     private View nav;
+    private Animation.AnimationListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -204,4 +206,5 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
     }
+
 }

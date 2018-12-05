@@ -2,23 +2,29 @@ package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.DrawerMatchers;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.concurrent.TransferQueue;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -33,16 +39,21 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.fail;
+import static org.mockito.AdditionalMatchers.not;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -95,6 +106,39 @@ public class ListOfferActivityTest {
         // reinit local database to default values just in case test are not independent
         LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
         localDb.writeCategories(Arrays.asList(Category.values()));
+    }
+
+    @Test
+    public void RefreshActuallyRefreshes() throws InterruptedException {
+        Offer newOffer = FilledFakeDatabase.getOffer(0);
+        onView(withId(R.id.offers_recycler_view)).check(matches(hasChildCount(2)));
+        Database.getInstance().write(Database.OFFERS_PATH, newOffer.getUuid(), newOffer);
+        onView(withId(R.id.refresh_list_offer))
+                .perform(withCustomConstraints(swipeDown(), isDisplayingAtLeast(80)));
+        onView(withId(R.id.offers_recycler_view))
+                .check(matches(hasChildCount(3)));
+    }
+
+    /**
+     * <@see https://stackoverflow.com/questions/33505953/espresso-how-to-test-swiperefreshlayout>
+     */
+    private static ViewAction withCustomConstraints(final ViewAction action, final Matcher<View> constraints) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return constraints;
+            }
+
+            @Override
+            public String getDescription() {
+                return action.getDescription();
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                action.perform(uiController, view);
+            }
+        };
     }
 
     @Test
