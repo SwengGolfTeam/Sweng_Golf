@@ -1,7 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -20,18 +22,21 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -56,6 +61,12 @@ public class ListOfferActivityTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title")
+            .setDescription(LOREM).setUuid("idoftheoffer1").build();
+    private static final Offer offer2 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title 2")
+            .setDescription(LOREM).setUuid("idoftheoffer2").build();
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
@@ -66,10 +77,6 @@ public class ListOfferActivityTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title")
-                .setDescription(LOREM).setUuid("idoftheoffer1").build();
-        Offer offer2 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title 2")
-                .setDescription(LOREM).setUuid("idoftheoffer2").build();
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
@@ -92,7 +99,7 @@ public class ListOfferActivityTest {
 
     @Test
     public void offerCorrectlyDisplayedInTheList() {
-        Offer offer = ListOfferActivity.getOfferList().get(0);
+        Offer offer = offer1;
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(offer.getTitle()))));
@@ -122,14 +129,14 @@ public class ListOfferActivityTest {
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(ListOfferActivity.getOfferList().get(0).getTitle())),
+                ViewMatchers.withText(offer1.getTitle())),
                 click()));
     }
 
     @Test
     public void offerCorrectlyExpandedAndRetractedAfterLongPressOnList() {
-        Offer offerToTest = ListOfferActivity.getOfferList().get(0);
-        Offer otherOffer = ListOfferActivity.getOfferList().get(1);
+        Offer offerToTest = offer1;
+        Offer otherOffer = offer2;
 
         String longDescription = offerToTest.getDescription();
         String shortDescription = offerToTest.getShortDescription();
@@ -148,12 +155,11 @@ public class ListOfferActivityTest {
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getShortDescription()))));
 
+        closeSoftKeyboard();
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(otherOffer.getTitle())), longClick()));
 
-        // Check that the first offer is retracted and that the second is expanded.
-        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                .check(matches(hasDescendant(withText(shortDescription))));
+        // Check that the second is expanded.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getDescription()))));
 

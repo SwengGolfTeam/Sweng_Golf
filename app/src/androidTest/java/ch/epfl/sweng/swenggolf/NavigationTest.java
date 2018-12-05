@@ -7,6 +7,7 @@ import android.support.test.rule.GrantPermissionRule;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -58,6 +60,7 @@ public class NavigationTest {
         Database.setDebugDatabase(database);
         FakeStorage storage = new FakeStorage(true);
         Storage.setDebugStorage(storage);
+        Config.goToTest();
         Config.setUser(FilledFakeDatabase.getUser(0));
         intentRule.launchActivity(new Intent());
     }
@@ -67,6 +70,7 @@ public class NavigationTest {
 
         clickOnDrawer(R.id.my_account);
         //Edit profile multiple times
+        closeSoftKeyboard();
         editMultipleTimes(R.id.edit_profile, R.id.saveButton, 4);
 
         checkFragmentShown(ProfileActivity.class);
@@ -191,6 +195,12 @@ public class NavigationTest {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    @After
+    public void release(){
+        Config.quitTest();
+        intentRule.finishActivity();
     }
 
 }

@@ -4,13 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".offer.ListOfferActivity">
+    tools:context=".offer.ListOfferActivity"
+    tools:layout_editor_absoluteY="25dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/offers_recycler_view"
+    <EditText
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:maxLines="1"
+        android:inputType="text"
+        />
 
     <TextView
         android:id="@+id/error_message"
@@ -22,13 +34,23 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/offers_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/search_bar"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
 
         <TextView
             android:id="@+id/no_offers_to_show"
@@ -38,19 +60,25 @@
             android:textColor="#6d6d6d"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:gravity="center"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/offer_list_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true" />
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

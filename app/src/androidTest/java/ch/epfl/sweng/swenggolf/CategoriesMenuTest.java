@@ -38,6 +38,9 @@ public class CategoriesMenuTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> activityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title").setDescription(LOREM)
+            .setUuid("idoftheoffer1").build();
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
@@ -45,9 +48,6 @@ public class CategoriesMenuTest {
 
     private static void initFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = (new Offer.Builder()).setUserId("user_id")
-                .setTitle("This is a title").setDescription(LOREM)
-                .setUuid("idoftheoffer1").build();
         database.write("/offers", "idoftheoffer1", offer1);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
@@ -70,7 +70,7 @@ public class CategoriesMenuTest {
         clickOnCategoryInMenu(Category.getDefault());
         clickOnCategoryInMenu(Category.getDefault());
 
-        Offer offer = ListOfferActivity.getOfferList().get(0);
+        Offer offer = offer1;
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(offer.getTitle()))));
