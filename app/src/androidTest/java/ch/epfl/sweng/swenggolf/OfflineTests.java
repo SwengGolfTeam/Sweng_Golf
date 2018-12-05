@@ -34,7 +34,7 @@ public class OfflineTests {
 
     @Test
     public void signInActivityCheckDialog() {
-        Config.quitTest();
+        Config.quitTest(); // to make sure
         Intents.init();
         signInRule.launchActivity(new Intent());
         Network.setFalseforTest(true);
@@ -52,11 +52,13 @@ public class OfflineTests {
         Config.quitTest();
         Intents.init();
         Network.setFalseforTest(true);
+        Config.goToTest();
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
-        Network.setFalseforTest(false);
         listOfferRule.finishActivity();
+        Network.setFalseforTest(false);
+        Config.quitTest();
         Intents.release();
     }
 }
