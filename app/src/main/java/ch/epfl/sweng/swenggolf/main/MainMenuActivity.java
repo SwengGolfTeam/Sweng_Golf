@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+
+import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
@@ -41,6 +43,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+        NetworkReceiver.registerReceiver(this, new NetworkReceiver());
         setContentView(R.layout.activity_main_menu);
         setToolBar();
         nav = ((NavigationView) (this.findViewById(R.id.drawer))).getHeaderView(0);
@@ -103,7 +106,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void replaceCentralFragment(Fragment fragment) {
-
         //drain the backstack
         int backStackSize = manager.getBackStackEntryCount();
         for (int i = 0; i < backStackSize; ++i) {

@@ -29,6 +29,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 /**
@@ -230,6 +231,7 @@ public class ListOfferActivity extends FragmentConverter {
         ValueListener listener = new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
+                errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
@@ -242,9 +244,11 @@ public class ListOfferActivity extends FragmentConverter {
             public void onCancelled(DbError error) {
                 Log.d(error.toString(), "Unable to load offers from database");
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                noOffers.setVisibility(View.GONE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
         dbConsumer.accept(database, categories, listener);
+        Network.checkAndDialog(getContext());
     }
 }

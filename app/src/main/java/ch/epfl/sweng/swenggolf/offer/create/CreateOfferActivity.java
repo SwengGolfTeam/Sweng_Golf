@@ -188,7 +188,7 @@ public class CreateOfferActivity extends FragmentConverter
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS){
             createHelper.attachLocation();
         }
     }
