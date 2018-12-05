@@ -42,8 +42,6 @@ public class ListOfferActivity extends FragmentConverter {
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
-                private TextView offerOpenedView = null;
-                private Offer offerOpened = null;
 
                 @Override
                 public void onItemClick(View view, int position) {
@@ -61,8 +59,7 @@ public class ListOfferActivity extends FragmentConverter {
                 }
 
                 /**
-                 * Expands or retract the offer after a long touch. Closes all other opened
-                 * offers in the list.
+                 * Expands or retract the offer after a long touch.
                  *
                  * @param element the TextView containing the information about the offer
                  * @param offer the offer
@@ -73,22 +70,9 @@ public class ListOfferActivity extends FragmentConverter {
                     String originalDescription = offer.getDescription();
 
                     if (actualDescription.equals(originalDescription)) {
-                        // Need to close the offer because the current offer is expanded
-                        changeDescription(element, offer);
-                        changeDescription(offerOpenedView, offerOpened);
-                        offerOpenedView = null;
-                        offerOpened = null;
+                        element.setText(offer.getShortDescription());
                     } else {
                         element.setText(originalDescription);
-                        changeDescription(offerOpenedView, offerOpened);
-                        offerOpenedView = element;
-                        offerOpened = offer;
-                    }
-                }
-
-                private void changeDescription(TextView element, Offer offer) {
-                    if (element != null && offer != null) {
-                        element.setText(offer.getShortDescription());
                     }
                 }
             };
