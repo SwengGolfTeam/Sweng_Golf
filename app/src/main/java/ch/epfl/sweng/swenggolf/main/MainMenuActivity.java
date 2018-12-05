@@ -40,7 +40,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private final User user = Config.getUser();
     private FragmentManager manager;
     private View nav;
-    private Animation.AnimationListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstances) {

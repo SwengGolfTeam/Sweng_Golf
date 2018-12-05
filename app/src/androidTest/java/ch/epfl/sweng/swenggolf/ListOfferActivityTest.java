@@ -109,7 +109,7 @@ public class ListOfferActivityTest {
     }
 
     @Test
-    public void RefreshActuallyRefreshes() throws InterruptedException {
+    public void refreshActuallyRefreshes() {
         Offer newOffer = FilledFakeDatabase.getOffer(0);
         onView(withId(R.id.offers_recycler_view)).check(matches(hasChildCount(2)));
         Database.getInstance().write(Database.OFFERS_PATH, newOffer.getUuid(), newOffer);
@@ -122,7 +122,8 @@ public class ListOfferActivityTest {
     /**
      * <@see https://stackoverflow.com/questions/33505953/espresso-how-to-test-swiperefreshlayout>
      */
-    private static ViewAction withCustomConstraints(final ViewAction action, final Matcher<View> constraints) {
+    private static ViewAction withCustomConstraints(
+            final ViewAction action, final Matcher<View> constraints) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {

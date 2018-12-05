@@ -187,7 +187,8 @@ public class ListOfferActivity extends FragmentConverter {
 
         updateData(inflated, categories);
 
-        mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
+        mRecyclerView.addOnItemTouchListener(
+                new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener));
         setupSearch(inflated);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -228,10 +229,6 @@ public class ListOfferActivity extends FragmentConverter {
                 //Do nothing
             }
         });
-    }
-
-    private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener);
     }
 
     /**
