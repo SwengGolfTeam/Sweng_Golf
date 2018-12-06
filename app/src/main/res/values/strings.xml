@@ -79,4 +79,6 @@
     <string name="open_discussion">Open discussion</string>
     <string name="hint_greeting">You can now send messages to each other</string>
     <string name="search">Search title</string>
+    <string name="closed">closed</string>
+    <string name="open">open</string>
 </resources>

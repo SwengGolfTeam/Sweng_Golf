@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
+import ch.epfl.sweng.swenggolf.offer.ListOwnOfferTabActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;

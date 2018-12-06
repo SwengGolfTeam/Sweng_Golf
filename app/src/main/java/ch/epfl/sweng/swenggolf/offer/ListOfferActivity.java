@@ -1,8 +1,8 @@
 package ch.epfl.sweng.swenggolf.offer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,12 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -30,13 +30,15 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.network.Network;
+import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 /**
  * Fragment which shows the offers stored in the Database.
  */
 public class ListOfferActivity extends FragmentConverter {
-
+    public static final String DISPLAY_CLOSED_BUNDLE_KEY =
+            "ch.epfl.sweng.swenggolf.listOfferActivity";
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
     private List<Offer> offerList = new ArrayList<>();
 
@@ -47,7 +49,11 @@ public class ListOfferActivity extends FragmentConverter {
                 public void onItemClick(View view, int position) {
                     closeSoftKeyboard(ListOfferActivity.this.search);
                     Offer showOffer = offerList.get(position);
-                    replaceCentralFragment(FragmentConverter.createShowOfferWithOffer(showOffer));
+                    ShowOfferActivity show = FragmentConverter.createShowOfferWithOffer(showOffer);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                            .beginTransaction().replace(R.id.centralFragment, show);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
 
                 @Override
@@ -82,17 +88,36 @@ public class ListOfferActivity extends FragmentConverter {
     private TextView errorMessage;
     private TextView noOffers;
     private LocalDatabase localDb;
-    private List<Category> checkedCategories = Arrays.asList(Category.values());
+    private List<Category> checkedCategories = new ArrayList<>(Arrays.asList(Category.values()));
     private RecyclerView mRecyclerView;
     private EditText search;
+    private boolean displayClosed;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
+        setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
+        if(getArguments() != null) {
+            displayClosed = getArguments().getBoolean(DISPLAY_CLOSED_BUNDLE_KEY);
+            User offersBelongTo = getArguments().getParcelable(User.USER);
+            if(offersBelongTo != null) {
+                setToolbar(R.drawable.ic_menu_black_24dp,
+                        offersBelongTo.getUserName() + "'s offers");
+            }
+        }
+
         localDb = new LocalDatabase(this.getContext(), null, 1);
+        loadCheckedCategories();
+
+        errorMessage = inflated.findViewById(R.id.error_message);
+        noOffers = inflated.findViewById(R.id.no_offers_to_show);
+        setRecyclerView(inflated, checkedCategories);
+        return inflated;
+    }
+
+    protected void loadCheckedCategories() {
         try {
             Log.d(LOG_LOCAL_DB, "Recover from database");
             checkedCategories = localDb.readCategories();
@@ -101,11 +126,6 @@ public class ListOfferActivity extends FragmentConverter {
             Log.d(LOG_LOCAL_DB, "Initial write with allCategories");
             localDb.writeCategories(checkedCategories); // by default is allCategories
         }
-
-        errorMessage = inflated.findViewById(R.id.error_message);
-        noOffers = inflated.findViewById(R.id.no_offers_to_show);
-        setRecyclerView(inflated, checkedCategories);
-        return inflated;
     }
 
     @Override
@@ -191,7 +211,7 @@ public class ListOfferActivity extends FragmentConverter {
                     db.readOffers(listener, categories);
                 }
             };
-            prepareOfferData(inflated, dbConsumer, categories);
+            prepareOfferData(displayClosed, inflated, dbConsumer, categories);
         }
 
     }
@@ -223,7 +243,7 @@ public class ListOfferActivity extends FragmentConverter {
     /**
      * Get the offers from the database.
      */
-    protected void prepareOfferData(final View inflated,
+    protected void prepareOfferData(final boolean displayClosed, final View inflated,
                                     DatabaseOfferConsumer dbConsumer, List<Category> categories) {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
@@ -233,6 +253,15 @@ public class ListOfferActivity extends FragmentConverter {
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
+                if(!offers.isEmpty()) {
+                    ArrayList<Offer> filtered = new ArrayList<>();
+                    for(Offer offer : offers) {
+                        if(!displayClosed ^ offer.getIsClosed()) {
+                            filtered.add(offer);
+                        }
+                    }
+                    offers = filtered;
+                }
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);

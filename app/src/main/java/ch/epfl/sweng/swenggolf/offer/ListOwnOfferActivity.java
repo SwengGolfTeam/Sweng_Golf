@@ -2,57 +2,36 @@ package ch.epfl.sweng.swenggolf.offer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-import static ch.epfl.sweng.swenggolf.profile.User.USER;
+public class ListOwnOfferActivity extends FragmentConverter {
 
-/**
- * Fragment which shows user own offers.
- */
-public class ListOwnOfferActivity extends ListOfferActivity {
-
-    private User user;
-
+    @Nullable
     @Override
-    protected void prepareOfferData(View inflated,
-                                    DatabaseOfferConsumer dbConsumer, List<Category> categories) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View inflated = inflater.inflate(R.layout.activity_list_own_offer, container, false);
+        TabLayout tabs = inflated.findViewById(R.id.list_own_offer_tablayout);
+        final ViewPager pager = inflated.findViewById(R.id.list_own_offer_pager);
 
-        super.prepareOfferData(inflated, new DatabaseOfferConsumer() {
-            @Override
-            public void accept(Database db, List<Category> categories,
-                               ValueListener<List<Offer>> listener) {
-                db.readOffers(listener, categories, user.getUserId());
-            }
-        }, categories);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstance) {
-
+        User user = Config.getUser();
         Bundle bundle = getArguments();
-        String title;
-
-        if (bundle != null) {
-            user = bundle.getParcelable(USER);
-            title = user.getUserName() + "'s offers";
-        } else {
-            user = Config.getUser();
-            title = getResources().getString(R.string.my_offers);
+        if(bundle != null && bundle.getParcelable(User.USER) != null) {
+            user = bundle.getParcelable(User.USER);
         }
-
-        View view = super.onCreateView(inflater, container, savedInstance);
-        setToolbar(R.drawable.ic_menu_black_24dp, title);
-        return view;
+        ListOwnOfferPager adapter = new ListOwnOfferPager(user, this.getContext(), getChildFragmentManager());
+        pager.setAdapter(adapter);
+        tabs.setupWithViewPager(pager);
+        return inflated;
     }
+
 }

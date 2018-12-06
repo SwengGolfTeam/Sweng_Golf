@@ -68,6 +68,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void launchFragment() {
         Fragment offerList = new ListOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        offerList.setArguments(bundle);
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
                 manager.beginTransaction()
@@ -143,7 +146,11 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadListOwnOfferActivity(MenuItem item) {
-        replaceCentralFragment(new ListOwnOfferActivity());
+        ListOwnOfferActivity openOffers = new ListOwnOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        openOffers.setArguments(bundle);
+        replaceCentralFragment(openOffers);
     }
 
     /**
