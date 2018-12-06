@@ -8,8 +8,10 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
+import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -75,6 +77,12 @@ class CreateListeners {
                             LENGTH_SHORT).show();
                     create.createHelper.updateUserScore(create.offerToModify, offer);
                     create.replaceCentralFragmentWithOffer(offer);
+                    Database.getInstance().remove("/offersSaved", Config.getUser().getUserId(), new CompletionListener() {
+                        @Override
+                        public void onComplete(DbError error) {
+
+                        }
+                    });
                 } else {
                     create.errorMessage.setVisibility(View.VISIBLE);
                     create.errorMessage.setText(R.string.error_create_offer_database);

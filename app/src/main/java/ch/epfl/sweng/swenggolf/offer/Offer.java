@@ -494,6 +494,54 @@ public class Offer implements Parcelable {
             );
         }
 
+        @Exclude
+        public boolean isEmpty() {
+            return description.isEmpty() && title.isEmpty();
+        }
+
+        public long getCreationDate() {
+            return creationDate;
+        }
+
+        public String getLinkPicture() {
+            return linkPicture;
+        }
+
+        public long getEndDate() {
+            return endDate;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public Category getTag() {
+            return tag;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public String getUuid() {
+            return uuid;
+        }
+
+        public boolean isClosed() {
+            return isClosed;
+        }
     }
 
 }
