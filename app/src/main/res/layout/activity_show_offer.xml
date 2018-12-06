@@ -211,10 +211,7 @@
                         android:visibility="gone" />
                 </RelativeLayout>
 
-
-
             </LinearLayout>
-
 
         </android.support.constraint.ConstraintLayout>
     </HorizontalScrollView>
