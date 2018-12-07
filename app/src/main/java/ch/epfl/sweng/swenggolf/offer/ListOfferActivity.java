@@ -158,17 +158,17 @@ public class ListOfferActivity extends FragmentConverter {
 
     private void onCheck(MenuItem item) {
         item.setChecked(!item.isChecked()); // true <-> false
-        List<Category> listCategories = new ArrayList<>();
+        checkedCategories.clear();
 
         for (int i = 0; i < Category.values().length; ++i) {
             if (mOptionsMenu.getItem(i).isChecked()) {
-                listCategories.add(Category.values()[i]);
+                checkedCategories.add(Category.values()[i]);
             }
         }
 
-        localDb.writeCategories(listCategories);
-        Log.d(LOG_LOCAL_DB, "write " + listCategories.toString());
-        updateData(getView(), listCategories);
+        localDb.writeCategories(checkedCategories);
+        Log.d(LOG_LOCAL_DB, "write " + checkedCategories.toString());
+        updateData(getView(), checkedCategories);
     }
 
     @Override
