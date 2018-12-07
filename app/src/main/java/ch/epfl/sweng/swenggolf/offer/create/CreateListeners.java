@@ -1,8 +1,11 @@
 package ch.epfl.sweng.swenggolf.offer.create;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
@@ -87,6 +91,45 @@ class CreateListeners {
                     create.errorMessage.setVisibility(View.VISIBLE);
                     create.errorMessage.setText(R.string.error_create_offer_database);
                 }
+            }
+        };
+    }
+    public ValueListener<Offer.Builder> restoreOfferListener() {
+        return new ValueListener<Offer.Builder>() {
+            @Override
+            public void onDataChange(final Offer.Builder value) {
+                if (value != null) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(create.getActivity());
+
+                    dialogBuilder.setTitle("Old offer found")
+                            .setMessage("You already started creating an offer. Do you want to continue to edit it ?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    create.offerBuilder = value;
+                                    create.createHelper.loadCreateOfferFields();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Database database = Database.getInstance();
+                                    database.remove(Database.OFFERS_SAVED, Config.getUser().getUserId(), new CompletionListener() {
+                                        @Override
+                                        public void onComplete(DbError error) {
+
+                                        }
+                                    });
+                                    // user cancelled the dialog
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert);
+                    Dialog alertDialog = dialogBuilder.create();
+                    alertDialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+
             }
         };
     }

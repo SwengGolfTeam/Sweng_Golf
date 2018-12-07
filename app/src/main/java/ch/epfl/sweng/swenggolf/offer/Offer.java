@@ -494,11 +494,6 @@ public class Offer implements Parcelable {
             );
         }
 
-        @Exclude
-        public boolean isEmpty() {
-            return description.isEmpty() && title.isEmpty();
-        }
-
         public long getCreationDate() {
             return creationDate;
         }

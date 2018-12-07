@@ -125,43 +125,9 @@ public class CreateOfferActivity extends FragmentConverter
             offerBuilder = new Offer.Builder();
             if(!creationAsked) {
                 final Database database = Database.getInstance();
-                ValueListener<Offer.Builder> listener = new ValueListener<Offer.Builder>() {
-                    @Override
-                    public void onDataChange(final Offer.Builder value) {
-                        if (value != null) {
-                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-
-                            dialogBuilder.setTitle("Old offer found")
-                                    .setMessage("You already started creating an offer. Do you want to continue to edit it ?")
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            offerBuilder = value;
-                                            createHelper.loadCreateOfferFields();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            database.remove("/offersSaved", Config.getUser().getUserId(), new CompletionListener() {
-                                                @Override
-                                                public void onComplete(DbError error) {
-
-                                                }
-                                            });
-                                            // user cancelled the dialog
-                                        }
-                                    })
-                                    .setIcon(android.R.drawable.ic_dialog_alert);
-                            Dialog alertDialog = dialogBuilder.create();
-                            alertDialog.show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DbError error) {
-
-                    }
-                };
-                database.read("/offersSaved", Config.getUser().getUserId(), listener, Offer.Builder.class);
+                ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
+                database.read(Database.OFFERS_SAVED, Config.getUser().getUserId(), listener,
+                        Offer.Builder.class);
             }
 
         }
@@ -420,12 +386,13 @@ public class CreateOfferActivity extends FragmentConverter
             final String description = descriptionText.getText().toString();
             final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
             Offer.Builder builder = createHelper.getOfferBuilder(title, description, category);
-            if(!builder.isEmpty()) {
+            if(!(builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
+                    && builder.getTag() == Category.OTHER)) {
                 Log.d("CREATEOFFER", "writing");
                 //write into database
                 Database database = Database.getInstance();
 
-                database.write("/offersSaved", Config.getUser().getUserId(), builder);
+                database.write(Database.OFFERS_SAVED, Config.getUser().getUserId(), builder);
             }
         }
     }
