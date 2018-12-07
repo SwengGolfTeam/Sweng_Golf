@@ -2,7 +2,6 @@ package ch.epfl.sweng.swenggolf;
 
 import android.support.annotation.NonNull;
 
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.util.ArrayList;

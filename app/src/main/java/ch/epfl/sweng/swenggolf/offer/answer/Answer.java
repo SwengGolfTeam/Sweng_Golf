@@ -27,8 +27,7 @@ public class Answer {
      */
     public Answer(String userId, String description) {
         this.userId = userId;
-        this.description = Check.checkString(description, "description",
-                COMMENT_MIN_LENGTH, COMMENT_MAX_LENGTH);
+        this.description = description;
     }
 
     /**

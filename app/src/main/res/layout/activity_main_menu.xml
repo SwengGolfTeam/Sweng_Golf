@@ -21,6 +21,24 @@
             app:navigationContentDescription="abc_action_bar_home_description" />
 
         <FrameLayout
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/banner_red"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/network_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/niramit_medium"
+                android:gravity="center_horizontal"
+                android:text="@string/network_error"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/centralFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

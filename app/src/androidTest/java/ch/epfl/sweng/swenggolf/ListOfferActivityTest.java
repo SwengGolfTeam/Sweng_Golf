@@ -1,43 +1,59 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
+import java.util.concurrent.TransferQueue;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.fail;
+import static org.mockito.AdditionalMatchers.not;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -56,6 +72,12 @@ public class ListOfferActivityTest {
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
+    private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title")
+            .setDescription(LOREM).setUuid("idoftheoffer1").build();
+    private static final Offer offer2 = (new Offer.Builder()).setUserId("user_id")
+            .setTitle("This is a title 2")
+            .setDescription(LOREM).setUuid("idoftheoffer2").build();
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
         return new RecyclerViewMatcher(recyclerViewId);
@@ -66,10 +88,6 @@ public class ListOfferActivityTest {
      */
     protected static void setUpFakeDatabase() {
         Database database = new FakeDatabase(true);
-        Offer offer1 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title")
-                .setDescription(LOREM).setUuid("idoftheoffer1").build();
-        Offer offer2 = (new Offer.Builder()).setUserId("user_id").setTitle("This is a title 2")
-                .setDescription(LOREM).setUuid("idoftheoffer2").build();
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
         Database.setDebugDatabase(database);
@@ -91,8 +109,42 @@ public class ListOfferActivityTest {
     }
 
     @Test
+    public void refreshActuallyRefreshes() {
+        Offer newOffer = FilledFakeDatabase.getOffer(0);
+        onView(withId(R.id.offers_recycler_view)).check(matches(hasChildCount(2)));
+        Database.getInstance().write(Database.OFFERS_PATH, newOffer.getUuid(), newOffer);
+        onView(withId(R.id.refresh_list_offer))
+                .perform(withCustomConstraints(swipeDown(), isDisplayingAtLeast(80)));
+        onView(withId(R.id.offers_recycler_view))
+                .check(matches(hasChildCount(3)));
+    }
+
+    /**
+     * <@see https://stackoverflow.com/questions/33505953/espresso-how-to-test-swiperefreshlayout>
+     */
+    private static ViewAction withCustomConstraints(
+            final ViewAction action, final Matcher<View> constraints) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return constraints;
+            }
+
+            @Override
+            public String getDescription() {
+                return action.getDescription();
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                action.perform(uiController, view);
+            }
+        };
+    }
+
+    @Test
     public void offerCorrectlyDisplayedInTheList() {
-        Offer offer = ListOfferActivity.getOfferList().get(0);
+        Offer offer = offer1;
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(offer.getTitle()))));
@@ -122,14 +174,14 @@ public class ListOfferActivityTest {
     @Test
     public void offerCorrectlyDisplayedAfterClickOnList() {
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(hasDescendant(
-                ViewMatchers.withText(ListOfferActivity.getOfferList().get(0).getTitle())),
+                ViewMatchers.withText(offer1.getTitle())),
                 click()));
     }
 
     @Test
     public void offerCorrectlyExpandedAndRetractedAfterLongPressOnList() {
-        Offer offerToTest = ListOfferActivity.getOfferList().get(0);
-        Offer otherOffer = ListOfferActivity.getOfferList().get(1);
+        Offer offerToTest = offer1;
+        Offer otherOffer = offer2;
 
         String longDescription = offerToTest.getDescription();
         String shortDescription = offerToTest.getShortDescription();
@@ -148,12 +200,11 @@ public class ListOfferActivityTest {
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getShortDescription()))));
 
+        closeSoftKeyboard();
         onView(withId(R.id.offers_recycler_view)).perform(actionOnItem(
                 hasDescendant(withText(otherOffer.getTitle())), longClick()));
 
-        // Check that the first offer is retracted and that the second is expanded.
-        onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
-                .check(matches(hasDescendant(withText(shortDescription))));
+        // Check that the second is expanded.
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(1))
                 .check(matches(hasDescendant(withText(otherOffer.getDescription()))));
 

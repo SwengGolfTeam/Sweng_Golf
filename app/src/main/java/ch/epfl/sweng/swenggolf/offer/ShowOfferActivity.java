@@ -82,7 +82,7 @@ public class ShowOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.button_show_offers);
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, R.string.show_offer_title);
         assert getArguments() != null;
         inflated = inflater.inflate(R.layout.activity_show_offer, container, false);
         userIsCreator = Config.getUser().getUserId().equals(offer.getUserId());
@@ -92,7 +92,7 @@ public class ShowOfferActivity extends FragmentConverter {
         LayoutInflater mInflater = getLayoutInflater();
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents();
-        setRecyclerView();
+        setAnswersRecyclerView();
         if (offer.getIsClosed()) {
             hideReactButton();
             listAnswerAdapter.closeAnswers();
@@ -104,23 +104,6 @@ public class ShowOfferActivity extends FragmentConverter {
         return inflated;
     }
 
-    private void setClosingListener() {
-        closingListener = new ValueListener<Boolean>() {
-            @Override
-            public void onDataChange(Boolean value) {
-                if (value != null && value) {
-                    closeOffer();
-                }
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                //No notification or errored notifications, as such no modification on display.
-            }
-        };
-        Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
-                "isClosed", closingListener, Boolean.class);
-    }
 
     @Override
     public void onDestroyView() {
@@ -128,19 +111,6 @@ public class ShowOfferActivity extends FragmentConverter {
         Database.getInstance().deafen(Database.ANSWERS_PATH, offer.getUuid(),
                 listAnswerAdapter.getUpdateListener());
         listAnswerAdapter.setUpdateListener(null);
-    }
-
-    private void setButtonCloseOffer() {
-        if (userIsCreator && !offer.getIsClosed()) {
-            final Button closeButton = inflated.findViewById(R.id.close_offer_button);
-            closeButton.setVisibility(View.VISIBLE);
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    closeOffer();
-                }
-            });
-        }
     }
 
     @Override
@@ -160,6 +130,36 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (userIsCreator && !offer.getIsClosed()) {
+            inflater.inflate(R.menu.menu_show_offer, menu);
+        } else {
+            inflater.inflate(R.menu.menu_empty, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getActivity().onBackPressed();
+                return true;
+            }
+            case R.id.button_modify_offer: {
+                replaceCentralFragment(createOfferActivityWithOffer(offer, fragmentsToSkip));
+                return true;
+            }
+            case R.id.button_delete_offer: {
+                showDeleteAlertDialog();
+                return true;
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -167,6 +167,8 @@ public class ShowOfferActivity extends FragmentConverter {
             setLocation();
         }
     }
+
+    /* methods to fill the offer content */
 
     private void setContents() {
         TextView offerTitle = inflated.findViewById(R.id.show_offer_title);
@@ -204,77 +206,6 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
-    private void setLocation() {
-        if (checkLocationPermission(getActivity())) {
-            AppLocation currentLocation = AppLocation.getInstance(getActivity());
-
-            currentLocation.getLocation(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        Location offerLocation = new Location(LocationManager.GPS_PROVIDER);
-                        offerLocation.setLatitude(offer.getLatitude());
-                        offerLocation.setLongitude(offer.getLongitude());
-
-                        int distance = (int) offerLocation.distanceTo(location)
-                                / DISTANCE_GRANULARITY * DISTANCE_GRANULARITY;
-                        String toPrompt;
-                        if (distance >= KILOMETER_SIZE) {
-                            distance /= KILOMETER_SIZE;
-                            toPrompt = distance + " km";
-                        } else if (distance == 0) {
-                            toPrompt = "Near";
-                        } else {
-                            toPrompt = distance + " m";
-                        }
-                        writeLocationToPage(toPrompt);
-                    }
-                }
-            });
-
-        }
-    }
-
-    private void writeLocationToPage(String toWrite) {
-        TextView distanceText = inflated.findViewById(R.id.saved_location_offer);
-        distanceText.setText(toWrite);
-        final Context context = getActivity();
-        distanceText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + offer.getLatitude()
-                        + "," + offer.getLongitude() + "(" + offer.getTitle() + ")");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                }
-
-            }
-        });
-    }
-
-    private void fetchAnswers() {
-        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
-            @Override
-            public void onDataChange(Answers value) {
-                if (value != null) {
-                    listAnswerAdapter.setAnswers(value);
-                } else {
-                    listAnswerAdapter.setAnswers(defaultAnswers);
-                }
-            }
-
-            @Override
-            public void onCancelled(DbError error) {
-                errorMessage.setVisibility(View.VISIBLE);
-            }
-        };
-        Database.getInstance().listen(Database.ANSWERS_PATH, offer.getUuid(),
-                answerListener, Answers.class);
-        listAnswerAdapter.setUpdateListener(answerListener);
-    }
-
     private ValueListener<User> createFiller(final View inflated) {
         return new ValueListener<User>() {
             @Override
@@ -294,6 +225,73 @@ public class ShowOfferActivity extends FragmentConverter {
             }
         };
     }
+
+    /**
+     * Open the user profile when we click on his name.
+     *
+     * @param v the view
+     */
+    public void openUserProfile(View v) {
+
+        DatabaseUser.getUser(new ValueListener<User>() {
+                                 @Override
+                                 public void onDataChange(User user) {
+                                     Fragment fragment =
+                                             createShowProfileWithProfile(user);
+                                     replaceCentralFragment(fragment);
+                                 }
+
+                                 @Override
+                                 public void onCancelled(DbError error) {
+                                     Toast.makeText(ShowOfferActivity.this.getContext(),
+                                             R.string.error_load_user, Toast.LENGTH_LONG).show();
+                                 }
+                             },
+                offer.getUserId());
+    }
+
+    /* methods for the answers */
+
+    private void setAnswersRecyclerView() {
+        RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
+        mRecyclerView.setFocusable(false);
+        mRecyclerView.setNestedScrollingEnabled(false);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer, this);
+        // Add dividing line
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
+        mRecyclerView.setAdapter(listAnswerAdapter);
+
+    }
+
+    private void fetchAnswers() {
+        ValueListener<Answers> answerListener = new ValueListener<Answers>() {
+            @Override
+            public void onDataChange(Answers value) {
+                if (value != null) {
+                    listAnswerAdapter.setAnswers(value);
+                    if (offer.getIsClosed()) {
+                        offerAccessToDiscussion();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                errorMessage.setVisibility(View.VISIBLE);
+            }
+        };
+        Database.getInstance().listen(Database.ANSWERS_PATH, offer.getUuid(),
+                answerListener, Answers.class);
+        listAnswerAdapter.setUpdateListener(answerListener);
+    }
+
 
     private void setAnswerToPost() {
         final Button reactButton = inflated.findViewById(R.id.react_button);
@@ -355,53 +353,59 @@ public class ShowOfferActivity extends FragmentConverter {
 
     }
 
-    private void setRecyclerView() {
-        RecyclerView mRecyclerView = inflated.findViewById(R.id.answers_recycler_view);
-        mRecyclerView.setFocusable(false);
-        mRecyclerView.setNestedScrollingEnabled(false);
+    /* methods for the location */
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+    private void setLocation() {
+        if (checkLocationPermission(getActivity())) {
+            AppLocation currentLocation = AppLocation.getInstance(getActivity());
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            currentLocation.getLocation(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Location offerLocation = new Location(LocationManager.GPS_PROVIDER);
+                        offerLocation.setLatitude(offer.getLatitude());
+                        offerLocation.setLongitude(offer.getLongitude());
 
-        listAnswerAdapter = new ListAnswerAdapter(defaultAnswers, offer, this);
-        // Add dividing line
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
-        mRecyclerView.setAdapter(listAnswerAdapter);
+                        int distance = (int) offerLocation.distanceTo(location)
+                                / DISTANCE_GRANULARITY * DISTANCE_GRANULARITY;
+                        String toPrompt;
+                        if (distance >= KILOMETER_SIZE) {
+                            distance /= KILOMETER_SIZE;
+                            toPrompt = distance + " km";
+                        } else if (distance == 0) {
+                            toPrompt = "Near";
+                        } else {
+                            toPrompt = distance + " m";
+                        }
+                        writeLocationToPage(toPrompt);
+                    }
+                }
+            });
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (userIsCreator && !offer.getIsClosed()) {
-            inflater.inflate(R.menu.menu_show_offer, menu);
-        } else {
-            inflater.inflate(R.menu.menu_empty, menu);
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                getActivity().onBackPressed();
-                return true;
+    private void writeLocationToPage(String toWrite) {
+        TextView distanceText = inflated.findViewById(R.id.saved_location_offer);
+        distanceText.setText(toWrite);
+        final Context context = getActivity();
+        distanceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + offer.getLatitude()
+                        + "," + offer.getLongitude() + "(" + offer.getTitle() + ")");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+
             }
-            case R.id.button_modify_offer: {
-                replaceCentralFragment(createOfferActivityWithOffer(offer, fragmentsToSkip));
-                return true;
-            }
-            case R.id.button_delete_offer: {
-                showDeleteAlertDialog();
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
-        }
+        });
     }
+
+    /* methods to delete an offer */
 
     /**
      * Display the Alert Dialog for the delete.
@@ -455,36 +459,20 @@ public class ShowOfferActivity extends FragmentConverter {
         };
     }
 
-    /**
-     * Open the user profile when we click on his name.
-     *
-     * @param v the view
-     */
-    public void openUserProfile(View v) {
 
-        DatabaseUser.getUser(new ValueListener<User>() {
-                                 @Override
-                                 public void onDataChange(User user) {
-                                     Fragment fragment =
-                                             createShowProfileWithProfile(user);
-                                     replaceCentralFragment(fragment);
-                                 }
+    /* methods to close an offer */
 
-                                 @Override
-                                 public void onCancelled(DbError error) {
-                                     Toast.makeText(ShowOfferActivity.this.getContext(),
-                                             R.string.error_load_user, Toast.LENGTH_LONG).show();
-                                 }
-                             },
-                offer.getUserId());
-
-    }
-
-    private void hideReactButton() {
-        Button reactButton = inflated.findViewById(R.id.react_button);
-        reactButton.setVisibility(View.GONE);
-        TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
-        closedMessage.setVisibility(View.VISIBLE);
+    private void setButtonCloseOffer() {
+        if (userIsCreator && !offer.getIsClosed()) {
+            final Button closeButton = inflated.findViewById(R.id.close_offer_button);
+            closeButton.setVisibility(View.VISIBLE);
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeOffer();
+                }
+            });
+        }
     }
 
     /**
@@ -500,9 +488,72 @@ public class ShowOfferActivity extends FragmentConverter {
         Button closeButton = inflated.findViewById(R.id.close_offer_button);
         closeButton.setVisibility(View.GONE);
         getActivity().invalidateOptionsMenu();
+        offerAccessToDiscussion();
         listAnswerAdapter.closeAnswers();
-        //TODO : add listener
     }
 
 
+    private void setClosingListener() {
+        closingListener = new ValueListener<Boolean>() {
+            @Override
+            public void onDataChange(Boolean value) {
+                if (value != null && value) {
+                    hideReactButton();
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                //No notification or errored notifications, as such no modification on display.
+            }
+        };
+        Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
+                "isClosed", closingListener, Boolean.class);
+    }
+
+    private void hideReactButton() {
+        Button reactButton = inflated.findViewById(R.id.react_button);
+        if (reactButton != null) {
+            reactButton.setVisibility(View.GONE);
+        }
+        TextView closedMessage = inflated.findViewById(R.id.offer_is_closed);
+        closedMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void offerAccessToDiscussion() {
+        Answers answers = listAnswerAdapter.getAnswers();
+        if (answers.getFavoritePos() != Answers.NO_FAVORITE) {
+            final String chosenUserId = answers.getUserOfPosition(answers.getFavoritePos());
+            if (userIsCreator || chosenUserId.equals(Config.getUser().getUserId())) {
+                Button discussionButton = inflated.findViewById(R.id.open_discussion);
+                discussionButton.setVisibility(View.VISIBLE);
+                discussionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goToMessagingWithUser(chosenUserId);
+
+
+                    }
+                });
+            }
+        }
+    }
+
+    private void goToMessagingWithUser(String chosenUserId) {
+        String otherUserId = userIsCreator ? chosenUserId : offer.getUserId();
+        Database.getInstance().read(Database.USERS_PATH, otherUserId,
+                new ValueListener<User>() {
+                    @Override
+                    public void onDataChange(User value) {
+                        replaceCentralFragment(
+                                FragmentConverter.createMessagingActivityWithOfferAndUser(
+                                        offer, value));
+                    }
+
+                    @Override
+                    public void onCancelled(DbError error) {
+                        // do nothing
+                    }
+                }, User.class);
+    }
 }
