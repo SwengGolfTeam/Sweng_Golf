@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -96,6 +97,7 @@ public class ListOfferActivity extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
+        Log.d("ListOfferCreation : ", "View created");
         View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
@@ -117,7 +119,7 @@ public class ListOfferActivity extends FragmentConverter {
         return inflated;
     }
 
-    protected void loadCheckedCategories() {
+    private void loadCheckedCategories() {
         try {
             Log.d(LOG_LOCAL_DB, "Recover from database");
             checkedCategories = localDb.readCategories();
@@ -132,10 +134,16 @@ public class ListOfferActivity extends FragmentConverter {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         mOptionsMenu = menu;
         inflater.inflate(R.menu.menu_list_offers, menu);
+        HashSet<Category> previouslyCheckedCategories = new HashSet<>(checkedCategories);
         addAllCategoriesToMenu(R.id.menu_offers);
+        if(!previouslyCheckedCategories.equals(new HashSet<>(checkedCategories))) {
+            updateData(getView(), checkedCategories);
+        }
     }
 
-    private void addAllCategoriesToMenu(int groupId) {
+    protected void addAllCategoriesToMenu(int groupId) {
+        mOptionsMenu.clear();
+        loadCheckedCategories();
         Category[] categoriesEnum = Category.values();
         for (int i = 0; i < categoriesEnum.length; i++) {
             if (checkedCategories.contains(categoriesEnum[i])) {
@@ -198,7 +206,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void updateData(View inflated, List<Category> categories) {
+    protected void updateData(View inflated, List<Category> categories) {
         mAdapter.clear();
         if (categories.isEmpty()) {
             noOffers.setVisibility(View.VISIBLE);
@@ -265,6 +273,8 @@ public class ListOfferActivity extends FragmentConverter {
                 if (!offers.isEmpty()) {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
+                } else if(offerList.isEmpty()) {
+                    noOffers.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -280,4 +290,5 @@ public class ListOfferActivity extends FragmentConverter {
         dbConsumer.accept(database, categories, listener);
         Network.checkAndDialog(getContext());
     }
+
 }
