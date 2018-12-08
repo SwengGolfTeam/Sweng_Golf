@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -36,4 +37,20 @@ public final class TestUtility {
                 .check(matches(isDisplayed()));
     }
 
+    /**
+     * Simulate a press on the back button
+     * @param intentRule the intent of the current activity
+     */
+    public static void pressBackButton(final IntentsTestRule intentRule) {
+        try {
+            intentRule.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    intentRule.getActivity().onBackPressed();
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
 }
