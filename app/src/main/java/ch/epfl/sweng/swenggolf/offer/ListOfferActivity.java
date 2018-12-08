@@ -41,7 +41,6 @@ public class ListOfferActivity extends FragmentConverter {
     public static final String DISPLAY_CLOSED_BUNDLE_KEY =
             "ch.epfl.sweng.swenggolf.listOfferActivity";
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
-    private List<Offer> offerList = new ArrayList<>();
 
     private final ListOfferTouchListener.OnItemClickListener clickListener =
             new ListOfferTouchListener.OnItemClickListener() {
@@ -49,7 +48,7 @@ public class ListOfferActivity extends FragmentConverter {
                 @Override
                 public void onItemClick(View view, int position) {
                     closeSoftKeyboard(ListOfferActivity.this.search);
-                    Offer showOffer = offerList.get(position);
+                    Offer showOffer = mAdapter.getOffer(position);
                     ShowOfferActivity show = FragmentConverter.createShowOfferWithOffer(showOffer);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                             .beginTransaction().replace(R.id.centralFragment, show);
@@ -61,7 +60,7 @@ public class ListOfferActivity extends FragmentConverter {
                 public void onLongItemClick(View view, int position) {
                     // Expands or retract the description
                     TextView descriptionView = view.findViewById(R.id.offer_description);
-                    Offer currentOffer = offerList.get(position);
+                    Offer currentOffer = mAdapter.getOffer(position);
                     expandOrRetractOffer(descriptionView, currentOffer);
                 }
 
@@ -205,8 +204,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-        mAdapter = new ListOfferAdapter(offerList);
+        mAdapter = new ListOfferAdapter();
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
@@ -247,7 +245,8 @@ public class ListOfferActivity extends FragmentConverter {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mAdapter.filter(s.toString());
+                int visibility = mAdapter.filter(s.toString()) ? View.VISIBLE : View.GONE;
+                noOffers.setVisibility(visibility);
             }
 
             @Override
@@ -279,13 +278,8 @@ public class ListOfferActivity extends FragmentConverter {
                     }
                     offers = filtered;
                 }
-                if (!offers.isEmpty()) {
-                    noOffers.setVisibility(View.GONE);
-                    mAdapter.add(offers);
-                } else if(offerList.isEmpty()) {
-                    noOffers.setVisibility(View.VISIBLE);
-                }
-
+                int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
+                noOffers.setVisibility(noOffersVisibility);
             }
 
             @Override

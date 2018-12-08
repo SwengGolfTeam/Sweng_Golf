@@ -2,6 +2,9 @@ package ch.epfl.sweng.swenggolf.database;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -214,7 +217,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setTitle("Transport some important data")
                     .setDescription("I have some nice crew of people that can help you "
                             + "do anything if you are okay to transport some data !")
-                    .setUuid("13").build(),
+                    .setUuid("13").setIsClosed(true).build(),
 
             new Offer.Builder().setUserId("14")
                     .setTitle("Help to fix me up")
@@ -223,7 +226,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
                             + "scale-to-width-down/800")
-                    .setUuid("14").build(),
+                    .setUuid("14").setIsClosed(true).build(),
 
     };
 
@@ -323,5 +326,15 @@ public final class FilledFakeDatabase extends FakeDatabase {
         location.setLatitude(FAKE_LATITUDE);
         location.setLongitude(FAKE_LONGITUDE);
         return location;
+    }
+
+    public static List<Offer> getClosedOffers() {
+        List<Offer> closedOffers = new ArrayList<>();
+        for(Offer offer : FAKE_OFFERS) {
+            if (offer.getIsClosed()) {
+                closedOffers.add(offer);
+            }
+        }
+        return closedOffers;
     }
 }

@@ -44,6 +44,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -90,6 +91,9 @@ public class ListOfferActivityTest {
         Database database = new FakeDatabase(true);
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
+        for(Offer offer : FilledFakeDatabase.getClosedOffers()) {
+            database.write("/offers", offer.getUuid(), offer);
+        }
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
@@ -233,5 +237,10 @@ public class ListOfferActivityTest {
     private void clickOnCategoryInMenu(Category cat) {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
         onView(withText(cat.toString())).perform(click());
+    }
+
+    @Test
+    public void displaysOnlyNonClosedOffers() {
+        onView(withId(R.id.offers_recycler_view)).check(matches(hasChildCount(2)));
     }
 }

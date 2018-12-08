@@ -26,16 +26,10 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     /**
      * Constructs a ListOfferAdapter for the RecyclerView.
-     *
-     * @param offerList the list of offers to be displayed
      */
-    public ListOfferAdapter(List<Offer> offerList) {
-        if (offerList == null) {
-            throw new IllegalArgumentException();
-        }
-        this.filteredOfferList = offerList;
+    public ListOfferAdapter() {
+        this.filteredOfferList = new ArrayList<>();
         this.offerList = new ArrayList<>();
-        this.offerList.addAll(offerList);
         filter = "";
         ViewUserFiller.clearMap();
     }
@@ -73,14 +67,19 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
 
     /**
      * Update the list of offers of the RecyclerView.
+     * Doesn't update the view if offers are null.
      *
      * @param offers a list of offers
+     * @return whether displayed offers are empty or not.
      */
-    public void add(@NonNull List<Offer> offers) {
-        offerList.addAll(offers);
-        filteredOfferList.clear();
-        fillFilteredList();
-        notifyDataSetChanged();
+    public boolean add(@NonNull List<Offer> offers) {
+        if(!offers.isEmpty()) {
+            offerList.addAll(offers);
+            filteredOfferList.clear();
+            fillFilteredList();
+            notifyDataSetChanged();
+        }
+        return filteredOfferList.isEmpty();
     }
 
     /**
@@ -103,13 +102,25 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     /**
      * Filter the data to only show data which contains the filter string in their title.
      *
-     * @param filter the string to filter
+     * @param filter the string to filter.
+     * @return whether the displayed list is empty or not.
      */
-    public void filter(String filter) {
+    public boolean filter(String filter) {
         this.filter = filter.toLowerCase();
         filteredOfferList.clear();
         fillFilteredList();
         notifyDataSetChanged();
+        return filteredOfferList.isEmpty();
+    }
+
+    /**
+     * Getter for an offer in the RecyclerView displaying this adapter.
+     *
+     * @param position the position of the offer in the displayed list.
+     * @return the offer at the appropriate position in the view.
+     */
+    public Offer getOffer(int position) {
+        return filteredOfferList.get(position);
     }
 
     /**
