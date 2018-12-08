@@ -40,6 +40,7 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -47,6 +48,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.toPack
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
 import static android.support.test.espresso.matcher.ViewMatchers.withChild;
@@ -228,10 +230,17 @@ public class ListOfferActivityTest {
 
     @Test
     public void allCategoriesUncheckedMessageShown() {
+        checkAll();
+        onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
+        checkAll();
+        onView(withId(R.id.offers_recycler_view))
+                .check(matches(hasMinimumChildCount(1)));
+    }
+
+    private void checkAll() {
         for (Category cat : Category.values()) {
             clickOnCategoryInMenu(cat);
         }
-        onView(withId(R.id.no_offers_to_show)).check(matches(isDisplayed()));
     }
 
     private void clickOnCategoryInMenu(Category cat) {
