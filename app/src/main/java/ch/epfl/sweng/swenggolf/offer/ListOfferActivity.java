@@ -291,17 +291,12 @@ public class ListOfferActivity extends FragmentConverter {
     }
 
     private List<Offer> filterClosedOffers(List<Offer> toBeFiltered) {
-        if(!toBeFiltered.isEmpty()) {
-            ArrayList<Offer> filtered = new ArrayList<>();
-            for(Offer offer : toBeFiltered) {
-                if(displayClosed && offer.getIsClosed()) {
-                    filtered.add(offer);
-                } else if(!displayClosed && !offer.getIsClosed()) {
-                    filtered.add(offer);
-                }
+        ArrayList<Offer> filtered = new ArrayList<>();
+        for(Offer offer : toBeFiltered) {
+            if(!displayClosed ^ offer.getIsClosed()) {
+                filtered.add(offer);
             }
-            return filtered;
         }
-        return toBeFiltered;
+        return filtered;
     }
 }
