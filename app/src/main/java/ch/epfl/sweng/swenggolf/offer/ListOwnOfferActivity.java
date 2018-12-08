@@ -18,8 +18,10 @@ public class ListOwnOfferActivity extends FragmentConverter {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.activity_list_own_offer, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View inflated = inflater.inflate(R.layout.activity_list_own_offer,
+                container, false);
         TabLayout tabs = inflated.findViewById(R.id.list_own_offer_tablayout);
         final ViewPager pager = inflated.findViewById(R.id.list_own_offer_pager);
 

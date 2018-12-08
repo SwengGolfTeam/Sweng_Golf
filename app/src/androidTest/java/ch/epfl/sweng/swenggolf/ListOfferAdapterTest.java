@@ -33,6 +33,10 @@ public class ListOfferAdapterTest {
     private final List<Offer> offerList = Arrays.asList(FilledFakeDatabase.getOffer(0),
             FilledFakeDatabase.getOffer(1));
 
+    /**
+     * Reinitialises the adapter used for tests.
+     * Creates a RecyclerView to be used with the adapter.
+     */
     @Before
     public void setUp() {
         a = new ListOfferAdapter();

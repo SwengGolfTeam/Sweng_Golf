@@ -13,9 +13,17 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 public class ListOwnOfferPager extends FragmentPagerAdapter {
 
     private Context context;
-    private ListOwnOfferTabActivity tabOpen, tabClosed;
+    private ListOwnOfferTabActivity tabOpen;
+    private ListOwnOfferTabActivity tabClosed;
 
-    public ListOwnOfferPager(User user, Context context, FragmentManager manager) {
+    /**
+     * Creates a new adapter for a viewPager to display a user offers.
+     *
+     * @param user the user who's offers are displayed.
+     * @param context the context of the activity in which this pager is used.
+     * @param manager the fragment manager used to manage the different fragments of the pager.
+     */
+    ListOwnOfferPager(User user, Context context, FragmentManager manager) {
         super(manager);
         this.context = context;
         tabOpen = new ListOwnOfferTabActivity();

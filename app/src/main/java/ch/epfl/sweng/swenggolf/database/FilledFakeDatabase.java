@@ -328,6 +328,11 @@ public final class FilledFakeDatabase extends FakeDatabase {
         return location;
     }
 
+    /**
+     * Returns a list of all closed offer in the database.
+     *
+     * @return the list of all offers such that their isClosed attribute is true.
+     */
     public static List<Offer> getClosedOffers() {
         List<Offer> closedOffers = new ArrayList<>();
         for(Offer offer : FAKE_OFFERS) {

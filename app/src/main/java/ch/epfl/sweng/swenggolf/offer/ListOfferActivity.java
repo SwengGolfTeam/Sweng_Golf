@@ -217,7 +217,7 @@ public class ListOfferActivity extends FragmentConverter {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    protected void updateData(View inflated, List<Category> categories) {
+    private void updateData(View inflated, List<Category> categories) {
         mAdapter.clear();
         if (categories.isEmpty()) {
             noOffers.setVisibility(View.VISIBLE);
@@ -264,20 +264,18 @@ public class ListOfferActivity extends FragmentConverter {
         Database database = Database.getInstance();
         inflated.findViewById(R.id.offer_list_loading).setVisibility(View.VISIBLE);
 
-        ValueListener listener = new ValueListener<List<Offer>>() {
+        ValueListener listener = onOfferFetched(inflated);
+        dbConsumer.accept(database, categories, listener);
+        Network.checkAndDialog(getContext());
+    }
+
+    private ValueListener<List<Offer>> onOfferFetched(final View inflated) {
+        return new ValueListener<List<Offer>>() {
             @Override
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if(!offers.isEmpty()) {
-                    ArrayList<Offer> filtered = new ArrayList<>();
-                    for(Offer offer : offers) {
-                        if(!displayClosed ^ offer.getIsClosed()) {
-                            filtered.add(offer);
-                        }
-                    }
-                    offers = filtered;
-                }
+                offers = filterClosedOffers(offers);
                 int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
                 noOffers.setVisibility(noOffersVisibility);
             }
@@ -290,8 +288,18 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
-        dbConsumer.accept(database, categories, listener);
-        Network.checkAndDialog(getContext());
     }
 
+    private List<Offer> filterClosedOffers(List<Offer> toBeFiltered) {
+        if(!toBeFiltered.isEmpty()) {
+            ArrayList<Offer> filtered = new ArrayList<>();
+            for(Offer offer : toBeFiltered) {
+                if(!displayClosed ^ offer.getIsClosed()) {
+                    filtered.add(offer);
+                }
+            }
+            return filtered;
+        }
+        return toBeFiltered;
+    }
 }
