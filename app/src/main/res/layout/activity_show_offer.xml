@@ -211,11 +211,11 @@
                         android:visibility="gone" />
                 </RelativeLayout>
 
-
-
             </LinearLayout>
-
 
         </android.support.constraint.ConstraintLayout>
     </HorizontalScrollView>
+
+
+
 </android.support.v4.widget.NestedScrollView>
