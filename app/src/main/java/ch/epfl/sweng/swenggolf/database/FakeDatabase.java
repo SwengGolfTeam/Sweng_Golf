@@ -191,7 +191,7 @@ public class FakeDatabase extends Database {
     private <T> List<T> getList(@NonNull String path) {
         List<T> list = new ArrayList<>();
         for (Map.Entry<String, Object> entry : database.entrySet()) {
-            if (entry.getKey().startsWith(path)) {
+            if (entry.getKey().startsWith(path + "/")) {
                 list.add((T) entry.getValue());
             }
         }

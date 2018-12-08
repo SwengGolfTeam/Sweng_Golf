@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
@@ -198,6 +199,19 @@ public class ShowOfferActivity extends FragmentConverter {
 
             Picasso.with(this.getContext()).load(Uri.parse(offer.getLinkPicture()))
                     .into(offerPicture);
+            offerPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                    View mView = getLayoutInflater().inflate(R.layout.dialog_custom_layout, null);
+                    PhotoView photoView = mView.findViewById(R.id.imageView);
+                    Picasso.with(getContext()).load(Uri.parse(offer.getLinkPicture()))
+                            .into(photoView);
+                    mBuilder.setView(mView);
+                    AlertDialog mDialog = mBuilder.create();
+                    mDialog.show();
+                }
+            });
         } else {
             offerPicture.getLayoutParams().height = 0;
         }
