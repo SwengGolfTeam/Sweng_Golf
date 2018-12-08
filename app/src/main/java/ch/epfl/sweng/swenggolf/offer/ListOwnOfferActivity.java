@@ -30,7 +30,8 @@ public class ListOwnOfferActivity extends FragmentConverter {
         if(bundle != null && bundle.getParcelable(User.USER) != null) {
             user = bundle.getParcelable(User.USER);
         }
-        ListOwnOfferPager adapter = new ListOwnOfferPager(user, this.getContext(), getChildFragmentManager());
+        ListOwnOfferPager adapter =
+                new ListOwnOfferPager(user, this.getContext(), getChildFragmentManager());
         pager.setAdapter(adapter);
         tabs.setupWithViewPager(pager);
         return inflated;

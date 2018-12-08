@@ -294,7 +294,9 @@ public class ListOfferActivity extends FragmentConverter {
         if(!toBeFiltered.isEmpty()) {
             ArrayList<Offer> filtered = new ArrayList<>();
             for(Offer offer : toBeFiltered) {
-                if(!displayClosed ^ offer.getIsClosed()) {
+                if(displayClosed && offer.getIsClosed()) {
+                    filtered.add(offer);
+                } else if(!displayClosed && !offer.getIsClosed()) {
                     filtered.add(offer);
                 }
             }
