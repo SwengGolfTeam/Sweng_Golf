@@ -2,6 +2,7 @@ package ch.epfl.sweng.swenggolf.notification;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +38,20 @@ public class NotificationsActivity extends FragmentConverter {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.notifications);
         View inflated = inflater.inflate(R.layout.activity_notifications, container, false);
         setRecyclerView(inflated);
+        setRefreshListener(inflated);
+
         return inflated;
+    }
+
+    private void setRefreshListener(final View inflated) {
+        final SwipeRefreshLayout refresh = inflated.findViewById(R.id.refresh_notifications);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchNotifications(inflated);
+                refresh.setRefreshing(false);
+            }
+        });
     }
 
     @Override

@@ -3,6 +3,7 @@ package ch.epfl.sweng.swenggolf.offer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -98,7 +98,7 @@ public class ListOfferActivity extends FragmentConverter {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         Log.d("ListOfferCreation : ", "View created");
-        View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
+        final View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
         if(getArguments() != null) {
@@ -116,6 +116,7 @@ public class ListOfferActivity extends FragmentConverter {
         errorMessage = inflated.findViewById(R.id.error_message);
         noOffers = inflated.findViewById(R.id.no_offers_to_show);
         setRecyclerView(inflated, checkedCategories);
+        setRefreshListener(inflated);
         return inflated;
     }
 
@@ -128,6 +129,17 @@ public class ListOfferActivity extends FragmentConverter {
             Log.d(LOG_LOCAL_DB, "Initial write with allCategories");
             localDb.writeCategories(checkedCategories); // by default is allCategories
         }
+    }
+
+    private void setRefreshListener(final View inflated) {
+        final SwipeRefreshLayout refresher = inflated.findViewById(R.id.refresh_list_offer);
+        refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData(inflated, checkedCategories);
+                refresher.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -201,7 +213,8 @@ public class ListOfferActivity extends FragmentConverter {
 
         updateData(inflated, categories);
 
-        mRecyclerView.addOnItemTouchListener(listOfferTouchListener(mRecyclerView));
+        mRecyclerView.addOnItemTouchListener(
+                new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener));
         setupSearch(inflated);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -242,10 +255,6 @@ public class ListOfferActivity extends FragmentConverter {
                 //Do nothing
             }
         });
-    }
-
-    private ListOfferTouchListener listOfferTouchListener(RecyclerView mRecyclerView) {
-        return new ListOfferTouchListener(this.getContext(), mRecyclerView, clickListener);
     }
 
     /**
