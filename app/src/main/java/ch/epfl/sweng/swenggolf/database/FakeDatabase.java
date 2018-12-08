@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -67,8 +68,12 @@ public class FakeDatabase extends Database {
     private void notifyListeners(String path, String id, Object object) {
         path = path + "/" + id;
         String[] listeningToChildren = path.split("/");
-        notifyChildren(listeningToChildren);
-        notifyPathListeners(path, object);
+        if(!path.equals("/")){
+            notifyChildren(listeningToChildren);
+            notifyPathListeners(path, object);
+        } else {
+            notifyPathListeners("/", getList("/"));
+        }
     }
 
     private void notifyPathListeners(String path, Object object) {
@@ -82,10 +87,13 @@ public class FakeDatabase extends Database {
 
     private String[] createChildrenPaths(String[] listenningToChildren) {
         String[] paths = new String[listenningToChildren.length-1];
-        StringBuilder currentPath = new StringBuilder();
-        for (int i = 0; i < paths.length; ++i) {
-            currentPath.append(i == 0 ? "" : "/").append(listenningToChildren[i]);
+        StringBuilder currentPath = new StringBuilder("/");
+        paths[0] = currentPath.toString();
+        //1 since the first slash produces an empty string
+        for (int i = 1; i < paths.length; ++i) {
+            currentPath.append(listenningToChildren[i]);
             paths[i] = currentPath.toString();
+            currentPath.append("/");
         }
         return paths;
     }

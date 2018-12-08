@@ -84,12 +84,13 @@ public class FakeDatabaseTest {
         final Database d = new FakeDatabase(true);
         ValueTestListener testListener = new ValueTestListenerString();
         ValueTestListener<List> testListenerList = new ValueTestListener<>();
-        d.write("x/y", "z", CONTENT);
-        d.listen( "x/y", "z", testListener, String.class);
-        d.listen("x", "y", testListenerList, List.class);
-        d.write("x/y", "z", CONTENT_2);
+        d.write("/x/y", "z", CONTENT);
+        d.listen( "/x/y", "z", testListener, String.class);
+        d.listen("/x", "y", testListenerList, List.class);
+        d.listen("", "", testListenerList, List.class);
+        d.write("/x/y", "z", CONTENT_2);
         assertThat(testListener.calls, is(2));
-        assertThat(testListenerList.calls, is(2));
+        assertThat(testListenerList.calls, is(4));
     }
 
     @Test
