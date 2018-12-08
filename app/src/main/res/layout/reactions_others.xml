@@ -31,19 +31,20 @@
 
     <TextView
         android:id="@+id/answer_description"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@id/user_info" />
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/user_info"
+        android:layout_toLeftOf="@id/favorite"/>
 
     <ImageButton
         android:id="@+id/favorite"
         style="?android:borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="24dp"
-        android:layout_toRightOf="@id/answer_description" />
+        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>
