@@ -323,4 +323,26 @@ public class FakeDatabaseTest {
             fail();
         }
     }
+
+
+    @Test
+    public void writeAndReadThrowNoClassCastException() {
+
+        Database database = new FakeDatabase(true);
+        Offer.Builder builder = new Offer.Builder();
+        database.write("/offersSaved", "9879", builder);
+
+        ValueListener<List<Offer>> li = new ValueListener<List<Offer>>() {
+            @Override
+            public void onDataChange(List<Offer> value) {
+
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+
+            }
+        };
+        database.readOffers(li);
+    }
 }
