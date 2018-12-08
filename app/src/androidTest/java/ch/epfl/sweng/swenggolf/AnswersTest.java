@@ -66,10 +66,10 @@ public class AnswersTest {
      * @param answer the message to be posted
      */
     public static void addAnswer(String answer) {
-        onView(withId(R.id.react_button)).perform(scrollTo(), click());
+        onView(withId(R.id.react_button)).perform(click());
         onView(withId(R.id.your_answer_description))
-                .perform(scrollTo(), typeText(answer), closeSoftKeyboard());
-        onView(withId(R.id.post_button)).perform(scrollTo(), click());
+                .perform(typeText(answer), closeSoftKeyboard());
+        onView(withId(R.id.post_button)).perform(click());
 
     }
 
@@ -94,7 +94,6 @@ public class AnswersTest {
         newAnswers.add(new Answer(offer.getUserId(), "hey !"));
         Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
-        onView(withChild(withText("hey !"))).perform(scrollTo());
         onView(withText("hey !")).check(matches(isDisplayed()));
     }
 
@@ -135,13 +134,13 @@ public class AnswersTest {
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
-        favButton.perform(scrollTo(), click());
+        favButton.perform(click());
         String acceptFav = mActivityRule.getActivity().getApplicationContext()
                 .getString(R.string.accept_favorite);
         onView(withText(acceptFav)).check(matches(isDisplayed()));
         onView(withText(android.R.string.yes)).perform(click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite))));
-        favButton.perform(scrollTo(), click());
+        favButton.perform(click());
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
         favButton.check(matches(withTagValue(equalTo((Object) R.drawable.ic_favorite_border))));
     }
@@ -182,7 +181,7 @@ public class AnswersTest {
     public void clickOnPictureLeadsToProfile() {
         Config.setUser(otherUser);
         addAnswer("blablabla");
-        onView(withContentDescription("pic0")).perform(scrollTo(), click());
+        onView(withContentDescription("pic0")).perform(click());
         // we are in the profile
         onView(withId(R.id.name)).check(matches(withText(otherUser.getUserName())));
     }
