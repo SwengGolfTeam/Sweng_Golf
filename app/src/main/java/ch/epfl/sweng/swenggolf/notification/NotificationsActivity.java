@@ -91,14 +91,18 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    if (value.isEmpty()) {
-                        noNotification.setVisibility(View.VISIBLE);
-                    } else {
-                        noNotification.setVisibility(View.INVISIBLE);
-                    }
+                    displayEmptyList(value);
                     // so that they appear the most recent on top
                     Collections.reverse(value);
                     mAdapter.setNotifications(value);
+                }
+            }
+
+            private void displayEmptyList(List<Notification> value) {
+                if (value.isEmpty()) {
+                    noNotification.setVisibility(View.VISIBLE);
+                } else {
+                    noNotification.setVisibility(View.INVISIBLE);
                 }
             }
 
