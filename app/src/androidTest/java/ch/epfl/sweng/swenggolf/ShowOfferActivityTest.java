@@ -120,7 +120,7 @@ public class ShowOfferActivityTest {
 
     @Test
     public void imageDisplayedOnClick() {
-        onView(withId(R.id.show_offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.show_offer_picture)).perform(click());
         onView(withId(R.id.imageView))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
