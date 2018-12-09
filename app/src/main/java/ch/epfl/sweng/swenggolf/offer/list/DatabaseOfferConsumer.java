@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer.list_offer;
+package ch.epfl.sweng.swenggolf.offer.list;
 
 import java.util.List;
 

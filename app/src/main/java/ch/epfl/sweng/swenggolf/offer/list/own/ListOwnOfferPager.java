@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer.list_offer.list_own_offer;
+package ch.epfl.sweng.swenggolf.offer.list.own;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.offer.list_offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 

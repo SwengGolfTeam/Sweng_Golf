@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer.list_offer.list_own_offer;
+package ch.epfl.sweng.swenggolf.offer.list.own;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +13,8 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.list_offer.DatabaseOfferConsumer;
-import ch.epfl.sweng.swenggolf.offer.list_offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.DatabaseOfferConsumer;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static ch.epfl.sweng.swenggolf.profile.User.USER;

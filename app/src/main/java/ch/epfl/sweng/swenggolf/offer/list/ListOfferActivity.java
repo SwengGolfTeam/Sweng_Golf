@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer.list_offer;
+package ch.epfl.sweng.swenggolf.offer.list;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
