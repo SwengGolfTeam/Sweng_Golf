@@ -31,9 +31,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -153,7 +151,7 @@ public class PointGainTest {
                         FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
         // User A adds answer
         Config.setUser(FilledFakeDatabase.getUser(2));
-        addAnswer();
+        TestUtility.addAnswer("For the empire !");
         // User B accepts it
         Config.setUser(FilledFakeDatabase.getUser(0));
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
@@ -165,16 +163,8 @@ public class PointGainTest {
         testUserPointsDbOnly(0, FilledFakeDatabase.getUser(2));
     }
 
-    private void addAnswer() {
-        onView(withId(R.id.react_button)).perform(scrollTo(), click());
-        onView(withId(R.id.your_answer_description))
-                .perform(scrollTo(),
-                        typeText("For the empire !"), closeSoftKeyboard());
-        onView(withId(R.id.post_button)).perform(scrollTo(), click());
-    }
-
     private void performFavoriteAction() {
-        onView(withContentDescription("fav0")).perform(scrollTo(), click());
+        onView(withContentDescription("fav0")).perform(click());
         onView(withText(android.R.string.yes)).perform(scrollTo(), click());
     }
 

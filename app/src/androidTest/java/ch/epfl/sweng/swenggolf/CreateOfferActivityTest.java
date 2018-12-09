@@ -68,7 +68,7 @@ import static org.hamcrest.core.IsNot.not;
 public class CreateOfferActivityTest {
 
     private static FragmentManager manager;
-    private final long beginingTime = 1515625200000L;
+    private final long beginningTime = 1515625200000L;
     private final long timeDiff = 10L;
     @Rule
     public IntentsTestRule<MainMenuActivity> intentsTestRule =
@@ -128,8 +128,8 @@ public class CreateOfferActivityTest {
             Bundle bundle = new Bundle();
             Offer offer = (new Offer.Builder()).setUserId(Config.getUser().getUserId())
                     .setTitle("20").setDescription("20").setLinkPicture("20").setUuid("20")
-                    .setTag(Category.FOOD).setCreationDate(beginingTime)
-                    .setEndDate(beginingTime + timeDiff).build();
+                    .setTag(Category.FOOD).setCreationDate(beginningTime)
+                    .setEndDate(beginningTime + timeDiff).build();
 
             bundle.putParcelable(Offer.OFFER, offer);
             fragment.setArguments(bundle);
@@ -235,7 +235,6 @@ public class CreateOfferActivityTest {
         onView(withText(R.string.offer_name)).perform(scrollTo());
         fillOffer();
 
-        onView(withText(cat)).perform(scrollTo());
         onView(withText(cat)).check(matches(isDisplayed()));
     }
 
