@@ -64,7 +64,6 @@ public class MessagingTest {
     @Test
     public void canOpenDiscussionAndSendMessages() {
         setUpUserAndLaunchShowOffer(author);
-        String greeting = "Hello";
         TestUtility.showOfferCustomScrollTo();
         TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.open_discussion)).perform(click());
@@ -73,6 +72,7 @@ public class MessagingTest {
         } catch (NoMatchingViewException e) {
             // do nothing
         }
+        String greeting = "Hello";
         onView(withId(R.id.message_content))
                 .perform(typeText(greeting), closeSoftKeyboard());
         onView(withId(R.id.send_message_button)).perform(click());
