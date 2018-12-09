@@ -85,8 +85,8 @@ class CreateListeners {
                             Config.getUser().getUserId(), new CompletionListener() {
                                 @Override
                                 public void onComplete(DbError error) {
-                                    //If we fail to remove the saved offer, there is a problem on the server
-                                    //Thus we can't do anything here
+                                    //If we fail to remove the saved offer, there is a problem on
+                                    // the server. Thus we can't do anything here
                                 }
                             });
                 } else {
