@@ -38,7 +38,7 @@ public final class TestUtility {
     }
 
     /**
-     * Simulate a press on the back button
+     * Simulate a press on the back button.
      * @param intentRule the intent of the current activity
      */
     public static void pressBackButton(final IntentsTestRule intentRule) {

@@ -1,6 +1,5 @@
 package ch.epfl.sweng.swenggolf;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.support.v4.content.ContextCompat.startActivity;
 import static ch.epfl.sweng.swenggolf.Permission.GPS;
 import static ch.epfl.sweng.swenggolf.Permission.NONE;
 
@@ -146,9 +144,10 @@ public class Config {
 
     /**
      * Display an Alert Dialog for the redirection to settings.
-     * @param context The context of the Dialog
-     * @param title The title of the Dialog
-     * @param message The message of the Dialog
+     *
+     * @param context        The context of the Dialog
+     * @param title          The title of the Dialog
+     * @param message        The message of the Dialog
      * @param settingsAction The action that is to be started by the dialog
      */
     public static void settingsDialog(final Context context, String title,
@@ -162,7 +161,7 @@ public class Config {
                         Intent settingsIntent = new Intent(settingsAction);
                         settingsIntent.setPackage("com.android.settings");
                         settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        if(settingsIntent.resolveActivity(context.getPackageManager()) != null) {
+                        if (settingsIntent.resolveActivity(context.getPackageManager()) != null) {
                             context.startActivity(settingsIntent);
                         }
                     }

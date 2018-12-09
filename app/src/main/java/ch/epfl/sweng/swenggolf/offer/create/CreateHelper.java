@@ -132,9 +132,9 @@ class CreateHelper {
     protected Offer.Builder getOfferBuilder(String name, String description, Category tag) {
         Offer.Builder builder = create.offerBuilder;
         builder.setUserId(Config.getUser().getUserId())
-               .setTitle(name).setDescription(description)
-               .setTag(tag).setCreationDate(create.creationDate)
-               .setEndDate(create.endDate).setLocation(create.location);
+                .setTitle(name).setDescription(description)
+                .setTag(tag).setCreationDate(create.creationDate)
+                .setEndDate(create.endDate).setLocation(create.location);
         return builder;
     }
 
@@ -195,7 +195,7 @@ class CreateHelper {
         }
 
         if (checkLocationPermission(create.getActivity())
-                & AppLocation.checkLocationActive(create.getContext())){
+                & AppLocation.checkLocationActive(create.getContext())) {
             create.location = new Location(""); // temporary location to avoid crash
             AppLocation currentLocation = AppLocation.getInstance(create.getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {

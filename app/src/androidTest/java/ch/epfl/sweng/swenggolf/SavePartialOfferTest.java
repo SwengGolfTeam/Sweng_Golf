@@ -41,6 +41,10 @@ public class SavePartialOfferTest {
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     private User user = FilledFakeDatabase.getUser(0);
+
+    /**
+     * Set up the fake database and a fake user.
+     */
     @Before
     public void setup() {
         Database.setDebugDatabase(new FakeDatabase(true));

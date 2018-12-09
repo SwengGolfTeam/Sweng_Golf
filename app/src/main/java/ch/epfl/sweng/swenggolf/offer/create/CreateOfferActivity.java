@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,9 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,9 +39,7 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -120,10 +115,9 @@ public class CreateOfferActivity extends FragmentConverter
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable(Offer.OFFER);
             offerBuilder = new Offer.Builder(offerToModify);
-        }
-        else {
+        } else {
             offerBuilder = new Offer.Builder();
-            if(!creationAsked) {
+            if (!creationAsked) {
                 final Database database = Database.getInstance();
                 ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
                 database.read(Database.OFFERS_SAVED, Config.getUser().getUserId(), listener,
@@ -207,7 +201,7 @@ public class CreateOfferActivity extends FragmentConverter
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS){
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
             createHelper.attachLocation();
         }
     }
@@ -376,24 +370,25 @@ public class CreateOfferActivity extends FragmentConverter
 
     @Override
     public void close() {
-        Log.d("CREATEOFFER", "closing");
-        if(offerToModify == null) {
-            Log.d("CREATEOFFER", "not null");
+        if (offerToModify == null) {
+            //Get data of the offer
             EditText nameText = findViewById(R.id.offer_name);
             EditText descriptionText = findViewById(R.id.offer_description);
-
             final String title = nameText.getText().toString();
             final String description = descriptionText.getText().toString();
-            final Category category = Category.valueOf(categorySpinner.getSelectedItem().toString());
+            final Category category =
+                    Category.valueOf(categorySpinner.getSelectedItem().toString());
             Offer.Builder builder = createHelper.getOfferBuilder(title, description, category);
-            if(!(builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
-                    && builder.getTag() == Category.OTHER)) {
-                Log.d("CREATEOFFER", "writing");
-                //write into database
-                Database database = Database.getInstance();
 
+            if (!isOfferEmpty(builder)) {
+                Database database = Database.getInstance();
                 database.write(Database.OFFERS_SAVED, Config.getUser().getUserId(), builder);
             }
         }
+    }
+
+    private boolean isOfferEmpty(Offer.Builder builder) {
+        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
+                && builder.getTag() == Category.OTHER;
     }
 }

@@ -81,12 +81,14 @@ class CreateListeners {
                             LENGTH_SHORT).show();
                     create.createHelper.updateUserScore(create.offerToModify, offer);
                     create.replaceCentralFragmentWithOffer(offer);
-                    Database.getInstance().remove("/offersSaved", Config.getUser().getUserId(), new CompletionListener() {
-                        @Override
-                        public void onComplete(DbError error) {
-
-                        }
-                    });
+                    Database.getInstance().remove("/offersSaved",
+                            Config.getUser().getUserId(), new CompletionListener() {
+                                @Override
+                                public void onComplete(DbError error) {
+                                    //If we fail to remove the saved offer, there is a problem on the server
+                                    //Thus we can't do anything here
+                                }
+                            });
                 } else {
                     create.errorMessage.setVisibility(View.VISIBLE);
                     create.errorMessage.setText(R.string.error_create_offer_database);
@@ -94,44 +96,56 @@ class CreateListeners {
             }
         };
     }
+
+    /**
+     * Create a listener that looks for saved offer in the database. If it found one offer, it will
+     * ask the user whether he wants to restore it or not.
+     *
+     * @return a listener
+     */
     public ValueListener<Offer.Builder> restoreOfferListener() {
         return new ValueListener<Offer.Builder>() {
             @Override
             public void onDataChange(final Offer.Builder value) {
                 if (value != null) {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(create.getActivity());
-
-                    dialogBuilder.setTitle("Old offer found")
-                            .setMessage("You already started creating an offer. Do you want to continue to edit it ?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    create.offerBuilder = value;
-                                    create.createHelper.loadCreateOfferFields();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Database database = Database.getInstance();
-                                    database.remove(Database.OFFERS_SAVED, Config.getUser().getUserId(), new CompletionListener() {
-                                        @Override
-                                        public void onComplete(DbError error) {
-
-                                        }
-                                    });
-                                    // user cancelled the dialog
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert);
-                    Dialog alertDialog = dialogBuilder.create();
-                    alertDialog.show();
+                    showAlertRestoreOffer(value);
                 }
             }
 
             @Override
             public void onCancelled(DbError error) {
-
+                //Do nothing
             }
         };
+    }
+
+    private void showAlertRestoreOffer(final Offer.Builder value) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(create.getActivity());
+
+        dialogBuilder.setTitle(R.string.old_offer_found)
+                .setMessage(R.string.restore_offer_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        create.offerBuilder = value;
+                        create.createHelper.loadCreateOfferFields();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Database database = Database.getInstance();
+                        database.remove(Database.OFFERS_SAVED, Config.getUser().getUserId(),
+                                new CompletionListener() {
+                                    @Override
+                                    public void onComplete(DbError error) {
+                                        //Do nothing
+                                    }
+                                });
+                        // user cancelled the dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     /**
