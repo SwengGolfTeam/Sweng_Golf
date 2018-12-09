@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf.offer.list_offer.list_own_offer;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.offer.list_offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class ListOwnOfferPager extends FragmentPagerAdapter {
-
+    private static final int DOUBLE_TAB_PAGER_ELEMENTS = 2;
     private Context context;
     private ListOwnOfferTabActivity tabOpen;
     private ListOwnOfferTabActivity tabClosed;
@@ -44,7 +45,7 @@ public class ListOwnOfferPager extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return DOUBLE_TAB_PAGER_ELEMENTS;
     }
 
     @Nullable

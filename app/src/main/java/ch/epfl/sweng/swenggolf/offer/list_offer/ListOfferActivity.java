@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf.offer.list_offer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +31,9 @@ import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.network.Network;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 

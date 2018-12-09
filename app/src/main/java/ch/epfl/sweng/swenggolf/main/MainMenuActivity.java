@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +20,8 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list_offer.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list_offer.list_own_offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
