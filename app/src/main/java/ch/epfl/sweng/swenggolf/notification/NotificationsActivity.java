@@ -80,11 +80,11 @@ public class NotificationsActivity extends FragmentConverter {
 
         checkUserPoints();
 
-        fetchNotifications(inflated);
+        fetchNotifications();
 
     }
 
-    private void fetchNotifications(final View inflated) {
+    private void fetchNotifications() {
         User currentUser = Config.getUser();
         ValueListener<List<Notification>> listener = new ValueListener<List<Notification>>() {
             @Override
