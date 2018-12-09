@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -65,7 +66,13 @@ public class MessagingTest {
     public void canOpenDiscussionAndSendMessages() {
         setUpUserAndLaunchShowOffer(author);
         String greeting = "Hello";
-        onView(withId(R.id.open_discussion)).perform(scrollTo(), click());
+        AnswersTest.showOfferCustomScrollTo();
+        onView(withId(R.id.open_discussion)).perform(click());
+        try {
+            onView(withId(R.id.open_discussion)).perform(click()); // the first click might not work
+        } catch (NoMatchingViewException e) {
+            // do nothing
+        }
         onView(withId(R.id.message_content))
                 .perform(typeText(greeting), closeSoftKeyboard());
         onView(withId(R.id.send_message_button)).perform(click());

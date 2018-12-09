@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -31,12 +32,12 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
@@ -66,11 +67,17 @@ public class AnswersTest {
      * @param answer the message to be posted
      */
     public static void addAnswer(String answer) {
+        showOfferCustomScrollTo();
         onView(withId(R.id.react_button)).perform(click());
         onView(withId(R.id.your_answer_description))
                 .perform(typeText(answer), closeSoftKeyboard());
         onView(withId(R.id.post_button)).perform(click());
 
+    }
+
+    public static void showOfferCustomScrollTo() {
+        onView(withId(R.id.show_offer_description)).perform(swipeUp());
+        onView(withId(R.id.show_offer_description)).perform(swipeUp());
     }
 
     /**
@@ -94,6 +101,7 @@ public class AnswersTest {
         newAnswers.add(new Answer(offer.getUserId(), "hey !"));
         Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
+        showOfferCustomScrollTo();
         onView(withText("hey !")).check(matches(isDisplayed()));
     }
 
@@ -131,10 +139,16 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+        showOfferCustomScrollTo();
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
         favButton.perform(click());
+        try {
+            favButton.perform(click()); // the first click was with the swipe and it didn't work
+        } catch (NoMatchingViewException e) {
+            // do nothing, it means the swipe wasn't necessary
+        }
         String acceptFav = mActivityRule.getActivity().getApplicationContext()
                 .getString(R.string.accept_favorite);
         onView(withText(acceptFav)).check(matches(isDisplayed()));
@@ -164,7 +178,9 @@ public class AnswersTest {
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
+        showOfferCustomScrollTo();
         addAnswer("second answer");
+        showOfferCustomScrollTo();
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
     }
 
@@ -185,4 +201,5 @@ public class AnswersTest {
         // we are in the profile
         onView(withId(R.id.name)).check(matches(withText(otherUser.getUserName())));
     }
+
 }

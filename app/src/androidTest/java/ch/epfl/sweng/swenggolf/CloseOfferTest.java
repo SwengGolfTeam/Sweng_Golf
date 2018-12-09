@@ -24,12 +24,14 @@ public class CloseOfferTest extends ShowOfferActivityTest {
     @NonNull
     private ViewInteraction closeOffer() {
         final ViewInteraction button = onView(withId(R.id.close_offer_button));
-        button.perform(scrollTo(), click());
+        AnswersTest.showOfferCustomScrollTo();
+        button.perform(click());
         return button;
     }
 
     @Test
     public void closeButtonVisibleWhenOfferIsOpen() {
+        AnswersTest.showOfferCustomScrollTo();
         onView(withId(R.id.close_offer_button)).check(matches(isDisplayed()));
     }
 

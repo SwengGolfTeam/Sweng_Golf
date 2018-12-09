@@ -53,14 +53,15 @@ public class ShowOfferActivityDbNotWorkingTest {
     @Test
     public void openProfileFromOfferShowToastOnFail() {
         database.setEntryNotWorking(Database.USERS_PATH, offer.getUserId());
-        onView(withId(R.id.show_offer_author)).perform(scrollTo(), click());
+        onView(withId(R.id.show_offer_author)).perform(click());
         testToastShow(mActivityRule, R.string.error_load_user);
     }
 
     @Test
     public void displaysErrorMessageWhenAnswersCannotBeLoaded() {
         database.setEntryNotWorking(Database.ANSWERS_PATH, offer.getUuid());
-        onView(withId(R.id.error_message)).perform(scrollTo()).check(matches(isDisplayed()));
+        AnswersTest.showOfferCustomScrollTo();
+        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
     }
 
 

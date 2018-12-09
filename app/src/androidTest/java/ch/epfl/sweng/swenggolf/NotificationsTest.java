@@ -1,6 +1,7 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
@@ -86,10 +87,18 @@ public class NotificationsTest {
     @Test
     public void answerChosenNotifIsSentAndRedirectsToOffer() {
         goToOfferAndPostAnswer("I can help you!");
-        //change user
+        //change user and go to offer
         Config.setUser(user2);
-        goToOfferAndPostAnswer("Thanks!");
-        onView(withContentDescription("fav0")).perform(scrollTo(), click());
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
+                .commit();
+        AnswersTest.showOfferCustomScrollTo();
+        onView(withContentDescription("fav0")).perform(click());
+        try {
+            onView(withContentDescription("fav0")).perform(click()); // try another time
+        } catch (NoMatchingViewException e) {
+            // do nothing
+        }
         onView(withText(android.R.string.yes)).perform(click());
         // go back to user1 to check notification
         setUserAndGoToNotifications(user1);
