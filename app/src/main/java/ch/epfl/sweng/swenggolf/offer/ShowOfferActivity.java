@@ -123,6 +123,8 @@ public class ShowOfferActivity extends FragmentConverter {
         if (bundle.containsKey(FRAGMENTS_TO_SKIP)) {
             fragmentsToSkip = bundle.getInt(FRAGMENTS_TO_SKIP);
         }
+
+
     }
 
     @Override

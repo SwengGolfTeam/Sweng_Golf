@@ -93,13 +93,13 @@ public class ShowOfferActivityTest {
         // We assume that the distance is larger than 1 km
         String expectedDistance = distance + " km";
 
-        onView(withId(R.id.saved_location_offer)).perform(scrollTo())
+        onView(withId(R.id.saved_location_offer))
                 .check(matches(withText(expectedDistance)));
     }
 
     @Test
     public void correctIntentSentWhenClickedOnDistance() {
-        onView(withId(R.id.saved_location_offer)).perform(scrollTo(), click());
+        onView(withId(R.id.saved_location_offer)).perform(click());
 
         if (!isGoogleMapsInstalled()) {
             assert (true); //skip test
@@ -120,7 +120,7 @@ public class ShowOfferActivityTest {
 
     @Test
     public void imageDisplayedOnClick() {
-        onView(withId(R.id.show_offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.show_offer_picture)).perform(click());
         onView(withId(R.id.imageView))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));

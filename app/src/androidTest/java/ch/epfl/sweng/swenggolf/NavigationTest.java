@@ -185,16 +185,7 @@ public class NavigationTest {
     }
 
     private void pressBackButton() {
-        try {
-            intentRule.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    intentRule.getActivity().onBackPressed();
-                }
-            });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        TestUtility.pressBackButton(intentRule);
     }
 
     @After

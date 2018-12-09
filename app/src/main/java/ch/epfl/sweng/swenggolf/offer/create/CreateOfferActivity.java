@@ -39,6 +39,8 @@ import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -63,6 +65,7 @@ public class CreateOfferActivity extends FragmentConverter
     CreateHelper createHelper;
     View inflated;
     Offer offerToModify;
+    Offer.Builder offerBuilder;
     long creationDate;
     long endDate;
     Location location = new Location("");
@@ -93,6 +96,7 @@ public class CreateOfferActivity extends FragmentConverter
         if (bundle != null && bundle.containsKey(FUTURE_FRAGMENTS_TO_SKIP)) {
             fragmentsToSkip = bundle.getInt(FUTURE_FRAGMENTS_TO_SKIP);
         }
+
     }
 
     @Override
@@ -110,8 +114,17 @@ public class CreateOfferActivity extends FragmentConverter
         offerToModify = null;
         if (getArguments() != null) {
             offerToModify = getArguments().getParcelable(Offer.OFFER);
-        }
+            offerBuilder = new Offer.Builder(offerToModify);
+        } else {
+            offerBuilder = new Offer.Builder();
+            if (!creationAsked) {
+                final Database database = Database.getInstance();
+                ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
+                database.read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
+                        Offer.Builder.class);
+            }
 
+        }
         createHelper.preFillFields();
 
         createListeners.setListeners();
@@ -188,7 +201,7 @@ public class CreateOfferActivity extends FragmentConverter
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS){
+        if (Config.onRequestPermissionsResult(requestCode, grantResults) == GPS) {
             createHelper.attachLocation();
         }
     }
@@ -207,7 +220,7 @@ public class CreateOfferActivity extends FragmentConverter
                         (InputMethodManager) getActivity()
                                 .getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                getFragmentManager().popBackStack();
+                getActivity().onBackPressed();
                 return true;
             }
             default: {
@@ -355,4 +368,28 @@ public class CreateOfferActivity extends FragmentConverter
 
     }
 
+    @Override
+    public void close() {
+        if (offerToModify == null) {
+
+            //Get data of the offer
+            EditText nameText = findViewById(R.id.offer_name);
+            EditText descriptionText = findViewById(R.id.offer_description);
+            final String title = nameText.getText().toString();
+            final String description = descriptionText.getText().toString();
+            final Category category =
+                    Category.valueOf(categorySpinner.getSelectedItem().toString());
+            Offer.Builder builder = createHelper.getOfferBuilder(title, description, category);
+
+            if (!isOfferEmpty(builder)) {
+                Database database = Database.getInstance();
+                database.write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), builder);
+            }
+        }
+    }
+
+    private boolean isOfferEmpty(Offer.Builder builder) {
+        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
+                && builder.getTag() == Category.OTHER;
+    }
 }

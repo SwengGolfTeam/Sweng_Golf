@@ -1,17 +1,12 @@
 package ch.epfl.sweng.swenggolf.location;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -68,12 +63,13 @@ public abstract class AppLocation {
 
     /**
      * Displays the Dialog if the location is disabled.
+     *
      * @param context The Context of the App
      * @return true if active, false otherwise
      */
-    public static boolean checkLocationActive(Context context){
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+    public static boolean checkLocationActive(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             return true;
         } else {
             Config.settingsDialog(context, Config.TITLE_LOCATION,

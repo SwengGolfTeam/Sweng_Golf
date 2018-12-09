@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -68,7 +67,7 @@ public class FakeDatabase extends Database {
     private void notifyListeners(String path, String id, Object object) {
         path = path + "/" + id;
         String[] listeningToChildren = path.split("/");
-        if(!path.equals("/")){
+        if (!path.equals("/")) {
             notifyChildren(listeningToChildren);
             notifyPathListeners(path, object);
         } else {
@@ -86,7 +85,7 @@ public class FakeDatabase extends Database {
     }
 
     private String[] createChildrenPaths(String[] listenningToChildren) {
-        String[] paths = new String[listenningToChildren.length-1];
+        String[] paths = new String[listenningToChildren.length - 1];
         StringBuilder currentPath = new StringBuilder("/");
         paths[0] = currentPath.toString();
         //1 since the first slash produces an empty string
