@@ -24,7 +24,6 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
@@ -66,8 +65,8 @@ public class MessagingTest {
     public void canOpenDiscussionAndSendMessages() {
         setUpUserAndLaunchShowOffer(author);
         String greeting = "Hello";
-        AnswersTest.showOfferCustomScrollTo();
-        AnswersTest.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.open_discussion)).perform(click());
         try {
             onView(withId(R.id.open_discussion)).perform(click()); // the first click might not work

@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -24,14 +23,14 @@ public class CloseOfferTest extends ShowOfferActivityTest {
     @NonNull
     private ViewInteraction closeOffer() {
         final ViewInteraction button = onView(withId(R.id.close_offer_button));
-        AnswersTest.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         button.perform(click());
         return button;
     }
 
     @Test
     public void closeButtonVisibleWhenOfferIsOpen() {
-        AnswersTest.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.close_offer_button)).check(matches(isDisplayed()));
     }
 

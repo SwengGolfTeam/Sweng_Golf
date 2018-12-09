@@ -30,10 +30,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeUp;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
@@ -62,25 +59,6 @@ public class AnswersTest {
     private User otherUser = FilledFakeDatabase.getUser(1);
 
     /**
-     * Posts an answer on the current offer.
-     *
-     * @param answer the message to be posted
-     */
-    public static void addAnswer(String answer) {
-        showOfferCustomScrollTo();
-        onView(withId(R.id.react_button)).perform(click());
-        onView(withId(R.id.your_answer_description))
-                .perform(typeText(answer), closeSoftKeyboard());
-        onView(withId(R.id.post_button)).perform(click());
-
-    }
-
-    public static void showOfferCustomScrollTo() {
-        onView(withId(R.id.show_offer_description)).perform(swipeUp());
-        onView(withId(R.id.show_offer_description)).perform(swipeUp());
-    }
-
-    /**
      * Set up a fake database, a fake user and launch activity.
      */
     @Before
@@ -101,14 +79,14 @@ public class AnswersTest {
         newAnswers.add(new Answer(offer.getUserId(), "hey !"));
         Answers a = new Answers(newAnswers, Answers.NO_FAVORITE);
         Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), a);
-        showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         onView(withText("hey !")).check(matches(isDisplayed()));
     }
 
     @Test
     public void textOfAnswerIsCorrect() {
         String answer = "my answer";
-        addAnswer(answer);
+        TestUtility.addAnswer(answer);
         onView(withContentDescription("description0"))
                 .check(matches(withText(answer)));
     }
@@ -121,7 +99,7 @@ public class AnswersTest {
 
     @Test
     public void authorOfAnswerIsCorrect() {
-        addAnswer("I wrote this");
+        TestUtility.addAnswer("I wrote this");
         onView(withContentDescription("username0"))
                 .check(matches(withText(Config.getUser().getUserName())));
     }
@@ -130,7 +108,7 @@ public class AnswersTest {
     public void authorCanSelectAndDeselectFavorite() {
         // user A adds answer
         Config.setUser(FilledFakeDatabase.getUser(1));
-        addAnswer("test");
+        TestUtility.addAnswer("test");
 
         // user B selects Answer as favorite (with refresh of Activity to generate buttons)
         Config.setUser(author);
@@ -139,7 +117,7 @@ public class AnswersTest {
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         ViewInteraction favButton = onView(withContentDescription("fav0"));
         // user is author
         favButton.check(matches(isClickable()));
@@ -163,14 +141,14 @@ public class AnswersTest {
     public void onlyAuthorCanChooseFavorite() {
         Config.setUser(otherUser);
         // user is not author
-        addAnswer("hey!");
+        TestUtility.addAnswer("hey!");
         onView(withContentDescription("fav0"))
                 .check(matches(not(isClickable())));
     }
 
     @Test
     public void canPostMultipleAnswers() {
-        addAnswer("first answer");
+        TestUtility.addAnswer("first answer");
         // change user and reload offer
         Config.setUser(otherUser);
         FragmentTransaction transaction = mActivityRule.getActivity()
@@ -178,16 +156,16 @@ public class AnswersTest {
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        showOfferCustomScrollTo();
-        showOfferCustomScrollTo();
-        addAnswer("second answer");
-        showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
+        TestUtility.addAnswer("second answer");
+        TestUtility.showOfferCustomScrollTo();
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
     }
 
     @Test
     public void errorMessageWhenAnswerIsTooShort() {
-        addAnswer("NO");
+        TestUtility.addAnswer("NO");
         final MainMenuActivity activity = mActivityRule.getActivity();
         onView(withId(R.id.your_answer_description)).check(matches(
                 hasErrorText(activity
@@ -197,7 +175,7 @@ public class AnswersTest {
     @Test
     public void clickOnPictureLeadsToProfile() {
         Config.setUser(otherUser);
-        addAnswer("blablabla");
+        TestUtility.addAnswer("blablabla");
         onView(withContentDescription("pic0")).perform(click());
         // we are in the profile
         onView(withId(R.id.name)).check(matches(withText(otherUser.getUserName())));

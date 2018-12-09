@@ -5,7 +5,6 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
-import android.view.animation.Animation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,13 +32,10 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -111,7 +107,7 @@ public class NotificationsTest {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        AnswersTest.showOfferCustomScrollTo();
+        TestUtility.showOfferCustomScrollTo();
         onView(withContentDescription("fav0")).perform(click());
         try {
             onView(withContentDescription("fav0")).perform(click()); // try another time
@@ -216,7 +212,7 @@ public class NotificationsTest {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        AnswersTest.addAnswer(message);
+        TestUtility.addAnswer(message);
     }
 
     private void checkNotificationIsThereAndLeadsToOffer(String message) {
