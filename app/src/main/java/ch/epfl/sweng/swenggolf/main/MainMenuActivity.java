@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +16,8 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-
-import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
+import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
@@ -195,8 +193,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void skipFragments() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
+        FragmentConverter fragment = (FragmentConverter) getSupportFragmentManager()
+                .findFragmentById(R.id.centralFragment);
         final Bundle bundle = fragment.getArguments();
+        fragment.close();
         if (bundle != null && bundle.containsKey(FRAGMENTS_TO_SKIP)) {
             int nbr = bundle.getInt(FRAGMENTS_TO_SKIP);
             for (int i = 0; i < nbr; ++i) {

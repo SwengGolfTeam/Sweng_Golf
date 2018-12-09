@@ -1,7 +1,5 @@
 package ch.epfl.sweng.swenggolf.offer.answer;
 
-import ch.epfl.sweng.swenggolf.tools.Check;
-
 /**
  * Class which represents an Answer of an Offer.
  */
