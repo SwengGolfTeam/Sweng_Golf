@@ -173,7 +173,7 @@ public class ListOfferActivity extends FragmentConverter {
     }
 
     private void setRecyclerView(View inflated, final List<Category> categories) {
-        noOffers.setVisibility(View.VISIBLE);
+        noOffers.setVisibility(View.INVISIBLE);
         mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);

@@ -60,7 +60,7 @@ public class Leaderboard extends FragmentConverter {
 
 
     private void setRecyclerView(View inflated) {
-        noUser.setVisibility(View.VISIBLE);
+        noUser.setVisibility(View.INVISIBLE);
         RecyclerView mRecyclerView = inflated.findViewById(R.id.users_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
