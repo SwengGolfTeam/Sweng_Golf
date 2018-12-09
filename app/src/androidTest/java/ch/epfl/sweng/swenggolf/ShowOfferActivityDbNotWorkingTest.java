@@ -18,7 +18,6 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -53,14 +52,15 @@ public class ShowOfferActivityDbNotWorkingTest {
     @Test
     public void openProfileFromOfferShowToastOnFail() {
         database.setEntryNotWorking(Database.USERS_PATH, offer.getUserId());
-        onView(withId(R.id.show_offer_author)).perform(scrollTo(), click());
+        onView(withId(R.id.show_offer_author)).perform(click());
         testToastShow(mActivityRule, R.string.error_load_user);
     }
 
     @Test
     public void displaysErrorMessageWhenAnswersCannotBeLoaded() {
         database.setEntryNotWorking(Database.ANSWERS_PATH, offer.getUuid());
-        onView(withId(R.id.error_message)).perform(scrollTo()).check(matches(isDisplayed()));
+        TestUtility.showOfferCustomScrollTo();
+        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
     }
 
 
