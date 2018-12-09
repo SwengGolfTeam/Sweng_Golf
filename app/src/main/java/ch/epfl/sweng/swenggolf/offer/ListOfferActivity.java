@@ -173,7 +173,6 @@ public class ListOfferActivity extends FragmentConverter {
     }
 
     private void setRecyclerView(View inflated, final List<Category> categories) {
-        noOffers.setVisibility(View.INVISIBLE);
         mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -199,6 +198,7 @@ public class ListOfferActivity extends FragmentConverter {
             noOffers.setVisibility(View.VISIBLE);
             inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
         } else {
+            noOffers.setVisibility(View.GONE);
             DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
                 @Override
                 public void accept(Database db, List<Category> categories,
@@ -244,7 +244,9 @@ public class ListOfferActivity extends FragmentConverter {
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if (!offers.isEmpty()) {
+                if (offers.isEmpty()) {
+                    noOffers.setVisibility(View.VISIBLE);
+                } else {
                     noOffers.setVisibility(View.GONE);
                     mAdapter.add(offers);
                 }

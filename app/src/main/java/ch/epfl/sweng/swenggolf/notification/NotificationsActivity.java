@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Collections;
@@ -31,6 +32,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
+    private TextView noNotification;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -39,6 +41,7 @@ public class NotificationsActivity extends FragmentConverter {
         View inflated = inflater.inflate(R.layout.activity_notifications, container, false);
         setRecyclerView(inflated);
         setRefreshListener(inflated);
+        noNotification = inflated.findViewById(R.id.message_empty);
 
         return inflated;
     }
@@ -79,9 +82,6 @@ public class NotificationsActivity extends FragmentConverter {
 
         fetchNotifications(inflated);
 
-        if (mAdapter.getItemCount() == 0) {
-            inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);
-        }
     }
 
     private void fetchNotifications(final View inflated) {
@@ -90,8 +90,10 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    if (value.size() != 0) {
-                        inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
+                    if (value.isEmpty()) {
+                        noNotification.setVisibility(View.VISIBLE);
+                    } else {
+                        noNotification.setVisibility(View.GONE);
                     }
                     // so that they appear the most recent on top
                     Collections.reverse(value);
