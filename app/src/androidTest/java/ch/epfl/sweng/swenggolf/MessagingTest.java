@@ -67,6 +67,7 @@ public class MessagingTest {
         setUpUserAndLaunchShowOffer(author);
         String greeting = "Hello";
         AnswersTest.showOfferCustomScrollTo();
+        AnswersTest.showOfferCustomScrollTo();
         onView(withId(R.id.open_discussion)).perform(click());
         try {
             onView(withId(R.id.open_discussion)).perform(click()); // the first click might not work

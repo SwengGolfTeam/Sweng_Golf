@@ -179,6 +179,7 @@ public class AnswersTest {
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
         showOfferCustomScrollTo();
+        showOfferCustomScrollTo();
         addAnswer("second answer");
         showOfferCustomScrollTo();
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
