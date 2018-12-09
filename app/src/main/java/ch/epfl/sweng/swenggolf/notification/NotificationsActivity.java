@@ -51,7 +51,7 @@ public class NotificationsActivity extends FragmentConverter {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchNotifications(inflated);
+                fetchNotifications();
                 refresh.setRefreshing(false);
             }
         });
