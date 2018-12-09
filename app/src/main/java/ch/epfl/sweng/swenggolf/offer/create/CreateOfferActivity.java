@@ -371,6 +371,7 @@ public class CreateOfferActivity extends FragmentConverter
     @Override
     public void close() {
         if (offerToModify == null) {
+
             //Get data of the offer
             EditText nameText = findViewById(R.id.offer_name);
             EditText descriptionText = findViewById(R.id.offer_description);

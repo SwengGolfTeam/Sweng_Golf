@@ -193,8 +193,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void skipFragments() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
+        FragmentConverter fragment = (FragmentConverter) getSupportFragmentManager()
+                .findFragmentById(R.id.centralFragment);
         final Bundle bundle = fragment.getArguments();
+        fragment.close();
         if (bundle != null && bundle.containsKey(FRAGMENTS_TO_SKIP)) {
             int nbr = bundle.getInt(FRAGMENTS_TO_SKIP);
             for (int i = 0; i < nbr; ++i) {

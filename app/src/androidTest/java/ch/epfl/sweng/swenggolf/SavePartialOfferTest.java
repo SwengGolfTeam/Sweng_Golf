@@ -72,7 +72,8 @@ public class SavePartialOfferTest {
         Offer.Builder builder = new Offer.Builder();
         builder.setDescription("description").setTitle("Title")
                 .setUserId(Config.getUser().getUserId());
-        Database.getInstance().write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), builder);
+        Database.getInstance().write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
+                builder);
         return builder;
     }
 
@@ -102,7 +103,8 @@ public class SavePartialOfferTest {
                 fail();
             }
         };
-        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
+        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
+                listener,
         Offer.Builder.class);
     }
 
@@ -123,7 +125,8 @@ public class SavePartialOfferTest {
                 fail();
             }
         };
-        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
+        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
+                listener,
                 Offer.Builder.class);
     }
 }
