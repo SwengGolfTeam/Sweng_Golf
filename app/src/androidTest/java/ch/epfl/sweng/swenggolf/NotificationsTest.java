@@ -5,6 +5,7 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
+import android.view.animation.Animation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.notification.NotificationsAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -32,15 +34,19 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class NotificationsTest {
 
@@ -50,6 +56,7 @@ public class NotificationsTest {
     private User user1 = FilledFakeDatabase.getUser(2);
     private User user2 = FilledFakeDatabase.getUser(3);
     private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
+    private Notification notif = new Notification(NotificationType.ANSWER_POSTED,user1,offer);
 
     /**
      * Set up a fake database, a fake user, and launches activity.
@@ -59,6 +66,18 @@ public class NotificationsTest {
         Config.setUser(user1);
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         activityTestRule.launchActivity(new Intent());
+    }
+
+    @Test
+    public void refreshActuallyRefreshes() throws InterruptedException {
+        NotificationsActivity notifications = new NotificationsActivity();
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, notifications).commit();
+        Thread.sleep(1000);
+        NotificationManager.addPendingNotification(user1.getUserId(), notif);
+        onView(withId(R.id.message_empty)).check(matches(isDisplayed()));
+        onView(withId(R.id.refresh_notifications)).perform(swipeDown());
+        onView(withId(R.id.message_empty)).check(matches(not(isDisplayed())));
     }
 
     @Test

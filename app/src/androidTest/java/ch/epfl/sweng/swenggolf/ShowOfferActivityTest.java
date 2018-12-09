@@ -7,6 +7,7 @@ import android.location.Location;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -32,7 +33,9 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasPackage;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
@@ -113,5 +116,13 @@ public class ShowOfferActivityTest {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    @Test
+    public void imageDisplayedOnClick() {
+        onView(withId(R.id.show_offer_picture)).perform(scrollTo(), click());
+        onView(withId(R.id.imageView))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
     }
 }
