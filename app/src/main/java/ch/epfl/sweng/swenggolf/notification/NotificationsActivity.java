@@ -39,9 +39,10 @@ public class NotificationsActivity extends FragmentConverter {
                              Bundle savedInstance) {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.notifications);
         View inflated = inflater.inflate(R.layout.activity_notifications, container, false);
+        noNotification = inflated.findViewById(R.id.message_empty);
         setRecyclerView(inflated);
         setRefreshListener(inflated);
-        noNotification = inflated.findViewById(R.id.message_empty);
+
 
         return inflated;
     }
@@ -93,7 +94,7 @@ public class NotificationsActivity extends FragmentConverter {
                     if (value.isEmpty()) {
                         noNotification.setVisibility(View.VISIBLE);
                     } else {
-                        noNotification.setVisibility(View.GONE);
+                        noNotification.setVisibility(View.INVISIBLE);
                     }
                     // so that they appear the most recent on top
                     Collections.reverse(value);
