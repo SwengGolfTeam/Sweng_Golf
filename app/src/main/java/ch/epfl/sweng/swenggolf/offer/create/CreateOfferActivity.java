@@ -120,7 +120,7 @@ public class CreateOfferActivity extends FragmentConverter
             if (!creationAsked) {
                 final Database database = Database.getInstance();
                 ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
-                database.read(Database.OFFERS_SAVED, Config.getUser().getUserId(), listener,
+                database.read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
                         Offer.Builder.class);
             }
 
@@ -382,7 +382,7 @@ public class CreateOfferActivity extends FragmentConverter
 
             if (!isOfferEmpty(builder)) {
                 Database database = Database.getInstance();
-                database.write(Database.OFFERS_SAVED, Config.getUser().getUserId(), builder);
+                database.write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), builder);
             }
         }
     }

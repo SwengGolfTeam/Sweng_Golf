@@ -202,6 +202,7 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
+     * This method is called when the user leave this fragment (use back button or back arrow).
      * Fragments that need to do some action (e.g. save data) when the we are leaving the fragment
      * need to override this method.
      */

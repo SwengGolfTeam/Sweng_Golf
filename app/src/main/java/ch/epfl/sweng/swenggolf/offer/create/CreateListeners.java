@@ -81,7 +81,7 @@ class CreateListeners {
                             LENGTH_SHORT).show();
                     create.createHelper.updateUserScore(create.offerToModify, offer);
                     create.replaceCentralFragmentWithOffer(offer);
-                    Database.getInstance().remove("/offersSaved",
+                    Database.getInstance().remove(Database.OFFERS_SAVED_PATH,
                             Config.getUser().getUserId(), new CompletionListener() {
                                 @Override
                                 public void onComplete(DbError error) {
@@ -133,7 +133,7 @@ class CreateListeners {
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Database database = Database.getInstance();
-                        database.remove(Database.OFFERS_SAVED, Config.getUser().getUserId(),
+                        database.remove(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
                                 new CompletionListener() {
                                     @Override
                                     public void onComplete(DbError error) {
