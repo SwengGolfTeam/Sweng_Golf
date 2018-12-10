@@ -12,7 +12,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
  * A class that allows to manage the number of views of the offers.
  */
 public class OfferStats {
-    private static final int INITIAL_NB_VIEWS = 0;
+    public static final int INITIAL_NB_VIEWS = 0;
     private static final String LOG_KEY_STATISTICS = "STATS";
 
     private OfferStats() {

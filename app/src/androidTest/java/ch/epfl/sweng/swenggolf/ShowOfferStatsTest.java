@@ -51,7 +51,6 @@ public class ShowOfferStatsTest {
     @Test
     public void statsAreDisplayedOnOwnOffer() {
         offer = FilledFakeDatabase.getOffer(0);
-        OfferStats.initializeNbViews(offer);
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.centralFragment,
@@ -63,7 +62,6 @@ public class ShowOfferStatsTest {
     @Test
     public void statsAreHiddenOnNotOwnOffer() {
         offer = FilledFakeDatabase.getOffer(1);
-        OfferStats.initializeNbViews(offer);
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.centralFragment,
@@ -75,7 +73,6 @@ public class ShowOfferStatsTest {
     @Test
     public void statsAreIncremented() {
         offer = FilledFakeDatabase.getOffer(2);
-        OfferStats.initializeNbViews(offer);
 
         //visit offer n°2 with user n°0
         FragmentTransaction transaction = mActivityRule.getActivity()
@@ -97,7 +94,7 @@ public class ShowOfferStatsTest {
         ValueListener<Integer> listener = new ValueListener<Integer>() {
             @Override
             public void onDataChange(Integer nb) {
-                assert (nb == 1); // incremented once
+                assert (nb == OfferStats.INITIAL_NB_VIEWS+1); // incremented once
             }
 
             @Override

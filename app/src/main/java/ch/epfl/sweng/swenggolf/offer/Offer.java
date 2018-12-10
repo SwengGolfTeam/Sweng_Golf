@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 
+import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.profile.PointType;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 
@@ -63,8 +64,6 @@ public class Offer implements Parcelable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.isClosed = isClosed;
-
-        OfferStats.initializeNbViews(this);
     }
 
     /**
