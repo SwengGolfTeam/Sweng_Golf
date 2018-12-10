@@ -494,6 +494,7 @@ public class ShowOfferActivity extends FragmentConverter {
         database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
         database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
         DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
+        OfferStats.removeNbViews(offer);
     }
 
     private CompletionListener getRemoveOfferListerner(final boolean showToast) {

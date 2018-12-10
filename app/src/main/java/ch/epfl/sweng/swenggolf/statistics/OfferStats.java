@@ -13,9 +13,7 @@ public class OfferStats {
 
     // hidden constructor as we only have one field for these stats
     private OfferStats () {}
-    // TODO when delete offer -> delete stats as well
 
-    // TODO with completion/Value Listeners?
     public static void initializeNbViews(Offer offer){
         Database.getInstance().write(Database.STATISTICS_OFFERS_PATH, offer.getUuid(), INITIAL_NB_VIEWS);
     }
@@ -51,7 +49,6 @@ public class OfferStats {
             public void onComplete(DbError error) {
                 Log.d("STATS", "Deleted stats for offer " + offer.getUuid());
             }
-            // TODO onFail() ?
         };
         Database.getInstance().remove(Database.STATISTICS_OFFERS_PATH, offer.getUuid(), listener);
     }
