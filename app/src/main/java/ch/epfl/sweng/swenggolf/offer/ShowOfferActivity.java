@@ -54,6 +54,7 @@ import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
@@ -102,6 +103,8 @@ public class ShowOfferActivity extends FragmentConverter {
             setAnswerToPost();
         }
         fetchAnswers();
+        // TODO if author -> do not increment and display the number
+        OfferStats.updateNbViews(offer);
         return inflated;
     }
 
