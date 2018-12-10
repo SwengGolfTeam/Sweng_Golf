@@ -91,18 +91,10 @@ public class NotificationsActivity extends FragmentConverter {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    displayEmptyList(value);
+                    displayEmptyListMessage(value);
                     // so that they appear the most recent on top
                     Collections.reverse(value);
                     mAdapter.setNotifications(value);
-                }
-            }
-
-            private void displayEmptyList(List<Notification> value) {
-                if (value.isEmpty()) {
-                    noNotification.setVisibility(View.VISIBLE);
-                } else {
-                    noNotification.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -116,6 +108,14 @@ public class NotificationsActivity extends FragmentConverter {
                 .readList(NotificationManager.getNotificationPath(
                         currentUser.getUserId()), listener, Notification.class);
 
+    }
+
+    private void displayEmptyListMessage(List<Notification> value) {
+        if (value.isEmpty()) {
+            noNotification.setVisibility(View.VISIBLE);
+        } else {
+            noNotification.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void checkUserPoints() {
