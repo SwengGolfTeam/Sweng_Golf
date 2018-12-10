@@ -23,6 +23,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -123,7 +124,7 @@ public class ProfileActivityOtherUserTest {
 
     @Test
     public void canOpenListOfOffers() {
-        onView(withId(R.id.ind_offers)).perform(click());
+        onView(withId(R.id.ind_offers)).perform(scrollTo(), click());
 
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText(otherUser.getUserName()))));
