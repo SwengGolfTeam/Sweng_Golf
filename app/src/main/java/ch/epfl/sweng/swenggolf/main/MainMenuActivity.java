@@ -19,8 +19,8 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -67,6 +67,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void launchFragment() {
         Fragment offerList = new ListOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        offerList.setArguments(bundle);
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
                 manager.beginTransaction()
@@ -142,7 +145,11 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadListOwnOfferActivity(MenuItem item) {
-        replaceCentralFragment(new ListOwnOfferActivity());
+        ListOwnOfferActivity openOffers = new ListOwnOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        openOffers.setArguments(bundle);
+        replaceCentralFragment(openOffers);
     }
 
     /**
