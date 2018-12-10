@@ -65,25 +65,30 @@ class CreateHelper {
 
         if (create.offerToModify != null) {
 
-            EditText title = create.inflated.findViewById(R.id.offer_name);
-            title.setText(create.offerToModify.getTitle(), TextView.BufferType.EDITABLE);
-
-            EditText description = create.inflated.findViewById(R.id.offer_description);
-            description.setText(create.offerToModify.getDescription(),
-                    TextView.BufferType.EDITABLE);
-
-            create.categorySpinner.setSelection(create.offerToModify.getTag().ordinal());
-
-            create.location = new Location("");
-            create.location.setLatitude(create.offerToModify.getLatitude());
-            create.location.setLongitude(create.offerToModify.getLongitude());
-
-            create.creationDate = create.offerToModify.getCreationDate();
-            create.endDate = create.offerToModify.getEndDate();
-
-            checkFillConditions();
+            loadCreateOfferFields();
+            loadImage();
 
         }
+    }
+
+    void loadCreateOfferFields() {
+        EditText title = create.inflated.findViewById(R.id.offer_name);
+        title.setText(create.offerBuilder.getTitle(), TextView.BufferType.EDITABLE);
+
+        EditText description = create.inflated.findViewById(R.id.offer_description);
+        description.setText(create.offerBuilder.getDescription(),
+                TextView.BufferType.EDITABLE);
+
+        create.categorySpinner.setSelection(create.offerBuilder.getTag().ordinal());
+
+        create.location = new Location("");
+        create.location.setLatitude(create.offerBuilder.getLatitude());
+        create.location.setLongitude(create.offerBuilder.getLongitude());
+
+        create.creationDate = create.offerBuilder.getCreationDate();
+        create.endDate = create.offerBuilder.getEndDate();
+
+        checkFillConditions();
     }
 
     private void setupSpinner() {
@@ -96,7 +101,9 @@ class CreateHelper {
         if (create.location.getLatitude() == 0.0 && create.location.getLongitude() == 0.0) {
             create.setCheckbox(ON);
         }
+    }
 
+    private void loadImage() {
         ImageView picture = create.inflated.findViewById(R.id.offer_picture);
         String link = create.offerToModify.getLinkPicture();
 
@@ -112,23 +119,23 @@ class CreateHelper {
      * @param description the description of the offer
      */
     void createOfferObject(String name, String description, Category tag) {
-        Offer.Builder builder;
-        if (create.offerToModify != null) {
-            builder = new Offer.Builder(create.offerToModify);
-        } else {
-            builder = new Offer.Builder();
-        }
-
-        final Offer newOffer = builder.setUserId(Config.getUser().getUserId())
-                .setTitle(name).setDescription(description)
-                .setTag(tag).setCreationDate(create.creationDate)
-                .setEndDate(create.endDate).setLocation(create.location).build();
-
+        Offer.Builder builder = getOfferBuilder(name, description, tag);
+        final Offer newOffer = builder.build();
         if (create.filePath == null) {
             writeOffer(newOffer);
         } else {
             uploadImage(newOffer);
         }
+    }
+
+    @NonNull
+    protected Offer.Builder getOfferBuilder(String name, String description, Category tag) {
+        Offer.Builder builder = create.offerBuilder;
+        builder.setUserId(Config.getUser().getUserId())
+                .setTitle(name).setDescription(description)
+                .setTag(tag).setCreationDate(create.creationDate)
+                .setEndDate(create.endDate).setLocation(create.location);
+        return builder;
     }
 
     private void uploadImage(final Offer offer) {
@@ -188,7 +195,7 @@ class CreateHelper {
         }
 
         if (checkLocationPermission(create.getActivity())
-                & AppLocation.checkLocationActive(create.getContext())){
+                & AppLocation.checkLocationActive(create.getContext())) {
             create.location = new Location(""); // temporary location to avoid crash
             AppLocation currentLocation = AppLocation.getInstance(create.getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {

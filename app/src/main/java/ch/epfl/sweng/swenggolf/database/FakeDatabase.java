@@ -67,8 +67,12 @@ public class FakeDatabase extends Database {
     private void notifyListeners(String path, String id, Object object) {
         path = path + "/" + id;
         String[] listeningToChildren = path.split("/");
-        notifyChildren(listeningToChildren);
-        notifyPathListeners(path, object);
+        if (!path.equals("/")) {
+            notifyChildren(listeningToChildren);
+            notifyPathListeners(path, object);
+        } else {
+            notifyPathListeners("/", getList("/"));
+        }
     }
 
     private void notifyPathListeners(String path, Object object) {
@@ -81,11 +85,14 @@ public class FakeDatabase extends Database {
     }
 
     private String[] createChildrenPaths(String[] listenningToChildren) {
-        String[] paths = new String[listenningToChildren.length];
-        StringBuilder currentPath = new StringBuilder();
-        for (int i = 0; i < paths.length; ++i) {
+        String[] paths = new String[listenningToChildren.length - 1];
+        StringBuilder currentPath = new StringBuilder("/");
+        paths[0] = currentPath.toString();
+        //1 since the first slash produces an empty string
+        for (int i = 1; i < paths.length; ++i) {
+            currentPath.append(listenningToChildren[i]);
             paths[i] = currentPath.toString();
-            currentPath.append("/").append(listenningToChildren[i]);
+            currentPath.append("/");
         }
         return paths;
     }
@@ -183,7 +190,7 @@ public class FakeDatabase extends Database {
     private <T> List<T> getList(@NonNull String path) {
         List<T> list = new ArrayList<>();
         for (Map.Entry<String, Object> entry : database.entrySet()) {
-            if (entry.getKey().startsWith(path)) {
+            if (entry.getKey().startsWith(path + "/")) {
                 list.add((T) entry.getValue());
             }
         }

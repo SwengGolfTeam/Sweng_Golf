@@ -200,4 +200,13 @@ public abstract class FragmentConverter extends Fragment {
         DrawerLayout drawer = getActivity().findViewById(R.id.side_menu);
         drawer.openDrawer(GravityCompat.START);
     }
+
+    /**
+     * This method is called when the user leave this fragment (use back button or back arrow).
+     * Fragments that need to do some action (e.g. save data) when the we are leaving the fragment
+     * need to override this method.
+     */
+    public void close() {
+
+    }
 }

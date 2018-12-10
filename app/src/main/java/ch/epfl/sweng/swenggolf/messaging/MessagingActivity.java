@@ -46,11 +46,11 @@ public class MessagingActivity extends FragmentConverter {
         setRecyclerView();
         inflated.findViewById(R.id.send_message_button)
                 .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        sendMessage();
+                    }
+                });
         return inflated;
     }
 
