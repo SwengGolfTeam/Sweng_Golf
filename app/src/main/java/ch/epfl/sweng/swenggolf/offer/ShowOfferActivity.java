@@ -94,6 +94,7 @@ public class ShowOfferActivity extends FragmentConverter {
         LayoutInflater mInflater = getLayoutInflater();
         newReaction = mInflater.inflate(R.layout.reaction_you, mLayout, false);
         setContents();
+        setStats();
         setAnswersRecyclerView();
         if (offer.getIsClosed()) {
             hideReactButton();
@@ -103,11 +104,8 @@ public class ShowOfferActivity extends FragmentConverter {
             setAnswerToPost();
         }
         fetchAnswers();
-        // TODO if author -> do not increment and display the number
-        OfferStats.updateNbViews(offer);
         return inflated;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -223,6 +221,40 @@ public class ShowOfferActivity extends FragmentConverter {
             setLocation();
         }
 
+    }
+
+    private void setStats() {
+        if (userIsCreator){ // display number of views
+            ValueListener<Integer> listener = new ValueListener<Integer>() {
+                @Override
+                public void onDataChange(Integer nb) {
+                    displayStats(nb);
+                }
+
+                @Override
+                public void onCancelled(DbError error) {
+                    Log.e("STATS","Failed to load views for offer " + offer.getUuid());
+                    displayStats(0);
+                }
+            };
+
+            OfferStats.getNbViews(listener, offer);
+
+        } else { // increment number of views
+            OfferStats.updateNbViews(offer);
+            hideStats();
+        }
+    }
+
+    private void displayStats(Integer nb) {
+        TextView views = inflated.findViewById(R.id.show_offer_views);
+        views.setText("Seen "+ nb + " times");
+        views.setVisibility(View.VISIBLE);
+    }
+
+    private void hideStats(){
+        TextView views = inflated.findViewById(R.id.show_offer_views);
+        views.setVisibility(View.GONE);
     }
 
     private ValueListener<User> createFiller(final View inflated) {
