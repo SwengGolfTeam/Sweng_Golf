@@ -207,6 +207,8 @@ public abstract class Database {
 
     }
 
+    public abstract void getKeys(@NonNull String path, @NonNull  ValueListener<List<String>> listener);
+
     @NonNull
     private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {
         List<Offer> list = new ArrayList<>();

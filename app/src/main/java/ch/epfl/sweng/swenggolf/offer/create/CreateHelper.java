@@ -130,6 +130,7 @@ class CreateHelper {
 
     @NonNull
     protected Offer.Builder getOfferBuilder(String name, String description, Category tag) {
+
         Offer.Builder builder = create.offerBuilder;
         builder.setUserId(Config.getUser().getUserId())
                 .setTitle(name).setDescription(description)

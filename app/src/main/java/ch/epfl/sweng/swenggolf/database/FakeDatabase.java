@@ -185,6 +185,11 @@ public class FakeDatabase extends Database {
                 listener, categories);
     }
 
+    @Override
+    public void getKeys(@NonNull String path, @NonNull ValueListener<List<String>> listener) {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
 
     @Nullable
     private <T> List<T> getList(@NonNull String path) {

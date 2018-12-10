@@ -1,9 +1,11 @@
 package ch.epfl.sweng.swenggolf.offer.create;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,11 +19,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +46,7 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -100,7 +107,7 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         CreateListeners createListeners = new CreateListeners(this);
@@ -130,6 +137,31 @@ public class CreateOfferActivity extends FragmentConverter
         createListeners.setListeners();
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
+
+
+        Button b = inflated.findViewById(R.id.button_save_pattern);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                final View edit = inflater.inflate(R.layout.save_offer_pattern, null);
+                mBuilder.setView(edit)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                EditText text = edit
+                                        .findViewById(R.id.dialog_choose_offer_name_button);
+                                String patternName = text.getText().toString();
+                                Database.getInstance().write("/offersPattern/"
+                                + Config.getUser().getUserId(), patternName, getOfferBuilder());
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null);
+                mBuilder.setMessage(R.string.choose_name_pattern);
+                mBuilder.show();
+            }
+        });
+
         return inflated;
     }
 
@@ -165,6 +197,11 @@ public class CreateOfferActivity extends FragmentConverter
             ImageView imageView = findViewById(R.id.offer_picture);
             Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_create_offer, menu);
     }
 
     private Uri compressTemporaryFilepath() {
@@ -223,6 +260,54 @@ public class CreateOfferActivity extends FragmentConverter
                 getActivity().onBackPressed();
                 return true;
             }
+            case R.id.action_choose_template:
+                final Database database = Database.getInstance();
+                database.getKeys("/offersPattern/" + Config.getUser().getUserId(), new ValueListener<List<String>>() {
+                    @Override
+                    public void onDataChange(List<String> value) {
+                        if (!value.isEmpty()) {
+                            Log.d("DIALOG", value.toString());
+                            final String[] s = value.toArray(new String[0]);
+                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+
+                        mBuilder.setTitle("Choose a template");
+                        mBuilder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                AlertDialog dialog1 = (AlertDialog) dialog;
+                                String patternSelected = s[dialog1.getListView().getCheckedItemPosition()];
+                                database.read("/offersPattern/" + Config.getUser().getUserId(), patternSelected, new ValueListener<Offer.Builder>() {
+                                    @Override
+                                    public void onDataChange(Offer.Builder value) {
+                                        Log.d("DIALOG", value.getTitle());
+                                        offerBuilder = value;
+                                        createHelper.loadCreateOfferFields();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DbError error) {
+                                    }
+                                }, Offer.Builder.class);
+                            }
+                        });
+                        mBuilder.setNegativeButton("Cancel", null);
+                        mBuilder.setSingleChoiceItems(s, -1, null);
+                        mBuilder.show();
+                    }
+                    else {
+                            Log.d("DIALOG", "no pattern");
+                            Toast.makeText(getContext(), "There is no pattern saved.", Toast.LENGTH_LONG)
+                            .show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DbError error) {
+
+                    }
+                });
+
+                return true;
             default: {
                 return super.onOptionsItemSelected(item);
             }
@@ -372,14 +457,7 @@ public class CreateOfferActivity extends FragmentConverter
     public void close() {
         if (offerToModify == null) {
 
-            //Get data of the offer
-            EditText nameText = findViewById(R.id.offer_name);
-            EditText descriptionText = findViewById(R.id.offer_description);
-            final String title = nameText.getText().toString();
-            final String description = descriptionText.getText().toString();
-            final Category category =
-                    Category.valueOf(categorySpinner.getSelectedItem().toString());
-            Offer.Builder builder = createHelper.getOfferBuilder(title, description, category);
+            Offer.Builder builder = getOfferBuilder();
 
             if (!isOfferEmpty(builder)) {
                 Database database = Database.getInstance();
@@ -388,8 +466,20 @@ public class CreateOfferActivity extends FragmentConverter
         }
     }
 
+    @NonNull
+    private Offer.Builder getOfferBuilder() {
+        EditText nameText = findViewById(R.id.offer_name);
+        EditText descriptionText = findViewById(R.id.offer_description);
+        final String title = nameText.getText().toString();
+        final String description = descriptionText.getText().toString();
+        final Category category =
+                Category.valueOf(categorySpinner.getSelectedItem().toString());
+        return createHelper.getOfferBuilder(title, description, category);
+    }
+
     private boolean isOfferEmpty(Offer.Builder builder) {
         return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
                 && builder.getTag() == Category.OTHER;
     }
+
 }
