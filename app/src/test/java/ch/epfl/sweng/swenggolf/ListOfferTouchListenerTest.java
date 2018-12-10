@@ -2,7 +2,7 @@ package ch.epfl.sweng.swenggolf;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.swenggolf.offer.ListOfferTouchListener;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferTouchListener;
 
 
 public class ListOfferTouchListenerTest {
