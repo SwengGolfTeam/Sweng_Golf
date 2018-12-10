@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
+import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
@@ -57,6 +58,12 @@ public class MainMenuActivity extends AppCompatActivity {
         if (savedInstances == null) {
             launchFragment();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Network.updateStatus(this);
     }
 
     private void setToolBar() {
