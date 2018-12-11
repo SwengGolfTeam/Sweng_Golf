@@ -49,24 +49,18 @@ public class ShowOfferStatsTest {
     }
 
     @Test
-    public void statsAreDisplayedOnOwnOffer() {
+    public void statsAreDisplayedOnOwnOffer() throws InterruptedException {
         offer = FilledFakeDatabase.getOffer(0);
-        FragmentTransaction transaction = mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
-                .commit();
+        processTransaction(offer);
+        TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.show_offer_views)).check(matches(isDisplayed()));
     }
 
     @Test
     public void statsAreHiddenOnNotOwnOffer() {
         offer = FilledFakeDatabase.getOffer(1);
-        FragmentTransaction transaction = mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
-                .commit();
+        processTransaction(offer);
+        TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.show_offer_views)).check(matches(not(isDisplayed())));
     }
 
@@ -75,19 +69,11 @@ public class ShowOfferStatsTest {
         offer = FilledFakeDatabase.getOffer(2);
 
         //visit offer n°2 with user n°0
-        FragmentTransaction transaction = mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
-                .commit();
+        processTransaction(offer);
 
         //visit offer n°2 with user n°8 (author)
         Config.setUser(FilledFakeDatabase.getUser(8));
-        transaction = mActivityRule.getActivity()
-                .getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.centralFragment,
-                FragmentConverter.createShowOfferWithOffer(offer))
-                .commit();
+        processTransaction(offer);
 
         // test if displayed and incremented
         onView(withId(R.id.show_offer_views)).check(matches(isDisplayed()));
@@ -110,12 +96,16 @@ public class ShowOfferStatsTest {
     public void statsAreDefaultWhenDbNotWorking() {
         Database.setDebugDatabase(new FakeDatabase(false));
         offer = FilledFakeDatabase.getOffer(0);
+        processTransaction(offer);
+        TestUtility.showOfferCustomScrollTo();
+        onView(withId(R.id.show_offer_views)).check(matches(isDisplayed()));
+    }
 
+    private void processTransaction(Offer offer){
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        onView(withId(R.id.show_offer_views)).check(matches(isDisplayed()));
     }
 }
