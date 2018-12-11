@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -202,4 +201,12 @@ public abstract class FragmentConverter extends Fragment {
         drawer.openDrawer(GravityCompat.START);
     }
 
+    /**
+     * This method is called when the user leave this fragment (use back button or back arrow).
+     * Fragments that need to do some action (e.g. save data) when the we are leaving the fragment
+     * need to override this method.
+     */
+    public void close() {
+
+    }
 }

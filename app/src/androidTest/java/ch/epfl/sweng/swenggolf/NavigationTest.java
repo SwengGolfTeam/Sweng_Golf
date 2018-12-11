@@ -18,8 +18,8 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
@@ -81,6 +81,11 @@ public class NavigationTest {
 
     private void editMultipleTimes(int modifyButton, int saveButton, int numberOfIterations) {
         for (int i = 0; i < numberOfIterations; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(withId(modifyButton)).perform(click());
             onView(withId(saveButton)).perform(scrollTo(), click());
         }
@@ -185,16 +190,7 @@ public class NavigationTest {
     }
 
     private void pressBackButton() {
-        try {
-            intentRule.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    intentRule.getActivity().onBackPressed();
-                }
-            });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        TestUtility.pressBackButton(intentRule);
     }
 
     @After

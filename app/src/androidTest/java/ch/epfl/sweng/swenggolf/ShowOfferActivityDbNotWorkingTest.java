@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -28,8 +29,7 @@ public class ShowOfferActivityDbNotWorkingTest {
     private static final FakeDatabase database = new FakeDatabase(true);
     private static final User user = new User("patrick", "0", "email",
             "photo", "preference");
-    private static final Offer offer = (new Offer.Builder()).setUserId("0").setTitle("title")
-            .setDescription("description").build();
+    private static final Offer offer = FilledFakeDatabase.getOffer(0);
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);

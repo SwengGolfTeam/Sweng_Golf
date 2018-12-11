@@ -1,4 +1,4 @@
-package ch.epfl.sweng.swenggolf.offer;
+package ch.epfl.sweng.swenggolf.offer.list.own;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
-import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
+import ch.epfl.sweng.swenggolf.offer.Category;
+import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.list.DatabaseOfferConsumer;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static ch.epfl.sweng.swenggolf.profile.User.USER;
@@ -19,15 +22,15 @@ import static ch.epfl.sweng.swenggolf.profile.User.USER;
 /**
  * Fragment which shows user own offers.
  */
-public class ListOwnOfferActivity extends ListOfferActivity {
+public class ListOwnOfferTabActivity extends ListOfferActivity {
 
     private User user;
 
     @Override
-    protected void prepareOfferData(View inflated,
+    protected void prepareOfferData(boolean displayClosed, View inflated,
                                     DatabaseOfferConsumer dbConsumer, List<Category> categories) {
 
-        super.prepareOfferData(inflated, new DatabaseOfferConsumer() {
+        super.prepareOfferData(displayClosed, inflated, new DatabaseOfferConsumer() {
             @Override
             public void accept(Database db, List<Category> categories,
                                ValueListener<List<Offer>> listener) {
@@ -41,18 +44,15 @@ public class ListOwnOfferActivity extends ListOfferActivity {
                              Bundle savedInstance) {
 
         Bundle bundle = getArguments();
-        String title;
 
-        if (bundle != null) {
+        if (bundle != null && bundle.getParcelable(USER) != null) {
             user = bundle.getParcelable(USER);
-            title = user.getUserName() + "'s offers";
-        } else {
+        } else if (bundle != null) {
             user = Config.getUser();
-            title = getResources().getString(R.string.my_offers);
+            bundle.putParcelable(USER, user);
         }
 
-        View view = super.onCreateView(inflater, container, savedInstance);
-        setToolbar(R.drawable.ic_menu_black_24dp, title);
-        return view;
+        return super.onCreateView(inflater, container, savedInstance);
     }
+
 }

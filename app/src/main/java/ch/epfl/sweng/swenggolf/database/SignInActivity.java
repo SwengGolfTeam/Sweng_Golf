@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,7 +22,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.network.Network;
-import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 
 /**
  * Sign-in Activity where the user can log in his
@@ -55,7 +53,7 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Network.updateStatus(SignInActivity.this);
                 Network.checkAndDialog(SignInActivity.this);
-                if (mAuth == null & Network.getStatus()){
+                if (mAuth == null & Network.getStatus()) {
                     mAuth = FirebaseAuth.getInstance();
                     initializeMAuthListener();
                     mAuth.addAuthStateListener(mAuthListener);

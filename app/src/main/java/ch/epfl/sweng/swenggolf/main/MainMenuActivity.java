@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,13 +16,13 @@ import com.squareup.picasso.Picasso;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-
-import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
+import ch.epfl.sweng.swenggolf.network.Network;
+import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -61,6 +60,12 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Network.updateStatus(this);
+    }
+
     private void setToolBar() {
         android.support.v7.widget.Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
@@ -69,6 +74,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void launchFragment() {
         Fragment offerList = new ListOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        offerList.setArguments(bundle);
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
                 manager.beginTransaction()
@@ -144,7 +152,11 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadListOwnOfferActivity(MenuItem item) {
-        replaceCentralFragment(new ListOwnOfferActivity());
+        ListOwnOfferActivity openOffers = new ListOwnOfferActivity();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        openOffers.setArguments(bundle);
+        replaceCentralFragment(openOffers);
     }
 
     /**
@@ -195,8 +207,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void skipFragments() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.centralFragment);
+        FragmentConverter fragment = (FragmentConverter) getSupportFragmentManager()
+                .findFragmentById(R.id.centralFragment);
         final Bundle bundle = fragment.getArguments();
+        fragment.close();
         if (bundle != null && bundle.containsKey(FRAGMENTS_TO_SKIP)) {
             int nbr = bundle.getInt(FRAGMENTS_TO_SKIP);
             for (int i = 0; i < nbr; ++i) {
