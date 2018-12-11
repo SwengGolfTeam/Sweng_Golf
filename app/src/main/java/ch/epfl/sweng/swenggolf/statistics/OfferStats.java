@@ -59,7 +59,12 @@ public class OfferStats {
 
             @Override
             public void onCancelled(DbError error) {
-                Log.e(LOG_KEY_STATISTICS, "Failed to update views for offer " + offer.getUuid());
+                if (error == DbError.DATA_DOES_NOT_EXIST) {
+                    Log.d("RETRO-COMPATIBILITY", "Stats generated for old offer " + offer.getUuid());
+                    OfferStats.initializeNbViews(offer);
+                } else {
+                    Log.e(LOG_KEY_STATISTICS, "Failed to update views for offer " + offer.getUuid());
+                }
             }
         };
 

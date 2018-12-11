@@ -233,7 +233,12 @@ public class ShowOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onCancelled(DbError error) {
-                    Log.e("STATS","Failed to load views for offer " + offer.getUuid());
+                    if (error == DbError.DATA_DOES_NOT_EXIST){
+                        OfferStats.initializeNbViews(offer);
+                        Log.d("RETRO-COMPATIBILITY", "Stats generated for old offer "+offer.getUuid());
+                    } else {
+                        Log.e("STATS", "Failed to load views for offer " + offer.getUuid());
+                    }
                     displayStats(0);
                 }
             };
