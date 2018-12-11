@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -206,6 +207,8 @@ public abstract class Database {
                 new AttributeFilter("userId", offerCreator));
 
     }
+
+    public abstract void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener);
 
     @NonNull
     private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {

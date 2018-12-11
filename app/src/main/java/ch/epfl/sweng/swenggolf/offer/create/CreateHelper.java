@@ -15,13 +15,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.storage.Storage;
@@ -164,6 +171,36 @@ class CreateHelper {
         Database database = Database.getInstance();
         CompletionListener listener = listeners.createWriteOfferListener(offer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+        sendNotificationToFollowers();
+    }
+
+    private void sendNotificationToFollowers() {
+        // 1. load list of followers
+        // 2. search the ones that contain your name
+        // 3. send notifications to them
+
+        ValueListener<Map<String, List<String>>> followerListener = new ValueListener<Map<String, List<String>>>() {
+            @Override
+            public void onDataChange(Map<String, List<String>> value) {
+                // TODO we should actually read a List of List, which is not currently permitted with the methods in Database
+                // -> implement another method for that in Database
+                // -> read about the different queries we can make
+                for (Map.Entry<String, List<String>> userFollowing : value.entrySet()) {
+                    for (String userId : userFollowing.getValue()) {
+                        if (userId.equals(Config.getUser().getUserId())) {
+                            NotificationManager.addPendingNotification(userFollowing.getKey(),
+                                    new Notification(NotificationType.TEST, null, null)); // TODO
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // TODO que faire ?
+            }
+        };
+        Database.getInstance().readFollowers(followerListener);
     }
 
     /**

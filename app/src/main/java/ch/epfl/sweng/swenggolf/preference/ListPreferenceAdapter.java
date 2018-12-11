@@ -69,7 +69,7 @@ public class ListPreferenceAdapter
                 Log.d("DBError", "Failed to load users");
             }
         };
-        d.readList("/followers/" + Config.getUser().getUserId(), getFollowingList, String.class);
+        d.readList(Database.FOLLOWERS_PATH + "/" + Config.getUser().getUserId(), getFollowingList, String.class);
     }
 
     @NonNull

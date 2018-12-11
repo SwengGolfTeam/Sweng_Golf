@@ -201,10 +201,40 @@ public final class FireDatabase extends Database {
             listener.onDataChange(new ArrayList<Offer>());
         }
         for (int i = 0; i < categories.size(); ++i) {
+            // TODO change the ordering to put the most recent on top?
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
             readListQuery(listener, query, Offer.class, false);
         }
     }
+
+    @Override
+    public void readFollowers(@NonNull final ValueListener<Map<String, List<String>>> listener) {
+        checkInternetConnectionValue(listener);
+        final DatabaseReference ref = database.getReference(FOLLOWERS_PATH);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String, List<String>> usersFollowing = new HashMap<>();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String key = userSnapshot.getKey();
+                        usersFollowing.put(key, new ArrayList<String>());
+                        for (DataSnapshot followerSnapshot : userSnapshot.getChildren()) {
+                            usersFollowing.get(key).add(followerSnapshot.getKey());
+                        }
+                    }
+                }
+                Log.d("FOLLOW", Boolean.toString(usersFollowing.isEmpty()));
+                listener.onDataChange(usersFollowing);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onCancelled(DbError.getError(databaseError));
+            }
+        });
+    }
+
 
     private <T> void readListQuery(
             @NonNull final ValueListener<List<T>> listener, Query query,
@@ -212,7 +242,7 @@ public final class FireDatabase extends Database {
         checkInternetConnectionValue(listener);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<T> list = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot offer : dataSnapshot.getChildren()) {
@@ -226,7 +256,7 @@ public final class FireDatabase extends Database {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 listener.onCancelled(DbError.getError(databaseError));
             }
         });

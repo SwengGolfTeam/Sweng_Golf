@@ -185,6 +185,11 @@ public class FakeDatabase extends Database {
                 listener, categories);
     }
 
+    @Override
+    public void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener) {
+        // TODO
+    }
+
 
     @Nullable
     private <T> List<T> getList(@NonNull String path) {
