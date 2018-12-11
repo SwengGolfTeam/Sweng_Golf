@@ -80,7 +80,7 @@ public class ShowOfferStatsTest {
         ValueListener<Integer> listener = new ValueListener<Integer>() {
             @Override
             public void onDataChange(Integer nb) {
-                assert (nb == OfferStats.INITIAL_NB_VIEWS+1); // incremented once
+                assert (nb == OfferStats.INITIAL_NB_VIEWS + 1); // incremented once
             }
 
             @Override
@@ -101,7 +101,30 @@ public class ShowOfferStatsTest {
         onView(withId(R.id.show_offer_views)).check(matches(isDisplayed()));
     }
 
-    private void processTransaction(Offer offer){
+    @Test
+    public void initializeStatsAfterDataNotFound() {
+        Offer newOffer = (new Offer.Builder()).setTitle("title")
+                .setDescription("description").setUserId("userid").setUuid("newid").build();
+        OfferStats.manageRetrocompatibility(DbError.DATA_DOES_NOT_EXIST, newOffer);
+
+        ValueListener<Integer> listener = new ValueListener<Integer>() {
+            @Override
+            public void onDataChange(Integer nb) {
+                assert (nb == OfferStats.INITIAL_NB_VIEWS); // exists
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        };
+
+        OfferStats.getNbViews(listener, newOffer);
+        // Check that following call does not throw exception
+        OfferStats.manageRetrocompatibility(DbError.DISCONNECTED, newOffer);
+    }
+
+    private void processTransaction(Offer offer) {
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.centralFragment,
