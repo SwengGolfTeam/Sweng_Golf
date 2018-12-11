@@ -103,10 +103,10 @@ public class ListOfferActivity extends FragmentConverter {
         final View inflated = inflater.inflate(R.layout.activity_list_offer, container, false);
 
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.offers);
-        if (getArguments() != null) {
+        if(getArguments() != null) {
             displayClosed = getArguments().getBoolean(DISPLAY_CLOSED_BUNDLE_KEY);
             User offersBelongTo = getArguments().getParcelable(User.USER);
-            if (offersBelongTo != null) {
+            if(offersBelongTo != null) {
                 setToolbar(R.drawable.ic_menu_black_24dp,
                         offersBelongTo.getUserName() + "'s offers");
             }
@@ -150,7 +150,7 @@ public class ListOfferActivity extends FragmentConverter {
         inflater.inflate(R.menu.menu_list_offers, menu);
         HashSet<Category> previouslyCheckedCategories = new HashSet<>(checkedCategories);
         addAllCategoriesToMenu(R.id.menu_offers);
-        if (!previouslyCheckedCategories.equals(new HashSet<>(checkedCategories))) {
+        if(!previouslyCheckedCategories.equals(new HashSet<>(checkedCategories))) {
             updateData(getView(), checkedCategories);
         }
     }
@@ -281,8 +281,9 @@ public class ListOfferActivity extends FragmentConverter {
                 if (offers.isEmpty()) {
                     noOffers.setVisibility(View.VISIBLE);
                 } else {
-                    noOffers.setVisibility(View.GONE);
-                    mAdapter.add(offers);
+                    offers = filterClosedOffers(offers);
+                    int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
+                    noOffers.setVisibility(noOffersVisibility);
                 }
 
             }
@@ -299,8 +300,8 @@ public class ListOfferActivity extends FragmentConverter {
 
     private List<Offer> filterClosedOffers(List<Offer> toBeFiltered) {
         ArrayList<Offer> filtered = new ArrayList<>();
-        for (Offer offer : toBeFiltered) {
-            if (!displayClosed ^ offer.getIsClosed()) {
+        for(Offer offer : toBeFiltered) {
+            if(!displayClosed ^ offer.getIsClosed()) {
                 filtered.add(offer);
             }
         }
