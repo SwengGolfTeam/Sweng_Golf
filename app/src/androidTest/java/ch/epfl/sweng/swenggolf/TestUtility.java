@@ -77,6 +77,7 @@ public final class TestUtility {
      * since scrollTo is not permitted with a NestedScrollView.
      */
     public static void showOfferCustomScrollTo() {
+        onView(withId(R.id.show_offer_picture)).perform(swipeUp());
         onView(withId(R.id.show_offer_description)).perform(swipeUp());
         onView(withId(R.id.show_offer_description)).perform(swipeUp());
     }
