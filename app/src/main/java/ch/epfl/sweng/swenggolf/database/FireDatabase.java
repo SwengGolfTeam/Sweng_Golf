@@ -224,7 +224,6 @@ public final class FireDatabase extends Database {
                         }
                     }
                 }
-                Log.d("FOLLOW", Boolean.toString(usersFollowing.isEmpty()));
                 listener.onDataChange(usersFollowing);
             }
 
