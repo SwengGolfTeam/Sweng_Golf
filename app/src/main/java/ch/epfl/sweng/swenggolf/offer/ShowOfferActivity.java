@@ -209,6 +209,11 @@ public class ShowOfferActivity extends FragmentConverter {
                     Picasso.with(getContext()).load(Uri.parse(offer.getLinkPicture()))
                             .into(photoView);
                     mBuilder.setView(mView);
+                    mBuilder.setNegativeButton("quit",  new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // user cancelled the dialog
+                        }
+                    });
                     AlertDialog mDialog = mBuilder.create();
                     mDialog.show();
                 }

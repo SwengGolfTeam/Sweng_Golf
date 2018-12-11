@@ -201,7 +201,6 @@ public class ListOfferActivity extends FragmentConverter {
     }
 
     private void setRecyclerView(View inflated, final List<Category> categories) {
-        noOffers.setVisibility(View.VISIBLE);
         mRecyclerView = inflated.findViewById(R.id.offers_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -226,6 +225,7 @@ public class ListOfferActivity extends FragmentConverter {
             noOffers.setVisibility(View.VISIBLE);
             inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
         } else {
+            noOffers.setVisibility(View.GONE);
             DatabaseOfferConsumer dbConsumer = new DatabaseOfferConsumer() {
                 @Override
                 public void accept(Database db, List<Category> categories,
@@ -278,9 +278,10 @@ public class ListOfferActivity extends FragmentConverter {
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                offers = filterClosedOffers(offers);
-                int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
-                noOffers.setVisibility(noOffersVisibility);
+                if (! offers.isEmpty()) {
+                    showEmptyMessage(offers);
+                }
+
             }
 
             @Override
@@ -291,6 +292,16 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
+    }
+
+    private void showEmptyMessage(List<Offer> offers) {
+        if (offers.isEmpty()) {
+            noOffers.setVisibility(View.VISIBLE);
+        } else {
+            offers = filterClosedOffers(offers);
+            int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
+            noOffers.setVisibility(noOffersVisibility);
+        }
     }
 
     private List<Offer> filterClosedOffers(List<Offer> toBeFiltered) {
