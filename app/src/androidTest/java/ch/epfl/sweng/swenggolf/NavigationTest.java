@@ -81,6 +81,11 @@ public class NavigationTest {
 
     private void editMultipleTimes(int modifyButton, int saveButton, int numberOfIterations) {
         for (int i = 0; i < numberOfIterations; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             onView(withId(modifyButton)).perform(click());
             onView(withId(saveButton)).perform(scrollTo(), click());
         }

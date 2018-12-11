@@ -35,6 +35,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -181,6 +182,7 @@ public class CreateOfferActivityTest {
         Offer testOffer = new Offer.Builder().setUserId(Config.getUser().getUserId())
                 .setTitle("Test").setDescription("Test").build();
         Database.getInstance().write("/offers", testOffer.getUuid(), testOffer);
+        OfferStats.initializeNbViews(testOffer);
         Fragment offer = FragmentConverter.createShowOfferWithOffer(testOffer);
         if (setToOtherThanOwner) {
             User u = new User("username",
