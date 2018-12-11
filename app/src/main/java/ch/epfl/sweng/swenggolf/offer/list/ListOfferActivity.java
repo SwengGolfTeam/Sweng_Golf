@@ -278,12 +278,8 @@ public class ListOfferActivity extends FragmentConverter {
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if (offers.isEmpty()) {
-                    noOffers.setVisibility(View.VISIBLE);
-                } else {
-                    offers = filterClosedOffers(offers);
-                    int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
-                    noOffers.setVisibility(noOffersVisibility);
+                if (! offers.isEmpty()) {
+                    showEmptyMessage(offers);
                 }
 
             }
@@ -296,6 +292,16 @@ public class ListOfferActivity extends FragmentConverter {
                 errorMessage.setVisibility(View.VISIBLE);
             }
         };
+    }
+
+    private void showEmptyMessage(List<Offer> offers) {
+        if (offers.isEmpty()) {
+            noOffers.setVisibility(View.VISIBLE);
+        } else {
+            offers = filterClosedOffers(offers);
+            int noOffersVisibility = mAdapter.add(offers) ? View.VISIBLE : View.GONE;
+            noOffers.setVisibility(noOffersVisibility);
+        }
     }
 
     private List<Offer> filterClosedOffers(List<Offer> toBeFiltered) {
