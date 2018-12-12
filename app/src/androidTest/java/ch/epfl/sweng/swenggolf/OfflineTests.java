@@ -14,6 +14,7 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.network.Network;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -57,6 +58,8 @@ public class OfflineTests {
         Config.goToTest();
         Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
         Config.setUser(FilledFakeDatabase.getUser(0));
+        UserStats initStats = new UserStats();
+        initStats.write(Config.getUser().getUserId());
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));
