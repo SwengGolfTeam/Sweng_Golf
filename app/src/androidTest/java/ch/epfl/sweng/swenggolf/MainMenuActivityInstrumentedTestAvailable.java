@@ -41,6 +41,9 @@ public class MainMenuActivityInstrumentedTestAvailable {
     public final ActivityTestRule<MainMenuActivity> mMenuRule =
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
+    /**
+     * Inits a Debugdatabase and creates the stats for the user.
+     */
     @Before
     public void setUp() {
         Config.setUser(new User("usernameValid", "userIdValid", "emailValid", "photoValid"));
