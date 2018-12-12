@@ -78,7 +78,7 @@ public class OfferPatternTest {
         onView(withText(name2)).perform(click());
         onView(withText(R.string.accept)).perform(click());
 
-        onView(withId(R.id.offer_title)).check(matches(withText(builder2.getTitle())));
+        onView(withId(R.id.offer_name)).check(matches(withText(builder2.getTitle())));
     }
 
     private void openPatternChoice() {
