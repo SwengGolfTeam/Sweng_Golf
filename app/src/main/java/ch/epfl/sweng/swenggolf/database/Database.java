@@ -215,7 +215,8 @@ public abstract class Database {
      * @param path     the path where we want to get the keys
      * @param listener the listener to retrieve the keys
      */
-    public abstract void getKeys(@NonNull String path, @NonNull ValueListener<List<String>> listener);
+    public abstract void getKeys(@NonNull String path,
+                                 @NonNull ValueListener<List<String>> listener);
 
     @NonNull
     private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {

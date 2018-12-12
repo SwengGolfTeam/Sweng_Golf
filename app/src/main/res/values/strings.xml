@@ -91,4 +91,6 @@
     <string name="accept">Accept</string>
     <string name="create_pattern_error_empty">You should at least provide a title, a description or a category to save this offer as a pattern.</string>
     <string name="error_no_pattern_saved">There is no pattern saved.</string>
+    <string name="can_not_load_pattern">Could not load the pattern.</string>
+    <string name="can_not_load_pattern_list">Can not load the list of pattern</string>
 </resources>

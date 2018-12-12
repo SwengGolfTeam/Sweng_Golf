@@ -47,13 +47,15 @@ public class OfferPatternTest {
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     private User user = FilledFakeDatabase.getUser(3);
+    private FakeDatabase database;
 
     /**
      * Set up the fake database and a fake user.
      */
     @Before
     public void setup() {
-        Database.setDebugDatabase(new FakeDatabase(true));
+        database = new FakeDatabase(true);
+        Database.setDebugDatabase(database);
         Config.setUser(user);
         intentsTestRule.launchActivity(new Intent());
         FragmentConverter fragment = (FragmentConverter)
@@ -95,10 +97,11 @@ public class OfferPatternTest {
         onView(withId(R.id.offer_description)).perform(typeText(description));
         onView(withId(R.id.button_save_pattern)).perform(scrollTo(), click());
         onView(withId(R.id.dialog_choose_offer_name_edit)).perform(typeText(patternName));
-        onView(withText(R.string.save)).perform(click());
+        onView(withText(R.string.save)).perform(scrollTo(), click());
 
         Database database = Database.getInstance();
-        database.read(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(), patternName,
+        database.read(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(),
+                patternName,
                 new ValueListener<Offer.Builder>() {
 
                     @Override
@@ -132,9 +135,30 @@ public class OfferPatternTest {
         onView(withId(R.id.offer_name)).perform(typeText("Hello"));
         onView(withId(R.id.button_save_pattern)).perform(scrollTo(), click());
         final ViewInteraction editText = onView(withId(R.id.dialog_choose_offer_name_edit));
-        editText.perform(typeText("This is a pattern name"));
+        editText.perform(scrollTo(), typeText("This is a pattern name"));
         editText.perform(clearText());
         onView(withText(R.string.save)).check(matches(not(isEnabled())));
+    }
+
+    @Test
+    public void showToastWhenCantLoadPattern() {
+        Offer.Builder builder = new Offer.Builder();
+        String patternName = "name";
+        Database.getInstance().write(Database.OFFERS_PATTERN_PATH + "/"
+                        + Config.getUser().getUserId(),patternName, builder);
+
+        openPatternChoice();
+        database.setWorking(false);
+        onView(withText(patternName)).perform(scrollTo(), click());
+        onView(withText(R.string.accept)).perform(scrollTo(), click());
+        TestUtility.testToastShow(intentsTestRule, R.string.can_not_load_pattern);
+    }
+
+    @Test
+    public void showToastWhenCantloadPatternList() {
+        database.setWorking(false);
+        openPatternChoice();
+        TestUtility.testToastShow(intentsTestRule, R.string.can_not_load_pattern_list);
     }
 
 }

@@ -122,10 +122,9 @@ public class CreateOfferActivity extends FragmentConverter
         } else {
             offerBuilder = new Offer.Builder();
             if (!creationAsked) {
-                final Database database = Database.getInstance();
                 ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
-                database.read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
-                        Offer.Builder.class);
+                Database.getInstance().read(Database.OFFERS_SAVED_PATH,
+                        Config.getUser().getUserId(), listener, Offer.Builder.class);
             }
 
         }
@@ -393,7 +392,7 @@ public class CreateOfferActivity extends FragmentConverter
 
             Offer.Builder builder = getOfferBuilder();
 
-            if (!isOfferEmpty(builder)) {
+            if (!CreateHelper.isOfferEmpty(builder)) {
                 Database database = Database.getInstance();
                 database.write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), builder);
             }
@@ -409,11 +408,6 @@ public class CreateOfferActivity extends FragmentConverter
         final Category category =
                 Category.valueOf(categorySpinner.getSelectedItem().toString());
         return createHelper.getOfferBuilder(title, description, category);
-    }
-
-    boolean isOfferEmpty(Offer.Builder builder) {
-        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
-                && builder.getTag() == Category.OTHER;
     }
 
 }

@@ -110,7 +110,7 @@ class CreateListeners {
      *
      * @return a listener
      */
-    public ValueListener<Offer.Builder> restoreOfferListener() {
+     ValueListener<Offer.Builder> restoreOfferListener() {
         return new ValueListener<Offer.Builder>() {
             @Override
             public void onDataChange(final Offer.Builder value) {
@@ -126,12 +126,16 @@ class CreateListeners {
         };
     }
 
-    public View.OnClickListener savePatternListener() {
+    /**
+     * If the offer is not empty, ask him to enter a name for the new pattern.
+     * @return the listener
+     */
+     View.OnClickListener savePatternListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Offer.Builder offerBuilder = create.getOfferBuilder();
-                if (create.isOfferEmpty(offerBuilder)) {
+                if (CreateHelper.isOfferEmpty(offerBuilder)) {
                     Toast.makeText(create.getContext(), R.string.create_pattern_error_empty,
                             Toast.LENGTH_LONG).show();
                 } else {
@@ -141,13 +145,18 @@ class CreateListeners {
         };
     }
 
-    public ValueListener<List<String>> loadPattern() {
+    /**
+     * Ask the user to choose a pattern to load.
+     * @return the listener
+     */
+     ValueListener<List<String>> loadPattern() {
         return new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {
                 if (!value.isEmpty()) {
                     final String[] s = value.toArray(new String[0]);
-                    android.app.AlertDialog.Builder mBuilder = new android.app.AlertDialog.Builder(create.getContext());
+                    android.app.AlertDialog.Builder mBuilder =
+                            new android.app.AlertDialog.Builder(create.getContext());
                     mBuilder.setTitle(R.string.choose_a_template);
                     mBuilder.setPositiveButton(R.string.accept, acceptLoadPatternListener(s));
                     mBuilder.setNegativeButton(R.string.cancel, null);
@@ -164,7 +173,8 @@ class CreateListeners {
 
             @Override
             public void onCancelled(DbError error) {
-
+                Toast.makeText(create.getContext(), R.string.can_not_load_pattern_list,
+                        Toast.LENGTH_LONG).show();
             }
         };
     }
@@ -188,6 +198,8 @@ class CreateListeners {
 
                             @Override
                             public void onCancelled(DbError error) {
+                                Toast.makeText(create.getContext(), R.string.can_not_load_pattern,
+                                        Toast.LENGTH_LONG).show();
                             }
                         }, Offer.Builder.class);
             }
