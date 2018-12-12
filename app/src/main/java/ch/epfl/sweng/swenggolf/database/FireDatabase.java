@@ -157,7 +157,11 @@ public final class FireDatabase extends Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 T value = dataSnapshot.getValue(c);
-                listener.onDataChange(value);
+                if (value == null) {
+                    listener.onCancelled(DbError.DATA_DOES_NOT_EXIST);
+                } else {
+                    listener.onDataChange(value);
+                }
             }
 
             @Override

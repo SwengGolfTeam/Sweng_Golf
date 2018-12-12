@@ -8,6 +8,7 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 
 /**
  * FakeDatabase filled for tests purposes.
@@ -242,6 +243,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
         }
         for (Offer offer : FAKE_OFFERS) {
             write(Database.OFFERS_PATH, offer.getUuid(), offer);
+            write(Database.STATISTICS_OFFERS_PATH, offer.getUuid(), OfferStats.INITIAL_NB_VIEWS);
         }
         for (User user : USER_ZERO_FOLLOWS) {
             String uid = user.getUserId();
