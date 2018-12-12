@@ -87,4 +87,8 @@
     <string name="save_as_pattern">Save as pattern</string>
     <string name="cancel">Cancel</string>
     <string name="choose_name_pattern">Choose a name for the new offer pattern</string>
+    <string name="choose_a_template">Choose a template</string>
+    <string name="accept">Accept</string>
+    <string name="create_pattern_error_empty">You should at least provide a title, a description or a category to save this offer as a pattern.</string>
+    <string name="error_no_pattern_saved">There is no pattern saved.</string>
 </resources>

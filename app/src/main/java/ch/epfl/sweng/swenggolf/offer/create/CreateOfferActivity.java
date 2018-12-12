@@ -18,7 +18,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -143,22 +146,51 @@ public class CreateOfferActivity extends FragmentConverter
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-                final View edit = inflater.inflate(R.layout.save_offer_pattern, null);
-                mBuilder.setView(edit)
-                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                EditText text = edit
-                                        .findViewById(R.id.dialog_choose_offer_name_button);
-                                String patternName = text.getText().toString();
-                                Database.getInstance().write("/offersPattern/"
-                                + Config.getUser().getUserId(), patternName, getOfferBuilder());
+                final Offer.Builder offerBuilder = getOfferBuilder();
+                if(isOfferEmpty(offerBuilder)) {
+                    Toast.makeText(getContext(), R.string.create_pattern_error_empty,
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                    final View edit = inflater.inflate(R.layout.save_offer_pattern, null);
+                    final EditText text = edit.findViewById(R.id.dialog_choose_offer_name_edit);
+                    mBuilder.setView(edit)
+                            .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String patternName = text.getText().toString();
+                                    Database.getInstance().write(Database.OFFERS_PATTERN_PATH
+                                            + "/" + Config.getUser().getUserId(), patternName, offerBuilder);
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null);
+                    mBuilder.setMessage(R.string.choose_name_pattern);
+                    final AlertDialog dialog = mBuilder.show();
+                    final Button acceptButton  = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    acceptButton.setEnabled(false);
+                    text.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            //Nothing
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            //Nothing
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            if(TextUtils.isEmpty(s)) {
+                                acceptButton.setEnabled(false);
                             }
-                        })
-                        .setNegativeButton(R.string.cancel, null);
-                mBuilder.setMessage(R.string.choose_name_pattern);
-                mBuilder.show();
+                            else {
+                                acceptButton.setEnabled(true);
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -262,7 +294,7 @@ public class CreateOfferActivity extends FragmentConverter
             }
             case R.id.action_choose_template:
                 final Database database = Database.getInstance();
-                database.getKeys("/offersPattern/" + Config.getUser().getUserId(), new ValueListener<List<String>>() {
+                database.getKeys(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(), new ValueListener<List<String>>() {
                     @Override
                     public void onDataChange(List<String> value) {
                         if (!value.isEmpty()) {
@@ -270,13 +302,13 @@ public class CreateOfferActivity extends FragmentConverter
                             final String[] s = value.toArray(new String[0]);
                         AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
 
-                        mBuilder.setTitle("Choose a template");
-                        mBuilder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                        mBuilder.setTitle(R.string.choose_a_template);
+                        mBuilder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 AlertDialog dialog1 = (AlertDialog) dialog;
                                 String patternSelected = s[dialog1.getListView().getCheckedItemPosition()];
-                                database.read("/offersPattern/" + Config.getUser().getUserId(), patternSelected, new ValueListener<Offer.Builder>() {
+                                database.read(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(), patternSelected, new ValueListener<Offer.Builder>() {
                                     @Override
                                     public void onDataChange(Offer.Builder value) {
                                         Log.d("DIALOG", value.getTitle());
@@ -290,15 +322,17 @@ public class CreateOfferActivity extends FragmentConverter
                                 }, Offer.Builder.class);
                             }
                         });
-                        mBuilder.setNegativeButton("Cancel", null);
+                        mBuilder.setNegativeButton(R.string.cancel, null);
                         mBuilder.setSingleChoiceItems(s, -1, null);
                         mBuilder.show();
+
                     }
                     else {
                             Log.d("DIALOG", "no pattern");
-                            Toast.makeText(getContext(), "There is no pattern saved.", Toast.LENGTH_LONG)
+                            Toast.makeText(getContext(), R.string.error_no_pattern_saved, Toast.LENGTH_LONG)
                             .show();
                         }
+
                     }
 
                     @Override

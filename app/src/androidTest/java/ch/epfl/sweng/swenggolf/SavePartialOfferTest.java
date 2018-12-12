@@ -125,8 +125,7 @@ public class SavePartialOfferTest {
                 fail();
             }
         };
-        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
-                listener,
+        Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
                 Offer.Builder.class);
     }
 }

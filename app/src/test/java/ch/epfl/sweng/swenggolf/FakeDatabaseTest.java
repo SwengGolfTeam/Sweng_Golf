@@ -339,10 +339,52 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DbError error) {
+            public void onCancelled(DbError error) {;
 
             }
         };
         database.readOffers(li);
+    }
+
+    @Test
+    public void getKeysTwoKeys() {
+        String path = Database.OFFERS_PATTERN_PATH + "/username";
+        final String key1 = "Key1";
+        final String key2 = "Key2";
+        String value1 = "value1";
+        String value2 = "value2";
+        Database database = new FakeDatabase(true);
+        database.write(path,key1,value1);
+        database.write(path, key2, value2);
+        database.getKeys(path, new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                assertThat(value.size(), is(2));
+                assertTrue(value.contains(key1));
+                assertTrue(value.contains(key2));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        });
+    }
+
+    @Test
+    public void getKeysNotWorking() {
+        Database database = new FakeDatabase(false);
+        database.getKeys(Database.OFFERS_PATTERN_PATH, new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                fail();
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.UNKNOWN_ERROR));
+            }
+        });
+
     }
 }
