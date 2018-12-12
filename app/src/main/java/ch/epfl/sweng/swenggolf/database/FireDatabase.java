@@ -87,6 +87,7 @@ public final class FireDatabase extends Database {
     @Override
     public void getKeys(@NonNull String path, @NonNull final ValueListener<List<String>> listener) {
 
+        checkInternetConnectionValue(listener);
         database.getReference(path).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

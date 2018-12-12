@@ -3,12 +3,14 @@ package ch.epfl.sweng.swenggolf;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
+import org.mockito.internal.matchers.Any;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -280,6 +282,85 @@ public class FireDatabaseTest {
 
         FireDatabase d = new FireDatabase(database);
         d.readOffers(listener, new ArrayList<Category>());
+    }
+
+    @Test
+    public void getKeysReturnError() {
+        Answer<Void> errorAnswer = new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener listener = invocation.getArgument(0);
+                listener.onCancelled(DatabaseError.fromCode(DatabaseError.NETWORK_ERROR));
+                return null;
+            }
+        };
+
+        FirebaseDatabase database = setupAnswerGetKeys(errorAnswer);
+
+        FireDatabase fireDatabase = new FireDatabase(database);
+        fireDatabase.getKeys("path", new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                fail();
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.NETWORK_ERROR));
+            }
+        });
+    }
+
+    @Test
+    public void getKeysReturnCorrectValues() {
+        final List<String> keys = new ArrayList<>();
+        keys.add("1");
+        keys.add("2");
+        keys.add("42");
+        Answer<Void> answer = new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                ValueEventListener listener = invocation.getArgument(0);
+                DataSnapshot dataSnapshotList = mock(DataSnapshot.class);
+                List<DataSnapshot> list = new ArrayList<>();
+                for(String key : keys){
+                    DataSnapshot snapshotKey = mock(DataSnapshot.class);
+                    when(snapshotKey.getKey()).thenReturn(key);
+                    list.add(snapshotKey);
+                }
+                when(dataSnapshotList.getChildren()).thenReturn(list);
+                listener.onDataChange(dataSnapshotList);
+                return null;
+            }
+        };
+        FirebaseDatabase database = setupAnswerGetKeys(answer);
+
+        FireDatabase fireDatabase = new FireDatabase(database);
+        fireDatabase.getKeys("path", new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                assertThat(value, is(keys));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        });
+
+
+    }
+
+    @NonNull
+    private FirebaseDatabase setupAnswerGetKeys(Answer<Void> errorAnswer) {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        DatabaseReference reference = mock(DatabaseReference.class);
+        when(database.getReference(anyString())).thenReturn(reference);
+
+
+        doAnswer(errorAnswer).when(reference)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
+        return database;
     }
 
     private void setUpQuery(FirebaseDatabase database) {
