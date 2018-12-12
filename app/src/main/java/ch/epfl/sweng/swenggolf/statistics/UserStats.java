@@ -57,50 +57,50 @@ public class UserStats {
         return stats.size();
     }
 
-    public void write(User user) {
-        Log.d(LOG_KEY_STATISTICS, "write stats for user "+user.getUserId());
+    public void write(String userId) {
+        Log.d(LOG_KEY_STATISTICS, "write stats for user "+userId);
         Database.getInstance()
-                .write(Database.STATISTICS_USERS_PATH, user.getUserId(), this);
+                .write(Database.STATISTICS_USERS_PATH, userId, this);
     }
 
-    public static void read(final ValueListener<UserStats> listener, User user) {
-        Log.d(LOG_KEY_STATISTICS, "read stats for user "+user.getUserId());
+    public static void read(final ValueListener<UserStats> listener, String userId) {
+        Log.d(LOG_KEY_STATISTICS, "read stats for user "+userId);
         Database.getInstance()
-                .read(Database.STATISTICS_USERS_PATH, user.getUserId(), listener, UserStats.class);
+                .read(Database.STATISTICS_USERS_PATH, userId, listener, UserStats.class);
     }
 
-    public static void updateStat(final Stats stat, final User user, final int nb){
+
+    public static void updateStat(final Stats stat, final String userId, final int nb){
         ValueListener<UserStats> listener = new ValueListener<UserStats>() {
             @Override
             public void onDataChange(UserStats stats) {
-                Log.d(LOG_KEY_STATISTICS, "Updated "+stat.toString()+" for user " + user.getUserId());
+                Log.d(LOG_KEY_STATISTICS, "Updated "+stat.toString()+" for user " + userId);
                 int oldValue = stats.getValue(stat);
                 stats.put(stat, oldValue+nb);
-                stats.write(user);
+                stats.write(userId);
             }
 
             @Override
             public void onCancelled(DbError error) {
-                checkBackwardsCompatibility(error, user);
+                checkBackwardsCompatibility(error, userId);
             }
         };
 
-        read(listener, user);
+        read(listener, userId);
     }
 
-    public static void checkBackwardsCompatibility(DbError error, User user) {
+    public static void checkBackwardsCompatibility(DbError error, String userId) {
         if (error == DbError.DATA_DOES_NOT_EXIST){
             UserStats initStats = new UserStats();
-            initStats.write(user);
-            Log.d(LOG_KEY_STATISTICS, "Stats generated for user "+user.getUserId());
+            initStats.write(userId);
+            Log.d(LOG_KEY_STATISTICS, "Stats generated for user "+userId);
         } else {
-            Log.e(LOG_KEY_STATISTICS, "Failed to load stats for user " + user.getUserId());
+            Log.e(LOG_KEY_STATISTICS, "Failed to load stats for user " + userId);
         }
     }
 
-
     public enum Stats {
-        CREATED_OFFERS("Offers created"),
+        OFFERS_CREATED("Offers created"),
         OFFERS_CLOSED("Offers closed"),
         OFFERS_DELETED("Offers deleted"),
         OFFERS_READ("Offers read"),

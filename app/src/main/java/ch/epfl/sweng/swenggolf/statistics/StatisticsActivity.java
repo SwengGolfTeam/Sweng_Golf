@@ -33,7 +33,7 @@ public class StatisticsActivity extends FragmentConverter {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
-        setToolbar(R.drawable.ic_baseline_arrow_back_24px, user.getUserName());
+        setToolbar(R.drawable.ic_baseline_arrow_back_24px, "Statistics");
         inflated = inflater.inflate(R.layout.activity_statistics, container, false);
         getStats();
         return inflated;
@@ -81,11 +81,11 @@ public class StatisticsActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                UserStats.checkBackwardsCompatibility(error, user);
+                UserStats.checkBackwardsCompatibility(error, user.getUserId());
                 setRecyclerView(new UserStats()); // default values no need to reload
             }
         };
-        UserStats.read(listener, user);
+        UserStats.read(listener, user.getUserId());
     }
 }
 

@@ -30,6 +30,7 @@ import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
@@ -209,6 +210,9 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setMessage(hint)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        if (pos != NO_FAVORITE) {
+                            UserStats.updateStat(UserStats.Stats.ANSWERS_ACCEPTED, answers.getUserOfPosition(pos), 1);
+                        }
                         writeFavPos(pos);
 
                     }
