@@ -16,7 +16,7 @@ import ch.epfl.sweng.swenggolf.profile.User;
  * A class that allows to manage the statistics of a User.
  */
 public class UserStats {
-    private static final Integer INITIAL_VALUE = 0;
+    public static final Integer INITIAL_VALUE = 0;
     private static final String LOG_KEY_STATISTICS = "USER_STATS";
     private HashMap<String, Integer> stats;
 

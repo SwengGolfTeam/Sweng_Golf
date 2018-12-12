@@ -17,6 +17,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -50,6 +51,9 @@ public class ProfileActivityOtherUserTest {
     public void setUp() {
         Config.setUser(user);
         Database.setDebugDatabase(database);
+        UserStats initStats = new UserStats();
+        initStats.write(user.getUserId());
+        initStats.write(otherUser.getUserId());
         mActivityRule.launchActivity(new Intent());
         profile = FragmentConverter.createShowProfileWithProfile(otherUser);
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()

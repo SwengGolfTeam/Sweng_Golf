@@ -49,7 +49,7 @@ public class ShowOfferStatsTest {
     }
 
     @Test
-    public void statsAreDisplayedOnOwnOffer() throws InterruptedException {
+    public void statsAreDisplayedOnOwnOffer() {
         offer = FilledFakeDatabase.getOffer(0);
         processTransaction(offer);
         TestUtility.showOfferCustomScrollTo();

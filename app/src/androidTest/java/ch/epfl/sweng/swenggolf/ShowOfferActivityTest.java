@@ -25,6 +25,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -62,6 +63,8 @@ public class ShowOfferActivityTest {
         Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
         Config.setUser(user);
+        UserStats initStats = new UserStats();
+        initStats.write(user.getUserId());
         mActivityRule.launchActivity(new Intent());
         FragmentTransaction transaction = mActivityRule.getActivity()
                 .getSupportFragmentManager().beginTransaction();
