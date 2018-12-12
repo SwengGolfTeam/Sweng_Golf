@@ -20,6 +20,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -50,6 +51,8 @@ public class CategoriesMenuTest {
         database.write("/offers", "idoftheoffer1", offer1);
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
+        UserStats initStats = new UserStats();
+        initStats.write(Config.getUser().getUserId());
         DatabaseUser.addUser(Config.getUser());
     }
 

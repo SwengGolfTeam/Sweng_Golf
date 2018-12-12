@@ -15,6 +15,7 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -46,6 +47,10 @@ public class WaitingActivityTest {
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
         DatabaseUser.addUser(USERDB);
+        Config.setUser(USERDB);
+        UserStats initStats = new UserStats();
+        initStats.write(USERDB.getUserId());
+        initStats.write(USERNOTDB.getUserId());
     }
 
     @Test

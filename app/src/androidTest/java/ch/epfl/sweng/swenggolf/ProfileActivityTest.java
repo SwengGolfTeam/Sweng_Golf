@@ -21,6 +21,7 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -61,6 +62,8 @@ public class ProfileActivityTest {
         Database database = FakeDatabase.fakeDatabaseCreator();
         Storage storage = new FakeStorage(true);
         Database.setDebugDatabase(database);
+        UserStats initStats = new UserStats();
+        initStats.write(user.getUserId());
         Storage.setDebugStorage(storage);
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()

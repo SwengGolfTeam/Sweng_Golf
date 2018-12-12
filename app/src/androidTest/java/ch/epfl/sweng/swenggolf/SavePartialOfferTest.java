@@ -18,6 +18,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -48,6 +49,8 @@ public class SavePartialOfferTest {
     public void setup() {
         Database.setDebugDatabase(new FakeDatabase(true));
         Config.setUser(user);
+        UserStats initStats = new UserStats();
+        initStats.write(user.getUserId());
     }
 
     private void launchCreateOffer() {

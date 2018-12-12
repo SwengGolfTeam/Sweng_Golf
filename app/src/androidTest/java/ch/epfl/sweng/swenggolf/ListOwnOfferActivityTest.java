@@ -18,6 +18,7 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -52,6 +53,8 @@ public class ListOwnOfferActivityTest {
         database.write(Database.OFFERS_PATH, oppositeOffer.getUuid(), oppositeOffer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer);
         Config.setUser(user);
+        UserStats initStats = new UserStats();
+        initStats.write(Config.getUser().getUserId());
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, new ListOwnOfferActivity()).commit();

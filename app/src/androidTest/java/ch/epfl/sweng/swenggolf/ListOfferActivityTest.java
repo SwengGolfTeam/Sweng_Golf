@@ -32,6 +32,7 @@ import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
@@ -99,6 +100,8 @@ public class ListOfferActivityTest {
         Database.setDebugDatabase(database);
         Config.setUser(new User("aaa", "user_id", "ccc", "ddd"));
         DatabaseUser.addUser(Config.getUser());
+        UserStats initStats = new UserStats();
+        initStats.write(Config.getUser().getUserId());
     }
 
     /**

@@ -1,9 +1,11 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -44,21 +47,22 @@ public class MessagingTest {
 
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
-            new IntentsTestRule<>(MainMenuActivity.class, false, true);
+            new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
     /**
      * Write some answers to the offer in the database, with the first one accepted.
      */
-    @BeforeClass
-    public static void setUp() {
-        Database.setDebugDatabase(FakeDatabase.fakeDatabaseCreator());
+    @Before
+    public void setUp() {
+        Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
         Answers answers = new Answers(Arrays.asList(
                 new Answer(acceptedUser.getUserId(), "I am blue"),
                 new Answer(otherUser.getUserId(), "dabedidabeda")),
                 0);
-
+        Config.setUser(author);
         Database.getInstance().write(Database.ANSWERS_PATH,
                 offer.getUuid(), answers);
+        mActivityRule.launchActivity(new Intent());
     }
 
     @Test

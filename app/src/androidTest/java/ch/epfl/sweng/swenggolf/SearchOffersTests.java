@@ -12,6 +12,7 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -31,6 +32,8 @@ public class SearchOffersTests {
     @Before
     public void setup() {
         Database.setDebugDatabase(database);
+        UserStats initStats = new UserStats();
+        initStats.write(Config.getUser().getUserId());
         mActivityRule.launchActivity(new Intent());
     }
 

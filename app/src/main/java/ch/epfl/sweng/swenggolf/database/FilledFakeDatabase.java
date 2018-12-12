@@ -9,6 +9,7 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 /**
  * FakeDatabase filled for tests purposes.
@@ -240,6 +241,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
         super(true);
         for (User user : FAKE_USERS) {
             write(Database.USERS_PATH, user.getUserId(), new User(user));
+            write(Database.STATISTICS_USERS_PATH, user.getUserId(), new UserStats());
         }
         for (Offer offer : FAKE_OFFERS) {
             write(Database.OFFERS_PATH, offer.getUuid(), offer);
