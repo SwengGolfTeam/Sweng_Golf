@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.SignInActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -55,11 +56,6 @@ public class OfflineTests {
         Config.quitTest();
         Intents.init();
         Config.goToTest();
-        Network.setFalseforTest(false);
-        Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
-        Config.setUser(FilledFakeDatabase.getUser(0));
-        UserStats initStats = new UserStats();
-        initStats.write(Config.getUser().getUserId());
         Network.setFalseforTest(true);
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());

@@ -44,7 +44,9 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
-        UserStats.updateStat(UserStats.Stats.LOGIN, Config.getUser().getUserId(), 1);
+        if(!Config.isTest()) {
+            UserStats.updateStat(UserStats.Stats.LOGIN, Config.getUser().getUserId(), 1);
+        }
         NetworkReceiver.registerReceiver(this, new NetworkReceiver());
         setContentView(R.layout.activity_main_menu);
         setToolBar();
