@@ -22,6 +22,7 @@ import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -95,9 +96,11 @@ public class OfferPatternTest {
         String patternName = "My super pattern";
         onView(withId(R.id.offer_name)).perform(typeText(title));
         onView(withId(R.id.offer_description)).perform(typeText(description));
+        closeSoftKeyboard();
         onView(withId(R.id.button_save_pattern)).perform(scrollTo(), click());
         onView(withId(R.id.dialog_choose_offer_name_edit)).perform(typeText(patternName));
-        onView(withText(R.string.save)).perform(scrollTo(), click());
+        closeSoftKeyboard();
+        onView(withText(R.string.save)).perform(click());
 
         Database database = Database.getInstance();
         database.read(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(),
@@ -133,9 +136,10 @@ public class OfferPatternTest {
     @Test
     public void canNotCreatePatternWithEmptyName() {
         onView(withId(R.id.offer_name)).perform(typeText("Hello"));
+        closeSoftKeyboard();
         onView(withId(R.id.button_save_pattern)).perform(scrollTo(), click());
         final ViewInteraction editText = onView(withId(R.id.dialog_choose_offer_name_edit));
-        editText.perform(scrollTo(), typeText("This is a pattern name"));
+        editText.perform(typeText("This is a pattern name"));
         editText.perform(clearText());
         onView(withText(R.string.save)).check(matches(not(isEnabled())));
     }
