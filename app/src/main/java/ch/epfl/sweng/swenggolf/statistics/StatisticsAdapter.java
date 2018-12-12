@@ -10,7 +10,8 @@ import android.widget.TextView;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.TwoFieldsViewHolder;
 
-public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.StatisticsViewHolder> {
+public class StatisticsAdapter extends
+        RecyclerView.Adapter<StatisticsAdapter.StatisticsViewHolder> {
     private UserStats stats;
 
     public StatisticsAdapter(UserStats stats) {

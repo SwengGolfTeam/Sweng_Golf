@@ -144,11 +144,10 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
-     * Creates a StatisticsActivity with all information needed.
+     * Creates a StatisticsActivity for a specific User.
      *
-     * TODO: change javadoc
-     *
-     * @return a new StatisticsActivity with the user and about the offer
+     * @param user the user for which we want the stats
+     * @return a new StatisticsActivity with all statistics for the User
      */
     public static StatisticsActivity createStatisticsActivityWithUser(User user) {
         StatisticsActivity fragment = fillFragment(new StatisticsActivity(), User.USER, user);

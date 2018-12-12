@@ -211,7 +211,8 @@ public class ListAnswerAdapter extends RecyclerView.Adapter<ListAnswerAdapter.An
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (pos != NO_FAVORITE) {
-                            UserStats.updateStat(UserStats.Stats.ANSWERS_ACCEPTED, answers.getUserOfPosition(pos), 1);
+                            UserStats.updateStat(UserStats.Stats.ANSWERS_ACCEPTED,
+                                    answers.getUserOfPosition(pos), 1);
                         }
                         writeFavPos(pos);
 
