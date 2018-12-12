@@ -55,7 +55,7 @@ public class WaitingActivityTest {
 
     @Test
     public void canGoToCreate() {
-        Config.setUser(new User(USERNOTDB));
+        Config.setUser(USERNOTDB);
         Config.setActivityCallback(new ActivityCallback() {
             @Override
             public void isDone() {
