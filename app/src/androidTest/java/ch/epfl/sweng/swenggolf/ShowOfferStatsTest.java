@@ -105,7 +105,7 @@ public class ShowOfferStatsTest {
     public void initializeStatsAfterDataNotFound() {
         Offer newOffer = (new Offer.Builder()).setTitle("title")
                 .setDescription("description").setUserId("userid").setUuid("newid").build();
-        OfferStats.manageRetrocompatibility(DbError.DATA_DOES_NOT_EXIST, newOffer);
+        OfferStats.checkBackwardsCompatibility(DbError.DATA_DOES_NOT_EXIST, newOffer);
 
         ValueListener<Integer> listener = new ValueListener<Integer>() {
             @Override
@@ -121,7 +121,7 @@ public class ShowOfferStatsTest {
 
         OfferStats.getNbViews(listener, newOffer);
         // Check that following call does not throw exception
-        OfferStats.manageRetrocompatibility(DbError.DISCONNECTED, newOffer);
+        OfferStats.checkBackwardsCompatibility(DbError.DISCONNECTED, newOffer);
     }
 
     private void processTransaction(Offer offer) {

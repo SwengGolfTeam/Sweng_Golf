@@ -238,7 +238,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onCancelled(DbError error) {
-                    OfferStats.manageRetrocompatibility(error, offer);
+                    OfferStats.checkBackwardsCompatibility(error, offer);
                     displayStats(0);
                 }
             };

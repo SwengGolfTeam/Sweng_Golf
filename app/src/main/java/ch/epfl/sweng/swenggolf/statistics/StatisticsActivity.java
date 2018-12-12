@@ -10,15 +10,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
-import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.offer.answer.Answer;
-import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -86,7 +81,8 @@ public class StatisticsActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                setRecyclerView(new UserStats()); // default values
+                UserStats.checkBackwardsCompatibility(error, user);
+                setRecyclerView(new UserStats()); // default values no need to reload
             }
         };
         UserStats.read(listener, user);

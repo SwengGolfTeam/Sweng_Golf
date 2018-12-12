@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.profile.User;
 
 public class UserStats {
     private static final Integer INITIAL_VALUE = 0;
-    private static final String LOG_KEY_STATISTICS = "STATS";
+    private static final String LOG_KEY_STATISTICS = "USER_STATS";
     private HashMap<String, Integer> stats;
 
     public UserStats(){
@@ -81,11 +81,21 @@ public class UserStats {
 
             @Override
             public void onCancelled(DbError error) {
-                // manageRetrocompatibility(error, offer);
+                checkBackwardsCompatibility(error, user);
             }
         };
 
         read(listener, user);
+    }
+
+    public static void checkBackwardsCompatibility(DbError error, User user) {
+        if (error == DbError.DATA_DOES_NOT_EXIST){
+            UserStats initStats = new UserStats();
+            initStats.write(user);
+            Log.d(LOG_KEY_STATISTICS, "Stats generated for user "+user.getUserId());
+        } else {
+            Log.e(LOG_KEY_STATISTICS, "Failed to load stats for user " + user.getUserId());
+        }
     }
 
 
