@@ -20,6 +20,9 @@ public class UserStats {
     private static final String LOG_KEY_STATISTICS = "USER_STATS";
     private HashMap<String, Integer> stats;
 
+    /**
+     * Builds the stats with the default value for all of them.
+     */
     public UserStats(){
         setMap(new HashMap<String, Integer>());
         for(Stats stat: Stats.values()){
@@ -43,11 +46,6 @@ public class UserStats {
     public HashMap<String, Integer> getMap(){
         return stats;
     }
-
-    /*@Exclude
-    public Collection<Integer> getValues(){
-        return stats.values();
-    }*/
 
     /**
      * Returns the i-th key of the Map.
