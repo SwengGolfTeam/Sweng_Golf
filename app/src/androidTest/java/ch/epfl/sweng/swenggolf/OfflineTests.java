@@ -54,12 +54,13 @@ public class OfflineTests {
     public void listOfferCheckDialog() {
         Config.quitTest();
         Intents.init();
-        Network.setFalseforTest(true);
         Config.goToTest();
+        Network.setFalseforTest(false);
         Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
         Config.setUser(FilledFakeDatabase.getUser(0));
         UserStats initStats = new UserStats();
         initStats.write(Config.getUser().getUserId());
+        Network.setFalseforTest(true);
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));

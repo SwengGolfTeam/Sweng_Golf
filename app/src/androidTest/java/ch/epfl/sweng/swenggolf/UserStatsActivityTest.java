@@ -36,6 +36,9 @@ public class UserStatsActivityTest {
     public IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
 
+    /**
+     * Sets up the database and the launches the activity.
+     */
     @Before
     public void setUp() {
         Database.setDebugDatabase(FilledFakeDatabase.fakeDatabaseCreator());
@@ -95,10 +98,5 @@ public class UserStatsActivityTest {
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createStatisticsActivityWithUser(user))
                 .commit();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
