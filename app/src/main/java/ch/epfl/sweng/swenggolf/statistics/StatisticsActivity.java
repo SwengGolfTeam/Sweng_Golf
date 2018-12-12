@@ -40,8 +40,7 @@ public class StatisticsActivity extends FragmentConverter {
                              Bundle savedInstance) {
         setToolbar(R.drawable.ic_baseline_arrow_back_24px, user.getUserName());
         inflated = inflater.inflate(R.layout.activity_statistics, container, false);
-        setRecyclerView();
-        //TODO inflate with different Stats
+        getStats();
         return inflated;
     }
 
@@ -61,42 +60,36 @@ public class StatisticsActivity extends FragmentConverter {
         }
     }
 
-    private void setRecyclerView() {
+    private void setRecyclerView(UserStats stats) {
         RecyclerView mRecyclerView = inflated.findViewById(R.id.statistics);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        UserStats test = new UserStats();
-        statisticsAdapter = new StatisticsAdapter(test);
+        statisticsAdapter = new StatisticsAdapter(stats);
         mRecyclerView.setAdapter(statisticsAdapter);
-
 
         // Add dividing line
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this.getContext(), LinearLayoutManager.VERTICAL));
     }
 
-    //TODO retrieve Stats in database
-    /*private void fetchMessages() {
-        ValueListener<Answers> messageListener = new ValueListener<Answers>() {
+    private void getStats() {
+        ValueListener<UserStats> listener = new ValueListener<UserStats>() {
             @Override
-            public void onDataChange(Answers value) {
-                if (value != null) {
-                    messagesAdapter.setAnswers(value);
+            public void onDataChange(UserStats stats) {
+                if (stats != null) {
+                    setRecyclerView(stats);
                 }
             }
 
             @Override
             public void onCancelled(DbError error) {
+                setRecyclerView(new UserStats()); // default values
             }
         };
-        Database.getInstance().listen(Database.MESSAGES_PATH, offerId,
-                messageListener, Answers.class);
-        messagesAdapter.setUpdateListener(messageListener);
-    }*/
-
-
+        UserStats.read(listener, user);
+    }
 }
 

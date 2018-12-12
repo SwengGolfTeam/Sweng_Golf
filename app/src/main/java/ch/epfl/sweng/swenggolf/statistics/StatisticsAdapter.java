@@ -7,16 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.tools.TwoFieldsViewHolder;
 
 public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.StatisticsViewHolder> {
-    private ArrayList<Integer> stats;
+    private UserStats stats;
 
     public StatisticsAdapter(UserStats stats) {
-        this.stats = new ArrayList<>(stats.values());
+        this.stats = stats;
     }
 
     @NonNull
@@ -31,11 +29,12 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.St
     @Override
     public void onBindViewHolder(
             @NonNull StatisticsViewHolder statisticsViewHolder, int i) {
+        UserStats.Stats key = stats.getKey(i);
         TextView text = (TextView) statisticsViewHolder.getFieldOne();
-        text.setText(UserStats.Stats.values()[i].getText());
+        text.setText(key.getText());
 
         TextView value = (TextView) statisticsViewHolder.getFieldTwo();
-        value.setText(stats.get(i).toString());
+        value.setText(stats.getValue(key).toString());
     }
 
     @Override
@@ -43,14 +42,12 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.St
         return stats.size();
     }
 
+
     /**
      * Representation of a row of the recyclerview.
      */
     public static class StatisticsViewHolder extends TwoFieldsViewHolder {
-
-
-        public StatisticsViewHolder(@NonNull View itemView, int textId,
-                                    int valueId) {
+        public StatisticsViewHolder(@NonNull View itemView, int textId, int valueId) {
             super(itemView, textId, valueId);
         }
 
