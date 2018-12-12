@@ -25,6 +25,7 @@ import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.StatisticsActivity;
 
 /**
  * Class adding functionalities to work with the MainMenuActivity
@@ -139,6 +140,18 @@ public abstract class FragmentConverter extends Fragment {
             Offer offer, User user) {
         MessagingActivity fragment = fillFragment(new MessagingActivity(), User.USER, user);
         fragment.getArguments().putString(Offer.OFFER, offer.getUuid());
+        return fragment;
+    }
+
+    /**
+     * Creates a StatisticsActivity with all information needed.
+     *
+     * TODO: change javadoc
+     *
+     * @return a new StatisticsActivity with the user and about the offer
+     */
+    public static StatisticsActivity createStatisticsActivityWithUser(User user) {
+        StatisticsActivity fragment = fillFragment(new StatisticsActivity(), User.USER, user);
         return fragment;
     }
 

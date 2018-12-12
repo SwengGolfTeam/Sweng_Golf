@@ -138,6 +138,15 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
+     * Launches the StatisticsActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void loadStatisticsActivity(MenuItem item) {
+        replaceCentralFragment(FragmentConverter.createStatisticsActivityWithUser(user));
+    }
+
+    /**
      * Launches the ShowOffersActivity.
      *
      * @param item the menu item that triggers the activity
