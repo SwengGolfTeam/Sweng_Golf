@@ -153,8 +153,8 @@ public class OfferPatternTest {
 
         openPatternChoice();
         database.setWorking(false);
-        onView(withText(patternName)).perform(scrollTo(), click());
-        onView(withText(R.string.accept)).perform(scrollTo(), click());
+        onView(withText(patternName)).perform(click());
+        onView(withText(R.string.accept)).perform(click());
         TestUtility.testToastShow(intentsTestRule, R.string.can_not_load_pattern);
     }
 
