@@ -335,7 +335,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
      */
     public static List<Offer> getClosedOffers() {
         List<Offer> closedOffers = new ArrayList<>();
-        for(Offer offer : FAKE_OFFERS) {
+        for (Offer offer : FAKE_OFFERS) {
             if (offer.getIsClosed()) {
                 closedOffers.add(offer);
             }

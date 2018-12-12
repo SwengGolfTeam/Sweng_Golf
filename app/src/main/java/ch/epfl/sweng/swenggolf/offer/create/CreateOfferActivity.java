@@ -1,11 +1,9 @@
 package ch.epfl.sweng.swenggolf.offer.create;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -18,11 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +43,6 @@ import java.util.List;
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.Database;
-import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -87,6 +80,7 @@ public class CreateOfferActivity extends FragmentConverter
     TextView errorMessage;
     private TextView dateText;
     private int fragmentsToSkip;
+    private CreateListeners createListeners;
 
     /**
      * Replace the central fragment by an Offer.
@@ -113,7 +107,7 @@ public class CreateOfferActivity extends FragmentConverter
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        CreateListeners createListeners = new CreateListeners(this);
+        createListeners = new CreateListeners(this);
         createHelper = new CreateHelper(this, createListeners);
 
         inflated = inflater.inflate(R.layout.activity_create_offer,
@@ -141,58 +135,8 @@ public class CreateOfferActivity extends FragmentConverter
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
 
-
         Button b = inflated.findViewById(R.id.button_save_pattern);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Offer.Builder offerBuilder = getOfferBuilder();
-                if(isOfferEmpty(offerBuilder)) {
-                    Toast.makeText(getContext(), R.string.create_pattern_error_empty,
-                            Toast.LENGTH_LONG).show();
-                }
-                else {
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-                    final View edit = inflater.inflate(R.layout.save_offer_pattern, null);
-                    final EditText text = edit.findViewById(R.id.dialog_choose_offer_name_edit);
-                    mBuilder.setView(edit)
-                            .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String patternName = text.getText().toString();
-                                    Database.getInstance().write(Database.OFFERS_PATTERN_PATH
-                                            + "/" + Config.getUser().getUserId(), patternName, offerBuilder);
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, null);
-                    mBuilder.setMessage(R.string.choose_name_pattern);
-                    final AlertDialog dialog = mBuilder.show();
-                    final Button acceptButton  = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    acceptButton.setEnabled(false);
-                    text.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            //Nothing
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            //Nothing
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            if(TextUtils.isEmpty(s)) {
-                                acceptButton.setEnabled(false);
-                            }
-                            else {
-                                acceptButton.setEnabled(true);
-                            }
-                        }
-                    });
-                }
-            }
-        });
+        b.setOnClickListener(createListeners.savePatternListener());
 
         return inflated;
     }
@@ -294,52 +238,8 @@ public class CreateOfferActivity extends FragmentConverter
             }
             case R.id.action_choose_template:
                 final Database database = Database.getInstance();
-                database.getKeys(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(), new ValueListener<List<String>>() {
-                    @Override
-                    public void onDataChange(List<String> value) {
-                        if (!value.isEmpty()) {
-                            Log.d("DIALOG", value.toString());
-                            final String[] s = value.toArray(new String[0]);
-                        AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
-
-                        mBuilder.setTitle(R.string.choose_a_template);
-                        mBuilder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                AlertDialog dialog1 = (AlertDialog) dialog;
-                                String patternSelected = s[dialog1.getListView().getCheckedItemPosition()];
-                                database.read(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(), patternSelected, new ValueListener<Offer.Builder>() {
-                                    @Override
-                                    public void onDataChange(Offer.Builder value) {
-                                        Log.d("DIALOG", value.getTitle());
-                                        offerBuilder = value;
-                                        createHelper.loadCreateOfferFields();
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DbError error) {
-                                    }
-                                }, Offer.Builder.class);
-                            }
-                        });
-                        mBuilder.setNegativeButton(R.string.cancel, null);
-                        mBuilder.setSingleChoiceItems(s, -1, null);
-                        mBuilder.show();
-
-                    }
-                    else {
-                            Log.d("DIALOG", "no pattern");
-                            Toast.makeText(getContext(), R.string.error_no_pattern_saved, Toast.LENGTH_LONG)
-                            .show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DbError error) {
-
-                    }
-                });
+                database.getKeys(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(),
+                        createListeners.loadPattern());
 
                 return true;
             default: {
@@ -501,7 +401,7 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
     @NonNull
-    private Offer.Builder getOfferBuilder() {
+    Offer.Builder getOfferBuilder() {
         EditText nameText = findViewById(R.id.offer_name);
         EditText descriptionText = findViewById(R.id.offer_description);
         final String title = nameText.getText().toString();
@@ -511,7 +411,7 @@ public class CreateOfferActivity extends FragmentConverter
         return createHelper.getOfferBuilder(title, description, category);
     }
 
-    private boolean isOfferEmpty(Offer.Builder builder) {
+    boolean isOfferEmpty(Offer.Builder builder) {
         return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
                 && builder.getTag() == Category.OTHER;
     }

@@ -189,17 +189,16 @@ public class FakeDatabase extends Database {
     @Override
     public void getKeys(@NonNull String path, @NonNull ValueListener<List<String>> listener) {
         Set<String> keys = new TreeSet<>();
-        for(String key : database.keySet()) {
-            if(key.startsWith(path)) {
+        for (String key : database.keySet()) {
+            if (key.startsWith(path)) {
                 key = key.split(path)[1];
-                        key = key.split("/")[1];
+                key = key.split("/")[1];
                 keys.add(key);
             }
         }
-        if(working){
+        if (working) {
             listener.onDataChange(new ArrayList<>(keys));
-        }
-        else {
+        } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
     }

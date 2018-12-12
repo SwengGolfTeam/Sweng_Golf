@@ -92,7 +92,7 @@ public final class FireDatabase extends Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> keys = new ArrayList<>();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     keys.add(snapshot.getKey());
                 }
                 listener.onDataChange(keys);
