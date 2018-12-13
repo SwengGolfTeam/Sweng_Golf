@@ -120,6 +120,7 @@ public class ProfileActivityTest {
     private void canEditField(int editTextId, final User newUser, String newText) {
         onView(withId(R.id.edit_profile)).perform(click());
         Espresso.closeSoftKeyboard();
+        onView(withId(editTextId)).perform(scrollTo());
         onView(withId(editTextId)).perform(replaceText(newText)).perform(closeSoftKeyboard());
         onView(withId(R.id.saveButton)).perform(scrollTo(), click());
         ValueListener vl = new ValueListener() {

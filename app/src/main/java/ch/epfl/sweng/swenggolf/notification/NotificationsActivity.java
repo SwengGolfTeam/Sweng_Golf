@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Collections;
@@ -31,14 +32,17 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
  */
 public class NotificationsActivity extends FragmentConverter {
     private NotificationsAdapter mAdapter;
+    private TextView noNotification;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         setToolbar(R.drawable.ic_menu_black_24dp, R.string.notifications);
         View inflated = inflater.inflate(R.layout.activity_notifications, container, false);
+        noNotification = inflated.findViewById(R.id.message_empty);
         setRecyclerView(inflated);
         setRefreshListener(inflated);
+
 
         return inflated;
     }
@@ -48,7 +52,7 @@ public class NotificationsActivity extends FragmentConverter {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchNotifications(inflated);
+                fetchNotifications();
                 refresh.setRefreshing(false);
             }
         });
@@ -77,22 +81,17 @@ public class NotificationsActivity extends FragmentConverter {
 
         checkUserPoints();
 
-        fetchNotifications(inflated);
+        fetchNotifications();
 
-        if (mAdapter.getItemCount() == 0) {
-            inflated.findViewById(R.id.message_empty).setVisibility(View.VISIBLE);
-        }
     }
 
-    private void fetchNotifications(final View inflated) {
+    private void fetchNotifications() {
         User currentUser = Config.getUser();
         ValueListener<List<Notification>> listener = new ValueListener<List<Notification>>() {
             @Override
             public void onDataChange(List<Notification> value) {
                 if (value != null) {
-                    if (value.size() != 0) {
-                        inflated.findViewById(R.id.message_empty).setVisibility(View.GONE);
-                    }
+                    displayEmptyListMessage(value);
                     // so that they appear the most recent on top
                     Collections.reverse(value);
                     mAdapter.setNotifications(value);
@@ -109,6 +108,14 @@ public class NotificationsActivity extends FragmentConverter {
                 .readList(NotificationManager.getNotificationPath(
                         currentUser.getUserId()), listener, Notification.class);
 
+    }
+
+    private void displayEmptyListMessage(List<Notification> value) {
+        if (value.isEmpty()) {
+            noNotification.setVisibility(View.VISIBLE);
+        } else {
+            noNotification.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void checkUserPoints() {

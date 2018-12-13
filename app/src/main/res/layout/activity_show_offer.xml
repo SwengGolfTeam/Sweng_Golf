@@ -103,6 +103,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/show_offer_title" />
 
+            <TextView
+                android:id="@+id/show_offer_views"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@android:string/untitled"
+                android:textColor="@color/offer_list_author"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_description" />
+
             <View
                 android:id="@+id/line"
                 android:layout_width="200dp"
@@ -111,7 +124,7 @@
                 android:background="?attr/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/show_offer_description" />
+                app:layout_constraintTop_toBottomOf="@+id/show_offer_views" />
 
             <LinearLayout
                 android:id="@+id/list_answers"

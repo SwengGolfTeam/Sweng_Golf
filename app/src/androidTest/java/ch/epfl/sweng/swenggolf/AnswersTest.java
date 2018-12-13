@@ -156,10 +156,7 @@ public class AnswersTest {
         transaction.replace(R.id.centralFragment,
                 FragmentConverter.createShowOfferWithOffer(offer))
                 .commit();
-        TestUtility.showOfferCustomScrollTo();
-        TestUtility.showOfferCustomScrollTo();
         TestUtility.addAnswer("second answer");
-        TestUtility.showOfferCustomScrollTo();
         onView(withContentDescription("description1")).check(matches(isDisplayed()));
     }
 

@@ -24,6 +24,7 @@ import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -59,9 +60,9 @@ public class PointGainTest {
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     private static Offer createFakeOffer() {
-        return (new Offer.Builder()).setUserId(Config.getUser().getUserId()).setTitle("test")
-                .setDescription("title").setUuid("23").setTag(Category.values()[3])
-                .setLatitude(23.4).setLongitude(23.4).build();
+        Offer newOffer = FilledFakeDatabase.getOffer(0);
+        OfferStats.initializeNbViews(newOffer);
+        return newOffer;
     }
 
     /**
@@ -146,6 +147,7 @@ public class PointGainTest {
 
     @Test
     public void acceptingOfferIncreasesPoints() {
+        Config.setUser(FilledFakeDatabase.getUser(0));
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
@@ -157,6 +159,7 @@ public class PointGainTest {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
                         FragmentConverter.createShowOfferWithOffer(createFakeOffer())).commit();
+        TestUtility.showOfferCustomScrollTo();
         performFavoriteAction();
         testUserPointsDbOnly(RESPOND_OFFER.getValue(), FilledFakeDatabase.getUser(2));
         performFavoriteAction();

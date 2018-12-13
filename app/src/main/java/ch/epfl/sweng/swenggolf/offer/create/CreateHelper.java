@@ -31,6 +31,7 @@ import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
@@ -130,6 +131,7 @@ class CreateHelper {
         final Offer newOffer = builder.build();
         if (create.filePath == null) {
             writeOffer(newOffer);
+            OfferStats.initializeNbViews(newOffer);
         } else {
             uploadImage(newOffer);
         }
