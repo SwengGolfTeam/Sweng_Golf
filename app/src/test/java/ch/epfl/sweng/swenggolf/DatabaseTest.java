@@ -90,12 +90,17 @@ public class DatabaseTest {
         ValueListener<String> valueListener = new ValueListener<String>() {
             @Override
             public void onDataChange(String value) {
-                assertNull(value);
+                fail();
             }
 
             @Override
             public void onCancelled(DbError error) {
-                fail();
+                if (error == DbError.DATA_DOES_NOT_EXIST){
+                    assert(true);
+                } else {
+                    fail();
+                }
+
             }
         };
         db.read(PATH, ID, valueListener, String.class);
