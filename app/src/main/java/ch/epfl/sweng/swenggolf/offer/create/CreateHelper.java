@@ -171,36 +171,40 @@ class CreateHelper {
         Database database = Database.getInstance();
         CompletionListener listener = listeners.createWriteOfferListener(offer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
-        sendNotificationToFollowers(offer);
+        informFollowers(offer);
     }
 
-    private void sendNotificationToFollowers(final Offer offer) {
-        // 1. load list of followers
-        // 2. search the ones that contain your name
-        // 3. send notifications to them
-
+    private void informFollowers(final Offer offer) {
         ValueListener<Map<String, List<String>>> followerListener =
                 new ValueListener<Map<String, List<String>>>() {
             @Override
             public void onDataChange(Map<String, List<String>> value) {
-                for (Map.Entry<String, List<String>> userFollowing : value.entrySet()) {
-                    for (String userId : userFollowing.getValue()) {
-                        if (userId.equals(Config.getUser().getUserId())) {
-                            NotificationManager.addPendingNotification(userFollowing.getKey(),
-                                    new Notification(NotificationType.FRIEND_POSTED,
-                                            Config.getUser(), offer));
-                        }
-                    }
-                }
+                sendNotificationToFollowers(value, offer);
             }
 
             @Override
             public void onCancelled(DbError error) {
-                // TODO que faire ?
+                // do nothing, they unfortunately will not receive any notification
             }
         };
         Database.getInstance().readFollowers(followerListener);
     }
+
+    private void sendNotificationToFollowers(Map<String, List<String>> directory, Offer offer) {
+        for (Map.Entry<String, List<String>> userFollowing : directory.entrySet()) {
+            for (String followerId : userFollowing.getValue()) {
+                checkAndSend(userFollowing.getKey(), followerId, offer);
+            }
+        }
+    }
+
+    private void checkAndSend(String followerId, String followeeId, Offer offer) {
+        if (followeeId.equals(Config.getUser().getUserId())) {
+            NotificationManager.addPendingNotification(followerId,
+                    new Notification(NotificationType.FRIEND_POSTED, Config.getUser(), offer));
+        }
+    }
+
 
     /**
      * Update the User score.

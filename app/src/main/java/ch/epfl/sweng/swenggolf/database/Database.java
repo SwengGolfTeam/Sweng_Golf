@@ -209,7 +209,12 @@ public abstract class Database {
     }
 
 
-    // TODO add meaningful javadoc
+    /**
+     * Read the followers entry in the database, and returns it using a listener under
+     * the form of a directory, each user mapped to its list of followers (their IDs only).
+     *
+     * @param listener an adequate listener
+     */
     public abstract void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener);
 
     @NonNull

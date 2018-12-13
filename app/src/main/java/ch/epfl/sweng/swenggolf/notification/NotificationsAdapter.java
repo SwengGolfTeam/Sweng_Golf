@@ -134,7 +134,8 @@ public class NotificationsAdapter
                 icon.setImageResource(R.drawable.ic_exposure_plus_1_black_24dp);
                 break;
             case FRIEND_POSTED:
-                text.setText(context.getString(R.string.notif_friend_posted, notification.getUserName()));
+                text.setText(context.getString(R.string.notif_friend_posted,
+                        notification.getUserName()));
                 icon.setImageResource(R.drawable.ic_star_black_24dp);
                 break;
             default:
