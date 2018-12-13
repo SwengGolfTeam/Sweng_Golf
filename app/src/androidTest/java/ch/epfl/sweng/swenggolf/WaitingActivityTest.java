@@ -85,7 +85,8 @@ public class WaitingActivityTest {
     public void databaseNotWorking() {
         Database.setDebugDatabase(new FakeDatabase(false));
         mActivityRule.launchActivity(new Intent());
-        TestUtility.testToastShow(mActivityRule, "Error on Connection: "+ DbError.UNKNOWN_ERROR.toString());
+        TestUtility.testToastShow(mActivityRule, "Error on Connection: "
+                + DbError.UNKNOWN_ERROR.toString());
         mActivityRule.finishActivity();
     }
 }
