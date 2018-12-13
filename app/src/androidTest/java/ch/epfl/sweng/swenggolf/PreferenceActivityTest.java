@@ -22,7 +22,6 @@ import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -51,8 +50,6 @@ public class PreferenceActivityTest {
         Database fake = FakeDatabase.fakeDatabaseCreator();
         Database.setDebugDatabase(fake);
         Config.setUser(FilledFakeDatabase.getUser(0));
-        UserStats initStats = new UserStats();
-        initStats.write(Config.getUser().getUserId());
         preferenceRule.launchActivity(new Intent());
         preferenceRule.getActivity().getSupportFragmentManager()
                 .beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity())

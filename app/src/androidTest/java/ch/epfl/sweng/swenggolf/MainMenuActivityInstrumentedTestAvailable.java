@@ -20,7 +20,6 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -46,10 +45,9 @@ public class MainMenuActivityInstrumentedTestAvailable {
      */
     @Before
     public void setUp() {
+        Config.goToTest();
         Config.setUser(new User("usernameValid", "userIdValid", "emailValid", "photoValid"));
         Database.setDebugDatabase(new FakeDatabase(true));
-        UserStats initStats = new UserStats();
-        initStats.write(Config.getUser().getUserId());
         mMenuRule.launchActivity(new Intent());
     }
 

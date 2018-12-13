@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
-import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
@@ -37,7 +36,6 @@ import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -120,9 +118,6 @@ public class CreateOfferActivityTest {
         Storage.setDebugStorage(new FakeStorage(true));
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
         Config.goToTest();
-        Config.setUser(FilledFakeDatabase.getUser(0));
-        UserStats initStats = new UserStats();
-        initStats.write(Config.getUser().getUserId());
         intentsTestRule.launchActivity(new Intent());
         manager = intentsTestRule.getActivity().getSupportFragmentManager();
     }
@@ -193,8 +188,6 @@ public class CreateOfferActivityTest {
             User u = new User("username",
                     "id" + Config.getUser().getUserId(), "username@example.com", "nophoto");
             Config.setUser(u);
-            UserStats initStats = new UserStats();
-            initStats.write(Config.getUser().getUserId());
             DatabaseUser.addUser(u);
         }
         manager.beginTransaction().replace(R.id.centralFragment, offer).commit();

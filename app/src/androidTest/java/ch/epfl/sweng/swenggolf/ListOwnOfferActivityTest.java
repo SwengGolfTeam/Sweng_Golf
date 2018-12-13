@@ -15,10 +15,9 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -27,7 +26,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
 
@@ -53,8 +51,6 @@ public class ListOwnOfferActivityTest {
         database.write(Database.OFFERS_PATH, oppositeOffer.getUuid(), oppositeOffer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer);
         Config.setUser(user);
-        UserStats initStats = new UserStats();
-        initStats.write(Config.getUser().getUserId());
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, new ListOwnOfferActivity()).commit();

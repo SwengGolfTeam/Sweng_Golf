@@ -52,24 +52,30 @@ public class DatabaseUser {
                 new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
-                        value = (value == null) ? 0 : value;
-                        value += scoredPoints;
-                        if (complete == null) {
-                            Database.getInstance().write(userPath,
-                                    POINTS, value);
-                        } else {
-                            Database.getInstance().write(userPath,
-                                    POINTS, value, complete);
-                        }
+                        writePointsToDatabase(userPath, value+scoredPoints, complete);
                     }
 
                     @Override
                     public void onCancelled(DbError error) {
-                        if (complete != null) {
-                            complete.onComplete(error);
+                        if (error == DbError.DATA_DOES_NOT_EXIST){
+                            writePointsToDatabase(userPath, scoredPoints, complete);
+                        } else {
+                            if (complete != null) {
+                                complete.onComplete(error);
+                            }
                         }
                     }
                 }, Integer.class);
+    }
+
+    private static void writePointsToDatabase(String userPath, Integer value, CompletionListener complete){
+        if (complete == null){
+            Database.getInstance().write(userPath,
+                    POINTS, value);
+        } else {
+            Database.getInstance().write(userPath,
+                    POINTS, value, complete);
+        }
     }
 
     /**

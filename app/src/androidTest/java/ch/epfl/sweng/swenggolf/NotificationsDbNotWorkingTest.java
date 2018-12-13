@@ -16,7 +16,6 @@ import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,8 +33,6 @@ public class NotificationsDbNotWorkingTest {
     @Before
     public void setUser() {
         Config.setUser(user);
-        UserStats initStats = new UserStats();
-        initStats.write(user.getUserId());
         // wait for last toast to disappear
         waitFor(1000);
     }
@@ -51,8 +48,6 @@ public class NotificationsDbNotWorkingTest {
     public void showsToastIfErrorDeletingNotification() {
         FakeDatabase db = new FakeDatabase(true);
         Database.setDebugDatabase(db);
-        UserStats initStats = new UserStats();
-        initStats.write(user.getUserId());
         // write a notification for the user
         NotificationManager.addPendingNotification(user.getUserId(),
                 new Notification(NotificationType.TEST, null, null));

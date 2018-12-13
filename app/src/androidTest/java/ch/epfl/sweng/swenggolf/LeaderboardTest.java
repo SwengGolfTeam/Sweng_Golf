@@ -18,7 +18,6 @@ import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.leaderboard.LeaderboardAdapter;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -51,10 +50,6 @@ public class LeaderboardTest {
         database.write("users", "userId2", user2);
         Database.setDebugDatabase(database);
         DatabaseUser.addUser(Config.getUser());
-        UserStats initStats = new UserStats();
-        initStats.write(user1.getUserId());
-        initStats.write(user2.getUserId());
-        initStats.write(Config.getUser().getUserId());
     }
 
     /**

@@ -18,7 +18,6 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -30,7 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertNull;
 
 public class SavePartialOfferTest {
     @Rule
@@ -49,8 +47,6 @@ public class SavePartialOfferTest {
     public void setup() {
         Database.setDebugDatabase(new FakeDatabase(true));
         Config.setUser(user);
-        UserStats initStats = new UserStats();
-        initStats.write(user.getUserId());
     }
 
     private void launchCreateOffer() {
@@ -120,12 +116,16 @@ public class SavePartialOfferTest {
         ValueListener<Offer.Builder> listener = new ValueListener<Offer.Builder>() {
             @Override
             public void onDataChange(Offer.Builder value) {
-                assertNull(value);
+                fail();
             }
 
             @Override
             public void onCancelled(DbError error) {
-                fail();
+                if (error == DbError.DATA_DOES_NOT_EXIST){
+                    assert(true);
+                } else {
+                    fail();
+                }
             }
         };
         Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
