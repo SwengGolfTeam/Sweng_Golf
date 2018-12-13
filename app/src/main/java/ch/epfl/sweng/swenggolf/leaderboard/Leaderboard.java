@@ -60,7 +60,6 @@ public class Leaderboard extends FragmentConverter {
 
 
     private void setRecyclerView(View inflated) {
-        noUser.setVisibility(View.VISIBLE);
         RecyclerView mRecyclerView = inflated.findViewById(R.id.users_recycler_view);
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -89,7 +88,9 @@ public class Leaderboard extends FragmentConverter {
 
             @Override
             public void onDataChange(List<User> users) {
-                if (!users.isEmpty()) {
+                if (users.isEmpty()) {
+                    noUser.setVisibility(View.VISIBLE);
+                } else {
                     noUser.setVisibility(View.GONE);
                     mAdapter.add(users);
                 }

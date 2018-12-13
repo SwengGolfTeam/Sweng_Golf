@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 public enum DbError {
     NONE("Everything went fine"),
     DATA_STALE("Data is outdated"),
+    DATA_DOES_NOT_EXIST("Data does not exist in database"),
     DISCONNECTED("Connection interrupted"),
     EXPIRED_TOKEN("Connection as expired"),
     INVALID_TOKEN("Connection is invalid"),
