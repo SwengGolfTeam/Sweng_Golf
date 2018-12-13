@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,14 +12,20 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
@@ -35,7 +42,7 @@ public class WaitingActivityTest {
 
     @Rule
     public final IntentsTestRule<WaitingActivity> mActivityRule =
-            new IntentsTestRule<>(WaitingActivity.class);
+            new IntentsTestRule<>(WaitingActivity.class, false, false);
 
 
     /**
@@ -56,12 +63,11 @@ public class WaitingActivityTest {
     @Test
     public void canGoToCreate() {
         Config.setUser(USERNOTDB);
-        Config.setActivityCallback(new ActivityCallback() {
-            @Override
-            public void isDone() {
-                intended(hasComponent(CreateUserActivity.class.getName()));
-            }
-        });
+        mActivityRule.launchActivity(new Intent());
+
+        //elements from CreateUserActivity
+        onView(withId(R.id.name_field)).check(matches(isDisplayed()));
+        onView(withId(R.id.presentation)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -73,6 +79,14 @@ public class WaitingActivityTest {
                 intended(hasComponent(MainMenuActivity.class.getName()));
             }
         });
+    }
+
+    @Test
+    public void databaseNotWorking() {
+        Database.setDebugDatabase(new FakeDatabase(false));
+        mActivityRule.launchActivity(new Intent());
+        TestUtility.testToastShow(mActivityRule, "Error on Connection: "+ DbError.UNKNOWN_ERROR.toString());
+        mActivityRule.finishActivity();
     }
 }
 
