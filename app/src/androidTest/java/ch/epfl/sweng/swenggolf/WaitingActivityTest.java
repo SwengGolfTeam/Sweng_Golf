@@ -81,15 +81,5 @@ public class WaitingActivityTest {
             }
         });
     }
-
-    @Test
-    public void databaseNotWorking() {
-        Database.setDebugDatabase(new FakeDatabase(false));
-        Config.setUser(USERDB);
-        mActivityRule.launchActivity(new Intent());
-        TestUtility.testToastShow(mActivityRule, "Error on Connection: "
-                + DbError.UNKNOWN_ERROR.toString());
-        mActivityRule.finishActivity();
-    }
 }
 
