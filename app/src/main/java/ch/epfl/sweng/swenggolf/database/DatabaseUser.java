@@ -68,7 +68,8 @@ public class DatabaseUser {
                 }, Integer.class);
     }
 
-    private static void writePointsToDatabase(String userPath, Integer value, CompletionListener complete){
+    private static void writePointsToDatabase(String userPath, Integer value,
+                                              CompletionListener complete){
         if (complete == null){
             Database.getInstance().write(userPath,
                     POINTS, value);

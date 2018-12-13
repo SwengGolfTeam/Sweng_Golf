@@ -14,6 +14,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -84,6 +85,7 @@ public class WaitingActivityTest {
     @Test
     public void databaseNotWorking() {
         Database.setDebugDatabase(new FakeDatabase(false));
+        Config.setUser(USERDB);
         mActivityRule.launchActivity(new Intent());
         TestUtility.testToastShow(mActivityRule, "Error on Connection: "
                 + DbError.UNKNOWN_ERROR.toString());
