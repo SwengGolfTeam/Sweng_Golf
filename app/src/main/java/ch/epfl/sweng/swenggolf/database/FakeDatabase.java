@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -194,11 +193,12 @@ public class FakeDatabase extends Database {
             if (entry.getKey().startsWith(FOLLOWERS_PATH)) {
                 String s = entry.getKey().substring(1); // to remove first '/' char
                 String[] children = s.split("/");
-                // assuming there is only valid entries in the database
-                if (userFollowing.get(children[1]) == null) {
-                    userFollowing.put(children[1], new ArrayList<String>());
+                if (children.length == 2) { // there might be other entries that are not what we want
+                    if (userFollowing.get(children[1]) == null) {
+                        userFollowing.put(children[1], new ArrayList<String>());
+                    }
+                    userFollowing.get(children[1]).add((String) entry.getValue());
                 }
-                userFollowing.get(children[1]).add(children[2]);
             }
         }
         FakeDatabaseListHandler.readFollowers(working, listener, userFollowing);
