@@ -93,7 +93,7 @@ public class OfferPatternTest {
     public void saveAsPatternSaveDataInDatabase() {
         final String title = "Title";
         final String description = "Description";
-        String patternName = "My super pattern";
+        final String patternName = "My super pattern";
         onView(withId(R.id.offer_name)).perform(typeText(title));
         onView(withId(R.id.offer_description)).perform(typeText(description));
         closeSoftKeyboard();
