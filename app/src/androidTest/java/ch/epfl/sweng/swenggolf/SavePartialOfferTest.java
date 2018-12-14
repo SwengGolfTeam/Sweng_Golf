@@ -121,11 +121,7 @@ public class SavePartialOfferTest {
 
             @Override
             public void onCancelled(DbError error) {
-                if (error == DbError.DATA_DOES_NOT_EXIST){
-                    assert(true);
-                } else {
-                    fail();
-                }
+                assertEquals(DbError.DATA_DOES_NOT_EXIST, error);
             }
         };
         Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),

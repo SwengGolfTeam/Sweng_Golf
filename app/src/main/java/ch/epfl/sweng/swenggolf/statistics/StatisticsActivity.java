@@ -40,11 +40,6 @@ public class StatisticsActivity extends FragmentConverter {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             getActivity().onBackPressed();

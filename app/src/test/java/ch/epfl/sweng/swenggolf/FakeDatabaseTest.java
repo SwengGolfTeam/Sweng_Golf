@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -106,11 +107,7 @@ public class FakeDatabaseTest {
 
             @Override
             public void onCancelled(DbError error) {
-                if (error == DbError.DATA_DOES_NOT_EXIST){
-                    assert(true);
-                } else {
-                    fail();
-                }
+                assertEquals(DbError.DATA_DOES_NOT_EXIST, error);
             }
         };
         d.read(PATH, ID, listener, String.class);
