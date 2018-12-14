@@ -28,6 +28,9 @@ public class SearchOffersTests {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
     FilledFakeDatabase database = (FilledFakeDatabase) FakeDatabase.fakeDatabaseCreator();
 
+    /**
+     * Sets up the debug database and inits the stats for the current user.
+     */
     @Before
     public void setup() {
         Database.setDebugDatabase(database);

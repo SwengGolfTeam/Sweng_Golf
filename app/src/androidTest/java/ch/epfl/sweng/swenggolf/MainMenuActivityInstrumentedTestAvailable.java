@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import ch.epfl.sweng.swenggolf.database.Database;
+import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
@@ -38,9 +40,14 @@ public class MainMenuActivityInstrumentedTestAvailable {
     public final ActivityTestRule<MainMenuActivity> mMenuRule =
             new ActivityTestRule<>(MainMenuActivity.class, false, false);
 
+    /**
+     * Inits a Debugdatabase and creates the stats for the user.
+     */
     @Before
     public void setUp() {
+        Config.goToTest();
         Config.setUser(new User("usernameValid", "userIdValid", "emailValid", "photoValid"));
+        Database.setDebugDatabase(new FakeDatabase(true));
         mMenuRule.launchActivity(new Intent());
     }
 

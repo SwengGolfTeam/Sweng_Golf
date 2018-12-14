@@ -55,6 +55,7 @@ import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
@@ -104,6 +105,8 @@ public class ShowOfferActivity extends FragmentConverter {
             setAnswerToPost();
         }
         fetchAnswers();
+        UserStats.updateStat(UserStats.Stats.OFFERS_READ, Config.getUser().getUserId(), 1);
+        UserStats.updateStat(UserStats.Stats.OFFERS_TOTAL_VIEWS, offer.getUserId(), 1);
         return inflated;
     }
 
@@ -238,7 +241,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onCancelled(DbError error) {
-                    OfferStats.manageRetrocompatibility(error, offer);
+                    OfferStats.checkBackwardsCompatibility(error, offer);
                     displayStats(0);
                 }
             };
@@ -394,6 +397,7 @@ public class ShowOfferActivity extends FragmentConverter {
             answers.getAnswerList()
                     .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
             Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+            UserStats.updateStat(UserStats.Stats.ANSWERS_POSTED, Config.getUser().getUserId(), 1);
             InputMethodManager imm = (InputMethodManager) getActivity()
                     .getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
@@ -500,6 +504,7 @@ public class ShowOfferActivity extends FragmentConverter {
         database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
         DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
         OfferStats.removeNbViews(offer);
+        UserStats.updateStat(UserStats.Stats.OFFERS_DELETED, Config.getUser().getUserId(), 1);
     }
 
     private CompletionListener getRemoveOfferListerner(final boolean showToast) {
@@ -547,6 +552,7 @@ public class ShowOfferActivity extends FragmentConverter {
         getActivity().invalidateOptionsMenu();
         offerAccessToDiscussion();
         listAnswerAdapter.closeAnswers();
+        UserStats.updateStat(UserStats.Stats.OFFERS_CLOSED, Config.getUser().getUserId(), 1);
     }
 
 

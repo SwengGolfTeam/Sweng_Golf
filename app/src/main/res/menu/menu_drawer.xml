@@ -38,5 +38,11 @@
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:onClick="loadLeaderboard"
             android:title="@string/leaderboard" />
+
+        <item
+            android:id="@+id/statistics_activity"
+            android:icon="@android:drawable/stat_notify_more"
+            android:onClick="loadStatisticsActivity"
+            android:title="@string/statistics" />
     </group>
 </menu>

@@ -114,7 +114,7 @@ public class FakeDatabase extends Database {
             if (database.containsKey(key)) {
                 listener.onDataChange((T) database.get(key));
             } else {
-                listener.onDataChange(null);
+                listener.onCancelled(DbError.DATA_DOES_NOT_EXIST);
             }
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);

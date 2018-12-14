@@ -13,8 +13,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
  */
 public class OfferStats {
     public static final int INITIAL_NB_VIEWS = 0;
-    private static final String LOG_KEY_STATISTICS = "STATS";
-    private static final String LOG_KEY_RETRO = "RETRO-COMPATIBILITY";
+    private static final String LOG_KEY_STATISTICS = "OFFER_STATS";
 
     private OfferStats() {
     }
@@ -60,7 +59,7 @@ public class OfferStats {
 
             @Override
             public void onCancelled(DbError error) {
-                manageRetrocompatibility(error, offer);
+                checkBackwardsCompatibility(error, offer);
             }
         };
 
@@ -87,10 +86,10 @@ public class OfferStats {
      * @param error the error returned by the database
      * @param offer the specific offer
      */
-    public static void manageRetrocompatibility(DbError error, Offer offer){
+    public static void checkBackwardsCompatibility(DbError error, Offer offer){
         if (error == DbError.DATA_DOES_NOT_EXIST){
             initializeNbViews(offer);
-            Log.d(LOG_KEY_RETRO, "Stats generated for old offer "+offer.getUuid());
+            Log.d(LOG_KEY_STATISTICS, "Stats generated for old offer "+offer.getUuid());
         } else {
             Log.e(LOG_KEY_STATISTICS, "Failed to load views for offer " + offer.getUuid());
         }

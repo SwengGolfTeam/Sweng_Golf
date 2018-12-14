@@ -11,4 +11,5 @@
     <dimen name="user_picture_small_radius">30dp</dimen>
     <dimen name="notif_icon_size">24dp</dimen>
     <dimen name="notif_height">100dp</dimen>
+    <dimen name="stats_height">60dp</dimen>
 </resources>

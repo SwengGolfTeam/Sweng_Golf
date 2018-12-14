@@ -15,6 +15,7 @@ import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
 
 public class CreateUserActivity extends AppCompatActivity {
@@ -69,6 +70,8 @@ public class CreateUserActivity extends AppCompatActivity {
             User u = User.userChanged(user, userName, user.getEmail());
             DatabaseUser.addUser(u);
             Config.setUser(u);
+            UserStats initStats = new UserStats();
+            initStats.write(u.getUserId());
             quit();
         } else {
             Toast.makeText(this, R.string.incorrect_user_creation, Toast.LENGTH_SHORT).show();

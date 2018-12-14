@@ -25,6 +25,7 @@ import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.tools.FragmentConverter.FRAGMENTS_TO_SKIP;
@@ -43,6 +44,9 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
+        if(!Config.isTest()) {
+            UserStats.updateStat(UserStats.Stats.LOGIN, Config.getUser().getUserId(), 1);
+        }
         NetworkReceiver.registerReceiver(this, new NetworkReceiver());
         setContentView(R.layout.activity_main_menu);
         setToolBar();
@@ -135,6 +139,15 @@ public class MainMenuActivity extends AppCompatActivity {
      */
     public void loadProfileActivity(MenuItem item) {
         replaceCentralFragment(FragmentConverter.createShowProfileWithProfile(user));
+    }
+
+    /**
+     * Launches the StatisticsActivity.
+     *
+     * @param item the menu item that triggers the activity
+     */
+    public void loadStatisticsActivity(MenuItem item) {
+        replaceCentralFragment(FragmentConverter.createStatisticsActivityWithUser(user));
     }
 
     /**
