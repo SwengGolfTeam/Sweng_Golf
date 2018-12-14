@@ -53,9 +53,9 @@ import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
-import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
@@ -135,8 +135,12 @@ public class ShowOfferActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (userIsCreator && !offer.getIsClosed()) {
-            inflater.inflate(R.menu.menu_show_offer, menu);
+        if (userIsCreator) {
+            if (offer.getIsClosed()) {
+                inflater.inflate(R.menu.menu_closed_offer, menu);
+            } else {
+                inflater.inflate(R.menu.menu_show_offer, menu);
+            }
         } else {
             inflater.inflate(R.menu.menu_empty, menu);
         }
@@ -155,6 +159,10 @@ public class ShowOfferActivity extends FragmentConverter {
             }
             case R.id.button_delete_offer: {
                 showDeleteAlertDialog();
+                return true;
+            }
+            case R.id.button_delete_closed_offer: {
+                Database.getInstance().deleteOffer(offer, getRemoveOfferListerner());
                 return true;
             }
             default: {
@@ -473,7 +481,9 @@ public class ShowOfferActivity extends FragmentConverter {
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteOfferInDatabase();
+                        Database.getInstance().deleteOffer(offer, getRemoveOfferListerner());
+                        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
+                        OfferStats.removeNbViews(offer);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -486,30 +496,18 @@ public class ShowOfferActivity extends FragmentConverter {
         alertDialog.show();
     }
 
-    /**
-     * Delete the offer in the database.
-     */
-    private void deleteOfferInDatabase() {
-        if (!offer.getLinkPicture().isEmpty()) {
-            Storage storage = Storage.getInstance();
-            storage.remove(offer.getLinkPicture());
-        }
-        Database database = Database.getInstance();
 
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
-        database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
-        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
-        OfferStats.removeNbViews(offer);
-    }
-
-    private CompletionListener getRemoveOfferListerner(final boolean showToast) {
+    private CompletionListener getRemoveOfferListerner() {
         return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE && showToast) {
-                    Toast.makeText(getContext(), R.string.offer_deleted,
+                if (databaseError == DbError.NONE) {
+                    Toast.makeText(getActivity(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
+                } else {
+                    Toast.makeText(getActivity(), R.string.offer_deleted_error,
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -561,7 +559,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                //No notification or errored notifications, as such no modification on display.
+                //No notification or error notifications, as such no modification on display.
             }
         };
         Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
@@ -588,8 +586,6 @@ public class ShowOfferActivity extends FragmentConverter {
                     @Override
                     public void onClick(View v) {
                         goToMessagingWithUser(chosenUserId);
-
-
                     }
                 });
             }

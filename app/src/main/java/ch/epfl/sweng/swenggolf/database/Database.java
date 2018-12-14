@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -221,4 +222,6 @@ public abstract class Database {
         }
         return list;
     }
+
+    public abstract void deleteOffer(@NonNull Offer offer, @NonNull CompletionListener listener);
 }

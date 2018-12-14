@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf.database;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -183,6 +184,16 @@ public class FakeDatabase extends Database {
                            List<Category> categories) {
         FakeDatabaseListHandler.readOffers(working, this.<Offer>getList(OFFERS_PATH),
                 listener, categories);
+    }
+
+    @Override
+    public void deleteOffer(@NonNull Offer offer, @NonNull CompletionListener listener) {
+        if (working) {
+            database.remove(Database.OFFERS_PATH + "/" + offer.getUuid());
+            listener.onComplete(DbError.NONE);
+        } else {
+            listener.onComplete(DbError.UNKNOWN_ERROR);
+        }
     }
 
 
