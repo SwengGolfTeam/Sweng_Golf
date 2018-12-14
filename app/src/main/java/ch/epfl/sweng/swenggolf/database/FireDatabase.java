@@ -223,18 +223,16 @@ public final class FireDatabase extends Database {
             Storage storage = Storage.getInstance();
             storage.remove(offer.getLinkPicture());
         }
-        Database database = Database.getInstance();
 
         CompletionListener emptyListener = new CompletionListener() {
             @Override
             public void onComplete(DbError error) {
-                // Does nothing;
             }
         };
 
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
-        database.remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
-        database.remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
+        remove(Database.OFFERS_PATH, offer.getUuid(), listener);
+        remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
+        remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
     }
 
     private <T> void readListQuery(
