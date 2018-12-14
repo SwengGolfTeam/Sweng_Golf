@@ -15,8 +15,8 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -26,7 +26,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
 

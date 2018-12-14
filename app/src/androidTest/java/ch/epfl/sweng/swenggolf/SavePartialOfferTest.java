@@ -29,7 +29,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertNull;
 
 public class SavePartialOfferTest {
     @Rule
@@ -117,12 +116,12 @@ public class SavePartialOfferTest {
         ValueListener<Offer.Builder> listener = new ValueListener<Offer.Builder>() {
             @Override
             public void onDataChange(Offer.Builder value) {
-                assertNull(value);
+                fail();
             }
 
             @Override
             public void onCancelled(DbError error) {
-                fail();
+                assertEquals(DbError.DATA_DOES_NOT_EXIST, error);
             }
         };
         Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),

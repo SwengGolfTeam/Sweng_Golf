@@ -45,24 +45,26 @@ public class WaitingActivity extends AppCompatActivity {
      * Choose which activity to launch next.
      */
     public void changeActivity() {
-        DatabaseUser.getUser(new ValueListener() {
+        DatabaseUser.getUser(new ValueListener<User>() {
 
             @Override
-            public void onDataChange(Object value) {
+            public void onDataChange(User value) {
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 if (value != null) {
                     Config.setUser((User) value);
                     goToMainMenu();
-                } else {
-                    goToCreate();
                 }
                 Config.getActivityCallback();
             }
 
             @Override
             public void onCancelled(DbError error) {
-                Toast.makeText(WaitingActivity.this,
-                        "Error on Connection", Toast.LENGTH_SHORT).show();
+                if (error == DbError.DATA_DOES_NOT_EXIST) {
+                    goToCreate();
+                } else {
+                    Toast.makeText(WaitingActivity.this,
+                            "Error on Connection: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         }, user);
     }
