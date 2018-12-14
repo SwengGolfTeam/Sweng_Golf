@@ -43,6 +43,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -267,6 +268,7 @@ public class CreateOfferActivity extends FragmentConverter
             errorMessage.setVisibility(View.VISIBLE);
         } else {
             createHelper.createOfferObject(title, description, category);
+            UserStats.updateStat(UserStats.Stats.OFFERS_CREATED, Config.getUser().getUserId(), 1);
         }
 
     }

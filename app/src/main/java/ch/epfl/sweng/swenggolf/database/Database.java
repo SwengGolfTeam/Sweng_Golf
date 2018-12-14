@@ -24,6 +24,7 @@ public abstract class Database {
     public static final String MESSAGES_PATH = "/messages";
     public static final String OFFERS_SAVED_PATH = "/offersSaved";
     public static final String STATISTICS_OFFERS_PATH = "/statistics/offers";
+    public static final String STATISTICS_USERS_PATH = "/statistics/users";
 
     private static Database database = null;
 
