@@ -190,7 +190,7 @@ public class FakeDatabase extends Database {
     public void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener) {
         Map<String, List<String>> userFollowing = new HashMap<>();
         for (Map.Entry<String, Object> entry : database.entrySet()) {
-            if (entry.getKey().startsWith(FOLLOWERS_PATH)) {
+            if (entry.getKey().startsWith(FOLLOWERS_PATH + "/")) {
                 fillFollowersDirectory(userFollowing, entry);
             }
         }
@@ -198,15 +198,15 @@ public class FakeDatabase extends Database {
     }
 
     private void fillFollowersDirectory(Map<String, List<String>> userFollowing,
-                                       Map.Entry<String, Object> entry) {
-        String s = entry.getKey().substring(1); // to remove first '/' char
-        String[] children = s.split("/");
-        if (children.length == 2) { // there might be other entries that are not what we want
-            if (userFollowing.get(children[1]) == null) {
-                userFollowing.put(children[1], new ArrayList<String>());
-            }
-            userFollowing.get(children[1]).add((String) entry.getValue());
+                                        Map.Entry<String, Object> entry) {
+        // Remove "/followers/ and only keep the children
+        String s = entry.getKey().substring(FOLLOWERS_PATH.length() + 1);
+        String userId = s.split("/")[0];
+        if (userFollowing.get(userId) == null) {
+            userFollowing.put(userId, new ArrayList<String>());
         }
+
+        userFollowing.get(userId).add((String) entry.getValue());
     }
 
 

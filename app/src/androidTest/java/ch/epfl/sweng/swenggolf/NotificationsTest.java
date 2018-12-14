@@ -174,15 +174,16 @@ public class NotificationsTest {
     public void getsNotificationWhenFriendPostsAnOffer() {
         // write info that user2 follows user1 into the database
         Database.getInstance().write(Database.FOLLOWERS_PATH, user2.getUserId(), user1.getUserId());
+
         // make user1 create an offer
-        Config.setUser(user1);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, new CreateOfferActivity())
                 .commit();
         String offerTitle = "This is an offer";
         onView(withId(R.id.offer_name)).perform(typeText(offerTitle))
                 .perform(closeSoftKeyboard());
-        onView(withId(R.id.offer_description)).perform(typeText("I want my friends to see it!"))
+        onView(withId(R.id.offer_description))
+                .perform(typeText("I want my friends to see it!"))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
 
