@@ -191,13 +191,13 @@ public class FakeDatabase extends Database {
         Map<String, List<String>> userFollowing = new HashMap<>();
         for (Map.Entry<String, Object> entry : database.entrySet()) {
             if (entry.getKey().startsWith(FOLLOWERS_PATH)) {
-                getFollowersRepertory(userFollowing, entry);
+                fillFollowersDirectory(userFollowing, entry);
             }
         }
         FakeDatabaseListHandler.readFollowers(working, listener, userFollowing);
     }
 
-    private void getFollowersRepertory(Map<String, List<String>> userFollowing,
+    private void fillFollowersDirectory(Map<String, List<String>> userFollowing,
                                        Map.Entry<String, Object> entry) {
         String s = entry.getKey().substring(1); // to remove first '/' char
         String[] children = s.split("/");
