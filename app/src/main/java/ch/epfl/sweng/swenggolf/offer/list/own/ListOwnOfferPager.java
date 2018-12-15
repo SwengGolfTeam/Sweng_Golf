@@ -20,7 +20,7 @@ public class ListOwnOfferPager extends FragmentPagerAdapter {
     /**
      * Creates a new adapter for a viewPager to display a user offers.
      *
-     * @param user the user who's offers are displayed.
+     * @param user    the user who's offers are displayed.
      * @param context the context of the activity in which this pager is used.
      * @param manager the fragment manager used to manage the different fragments of the pager.
      */
@@ -37,7 +37,7 @@ public class ListOwnOfferPager extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        if(i == 0) {
+        if (i == 0) {
             return tabOpen;
         }
         return tabClosed;
@@ -51,7 +51,7 @@ public class ListOwnOfferPager extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        if(position == 0) {
+        if (position == 0) {
             return context.getString(R.string.open);
         }
         return context.getString(R.string.closed);

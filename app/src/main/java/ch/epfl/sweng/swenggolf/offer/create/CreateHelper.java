@@ -59,6 +59,17 @@ class CreateHelper {
     }
 
     /**
+     * In this case, we consider the offer to be empty if the title and the description are empty
+     * and the category is the default one.
+     * @param builder the builder of the offer
+     * @return true if the offer is empty, false otherwise
+     */
+    static boolean isOfferEmpty(Offer.Builder builder) {
+        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
+                && builder.getTag() == Category.OTHER;
+    }
+
+    /**
      * Pre-fill the date, category, location fields of the CreateOfferActivity.
      */
     void preFillFields() {
@@ -139,6 +150,7 @@ class CreateHelper {
 
     @NonNull
     protected Offer.Builder getOfferBuilder(String name, String description, Category tag) {
+
         Offer.Builder builder = create.offerBuilder;
         builder.setUserId(Config.getUser().getUserId())
                 .setTitle(name).setDescription(description)

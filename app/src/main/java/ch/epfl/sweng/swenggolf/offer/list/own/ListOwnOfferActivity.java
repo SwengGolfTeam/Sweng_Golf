@@ -27,7 +27,7 @@ public class ListOwnOfferActivity extends FragmentConverter {
 
         User user = Config.getUser();
         Bundle bundle = getArguments();
-        if(bundle != null && bundle.getParcelable(User.USER) != null) {
+        if (bundle != null && bundle.getParcelable(User.USER) != null) {
             user = bundle.getParcelable(User.USER);
         }
         ListOwnOfferPager adapter =

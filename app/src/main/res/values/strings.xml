@@ -86,4 +86,14 @@
     <string name="open">open</string>
     <string name="old_offer_found">Old offer found</string>
     <string name="restore_offer_message">You already started creating an offer. Do you want to continue to edit it ?</string>
+    <string name="choose_offer_template">Choose offer template</string>
+    <string name="save_as_pattern">Save as pattern</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_name_pattern">Choose a name for the new offer pattern</string>
+    <string name="choose_a_template">Choose a template</string>
+    <string name="accept">Accept</string>
+    <string name="create_pattern_error_empty">You should at least provide a title, a description or a category to save this offer as a pattern.</string>
+    <string name="error_no_pattern_saved">There is no pattern saved.</string>
+    <string name="can_not_load_pattern">Could not load the pattern.</string>
+    <string name="can_not_load_pattern_list">Can not load the list of pattern</string>
 </resources>
