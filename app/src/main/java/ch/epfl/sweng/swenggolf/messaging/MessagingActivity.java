@@ -95,15 +95,18 @@ public class MessagingActivity extends FragmentConverter {
     private void sendMessage() {
         EditText editText = findViewById(R.id.message_content);
         Answers messages = messagesAdapter.getAnswers();
-        // we write the whole lists of messages every time because of the listeners
-        messages.getAnswerList()
-                .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
-        Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
-        messagesAdapter.setAnswers(messages);
-        editText.getText().clear();
-        messagesAdapter.notifyDataSetChanged();
-        UserStats.updateStat(UserStats.Stats.MESSAGES_SENT, Config.getUser().getUserId(), 1);
-        UserStats.updateStat(UserStats.Stats.MESSAGES_RECEIVED, otherUser.getUserId(), 1);
+        String message = editText.getText().toString();
+        if (!message.isEmpty()) {
+            // we write the whole lists of messages every time because of the listeners
+            messages.getAnswerList()
+                    .add(new Answer(Config.getUser().getUserId(), message));
+            Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
+            messagesAdapter.setAnswers(messages);
+            editText.getText().clear();
+            messagesAdapter.notifyDataSetChanged();
+            UserStats.updateStat(UserStats.Stats.MESSAGES_SENT, Config.getUser().getUserId(), 1);
+            UserStats.updateStat(UserStats.Stats.MESSAGES_RECEIVED, otherUser.getUserId(), 1);
+        }
     }
 
     private void fetchMessages() {
