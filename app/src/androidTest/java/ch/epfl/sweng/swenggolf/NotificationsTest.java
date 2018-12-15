@@ -25,6 +25,7 @@ import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
 import ch.epfl.sweng.swenggolf.notification.NotificationsAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.Badge;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -32,7 +33,10 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -96,7 +100,7 @@ public class NotificationsTest {
         setUserAndGoToNotifications(user2);
         String answerMessage = activityTestRule.getActivity()
                 .getString(R.string.notif_answer_posted, user1.getUserName(), offer.getTitle());
-        checkNotificationIsThereAndLeadsToOffer(answerMessage);
+        checkNotificationIsThereAndLeadsToOffer(answerMessage, offer.getTitle());
     }
 
     @Test
@@ -119,7 +123,7 @@ public class NotificationsTest {
         setUserAndGoToNotifications(user1);
         String answerChosenMessage = activityTestRule.getActivity()
                 .getString(R.string.notif_answer_chosen, user2.getUserName(), offer.getTitle());
-        checkNotificationIsThereAndLeadsToOffer(answerChosenMessage);
+        checkNotificationIsThereAndLeadsToOffer(answerChosenMessage, offer.getTitle());
     }
 
     @Test
@@ -164,6 +168,31 @@ public class NotificationsTest {
         onView(withText(activityTestRule.getActivity().getString(R.string.notif_level_gained)))
                 .check(matches(isDisplayed())).perform(click());
         checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
+    }
+
+    @Test
+    public void getsNotificationWhenFriendPostsAnOffer() {
+        // write info that user2 follows user1 into the database
+        Database.getInstance().write(Database.FOLLOWERS_PATH, user2.getUserId(), user1.getUserId());
+
+        // make user1 create an offer
+        activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.centralFragment, new CreateOfferActivity())
+                .commit();
+        String offerTitle = "This is an offer";
+        onView(withId(R.id.offer_name)).perform(typeText(offerTitle))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.offer_description))
+                .perform(typeText("I want my friends to see it!"))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.button_create_offer)).perform(scrollTo(), click());
+
+        // check user2 received the correct notification
+        setUserAndGoToNotifications(user2);
+        String friendPostedOffer = activityTestRule.getActivity()
+                .getString(R.string.notif_friend_posted, user1.getUserName());
+        checkNotificationIsThereAndLeadsToOffer(friendPostedOffer, offerTitle);
+
     }
 
     private void addPointsToUser(int numPoints, User user) {
@@ -215,13 +244,13 @@ public class NotificationsTest {
         TestUtility.addAnswer(message);
     }
 
-    private void checkNotificationIsThereAndLeadsToOffer(String message) {
+    private void checkNotificationIsThereAndLeadsToOffer(String message, String offerTitle) {
         ViewInteraction notification = onView(withText(message));
         notification.check(matches(isDisplayed()));
-        /// check that it shows the offer when clicking on it
+        // check that it shows the offer when clicking on it
         notification.perform(click());
         checkThatWeAreAt(ShowOfferActivity.class.getName(),
-                R.id.show_offer_title, offer.getTitle());
+                R.id.show_offer_title, offerTitle);
     }
 
 }

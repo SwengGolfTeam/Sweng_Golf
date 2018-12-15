@@ -15,13 +15,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
@@ -166,7 +173,40 @@ class CreateHelper {
         Database database = Database.getInstance();
         CompletionListener listener = listeners.createWriteOfferListener(offer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+        informFollowers(offer);
     }
+
+    private void informFollowers(final Offer offer) {
+        ValueListener<Map<String, List<String>>> followerListener =
+                new ValueListener<Map<String, List<String>>>() {
+            @Override
+            public void onDataChange(Map<String, List<String>> value) {
+                sendNotificationToFollowers(value, offer);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // do nothing, they unfortunately will not receive any notification
+            }
+        };
+        Database.getInstance().readFollowers(followerListener);
+    }
+
+    private void sendNotificationToFollowers(Map<String, List<String>> directory, Offer offer) {
+        for (Map.Entry<String, List<String>> userFollowing : directory.entrySet()) {
+            for (String followerId : userFollowing.getValue()) {
+                checkAndSend(userFollowing.getKey(), followerId, offer);
+            }
+        }
+    }
+
+    private void checkAndSend(String followerId, String followeeId, Offer offer) {
+        if (followeeId.equals(Config.getUser().getUserId())) {
+            NotificationManager.addPendingNotification(followerId,
+                    new Notification(NotificationType.FRIEND_POSTED, Config.getUser(), offer));
+        }
+    }
+
 
     /**
      * Update the User score.
