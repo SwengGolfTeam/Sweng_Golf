@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -218,6 +219,14 @@ public abstract class Database {
      */
     public abstract void getKeys(@NonNull String path,
                                  @NonNull ValueListener<List<String>> listener);
+
+    /**
+     * Read the followers entry in the database, and returns it using a listener under
+     * the form of a directory, each user mapped to its list of followers (their IDs only).
+     *
+     * @param listener an adequate listener
+     */
+    public abstract void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener);
 
     @NonNull
     private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {

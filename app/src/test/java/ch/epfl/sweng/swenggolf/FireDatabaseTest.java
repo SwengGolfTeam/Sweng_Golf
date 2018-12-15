@@ -17,12 +17,15 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.database.AttributeOrdering;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FireDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -243,6 +246,38 @@ public class FireDatabaseTest {
         };
     }
 
+    @NonNull
+    private Answer<Void> setUpFollowersDataSnapshot(Map<String, List<String>> usersFollowing) {
+        List<DataSnapshot> children = new ArrayList<>();
+
+        for (String userId : usersFollowing.keySet()) {
+            List<DataSnapshot> grandChildren = new ArrayList<>();
+            for (String follower : usersFollowing.get(userId)) {
+                DataSnapshot grandChild = mock(DataSnapshot.class);
+                when(grandChild.getKey()).thenReturn(follower);
+                grandChildren.add(grandChild);
+            }
+
+            DataSnapshot child = mock(DataSnapshot.class);
+            when(child.getKey()).thenReturn(userId);
+            when(child.getChildren()).thenReturn(grandChildren);
+            children.add(child);
+        }
+
+        final DataSnapshot parent = mock(DataSnapshot.class);
+        when(parent.getChildren()).thenReturn(children);
+        when(parent.exists()).thenReturn(true);
+
+        return new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) {
+                ValueEventListener listener = invocation.getArgument(0);
+                listener.onDataChange(parent);
+                return null;
+            }
+        };
+    }
+
     @Test
     public void readOffersReturnsCorrectValues() {
         FirebaseDatabase database = mock(FirebaseDatabase.class);
@@ -310,6 +345,32 @@ public class FireDatabaseTest {
             }
         });
     }
+    public void readFollowersReturnsCorrectValues() {
+        FirebaseDatabase database = mock(FirebaseDatabase.class);
+        // fill followers map
+        final Map<String, List<String>> userFollowing = new HashMap<>();
+        List<String> followers = Arrays.asList(FilledFakeDatabase.getUser(2).getUserId(),
+                FilledFakeDatabase.getUser(3).getUserId());
+        userFollowing.put(FilledFakeDatabase.getUser(0).getUserId(), followers);
+
+        setUpFollowerQuery(database, userFollowing);
+
+        // read in database
+        ValueListener<Map<String, List<String>>> listener =
+                new ValueListener<Map<String, List<String>>>() {
+            @Override
+            public void onDataChange(Map<String, List<String>> value) {
+                assertEquals(userFollowing, value);
+            }
+
+                    @Override
+                    public void onCancelled(DbError error) {
+
+                    }
+                };
+        FireDatabase d = new FireDatabase(database);
+        d.readFollowers(listener);
+    }
 
     @Test
     public void getKeysReturnCorrectValues() {
@@ -361,6 +422,15 @@ public class FireDatabaseTest {
         doAnswer(errorAnswer).when(reference)
                 .addListenerForSingleValueEvent(any(ValueEventListener.class));
         return database;
+            }
+
+    private void setUpFollowerQuery(FirebaseDatabase database,
+                                    Map<String, List<String>> userFollowing) {
+        DatabaseReference ref = mock(DatabaseReference.class);
+        when(database.getReference(anyString())).thenReturn(ref);
+        Answer<Void> queryListener = setUpFollowersDataSnapshot(userFollowing);
+        doAnswer(queryListener).when(ref)
+                .addListenerForSingleValueEvent(any(ValueEventListener.class));
     }
 
     private void setUpQuery(FirebaseDatabase database) {

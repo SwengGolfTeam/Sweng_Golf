@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -201,6 +202,29 @@ public class FakeDatabase extends Database {
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }
+    }
+
+    @Override
+    public void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener) {
+        Map<String, List<String>> userFollowing = new HashMap<>();
+        for (Map.Entry<String, Object> entry : database.entrySet()) {
+            if (entry.getKey().startsWith(FOLLOWERS_PATH + "/")) {
+                fillFollowersDirectory(userFollowing, entry);
+            }
+        }
+        FakeDatabaseListHandler.readFollowers(working, listener, userFollowing);
+    }
+
+    private void fillFollowersDirectory(Map<String, List<String>> userFollowing,
+                                        Map.Entry<String, Object> entry) {
+        // Remove "/followers/ and only keep the children
+        String s = entry.getKey().substring(FOLLOWERS_PATH.length() + 1);
+        String userId = s.split("/")[0];
+        if (userFollowing.get(userId) == null) {
+            userFollowing.put(userId, new ArrayList<String>());
+        }
+
+        userFollowing.get(userId).add((String) entry.getValue());
     }
 
 

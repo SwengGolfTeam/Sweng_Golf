@@ -30,7 +30,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -149,7 +148,7 @@ public class OfferPatternTest {
         Offer.Builder builder = new Offer.Builder();
         String patternName = "name";
         Database.getInstance().write(Database.OFFERS_PATTERN_PATH + "/"
-                        + Config.getUser().getUserId(),patternName, builder);
+                + Config.getUser().getUserId(), patternName, builder);
 
         openPatternChoice();
         database.setWorking(false);

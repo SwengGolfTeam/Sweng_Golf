@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -63,6 +64,16 @@ final class FakeDatabaseListHandler {
         if (working) {
             pathContent = removeOffersWrongCategories(pathContent, categories);
             listener.onDataChange(pathContent);
+        } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
+    }
+
+    public static void readFollowers(
+            boolean working, @NonNull final ValueListener<Map<String, List<String>>> listener,
+            Map<String, List<String>> followersContent) {
+        if (working) {
+            listener.onDataChange(followersContent);
         } else {
             listener.onCancelled(DbError.UNKNOWN_ERROR);
         }

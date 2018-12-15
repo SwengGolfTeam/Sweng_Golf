@@ -53,7 +53,7 @@ public class SavePartialOfferTest {
         intentsTestRule.launchActivity(new Intent());
         FragmentConverter fragment = (FragmentConverter)
                 intentsTestRule.getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.centralFragment);
+                        .findFragmentById(R.id.centralFragment);
         fragment.replaceCentralFragment(new CreateOfferActivity());
     }
 
@@ -104,7 +104,7 @@ public class SavePartialOfferTest {
         };
         Database.getInstance().read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(),
                 listener,
-        Offer.Builder.class);
+                Offer.Builder.class);
     }
 
     @Test
