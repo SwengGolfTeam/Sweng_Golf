@@ -85,6 +85,27 @@ public final class FireDatabase extends Database {
     }
 
     @Override
+    public void getKeys(@NonNull String path, @NonNull final ValueListener<List<String>> listener) {
+
+        checkInternetConnectionValue(listener);
+        database.getReference(path).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> keys = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    keys.add(snapshot.getKey());
+                }
+                listener.onDataChange(keys);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                listener.onCancelled(DbError.getError(databaseError));
+            }
+        });
+    }
+
+    @Override
     public void write(@NonNull String path, @NonNull String id, @NonNull Object object) {
         database.getReference(path).child(id).setValue(object);
     }

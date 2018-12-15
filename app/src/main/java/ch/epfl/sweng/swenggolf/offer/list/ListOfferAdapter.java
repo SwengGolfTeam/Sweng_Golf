@@ -73,7 +73,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
      * @return whether displayed offers are empty or not.
      */
     public boolean add(@NonNull List<Offer> offers) {
-        if(!offers.isEmpty()) {
+        if (!offers.isEmpty()) {
             offerList.addAll(offers);
             filteredOfferList.clear();
             fillFilteredList();

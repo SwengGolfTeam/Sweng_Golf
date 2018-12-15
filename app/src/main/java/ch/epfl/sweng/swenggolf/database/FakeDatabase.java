@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
@@ -184,6 +185,23 @@ public class FakeDatabase extends Database {
                            List<Category> categories) {
         FakeDatabaseListHandler.readOffers(working, this.<Offer>getList(OFFERS_PATH),
                 listener, categories);
+    }
+
+    @Override
+    public void getKeys(@NonNull String path, @NonNull ValueListener<List<String>> listener) {
+        Set<String> keys = new TreeSet<>();
+        for (String key : database.keySet()) {
+            if (key.startsWith(path)) {
+                key = key.split(path)[1];
+                key = key.split("/")[1];
+                keys.add(key);
+            }
+        }
+        if (working) {
+            listener.onDataChange(new ArrayList<>(keys));
+        } else {
+            listener.onCancelled(DbError.UNKNOWN_ERROR);
+        }
     }
 
     @Override

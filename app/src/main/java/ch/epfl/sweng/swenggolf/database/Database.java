@@ -24,6 +24,7 @@ public abstract class Database {
     public static final String NOTIFICATION_PATH = "/notifications";
     public static final String MESSAGES_PATH = "/messages";
     public static final String OFFERS_SAVED_PATH = "/offersSaved";
+    public static final String OFFERS_PATTERN_PATH = "/offersPattern";
     public static final String STATISTICS_OFFERS_PATH = "/statistics/offers";
     public static final String STATISTICS_USERS_PATH = "/statistics/users";
 
@@ -210,6 +211,14 @@ public abstract class Database {
 
     }
 
+    /**
+     * Return all the keys a the level given by the path.
+     *
+     * @param path     the path where we want to get the keys
+     * @param listener the listener to retrieve the keys
+     */
+    public abstract void getKeys(@NonNull String path,
+                                 @NonNull ValueListener<List<String>> listener);
 
     /**
      * Read the followers entry in the database, and returns it using a listener under

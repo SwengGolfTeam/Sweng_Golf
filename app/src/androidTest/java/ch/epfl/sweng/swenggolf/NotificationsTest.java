@@ -56,7 +56,7 @@ public class NotificationsTest {
     private User user1 = FilledFakeDatabase.getUser(2);
     private User user2 = FilledFakeDatabase.getUser(3);
     private Offer offer = FilledFakeDatabase.getOfferOfUser(user2.getUserId());
-    private Notification notif = new Notification(NotificationType.ANSWER_POSTED,user1,offer);
+    private Notification notif = new Notification(NotificationType.ANSWER_POSTED, user1, offer);
 
     /**
      * Set up a fake database, a fake user, and launches activity.

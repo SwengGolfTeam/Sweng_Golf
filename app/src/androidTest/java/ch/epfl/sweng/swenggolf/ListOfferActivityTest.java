@@ -83,7 +83,7 @@ public class ListOfferActivityTest {
         Database database = new FakeDatabase(true);
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
-        for(Offer offer : FilledFakeDatabase.getClosedOffers()) {
+        for (Offer offer : FilledFakeDatabase.getClosedOffers()) {
             database.write("/offers", offer.getUuid(), offer);
         }
         Database.setDebugDatabase(database);

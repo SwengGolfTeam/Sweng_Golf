@@ -44,6 +44,7 @@ public final class TestUtility {
 
     /**
      * Simulate a press on the back button.
+     *
      * @param intentRule the intent of the current activity
      */
     public static void pressBackButton(final IntentsTestRule intentRule) {
@@ -59,7 +60,8 @@ public final class TestUtility {
         }
     }
 
-     /** Posts an answer on the current offer.
+    /**
+     * Posts an answer on the current offer.
      *
      * @param answer the message to be posted
      */
