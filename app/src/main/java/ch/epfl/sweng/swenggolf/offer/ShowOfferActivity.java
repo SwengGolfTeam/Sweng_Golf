@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -408,9 +409,21 @@ public class ShowOfferActivity extends FragmentConverter {
                         new Notification(NotificationType.ANSWER_POSTED,
                                 Config.getUser(), offer));
             }
+            sendNotificationToPreviousAnswerers(answers.getAnswerList());
             listAnswerAdapter.notifyDataSetChanged();
         }
+    }
 
+    private void sendNotificationToPreviousAnswerers(List<Answer> answerList) {
+        List<String> participants = new ArrayList<>();
+        for (Answer a : answerList) {
+            String userId = a.getUserId();
+            if (!participants.contains(userId)) {
+                NotificationManager.addPendingNotification(userId,
+                        new Notification(NotificationType.ALSO_ANSWERED, Config.getUser(), offer));
+                participants.add(userId);
+            }
+        }
     }
 
     /* methods for the location */
