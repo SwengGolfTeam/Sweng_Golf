@@ -343,7 +343,9 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                errorMessage.setVisibility(View.VISIBLE);
+                if (error != DbError.DATA_DOES_NOT_EXIST) {
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
             }
         };
         Database.getInstance().listen(Database.ANSWERS_PATH, offer.getUuid(),
