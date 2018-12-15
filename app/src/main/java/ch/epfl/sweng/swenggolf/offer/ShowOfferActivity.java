@@ -333,11 +333,9 @@ public class ShowOfferActivity extends FragmentConverter {
         ValueListener<Answers> answerListener = new ValueListener<Answers>() {
             @Override
             public void onDataChange(Answers value) {
-                if (value != null) {
-                    listAnswerAdapter.setAnswers(value);
-                    if (offer.getIsClosed()) {
-                        offerAccessToDiscussion();
-                    }
+                listAnswerAdapter.setAnswers(value);
+                if (offer.getIsClosed()) {
+                    offerAccessToDiscussion();
                 }
             }
 
