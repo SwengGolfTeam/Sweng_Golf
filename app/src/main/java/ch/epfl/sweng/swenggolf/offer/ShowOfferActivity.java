@@ -212,7 +212,7 @@ public class ShowOfferActivity extends FragmentConverter {
                     Picasso.with(getContext()).load(Uri.parse(offer.getLinkPicture()))
                             .into(photoView);
                     mBuilder.setView(mView);
-                    mBuilder.setNegativeButton("quit",  new DialogInterface.OnClickListener() {
+                    mBuilder.setNegativeButton("quit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // user cancelled the dialog
                         }
@@ -232,7 +232,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setStats() {
-        if (userIsCreator){ // display number of views
+        if (userIsCreator) { // display number of views
             ValueListener<Integer> listener = new ValueListener<Integer>() {
                 @Override
                 public void onDataChange(Integer nb) {
@@ -256,11 +256,11 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private void displayStats(Integer nb) {
         TextView views = inflated.findViewById(R.id.show_offer_views);
-        views.setText("Seen "+ nb + " times");
+        views.setText("Seen " + nb + " times");
         views.setVisibility(View.VISIBLE);
     }
 
-    private void hideStats(){
+    private void hideStats() {
         TextView views = inflated.findViewById(R.id.show_offer_views);
         views.setVisibility(View.GONE);
     }
@@ -617,8 +617,10 @@ public class ShowOfferActivity extends FragmentConverter {
 
                     @Override
                     public void onCancelled(DbError error) {
-                        // do nothing
+                        Toast.makeText(ShowOfferActivity.this.getContext(),
+                                R.string.error_load_messages, Toast.LENGTH_LONG).show();
                     }
+
                 }, User.class);
     }
 }

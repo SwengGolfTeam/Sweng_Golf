@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -18,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -94,7 +96,6 @@ public class MessagingActivity extends FragmentConverter {
         EditText editText = findViewById(R.id.message_content);
         Answers messages = messagesAdapter.getAnswers();
         // we write the whole lists of messages every time because of the listeners
-        // TODO change this and only write message by message
         messages.getAnswerList()
                 .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
         Database.getInstance().write(Database.MESSAGES_PATH, offerId, messages);
@@ -116,7 +117,10 @@ public class MessagingActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                // TODO put a toast or something?
+                if (error != DbError.DATA_DOES_NOT_EXIST) {
+                    Toast.makeText(MessagingActivity.this.getContext(),
+                            R.string.error_load_messages, Toast.LENGTH_LONG).show();
+                }
             }
         };
         Database.getInstance().listen(Database.MESSAGES_PATH, offerId,
