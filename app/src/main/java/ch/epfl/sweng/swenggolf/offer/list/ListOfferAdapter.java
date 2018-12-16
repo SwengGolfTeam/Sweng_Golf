@@ -2,12 +2,15 @@ package ch.epfl.sweng.swenggolf.offer.list;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.swenggolf.R;
@@ -75,12 +78,25 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     public boolean add(@NonNull List<Offer> offers) {
         if (!offers.isEmpty()) {
             offerList.addAll(offers);
+            Collections.sort(offerList,creationDateComparator);
             filteredOfferList.clear();
             fillFilteredList();
             notifyDataSetChanged();
         }
         return filteredOfferList.isEmpty();
     }
+
+    private static final Comparator<Offer> creationDateComparator = new Comparator<Offer>() {
+        @Override
+        public int compare(Offer o1, Offer o2) {
+            if(o1.getCreationDate() < o2.getCreationDate()) {
+                return 1;
+            } else if(o1.getCreationDate() > o2.getCreationDate()) {
+                return -1;
+            }
+            return 0;
+        }
+    };
 
     /**
      * Remove all the data in the adapter.
