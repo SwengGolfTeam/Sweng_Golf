@@ -38,6 +38,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -212,7 +215,7 @@ public class ShowOfferActivity extends FragmentConverter {
                     Picasso.with(getContext()).load(Uri.parse(offer.getLinkPicture()))
                             .into(photoView);
                     mBuilder.setView(mView);
-                    mBuilder.setNegativeButton("quit",  new DialogInterface.OnClickListener() {
+                    mBuilder.setNegativeButton("quit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // user cancelled the dialog
                         }
@@ -232,7 +235,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setStats() {
-        if (userIsCreator){ // display number of views
+        if (userIsCreator) { // display number of views
             ValueListener<Integer> listener = new ValueListener<Integer>() {
                 @Override
                 public void onDataChange(Integer nb) {
@@ -256,11 +259,11 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private void displayStats(Integer nb) {
         TextView views = inflated.findViewById(R.id.show_offer_views);
-        views.setText("Seen "+ nb + " times");
+        views.setText("Seen " + nb + " times");
         views.setVisibility(View.VISIBLE);
     }
 
-    private void hideStats(){
+    private void hideStats() {
         TextView views = inflated.findViewById(R.id.show_offer_views);
         views.setVisibility(View.GONE);
     }
@@ -408,9 +411,22 @@ public class ShowOfferActivity extends FragmentConverter {
                         new Notification(NotificationType.ANSWER_POSTED,
                                 Config.getUser(), offer));
             }
+            sendNotificationToPreviousAnswerers(answers.getAnswerList());
             listAnswerAdapter.notifyDataSetChanged();
         }
+    }
 
+    private void sendNotificationToPreviousAnswerers(List<Answer> answerList) {
+        Set<String> participants = new HashSet<>();
+        for (Answer a : answerList) {
+            String userId = a.getUserId();
+            if (!participants.contains(userId) && !userId.equals(offer.getUserId())
+                    && !userId.equals(Config.getUser().getUserId())) {
+                NotificationManager.addPendingNotification(userId,
+                        new Notification(NotificationType.ALSO_ANSWERED, Config.getUser(), offer));
+                participants.add(userId);
+            }
+        }
     }
 
     /* methods for the location */
