@@ -195,6 +195,17 @@ public class NotificationsTest {
 
     }
 
+    @Test
+    public void getsNotificationWhenOtherUserAnswersOffer() {
+        goToOfferAndPostAnswer("I can help you");
+        Config.setUser(user2);
+        goToOfferAndPostAnswer("Thank you");
+        setUserAndGoToNotifications(user1);
+        String alsoAnsweredOffer = activityTestRule.getActivity()
+                .getString(R.string.notif_also_answered, user2.getUserName(), offer.getTitle());
+        checkNotificationIsThereAndLeadsToOffer(alsoAnsweredOffer, offer.getTitle());
+    }
+
     private void addPointsToUser(int numPoints, User user) {
         user.addPoints(numPoints);
         setUserAndGoToNotifications(user);
