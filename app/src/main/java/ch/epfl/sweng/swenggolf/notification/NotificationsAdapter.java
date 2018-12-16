@@ -138,6 +138,11 @@ public class NotificationsAdapter
                         notification.getUserName()));
                 icon.setImageResource(R.drawable.ic_star_black_24dp);
                 break;
+            case ALSO_ANSWERED:
+                text.setText(context.getString(R.string.notif_also_answered,
+                        notification.getUserName(), notification.getOfferName()));
+                icon.setImageResource(R.drawable.ic_comment_black_24dp);
+                break;
             default:
                 text.setText("TEST");
         }

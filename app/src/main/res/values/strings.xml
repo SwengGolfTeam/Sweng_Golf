@@ -62,6 +62,7 @@
     <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
     <string name="notif_level_gained">You leveled up! Congrats!</string>
     <string name="notif_friend_posted">%s posted a new offer </string>
+    <string name="notif_also_answered">%s also answered the offer \"%s\"</string>
     <string name="no_notifications">You currently don\'t have any notification</string>
     <string name="notif_error">There has been an error loading the notifications</string>
     <string name="notif_delete_error">The notification couldn\'t be deleted</string>
