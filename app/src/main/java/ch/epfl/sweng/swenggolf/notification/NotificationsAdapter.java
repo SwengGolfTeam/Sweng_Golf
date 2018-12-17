@@ -133,6 +133,16 @@ public class NotificationsAdapter
                 text.setText(context.getString(R.string.notif_level_gained));
                 icon.setImageResource(R.drawable.ic_exposure_plus_1_black_24dp);
                 break;
+            case FRIEND_POSTED:
+                text.setText(context.getString(R.string.notif_friend_posted,
+                        notification.getUserName()));
+                icon.setImageResource(R.drawable.ic_star_black_24dp);
+                break;
+            case ALSO_ANSWERED:
+                text.setText(context.getString(R.string.notif_also_answered,
+                        notification.getUserName(), notification.getOfferName()));
+                icon.setImageResource(R.drawable.ic_comment_black_24dp);
+                break;
             default:
                 text.setText("TEST");
         }

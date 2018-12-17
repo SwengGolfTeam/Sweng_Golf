@@ -61,11 +61,14 @@
     <string name="notif_follow">%s is now following you</string>
     <string name="notif_answer_posted">%s posted an answer on your offer \"%s\"</string>
     <string name="notif_level_gained">You leveled up! Congrats!</string>
+    <string name="notif_friend_posted">%s posted a new offer </string>
+    <string name="notif_also_answered">%s also answered the offer \"%s\"</string>
     <string name="no_notifications">You currently don\'t have any notification</string>
     <string name="notif_error">There has been an error loading the notifications</string>
     <string name="notif_delete_error">The notification couldn\'t be deleted</string>
     <string name="title_activity_leaderboard">Leaderboard</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="statistics">Statistics</string>
     <string name="answer_limit">The answer should be at least %d characters.</string>
     <string name="accept_favorite">Accept answer</string>
     <string name="accept_favorite_question">Do you want to accept this answer?</string>
@@ -83,5 +86,14 @@
     <string name="open">open</string>
     <string name="old_offer_found">Old offer found</string>
     <string name="restore_offer_message">You already started creating an offer. Do you want to continue to edit it?</string>
-    <string name="offer_deleted_error">Could not delete offer</string>
+    <string name="choose_offer_template">Choose offer template</string>
+    <string name="save_as_pattern">Save as pattern</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_name_pattern">Choose a name for the new offer pattern</string>
+    <string name="choose_a_template">Choose a template</string>
+    <string name="accept">Accept</string>
+    <string name="create_pattern_error_empty">You should at least provide a title, a description or a category to save this offer as a pattern.</string>
+    <string name="error_no_pattern_saved">There is no pattern saved.</string>
+    <string name="can_not_load_pattern">Could not load the pattern.</string>
+    <string name="can_not_load_pattern_list">Can not load the list of pattern</string>
 </resources>

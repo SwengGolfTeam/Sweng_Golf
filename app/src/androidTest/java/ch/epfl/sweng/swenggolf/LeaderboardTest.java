@@ -45,6 +45,7 @@ public class LeaderboardTest {
                 "photo1", "", "DEFAULT_DESCRIPTION1", 30);
         User user2 = new User("username2", "userId2", "email2",
                 "photo2", "", "DEFAULT_DESCRIPTION2", 50);
+
         database.write("users", "userId1", user1);
         database.write("users", "userId2", user2);
         Database.setDebugDatabase(database);

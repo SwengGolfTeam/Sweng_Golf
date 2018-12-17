@@ -21,6 +21,7 @@ import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 public class MessagingActivity extends FragmentConverter {
@@ -100,6 +101,8 @@ public class MessagingActivity extends FragmentConverter {
         messagesAdapter.setAnswers(messages);
         editText.getText().clear();
         messagesAdapter.notifyDataSetChanged();
+        UserStats.updateStat(UserStats.Stats.MESSAGES_SENT, Config.getUser().getUserId(), 1);
+        UserStats.updateStat(UserStats.Stats.MESSAGES_RECEIVED, otherUser.getUserId(), 1);
     }
 
     private void fetchMessages() {

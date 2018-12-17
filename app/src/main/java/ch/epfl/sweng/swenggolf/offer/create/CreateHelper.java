@@ -15,13 +15,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.database.CompletionListener;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
+import ch.epfl.sweng.swenggolf.database.DbError;
+import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.location.AppLocation;
+import ch.epfl.sweng.swenggolf.notification.Notification;
+import ch.epfl.sweng.swenggolf.notification.NotificationManager;
+import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
@@ -49,6 +56,17 @@ class CreateHelper {
     protected CreateHelper(CreateOfferActivity create, CreateListeners listeners) {
         this.create = create;
         this.listeners = listeners;
+    }
+
+    /**
+     * In this case, we consider the offer to be empty if the title and the description are empty
+     * and the category is the default one.
+     * @param builder the builder of the offer
+     * @return true if the offer is empty, false otherwise
+     */
+    static boolean isOfferEmpty(Offer.Builder builder) {
+        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
+                && builder.getTag() == Category.OTHER;
     }
 
     /**
@@ -132,6 +150,7 @@ class CreateHelper {
 
     @NonNull
     protected Offer.Builder getOfferBuilder(String name, String description, Category tag) {
+
         Offer.Builder builder = create.offerBuilder;
         builder.setUserId(Config.getUser().getUserId())
                 .setTitle(name).setDescription(description)
@@ -166,7 +185,40 @@ class CreateHelper {
         Database database = Database.getInstance();
         CompletionListener listener = listeners.createWriteOfferListener(offer);
         database.write(Database.OFFERS_PATH, offer.getUuid(), offer, listener);
+        informFollowers(offer);
     }
+
+    private void informFollowers(final Offer offer) {
+        ValueListener<Map<String, List<String>>> followerListener =
+                new ValueListener<Map<String, List<String>>>() {
+            @Override
+            public void onDataChange(Map<String, List<String>> value) {
+                sendNotificationToFollowers(value, offer);
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                // do nothing, they unfortunately will not receive any notification
+            }
+        };
+        Database.getInstance().readFollowers(followerListener);
+    }
+
+    private void sendNotificationToFollowers(Map<String, List<String>> directory, Offer offer) {
+        for (Map.Entry<String, List<String>> userFollowing : directory.entrySet()) {
+            for (String followerId : userFollowing.getValue()) {
+                checkAndSend(userFollowing.getKey(), followerId, offer);
+            }
+        }
+    }
+
+    private void checkAndSend(String followerId, String followeeId, Offer offer) {
+        if (followeeId.equals(Config.getUser().getUserId())) {
+            NotificationManager.addPendingNotification(followerId,
+                    new Notification(NotificationType.FRIEND_POSTED, Config.getUser(), offer));
+        }
+    }
+
 
     /**
      * Update the User score.

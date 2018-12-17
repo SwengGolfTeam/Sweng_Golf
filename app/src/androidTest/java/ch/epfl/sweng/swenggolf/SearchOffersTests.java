@@ -28,6 +28,9 @@ public class SearchOffersTests {
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
     FilledFakeDatabase database = (FilledFakeDatabase) FakeDatabase.fakeDatabaseCreator();
 
+    /**
+     * Sets up the debug database and inits the stats for the current user.
+     */
     @Before
     public void setup() {
         Database.setDebugDatabase(database);
@@ -64,14 +67,14 @@ public class SearchOffersTests {
     @Test
     public void showRightOfferWhenSearchingWithBeginningOfTitle() {
         Offer offer = database.getOffer(2);
-        search(offer.getTitle().substring(0,5));
+        search(offer.getTitle().substring(0, 5));
         checkTitle(offer);
     }
 
     @Test
     public void showRightOfferWhenSearchingWithSubstringOfTitle() {
         Offer offer = database.getOffer(10);
-        search(offer.getTitle().substring(4,10));
+        search(offer.getTitle().substring(4, 10));
         checkTitle(offer);
     }
 

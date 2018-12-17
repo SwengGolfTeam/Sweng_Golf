@@ -51,8 +51,8 @@ public class OfflineTests {
     public void listOfferCheckDialog() {
         Config.quitTest();
         Intents.init();
-        Network.setFalseforTest(true);
         Config.goToTest();
+        Network.setFalseforTest(true);
         listOfferRule.launchActivity(new Intent());
         onView(withText(android.R.string.yes)).perform(click());
         intended(toPackage("com.android.settings"));

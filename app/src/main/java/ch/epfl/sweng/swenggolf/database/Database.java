@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.offer.Category;
@@ -24,7 +25,9 @@ public abstract class Database {
     public static final String NOTIFICATION_PATH = "/notifications";
     public static final String MESSAGES_PATH = "/messages";
     public static final String OFFERS_SAVED_PATH = "/offersSaved";
+    public static final String OFFERS_PATTERN_PATH = "/offersPattern";
     public static final String STATISTICS_OFFERS_PATH = "/statistics/offers";
+    public static final String STATISTICS_USERS_PATH = "/statistics/users";
 
     private static Database database = null;
 
@@ -208,6 +211,23 @@ public abstract class Database {
                 new AttributeFilter("userId", offerCreator));
 
     }
+
+    /**
+     * Return all the keys a the level given by the path.
+     *
+     * @param path     the path where we want to get the keys
+     * @param listener the listener to retrieve the keys
+     */
+    public abstract void getKeys(@NonNull String path,
+                                 @NonNull ValueListener<List<String>> listener);
+
+    /**
+     * Read the followers entry in the database, and returns it using a listener under
+     * the form of a directory, each user mapped to its list of followers (their IDs only).
+     *
+     * @param listener an adequate listener
+     */
+    public abstract void readFollowers(@NonNull ValueListener<Map<String, List<String>>> listener);
 
     @NonNull
     private List<Offer> filterOffers(List<Offer> value, @NonNull List<Category> categories) {

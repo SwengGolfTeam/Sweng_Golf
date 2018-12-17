@@ -18,10 +18,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,6 +46,7 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -77,6 +81,7 @@ public class CreateOfferActivity extends FragmentConverter
     TextView errorMessage;
     private TextView dateText;
     private int fragmentsToSkip;
+    private CreateListeners createListeners;
 
     /**
      * Replace the central fragment by an Offer.
@@ -100,10 +105,10 @@ public class CreateOfferActivity extends FragmentConverter
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        CreateListeners createListeners = new CreateListeners(this);
+        createListeners = new CreateListeners(this);
         createHelper = new CreateHelper(this, createListeners);
 
         inflated = inflater.inflate(R.layout.activity_create_offer,
@@ -118,10 +123,9 @@ public class CreateOfferActivity extends FragmentConverter
         } else {
             offerBuilder = new Offer.Builder();
             if (!creationAsked) {
-                final Database database = Database.getInstance();
                 ValueListener<Offer.Builder> listener = createListeners.restoreOfferListener();
-                database.read(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), listener,
-                        Offer.Builder.class);
+                Database.getInstance().read(Database.OFFERS_SAVED_PATH,
+                        Config.getUser().getUserId(), listener, Offer.Builder.class);
             }
 
         }
@@ -130,6 +134,10 @@ public class CreateOfferActivity extends FragmentConverter
         createListeners.setListeners();
         dateText = inflated.findViewById(R.id.showDate);
         dateText.setText(Offer.dateFormat().format(endDate));
+
+        Button b = inflated.findViewById(R.id.button_save_pattern);
+        b.setOnClickListener(createListeners.savePatternListener());
+
         return inflated;
     }
 
@@ -165,6 +173,11 @@ public class CreateOfferActivity extends FragmentConverter
             ImageView imageView = findViewById(R.id.offer_picture);
             Picasso.with(this.getContext()).load(filePath).fit().into(imageView);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_create_offer, menu);
     }
 
     private Uri compressTemporaryFilepath() {
@@ -223,6 +236,12 @@ public class CreateOfferActivity extends FragmentConverter
                 getActivity().onBackPressed();
                 return true;
             }
+            case R.id.action_choose_template:
+                final Database database = Database.getInstance();
+                database.getKeys(Database.OFFERS_PATTERN_PATH + "/" + Config.getUser().getUserId(),
+                        createListeners.loadPattern());
+
+                return true;
             default: {
                 return super.onOptionsItemSelected(item);
             }
@@ -267,6 +286,7 @@ public class CreateOfferActivity extends FragmentConverter
             errorMessage.setVisibility(View.VISIBLE);
         } else {
             createHelper.createOfferObject(title, description, category);
+            UserStats.updateStat(UserStats.Stats.OFFERS_CREATED, Config.getUser().getUserId(), 1);
         }
 
     }
@@ -372,24 +392,24 @@ public class CreateOfferActivity extends FragmentConverter
     public void close() {
         if (offerToModify == null) {
 
-            //Get data of the offer
-            EditText nameText = findViewById(R.id.offer_name);
-            EditText descriptionText = findViewById(R.id.offer_description);
-            final String title = nameText.getText().toString();
-            final String description = descriptionText.getText().toString();
-            final Category category =
-                    Category.valueOf(categorySpinner.getSelectedItem().toString());
-            Offer.Builder builder = createHelper.getOfferBuilder(title, description, category);
+            Offer.Builder builder = getOfferBuilder();
 
-            if (!isOfferEmpty(builder)) {
+            if (!CreateHelper.isOfferEmpty(builder)) {
                 Database database = Database.getInstance();
                 database.write(Database.OFFERS_SAVED_PATH, Config.getUser().getUserId(), builder);
             }
         }
     }
 
-    private boolean isOfferEmpty(Offer.Builder builder) {
-        return builder.getTitle().isEmpty() && builder.getDescription().isEmpty()
-                && builder.getTag() == Category.OTHER;
+    @NonNull
+    Offer.Builder getOfferBuilder() {
+        EditText nameText = findViewById(R.id.offer_name);
+        EditText descriptionText = findViewById(R.id.offer_description);
+        final String title = nameText.getText().toString();
+        final String description = descriptionText.getText().toString();
+        final Category category =
+                Category.valueOf(categorySpinner.getSelectedItem().toString());
+        return createHelper.getOfferBuilder(title, description, category);
     }
+
 }

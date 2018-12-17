@@ -1,11 +1,9 @@
 package ch.epfl.sweng.swenggolf;
 
 import android.content.Intent;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.DrawerMatchers;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
@@ -18,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
-import java.util.concurrent.TransferQueue;
 
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
@@ -28,7 +25,6 @@ import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.profile.User;
@@ -40,23 +36,17 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
-import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.fail;
-import static org.mockito.AdditionalMatchers.not;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -93,7 +83,7 @@ public class ListOfferActivityTest {
         Database database = new FakeDatabase(true);
         database.write("/offers", "idoftheoffer1", offer1);
         database.write("/offers", "idoftheoffer2", offer2);
-        for(Offer offer : FilledFakeDatabase.getClosedOffers()) {
+        for (Offer offer : FilledFakeDatabase.getClosedOffers()) {
             database.write("/offers", offer.getUuid(), offer);
         }
         Database.setDebugDatabase(database);

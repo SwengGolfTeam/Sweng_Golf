@@ -1,5 +1,6 @@
 package ch.epfl.sweng.swenggolf;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -8,16 +9,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.swenggolf.database.CreateUserActivity;
 import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.WaitingActivity;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 public class WaitingActivityTest {
@@ -34,7 +39,7 @@ public class WaitingActivityTest {
 
     @Rule
     public final IntentsTestRule<WaitingActivity> mActivityRule =
-            new IntentsTestRule<>(WaitingActivity.class);
+            new IntentsTestRule<>(WaitingActivity.class, false, false);
 
 
     /**
@@ -46,17 +51,20 @@ public class WaitingActivityTest {
         Database database = new FakeDatabase(true);
         Database.setDebugDatabase(database);
         DatabaseUser.addUser(USERDB);
+        Config.setUser(USERDB);
+        UserStats initStats = new UserStats();
+        initStats.write(USERDB.getUserId());
+        initStats.write(USERNOTDB.getUserId());
     }
 
     @Test
     public void canGoToCreate() {
-        Config.setUser(new User(USERNOTDB));
-        Config.setActivityCallback(new ActivityCallback() {
-            @Override
-            public void isDone() {
-                intended(hasComponent(CreateUserActivity.class.getName()));
-            }
-        });
+        Config.setUser(USERNOTDB);
+        mActivityRule.launchActivity(new Intent());
+
+        //elements from CreateUserActivity
+        onView(withId(R.id.name_field)).check(matches(isDisplayed()));
+        onView(withId(R.id.presentation)).check(matches(isDisplayed()));
     }
 
     @Test

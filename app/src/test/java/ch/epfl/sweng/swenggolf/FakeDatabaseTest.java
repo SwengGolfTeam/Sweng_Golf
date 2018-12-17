@@ -19,6 +19,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -90,21 +91,23 @@ public class FakeDatabaseTest {
         d.listen("", "", testListenerList, List.class);
         d.write("/x/y", "z", CONTENT_2);
         assertThat(testListener.calls, is(2));
-        assertThat(testListenerList.calls, is(4));
+        assertThat(testListener.doesNotExist, is(0));
+        assertThat(testListenerList.calls, is(2));
+        assertThat(testListenerList.doesNotExist, is(2));
     }
 
     @Test
-    public void readReturnsNull() {
+    public void readReturnsDataDoesNotExist() {
         Database d = new FakeDatabase(true);
         ValueListener<String> listener = new ValueListener<String>() {
             @Override
             public void onDataChange(String value) {
-                assertNull(value);
+                fail();
             }
 
             @Override
             public void onCancelled(DbError error) {
-                fail();
+                assertEquals(DbError.DATA_DOES_NOT_EXIST, error);
             }
         };
         d.read(PATH, ID, listener, String.class);
@@ -312,6 +315,7 @@ public class FakeDatabaseTest {
 
     class ValueTestListener<T> implements ValueListener<T> {
         int calls = 0;
+        int doesNotExist =0;
 
         @Override
         public void onDataChange(T value) {
@@ -320,7 +324,11 @@ public class FakeDatabaseTest {
 
         @Override
         public void onCancelled(DbError error) {
-            fail();
+            if (error == DbError.DATA_DOES_NOT_EXIST){
+                doesNotExist++;
+            } else {
+                fail();
+            }
         }
     }
 
@@ -339,10 +347,52 @@ public class FakeDatabaseTest {
             }
 
             @Override
-            public void onCancelled(DbError error) {
+            public void onCancelled(DbError error) {;
 
             }
         };
         database.readOffers(li);
+    }
+
+    @Test
+    public void getKeysTwoKeys() {
+        String path = Database.OFFERS_PATTERN_PATH + "/username";
+        final String key1 = "Key1";
+        final String key2 = "Key2";
+        String value1 = "value1";
+        String value2 = "value2";
+        Database database = new FakeDatabase(true);
+        database.write(path,key1,value1);
+        database.write(path, key2, value2);
+        database.getKeys(path, new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                assertThat(value.size(), is(2));
+                assertTrue(value.contains(key1));
+                assertTrue(value.contains(key2));
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                fail();
+            }
+        });
+    }
+
+    @Test
+    public void getKeysNotWorking() {
+        Database database = new FakeDatabase(false);
+        database.getKeys(Database.OFFERS_PATTERN_PATH, new ValueListener<List<String>>() {
+            @Override
+            public void onDataChange(List<String> value) {
+                fail();
+            }
+
+            @Override
+            public void onCancelled(DbError error) {
+                assertThat(error, is(DbError.UNKNOWN_ERROR));
+            }
+        });
+
     }
 }

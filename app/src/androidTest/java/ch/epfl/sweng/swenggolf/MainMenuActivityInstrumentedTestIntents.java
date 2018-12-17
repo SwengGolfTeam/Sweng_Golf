@@ -19,9 +19,9 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
 import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
 import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
 

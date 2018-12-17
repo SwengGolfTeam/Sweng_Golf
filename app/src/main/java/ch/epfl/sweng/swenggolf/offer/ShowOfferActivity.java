@@ -38,6 +38,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import ch.epfl.sweng.swenggolf.Config;
 import ch.epfl.sweng.swenggolf.R;
@@ -55,6 +58,7 @@ import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
+import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
@@ -104,6 +108,8 @@ public class ShowOfferActivity extends FragmentConverter {
             setAnswerToPost();
         }
         fetchAnswers();
+        UserStats.updateStat(UserStats.Stats.OFFERS_READ, Config.getUser().getUserId(), 1);
+        UserStats.updateStat(UserStats.Stats.OFFERS_TOTAL_VIEWS, offer.getUserId(), 1);
         return inflated;
     }
 
@@ -246,7 +252,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onCancelled(DbError error) {
-                    OfferStats.manageRetrocompatibility(error, offer);
+                    OfferStats.checkBackwardsCompatibility(error, offer);
                     displayStats(0);
                 }
             };
@@ -402,6 +408,7 @@ public class ShowOfferActivity extends FragmentConverter {
             answers.getAnswerList()
                     .add(new Answer(Config.getUser().getUserId(), editText.getText().toString()));
             Database.getInstance().write(Database.ANSWERS_PATH, offer.getUuid(), answers);
+            UserStats.updateStat(UserStats.Stats.ANSWERS_POSTED, Config.getUser().getUserId(), 1);
             InputMethodManager imm = (InputMethodManager) getActivity()
                     .getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(newReaction.getWindowToken(), 0);
@@ -412,9 +419,22 @@ public class ShowOfferActivity extends FragmentConverter {
                         new Notification(NotificationType.ANSWER_POSTED,
                                 Config.getUser(), offer));
             }
+            sendNotificationToPreviousAnswerers(answers.getAnswerList());
             listAnswerAdapter.notifyDataSetChanged();
         }
+    }
 
+    private void sendNotificationToPreviousAnswerers(List<Answer> answerList) {
+        Set<String> participants = new HashSet<>();
+        for (Answer a : answerList) {
+            String userId = a.getUserId();
+            if (!participants.contains(userId) && !userId.equals(offer.getUserId())
+                    && !userId.equals(Config.getUser().getUserId())) {
+                NotificationManager.addPendingNotification(userId,
+                        new Notification(NotificationType.ALSO_ANSWERED, Config.getUser(), offer));
+                participants.add(userId);
+            }
+        }
     }
 
     /* methods for the location */
@@ -515,7 +535,6 @@ public class ShowOfferActivity extends FragmentConverter {
         alertDialog.show();
     }
 
-
     private CompletionListener getRemoveOfferListerner() {
         return new CompletionListener() {
             @Override
@@ -564,6 +583,7 @@ public class ShowOfferActivity extends FragmentConverter {
         getActivity().invalidateOptionsMenu();
         offerAccessToDiscussion();
         listAnswerAdapter.closeAnswers();
+        UserStats.updateStat(UserStats.Stats.OFFERS_CLOSED, Config.getUser().getUserId(), 1);
     }
 
 
