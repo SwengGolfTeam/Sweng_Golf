@@ -43,6 +43,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -66,10 +67,10 @@ public class ListOfferActivityTest {
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
             new IntentsTestRule<>(MainMenuActivity.class, false, false);
     private static final Offer offer1 = (new Offer.Builder()).setUserId("user_id")
-            .setTitle("This is a title")
+            .setTitle("This is a title").setCreationDate(1)
             .setDescription(LOREM).setUuid("idoftheoffer1").build();
     private static final Offer offer2 = (new Offer.Builder()).setUserId("user_id")
-            .setTitle("This is a title 2")
+            .setTitle("This is a title 2").setCreationDate(0)
             .setDescription(LOREM).setUuid("idoftheoffer2").build();
 
     public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
@@ -241,5 +242,12 @@ public class ListOfferActivityTest {
     @Test
     public void displaysOnlyNonClosedOffers() {
         onView(withId(R.id.offers_recycler_view)).check(matches(hasChildCount(2)));
+    }
+
+    @Test
+    public void sortedByCreationDate() {
+        RecyclerViewMatcher offersMatcher = new RecyclerViewMatcher(R.id.offers_recycler_view);
+        onView(offersMatcher.atPosition(1))
+                .check(matches(hasDescendant(withText(offer2.getTitle()))));
     }
 }

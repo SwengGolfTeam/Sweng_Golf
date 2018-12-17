@@ -52,12 +52,12 @@ public class DatabaseUser {
                 new ValueListener<Integer>() {
                     @Override
                     public void onDataChange(Integer value) {
-                        writePointsToDatabase(userPath, value+scoredPoints, complete);
+                        writePointsToDatabase(userPath, value + scoredPoints, complete);
                     }
 
                     @Override
                     public void onCancelled(DbError error) {
-                        if (error == DbError.DATA_DOES_NOT_EXIST){
+                        if (error == DbError.DATA_DOES_NOT_EXIST) {
                             writePointsToDatabase(userPath, scoredPoints, complete);
                         } else {
                             if (complete != null) {
@@ -69,8 +69,8 @@ public class DatabaseUser {
     }
 
     private static void writePointsToDatabase(String userPath, Integer value,
-                                              CompletionListener complete){
-        if (complete == null){
+                                              CompletionListener complete) {
+        if (complete == null) {
             Database.getInstance().write(userPath,
                     POINTS, value);
         } else {

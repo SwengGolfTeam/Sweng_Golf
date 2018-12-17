@@ -61,6 +61,7 @@ class CreateHelper {
     /**
      * In this case, we consider the offer to be empty if the title and the description are empty
      * and the category is the default one.
+     *
      * @param builder the builder of the offer
      * @return true if the offer is empty, false otherwise
      */
@@ -191,16 +192,16 @@ class CreateHelper {
     private void informFollowers(final Offer offer) {
         ValueListener<Map<String, List<String>>> followerListener =
                 new ValueListener<Map<String, List<String>>>() {
-            @Override
-            public void onDataChange(Map<String, List<String>> value) {
-                sendNotificationToFollowers(value, offer);
-            }
+                    @Override
+                    public void onDataChange(Map<String, List<String>> value) {
+                        sendNotificationToFollowers(value, offer);
+                    }
 
-            @Override
-            public void onCancelled(DbError error) {
-                // do nothing, they unfortunately will not receive any notification
-            }
-        };
+                    @Override
+                    public void onCancelled(DbError error) {
+                        // do nothing, they unfortunately will not receive any notification
+                    }
+                };
         Database.getInstance().readFollowers(followerListener);
     }
 

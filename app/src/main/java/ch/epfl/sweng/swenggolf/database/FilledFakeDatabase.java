@@ -118,7 +118,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "images/f/ff/Sandcrawler.png/"
                             + "revision/latest?cb=20130812001443")
                     .setUuid("01").setTag(Category.values()[0])
-                    .setCreationDate(DATE).setEndDate(DATE).setLocation(getLocation()).build(),
+                    .setCreationDate(13).setEndDate(DATE).setLocation(getLocation()).build(),
 
             new Offer.Builder().setUserId("13")
                     .setTitle("Defense against the droids")
@@ -129,7 +129,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "databank_battledroid_01_169_1524f145.jpeg?"
                             + "region=0%2C0%2C1560%2C878&width=768")
                     .setUuid("02").setTag(Category.values()[1])
-                    .setCreationDate(DATE).setEndDate(DATE).setLocation(getLocation()).build(),
+                    .setCreationDate(12).setEndDate(DATE).setLocation(getLocation()).build(),
 
             new Offer.Builder().setUserId("8")
                     .setTitle("Chosen one")
@@ -137,7 +137,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + " If you are I can train you !"
                             + " Warning, last apprentice got bad burns !")
                     .setUuid("03").setTag(Category.values()[1])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
+                    .setCreationDate(11).setEndDate(DATE).build(),
 
             new Offer.Builder().setUserId("15")
                     .setTitle("Great Price to find a friend")
@@ -147,7 +147,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture("https://cdn3.whatculture.com/"
                             + "images/2014/12/Star-Wars-Special-Edition-Jabba-600x400.jpg")
                     .setUuid("04").setTag(Category.values()[2])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
+                    .setCreationDate(10).setEndDate(DATE).build(),
 
             new Offer.Builder().setUserId("7")
                     .setTitle("Defeat Dark Sidious I must")
@@ -157,7 +157,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(WIKIA_NO_COOKIE + STARWARS
                             + "images/2/23/Gngf.jpg/revision/latest?cb=20080326171911")
                     .setUuid("05").setTag(Category.values()[2])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
+                    .setCreationDate(9).setEndDate(DATE).build(),
 
             new Offer.Builder().setUserId("4")
                     .setTitle("Help to get the senate")
@@ -166,7 +166,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(LUMIERE
                             + "galactic-senate-3_9351812c.jpeg?region=0%2C0%2C800%2C342")
                     .setUuid("06").setTag(Category.values()[1])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
+                    .setCreationDate(8).setEndDate(DATE).build(),
 
             new Offer.Builder().setUserId("5")
                     .setTitle("Prepare Surprise for a friend")
@@ -174,12 +174,13 @@ public final class FilledFakeDatabase extends FakeDatabase {
                             + "for a friend ? Create a display with \"NOT YET !\""
                             + " on it. I'll invite you to a beer then.")
                     .setUuid("07").setTag(Category.values()[2])
-                    .setCreationDate(DATE).setEndDate(DATE).build(),
+                    .setCreationDate(7).setEndDate(DATE).build(),
 
             new Offer.Builder().setUserId("10")
                     .setTitle("Take revenge on my apprentice")
                     .setDescription("Need someone to find my apprentice, some \"bat\" guy. "
                             + "I'll show you the League of Shadows !")
+                    .setCreationDate(6)
                     .setUuid("08").build(),
 
             new Offer.Builder().setUserId("9")
@@ -188,7 +189,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(LUMIERE
                             + "jawas_42e63e07.jpeg?region=866%2C10%2C1068%2C601&width=768")
                     .setTag(Category.values()[3])
-                    .setCreationDate(DATE)
+                    .setCreationDate(5)
                     .setEndDate(DATE)
                     .setUuid("09").build(),
 
@@ -199,7 +200,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(LUMIERE
                             + "Death-Star-II_b5760154.jpeg?region=0%2C0%2C2160%2C1215&width=768")
                     .setTag(Category.values()[3])
-                    .setCreationDate(DATE)
+                    .setCreationDate(4)
                     .setEndDate(DATE)
                     .setUuid("10").build(),
 
@@ -208,17 +209,20 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setDescription("I need help to rebuild my spaceship in exchange I can help "
                             + "with farm work since I'm pretty good at farm stuff !")
                     .setLinkPicture("https://www.jedidefender.com/collect92/lukexwing%20anh.jpg")
+                    .setCreationDate(3)
                     .setUuid("11").build(),
 
             new Offer.Builder().setUserId("17")
                     .setTitle("Lightsaber to find Jedi")
                     .setDescription("I'm looking for a bold general, care to help me ?")
+                    .setCreationDate(2)
                     .setUuid("12").build(),
 
             new Offer.Builder().setUserId("2")
                     .setTitle("Transport some important data")
                     .setDescription("I have some nice crew of people that can help you "
                             + "do anything if you are okay to transport some data !")
+                    .setCreationDate(1)
                     .setUuid("13").setIsClosed(true).build(),
 
             new Offer.Builder().setUserId("14")
@@ -228,6 +232,7 @@ public final class FilledFakeDatabase extends FakeDatabase {
                     .setLinkPicture(WIKIA_NO_COOKIE
                             + "a2a264e8-38e0-4c5e-b11d-7232c1f808ce/"
                             + "scale-to-width-down/800")
+                    .setCreationDate(0)
                     .setUuid("14").setIsClosed(true).build(),
 
     };

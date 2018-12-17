@@ -44,7 +44,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstances) {
         super.onCreate(savedInstances);
-        if(!Config.isTest()) {
+        if (!Config.isTest()) {
             UserStats.updateStat(UserStats.Stats.LOGIN, Config.getUser().getUserId(), 1);
         }
         NetworkReceiver.registerReceiver(this, new NetworkReceiver());
