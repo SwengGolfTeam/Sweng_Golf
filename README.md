@@ -1,4 +1,4 @@
-# PolyTroc *(temporary name)*
+# PolyTroc
 ## team Sweng_Golf
 
 *Development of an Android app in the context of the Software Engineering course taught at EPFL in Fall 2018.*
