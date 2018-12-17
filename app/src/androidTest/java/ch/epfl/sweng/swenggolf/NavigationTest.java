@@ -159,6 +159,15 @@ public class NavigationTest {
     }
 
     @Test
+    public void deleteClosedOffer() {
+        goToShowOffer();
+        onView(withId(R.id.close_offer_button)).perform(click());
+        onView(withId(R.id.button_delete_offer)).perform(click());
+        onView(withText(android.R.string.yes)).perform(click());
+        checkFragmentShown(ListOwnOfferActivity.class);
+    }
+
+    @Test
     public void goHomeScreen() {
         pressBackButton();
         final int expectedNumberOfFragments = 1;

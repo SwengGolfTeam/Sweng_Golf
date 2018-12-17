@@ -500,6 +500,7 @@ public class ShowOfferActivity extends FragmentConverter {
         CompletionListener emptyListener = new CompletionListener() {
             @Override
             public void onComplete(DbError error) {
+                // Does nothing
             }
         };
 
