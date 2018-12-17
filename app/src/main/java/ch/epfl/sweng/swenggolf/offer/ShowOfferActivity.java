@@ -501,11 +501,13 @@ public class ShowOfferActivity extends FragmentConverter {
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteOfferInDatabase(offer, getRemoveOfferListerner());
+                        deleteOfferInDatabase();
                         if (!offer.getIsClosed()) {
                             DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
-                            OfferStats.removeNbViews(offer);
                         }
+                        OfferStats.removeNbViews(offer);
+                        UserStats.updateStat(UserStats.Stats.OFFERS_DELETED,
+                                Config.getUser().getUserId(), 1);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -521,7 +523,7 @@ public class ShowOfferActivity extends FragmentConverter {
     /**
      * Delete the offer in the database.
      */
-    public void deleteOfferInDatabase(@NonNull final Offer offer, @NonNull CompletionListener listener) {
+    public void deleteOfferInDatabase() {
         if (!offer.getLinkPicture().isEmpty()) {
             Storage storage = Storage.getInstance();
             storage.remove(offer.getLinkPicture());
@@ -536,7 +538,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
         Database database = Database.getInstance();
 
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner());
         database.remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
         database.remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
     }
