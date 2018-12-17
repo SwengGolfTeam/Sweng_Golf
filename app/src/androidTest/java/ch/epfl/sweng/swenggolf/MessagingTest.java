@@ -56,7 +56,6 @@ public class MessagingTest {
                 new Answer(acceptedUser.getUserId(), "I am blue"),
                 new Answer(otherUser.getUserId(), "dabedidabeda")),
                 0);
-        Config.setUser(author);
         Database.getInstance().write(Database.ANSWERS_PATH,
                 offer.getUuid(), answers);
         mActivityRule.launchActivity(new Intent());

@@ -170,6 +170,7 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="15sp"
                     android:textStyle="italic"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                     android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView

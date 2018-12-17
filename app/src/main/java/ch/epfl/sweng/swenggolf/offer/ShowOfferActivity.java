@@ -354,7 +354,9 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                errorMessage.setVisibility(View.VISIBLE);
+                if (error != DbError.DATA_DOES_NOT_EXIST) {
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
             }
         };
         Database.getInstance().listen(Database.ANSWERS_PATH, offer.getUuid(),
@@ -649,8 +651,10 @@ public class ShowOfferActivity extends FragmentConverter {
 
                     @Override
                     public void onCancelled(DbError error) {
-                        // do nothing
+                        Toast.makeText(ShowOfferActivity.this.getContext(),
+                                R.string.error_load_messages, Toast.LENGTH_LONG).show();
                     }
+
                 }, User.class);
     }
 }
