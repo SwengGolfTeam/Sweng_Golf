@@ -161,8 +161,9 @@ public class NavigationTest {
     @Test
     public void deleteClosedOffer() {
         goToShowOffer();
+        TestUtility.showOfferCustomScrollTo();
         onView(withId(R.id.close_offer_button)).perform(click());
-        onView(withId(R.id.button_delete_offer)).perform(click());
+        onView(withId(R.id.button_delete_closed_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
         checkFragmentShown(ListOwnOfferActivity.class);
     }
