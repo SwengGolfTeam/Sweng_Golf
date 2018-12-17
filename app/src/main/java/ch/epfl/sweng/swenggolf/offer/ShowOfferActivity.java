@@ -502,8 +502,10 @@ public class ShowOfferActivity extends FragmentConverter {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteOfferInDatabase(offer, getRemoveOfferListerner());
-                        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
-                        OfferStats.removeNbViews(offer);
+                        if (!offer.getIsClosed()) {
+                            DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
+                            OfferStats.removeNbViews(offer);
+                        }
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
