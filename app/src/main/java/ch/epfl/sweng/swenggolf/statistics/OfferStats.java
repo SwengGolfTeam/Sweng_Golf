@@ -83,13 +83,14 @@ public class OfferStats {
 
     /**
      * Handles the case where it it an old Offer without the statistics.
+     *
      * @param error the error returned by the database
      * @param offer the specific offer
      */
-    public static void checkBackwardsCompatibility(DbError error, Offer offer){
-        if (error == DbError.DATA_DOES_NOT_EXIST){
+    public static void checkBackwardsCompatibility(DbError error, Offer offer) {
+        if (error == DbError.DATA_DOES_NOT_EXIST) {
             initializeNbViews(offer);
-            Log.d(LOG_KEY_STATISTICS, "Stats generated for old offer "+offer.getUuid());
+            Log.d(LOG_KEY_STATISTICS, "Stats generated for old offer " + offer.getUuid());
         } else {
             Log.e(LOG_KEY_STATISTICS, "Failed to load views for offer " + offer.getUuid());
         }

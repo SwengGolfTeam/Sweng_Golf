@@ -1,12 +1,8 @@
 package ch.epfl.sweng.swenggolf.database;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,12 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.statistics.OfferStats;
-import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.DISCONNECTED;
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;

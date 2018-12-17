@@ -491,7 +491,35 @@ public class ShowOfferActivity extends FragmentConverter {
 
     /* methods to delete an offer */
 
-    public void deleteOffer(@NonNull final Offer offer, @NonNull CompletionListener listener) {
+    /**
+     * Display the Alert Dialog for the delete.
+     */
+    public void showDeleteAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this offer?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteOfferInDatabase(offer, getRemoveOfferListerner());
+                        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
+                        OfferStats.removeNbViews(offer);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user cancelled the dialog
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert);
+        Dialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Delete the offer in the database.
+     */
+    public void deleteOfferInDatabase(@NonNull final Offer offer, @NonNull CompletionListener listener) {
         if (!offer.getLinkPicture().isEmpty()) {
             Storage storage = Storage.getInstance();
             storage.remove(offer.getLinkPicture());
@@ -511,42 +539,14 @@ public class ShowOfferActivity extends FragmentConverter {
         database.remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
     }
 
-    /**
-     * Display the Alert Dialog for the delete.
-     */
-    public void showDeleteAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this offer?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteOffer(offer, getRemoveOfferListerner());
-                        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
-                        OfferStats.removeNbViews(offer);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // user cancelled the dialog
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert);
-        Dialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     private CompletionListener getRemoveOfferListerner() {
         return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
                 if (databaseError == DbError.NONE) {
-                    Toast.makeText(getActivity(), R.string.offer_deleted,
+                    Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
-                } else {
-                    Toast.makeText(getActivity(), R.string.offer_deleted_error,
-                            Toast.LENGTH_SHORT).show();
                 }
             }
 
