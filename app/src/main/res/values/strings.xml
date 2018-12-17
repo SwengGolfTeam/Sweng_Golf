@@ -85,7 +85,7 @@
     <string name="closed">closed</string>
     <string name="open">open</string>
     <string name="old_offer_found">Old offer found</string>
-    <string name="restore_offer_message">You already started creating an offer. Do you want to continue to edit it ?</string>
+    <string name="restore_offer_message">You already started creating an offer. Do you want to continue to edit it?</string>
     <string name="choose_offer_template">Choose offer template</string>
     <string name="save_as_pattern">Save as pattern</string>
     <string name="cancel">Cancel</string>

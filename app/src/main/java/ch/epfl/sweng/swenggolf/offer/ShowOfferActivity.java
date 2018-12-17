@@ -141,8 +141,12 @@ public class ShowOfferActivity extends FragmentConverter {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (userIsCreator && !offer.getIsClosed()) {
-            inflater.inflate(R.menu.menu_show_offer, menu);
+        if (userIsCreator) {
+            if (offer.getIsClosed()) {
+                inflater.inflate(R.menu.menu_closed_offer, menu);
+            } else {
+                inflater.inflate(R.menu.menu_show_offer, menu);
+            }
         } else {
             inflater.inflate(R.menu.menu_empty, menu);
         }
@@ -160,6 +164,10 @@ public class ShowOfferActivity extends FragmentConverter {
                 return true;
             }
             case R.id.button_delete_offer: {
+                showDeleteAlertDialog();
+                return true;
+            }
+            case R.id.button_delete_closed_offer: {
                 showDeleteAlertDialog();
                 return true;
             }
@@ -494,6 +502,12 @@ public class ShowOfferActivity extends FragmentConverter {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteOfferInDatabase();
+                        if (!offer.getIsClosed()) {
+                            DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
+                        }
+                        OfferStats.removeNbViews(offer);
+                        UserStats.updateStat(UserStats.Stats.OFFERS_DELETED,
+                                Config.getUser().getUserId(), 1);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -514,20 +528,26 @@ public class ShowOfferActivity extends FragmentConverter {
             Storage storage = Storage.getInstance();
             storage.remove(offer.getLinkPicture());
         }
+
+        CompletionListener emptyListener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+                // Does nothing
+            }
+        };
+
         Database database = Database.getInstance();
 
-        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner(true));
-        database.remove(Database.ANSWERS_PATH, offer.getUuid(), getRemoveOfferListerner(false));
-        DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
-        OfferStats.removeNbViews(offer);
-        UserStats.updateStat(UserStats.Stats.OFFERS_DELETED, Config.getUser().getUserId(), 1);
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), getRemoveOfferListerner());
+        database.remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
+        database.remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
     }
 
-    private CompletionListener getRemoveOfferListerner(final boolean showToast) {
+    private CompletionListener getRemoveOfferListerner() {
         return new CompletionListener() {
             @Override
             public void onComplete(@Nullable DbError databaseError) {
-                if (databaseError == DbError.NONE && showToast) {
+                if (databaseError == DbError.NONE) {
                     Toast.makeText(getContext(), R.string.offer_deleted,
                             Toast.LENGTH_SHORT).show();
                     getActivity().onBackPressed();
@@ -583,7 +603,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                //No notification or errored notifications, as such no modification on display.
+                //No notification or error notifications, as such no modification on display.
             }
         };
         Database.getInstance().listen(Database.OFFERS_PATH + "/" + offer.getUuid(),
@@ -610,8 +630,6 @@ public class ShowOfferActivity extends FragmentConverter {
                     @Override
                     public void onClick(View v) {
                         goToMessagingWithUser(chosenUserId);
-
-
                     }
                 });
             }
