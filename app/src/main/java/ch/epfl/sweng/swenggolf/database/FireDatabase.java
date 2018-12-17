@@ -217,24 +217,6 @@ public final class FireDatabase extends Database {
         }
     }
 
-    @Override
-    public void deleteOffer(@NonNull final Offer offer, @NonNull CompletionListener listener) {
-        if (!offer.getLinkPicture().isEmpty()) {
-            Storage storage = Storage.getInstance();
-            storage.remove(offer.getLinkPicture());
-        }
-
-        CompletionListener emptyListener = new CompletionListener() {
-            @Override
-            public void onComplete(DbError error) {
-            }
-        };
-
-        remove(Database.OFFERS_PATH, offer.getUuid(), listener);
-        remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
-        remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
-    }
-
     private <T> void readListQuery(
             @NonNull final ValueListener<List<T>> listener, Query query,
             final Class<T> c, final boolean reverserOrder) {

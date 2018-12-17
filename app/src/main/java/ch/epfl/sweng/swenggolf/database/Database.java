@@ -222,6 +222,4 @@ public abstract class Database {
         }
         return list;
     }
-
-    public abstract void deleteOffer(@NonNull Offer offer, @NonNull CompletionListener listener);
 }

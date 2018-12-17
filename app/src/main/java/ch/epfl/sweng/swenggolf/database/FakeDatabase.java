@@ -186,16 +186,6 @@ public class FakeDatabase extends Database {
                 listener, categories);
     }
 
-    @Override
-    public void deleteOffer(@NonNull Offer offer, @NonNull CompletionListener listener) {
-        if (working) {
-            database.remove(Database.OFFERS_PATH + "/" + offer.getUuid());
-            listener.onComplete(DbError.NONE);
-        } else {
-            listener.onComplete(DbError.UNKNOWN_ERROR);
-        }
-    }
-
 
     @Nullable
     private <T> List<T> getList(@NonNull String path) {

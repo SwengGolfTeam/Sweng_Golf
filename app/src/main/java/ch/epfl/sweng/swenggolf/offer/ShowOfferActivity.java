@@ -53,9 +53,9 @@ import ch.epfl.sweng.swenggolf.notification.NotificationType;
 import ch.epfl.sweng.swenggolf.offer.answer.Answer;
 import ch.epfl.sweng.swenggolf.offer.answer.Answers;
 import ch.epfl.sweng.swenggolf.offer.answer.ListAnswerAdapter;
-import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
+import ch.epfl.sweng.swenggolf.storage.Storage;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 import ch.epfl.sweng.swenggolf.tools.ViewUserFiller;
 
@@ -162,7 +162,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 return true;
             }
             case R.id.button_delete_closed_offer: {
-                Database.getInstance().deleteOffer(offer, getRemoveOfferListerner());
+                showDeleteAlertDialog();
                 return true;
             }
             default: {
@@ -217,7 +217,7 @@ public class ShowOfferActivity extends FragmentConverter {
                     Picasso.with(getContext()).load(Uri.parse(offer.getLinkPicture()))
                             .into(photoView);
                     mBuilder.setView(mView);
-                    mBuilder.setNegativeButton("quit",  new DialogInterface.OnClickListener() {
+                    mBuilder.setNegativeButton("quit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // user cancelled the dialog
                         }
@@ -237,7 +237,7 @@ public class ShowOfferActivity extends FragmentConverter {
     }
 
     private void setStats() {
-        if (userIsCreator){ // display number of views
+        if (userIsCreator) { // display number of views
             ValueListener<Integer> listener = new ValueListener<Integer>() {
                 @Override
                 public void onDataChange(Integer nb) {
@@ -261,11 +261,11 @@ public class ShowOfferActivity extends FragmentConverter {
 
     private void displayStats(Integer nb) {
         TextView views = inflated.findViewById(R.id.show_offer_views);
-        views.setText("Seen "+ nb + " times");
+        views.setText("Seen " + nb + " times");
         views.setVisibility(View.VISIBLE);
     }
 
-    private void hideStats(){
+    private void hideStats() {
         TextView views = inflated.findViewById(R.id.show_offer_views);
         views.setVisibility(View.GONE);
     }
@@ -471,6 +471,25 @@ public class ShowOfferActivity extends FragmentConverter {
 
     /* methods to delete an offer */
 
+    public void deleteOffer(@NonNull final Offer offer, @NonNull CompletionListener listener) {
+        if (!offer.getLinkPicture().isEmpty()) {
+            Storage storage = Storage.getInstance();
+            storage.remove(offer.getLinkPicture());
+        }
+
+        CompletionListener emptyListener = new CompletionListener() {
+            @Override
+            public void onComplete(DbError error) {
+            }
+        };
+
+        Database database = Database.getInstance();
+
+        database.remove(Database.OFFERS_PATH, offer.getUuid(), listener);
+        database.remove(Database.ANSWERS_PATH, offer.getUuid(), emptyListener);
+        database.remove(Database.MESSAGES_PATH, offer.getUuid(), emptyListener);
+    }
+
     /**
      * Display the Alert Dialog for the delete.
      */
@@ -481,7 +500,7 @@ public class ShowOfferActivity extends FragmentConverter {
                 .setMessage("Are you sure you want to delete this offer?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Database.getInstance().deleteOffer(offer, getRemoveOfferListerner());
+                        deleteOffer(offer, getRemoveOfferListerner());
                         DatabaseUser.addPointsToCurrentUser(-offer.offerValue());
                         OfferStats.removeNbViews(offer);
                     }
