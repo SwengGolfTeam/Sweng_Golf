@@ -71,6 +71,7 @@ public class ListOfferAdapter extends RecyclerView.Adapter<ListOfferAdapter.MyVi
     /**
      * Update the list of offers of the RecyclerView.
      * Doesn't update the view if offers are null.
+     * Sorts the list in descending order of creation date.
      *
      * @param offers a list of offers
      * @return whether displayed offers are empty or not.
