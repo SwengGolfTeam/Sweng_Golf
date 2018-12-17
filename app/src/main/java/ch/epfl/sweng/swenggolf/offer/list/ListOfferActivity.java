@@ -278,7 +278,7 @@ public class ListOfferActivity extends FragmentConverter {
             public void onDataChange(List<Offer> offers) {
                 errorMessage.setVisibility(View.GONE);
                 inflated.findViewById(R.id.offer_list_loading).setVisibility(View.GONE);
-                if (! offers.isEmpty()) {
+                if (!offers.isEmpty()) {
                     showEmptyMessage(offers);
                 }
 

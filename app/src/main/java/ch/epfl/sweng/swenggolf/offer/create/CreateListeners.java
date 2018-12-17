@@ -110,7 +110,7 @@ class CreateListeners {
      *
      * @return a listener
      */
-     ValueListener<Offer.Builder> restoreOfferListener() {
+    ValueListener<Offer.Builder> restoreOfferListener() {
         return new ValueListener<Offer.Builder>() {
             @Override
             public void onDataChange(final Offer.Builder value) {
@@ -128,9 +128,10 @@ class CreateListeners {
 
     /**
      * If the offer is not empty, ask him to enter a name for the new pattern.
+     *
      * @return the listener
      */
-     View.OnClickListener savePatternListener() {
+    View.OnClickListener savePatternListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,9 +148,10 @@ class CreateListeners {
 
     /**
      * Ask the user to choose a pattern to load.
+     *
      * @return the listener
      */
-     ValueListener<List<String>> loadPattern() {
+    ValueListener<List<String>> loadPattern() {
         return new ValueListener<List<String>>() {
             @Override
             public void onDataChange(List<String> value) {

@@ -18,9 +18,9 @@ public class TwoFieldsViewHolder extends RecyclerView.ViewHolder {
     /**
      * Creates a holder with the ids for the Views to use to display.
      *
-     * @param container  the View that will contain the elements
-     * @param fieldOne   the id of the fieldOne View
-     * @param fieldTwo   the id of the subtitle View
+     * @param container the View that will contain the elements
+     * @param fieldOne  the id of the fieldOne View
+     * @param fieldTwo  the id of the subtitle View
      */
     public TwoFieldsViewHolder(View container, int fieldOne, int fieldTwo) {
         super(container);
