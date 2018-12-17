@@ -523,7 +523,7 @@ public class ShowOfferActivity extends FragmentConverter {
     /**
      * Delete the offer in the database.
      */
-    public void deleteOfferInDatabase() {
+    private void deleteOfferInDatabase() {
         if (!offer.getLinkPicture().isEmpty()) {
             Storage storage = Storage.getInstance();
             storage.remove(offer.getLinkPicture());
