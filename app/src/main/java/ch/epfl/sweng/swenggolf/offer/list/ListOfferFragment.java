@@ -33,14 +33,14 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 /**
  * Fragment which shows the offers stored in the Database.
  */
-public class ListOfferActivity extends FragmentConverter {
+public class ListOfferFragment extends FragmentConverter {
     public static final String DISPLAY_CLOSED_BUNDLE_KEY =
             "ch.epfl.sweng.swenggolf.listOfferActivity";
     private static final String LOG_LOCAL_DB = "LOCAL DATABASE";
@@ -50,9 +50,9 @@ public class ListOfferActivity extends FragmentConverter {
 
                 @Override
                 public void onItemClick(View view, int position) {
-                    closeSoftKeyboard(ListOfferActivity.this.search);
+                    closeSoftKeyboard(ListOfferFragment.this.search);
                     Offer showOffer = mAdapter.getOffer(position);
-                    ShowOfferActivity show = FragmentConverter.createShowOfferWithOffer(showOffer);
+                    ShowOfferFragment show = FragmentConverter.createShowOfferWithOffer(showOffer);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                             .beginTransaction().replace(R.id.centralFragment, show);
                     transaction.addToBackStack(null);

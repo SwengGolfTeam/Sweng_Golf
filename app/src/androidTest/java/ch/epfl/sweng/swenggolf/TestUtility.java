@@ -75,7 +75,7 @@ public final class TestUtility {
     }
 
     /**
-     * Performs something equivalent to a scroll in ShowOfferActivity,
+     * Performs something equivalent to a scroll in ShowOfferFragment,
      * since scrollTo is not permitted with a NestedScrollView.
      */
     public static void showOfferCustomScrollTo() {

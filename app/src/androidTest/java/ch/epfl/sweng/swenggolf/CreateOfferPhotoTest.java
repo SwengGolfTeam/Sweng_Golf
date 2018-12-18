@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
 
 import static android.app.Activity.RESULT_OK;
 import static android.support.test.espresso.Espresso.onView;
@@ -59,13 +59,13 @@ public class CreateOfferPhotoTest {
     }
 
     /**
-     * Set up the environnement to work with CreateOfferActivity.
+     * Set up the environnement to work with CreateOfferFragment.
      */
     @Before
     public void setUp() {
         FragmentManager manager = mActivitiyRule.getActivity().getSupportFragmentManager();
         manager.beginTransaction()
-                .replace(R.id.centralFragment, new CreateOfferActivity()).commit();
+                .replace(R.id.centralFragment, new CreateOfferFragment()).commit();
     }
 
     @Test

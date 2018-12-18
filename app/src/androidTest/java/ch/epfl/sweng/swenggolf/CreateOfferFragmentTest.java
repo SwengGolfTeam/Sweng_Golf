@@ -32,8 +32,8 @@ import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
@@ -66,7 +66,7 @@ import static org.hamcrest.core.IsNot.not;
  * Instrumented test, which will execute on an Android device.
  */
 @RunWith(AndroidJUnit4.class)
-public class CreateOfferActivityTest {
+public class CreateOfferFragmentTest {
 
     private static FragmentManager manager;
     private final long beginningTime = 1515625200000L;
@@ -79,7 +79,7 @@ public class CreateOfferActivityTest {
             GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
     /**
-     * Fills the field to create an offer in CreateOfferActivity.
+     * Fills the field to create an offer in CreateOfferFragment.
      * The offer created has a title, description, picture, location and date.
      */
     public static void fillOffer() {
@@ -114,7 +114,7 @@ public class CreateOfferActivityTest {
      */
     @Before
     public void setTest() {
-        ListOfferActivityTest.setUpFakeDatabase();
+        ListOfferFragmentTest.setUpFakeDatabase();
         Storage.setDebugStorage(new FakeStorage(true));
         AppLocation.setDebugLocation(FakeLocation.fakeLocationCreator());
         Config.goToTest();
@@ -124,7 +124,7 @@ public class CreateOfferActivityTest {
 
     private void goToCreateOffer(boolean hasOffer) {
         FragmentTransaction transaction = manager.beginTransaction();
-        CreateOfferActivity fragment = new CreateOfferActivity();
+        CreateOfferFragment fragment = new CreateOfferFragment();
         if (hasOffer) {
             Bundle bundle = new Bundle();
             Offer offer = (new Offer.Builder()).setUserId(Config.getUser().getUserId())
@@ -165,7 +165,7 @@ public class CreateOfferActivityTest {
     public void createOfferShowOfferWhenValidInput() {
         goToCreateOffer(false);
         fillOffer();
-        assertDisplayedFragment(ShowOfferActivity.class);
+        assertDisplayedFragment(ShowOfferFragment.class);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class CreateOfferActivityTest {
         goToShowOffer(false);
         onView(withId(R.id.button_modify_offer)).perform(click());
         fillOffer();
-        assertDisplayedFragment(ShowOfferActivity.class);
+        assertDisplayedFragment(ShowOfferFragment.class);
     }
 
     private void worksOnlyOnCreator(int id) {
@@ -218,7 +218,7 @@ public class CreateOfferActivityTest {
 
     private void assertBackFrom(boolean hasOffer, Class expectedDisplayedClass) {
         goToCreateOffer(hasOffer);
-        assertDisplayedFragment(CreateOfferActivity.class);
+        assertDisplayedFragment(CreateOfferFragment.class);
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
         assertDisplayedFragment(expectedDisplayedClass);
     }

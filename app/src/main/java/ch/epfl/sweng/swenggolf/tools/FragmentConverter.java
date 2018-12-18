@@ -18,20 +18,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import ch.epfl.sweng.swenggolf.R;
-import ch.epfl.sweng.swenggolf.messaging.MessagingActivity;
+import ch.epfl.sweng.swenggolf.messaging.MessagingFragment;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.profile.EditProfileActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
+import ch.epfl.sweng.swenggolf.profile.EditProfileFragment;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
-import ch.epfl.sweng.swenggolf.statistics.StatisticsActivity;
+import ch.epfl.sweng.swenggolf.statistics.StatisticsFragment;
 
 /**
  * Class adding functionalities to work with the MainMenuActivity
  * and automatize initialization such as setting the toolbar.
  * It also adds functionalities to create initialized fragments
- * such as ShowOfferActivity or CreateOfferActivity.
+ * such as ShowOfferFragment or CreateOfferFragment.
  */
 public abstract class FragmentConverter extends Fragment {
 
@@ -40,38 +40,38 @@ public abstract class FragmentConverter extends Fragment {
     public static final String FUTURE_FRAGMENTS_TO_SKIP = "futureFragmentsToSkip";
 
     /**
-     * Creates a ProfileActivity wit arguments already set.
+     * Creates a ProfileFragment wit arguments already set.
      *
      * @param user the user to pass to the fragment.
-     * @return a new ProfileActivity fragment with user.
+     * @return a new ProfileFragment fragment with user.
      */
-    public static ProfileActivity createShowProfileWithProfile(User user) {
+    public static ProfileFragment createShowProfileWithProfile(User user) {
         String key = User.USER;
-        return fillFragment(new ProfileActivity(), key, user);
+        return fillFragment(new ProfileFragment(), key, user);
     }
 
     /**
-     * Creates a ProfileActivity wit arguments already set.
+     * Creates a ProfileFragment wit arguments already set.
      *
      * @param user the user to pass to the fragment.
-     * @return a new ProfileActivity fragment with user.
+     * @return a new ProfileFragment fragment with user.
      */
-    public static ProfileActivity createShowProfileWithProfile(User user, int fragmentsToSkip) {
+    public static ProfileFragment createShowProfileWithProfile(User user, int fragmentsToSkip) {
         String key = User.USER;
-        ProfileActivity fragment = fillFragment(new ProfileActivity(), key, user);
+        ProfileFragment fragment = fillFragment(new ProfileFragment(), key, user);
         fragment.getArguments().putInt(FRAGMENTS_TO_SKIP, fragmentsToSkip);
         return fragment;
     }
 
     /**
-     * Create a EditProfileActivity with a number of fragments to skip.
+     * Create a EditProfileFragment with a number of fragments to skip.
      *
      * @param fragmentsToSkip the number of fragments we currently need to skip when we click on
      *                        back button
-     * @return the EditProfileActivity
+     * @return the EditProfileFragment
      */
-    public static EditProfileActivity createEditProfileActivity(int fragmentsToSkip) {
-        EditProfileActivity fragment = new EditProfileActivity();
+    public static EditProfileFragment createEditProfileActivity(int fragmentsToSkip) {
+        EditProfileFragment fragment = new EditProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(FUTURE_FRAGMENTS_TO_SKIP, fragmentsToSkip);
         fragment.setArguments(bundle);
@@ -79,24 +79,24 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
-     * Creates a ShowOfferActivity with arguments already set.
+     * Creates a ShowOfferFragment with arguments already set.
      *
      * @param offer the offer to pass to the fragment.
-     * @return a new ShowOfferActivity with an offer.
+     * @return a new ShowOfferFragment with an offer.
      */
-    public static ShowOfferActivity createShowOfferWithOffer(Offer offer) {
-        return fillFragment(new ShowOfferActivity(), Offer.OFFER, offer);
+    public static ShowOfferFragment createShowOfferWithOffer(Offer offer) {
+        return fillFragment(new ShowOfferFragment(), Offer.OFFER, offer);
     }
 
     /**
-     * Creates a ShowOfferActivity with arguments already set.
+     * Creates a ShowOfferFragment with arguments already set.
      *
      * @param offer           the offer to pass to the fragment.
      * @param fragmentsToSkip the number of fragments to skip when the user click on back button.
-     * @return new ShowOfferActivity with an offer.
+     * @return new ShowOfferFragment with an offer.
      */
-    public static ShowOfferActivity createShowOfferWithOffer(Offer offer, int fragmentsToSkip) {
-        ShowOfferActivity fragment = fillFragment(new ShowOfferActivity(), Offer.OFFER, offer);
+    public static ShowOfferFragment createShowOfferWithOffer(Offer offer, int fragmentsToSkip) {
+        ShowOfferFragment fragment = fillFragment(new ShowOfferFragment(), Offer.OFFER, offer);
         return putFragmentsToSkip(fragment, fragmentsToSkip);
     }
 
@@ -107,50 +107,50 @@ public abstract class FragmentConverter extends Fragment {
     }
 
     /**
-     * Creates a CreateOfferActivity with arguments already set.
+     * Creates a CreateOfferFragment with arguments already set.
      *
      * @param offer the offer to pass to the fragment.
-     * @return a new CreateOfferActivity with an offer.
+     * @return a new CreateOfferFragment with an offer.
      */
-    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer) {
-        return fillFragment(new CreateOfferActivity(), Offer.OFFER, offer);
+    public static CreateOfferFragment createOfferActivityWithOffer(Offer offer) {
+        return fillFragment(new CreateOfferFragment(), Offer.OFFER, offer);
     }
 
     /**
-     * Creates a CreateOfferActivity with arguments already set.
+     * Creates a CreateOfferFragment with arguments already set.
      *
      * @param offer the offer to pass to the fragment.
-     * @return a new CreateOfferActivity with an offer.
+     * @return a new CreateOfferFragment with an offer.
      */
-    public static CreateOfferActivity createOfferActivityWithOffer(Offer offer,
+    public static CreateOfferFragment createOfferActivityWithOffer(Offer offer,
                                                                    int fragmentsToSkip) {
-        CreateOfferActivity fragment = fillFragment(new CreateOfferActivity(), Offer.OFFER, offer);
+        CreateOfferFragment fragment = fillFragment(new CreateOfferFragment(), Offer.OFFER, offer);
         fragment.getArguments().putInt(FUTURE_FRAGMENTS_TO_SKIP, fragmentsToSkip);
         return fragment;
     }
 
     /**
-     * Creates a MessagingActivity with all information needed.
+     * Creates a MessagingFragment with all information needed.
      *
      * @param offer the offer which the discussion is about
      * @param user  the user to talk to
-     * @return a new MessagingActivity with the user and about the offer
+     * @return a new MessagingFragment with the user and about the offer
      */
-    public static MessagingActivity createMessagingActivityWithOfferAndUser(
+    public static MessagingFragment createMessagingActivityWithOfferAndUser(
             Offer offer, User user) {
-        MessagingActivity fragment = fillFragment(new MessagingActivity(), User.USER, user);
+        MessagingFragment fragment = fillFragment(new MessagingFragment(), User.USER, user);
         fragment.getArguments().putString(Offer.OFFER, offer.getUuid());
         return fragment;
     }
 
     /**
-     * Creates a StatisticsActivity for a specific User.
+     * Creates a StatisticsFragment for a specific User.
      *
      * @param user the user for which we want the stats
-     * @return a new StatisticsActivity with all statistics for the User
+     * @return a new StatisticsFragment with all statistics for the User
      */
-    public static StatisticsActivity createStatisticsActivityWithUser(User user) {
-        StatisticsActivity fragment = fillFragment(new StatisticsActivity(), User.USER, user);
+    public static StatisticsFragment createStatisticsActivityWithUser(User user) {
+        StatisticsFragment fragment = fillFragment(new StatisticsFragment(), User.USER, user);
         return fragment;
     }
 

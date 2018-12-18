@@ -27,7 +27,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferFragment;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
 import static ch.epfl.sweng.swenggolf.database.DbError.NONE;
@@ -37,7 +37,7 @@ import static ch.epfl.sweng.swenggolf.profile.User.USER;
 /**
  * Fragment which shows a profile of an User.
  */
-public class ProfileActivity extends FragmentConverter {
+public class ProfileFragment extends FragmentConverter {
     private static final int STAR_OFF = android.R.drawable.btn_star_big_off;
     private static final int STAR_ON = android.R.drawable.btn_star_big_on;
     private User user;
@@ -69,7 +69,7 @@ public class ProfileActivity extends FragmentConverter {
         final Bundle bundle = getArguments();
         user = bundle.getParcelable("ch.epfl.sweng.swenggolf.user");
         if (user == null) {
-            throw new NullPointerException("The user given to ProfileActivity can not be null");
+            throw new NullPointerException("The user given to ProfileFragment can not be null");
         }
         if (bundle.containsKey(FRAGMENTS_TO_SKIP)) {
             fragmentsToSkip = bundle.getInt(FRAGMENTS_TO_SKIP);
@@ -99,7 +99,7 @@ public class ProfileActivity extends FragmentConverter {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(USER, user);
 
-                        Fragment fragment = new ListOwnOfferActivity();
+                        Fragment fragment = new ListOwnOfferFragment();
                         fragment.setArguments(bundle);
 
                         replaceCentralFragment(fragment);
@@ -207,12 +207,12 @@ public class ProfileActivity extends FragmentConverter {
                     NotificationManager.addPendingNotification(user.getUserId(),
                             new Notification(NotificationType.FOLLOW,
                                     Config.getUser(), null));
-                    Toast.makeText(ProfileActivity.this.getContext(), getResources()
+                    Toast.makeText(ProfileFragment.this.getContext(), getResources()
                                     .getString(R.string.now_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)
                             .show();
                 } else {
-                    Toast.makeText(ProfileActivity.this.getContext(), getResources()
+                    Toast.makeText(ProfileFragment.this.getContext(), getResources()
                                     .getString(R.string.error_following) + " " + user.getUserName(),
                             Toast.LENGTH_SHORT)
                             .show();

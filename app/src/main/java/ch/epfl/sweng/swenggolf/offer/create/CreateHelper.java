@@ -35,25 +35,25 @@ import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
 import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermission;
-import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.OFF;
-import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.ON;
-import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity.SEPARATION;
+import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment.OFF;
+import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment.ON;
+import static ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment.SEPARATION;
 
 /**
  * Helps the CreateOfferactivity to set some fields.
  */
 class CreateHelper {
 
-    private final CreateOfferActivity create;
+    private final CreateOfferFragment create;
     private final CreateListeners listeners;
 
     /**
      * Initialize the create helper.
      *
-     * @param create    the CreateOfferActivity to help
+     * @param create    the CreateOfferFragment to help
      * @param listeners the CreateListeners
      */
-    protected CreateHelper(CreateOfferActivity create, CreateListeners listeners) {
+    protected CreateHelper(CreateOfferFragment create, CreateListeners listeners) {
         this.create = create;
         this.listeners = listeners;
     }
@@ -71,7 +71,7 @@ class CreateHelper {
     }
 
     /**
-     * Pre-fill the date, category, location fields of the CreateOfferActivity.
+     * Pre-fill the date, category, location fields of the CreateOfferFragment.
      */
     void preFillFields() {
 

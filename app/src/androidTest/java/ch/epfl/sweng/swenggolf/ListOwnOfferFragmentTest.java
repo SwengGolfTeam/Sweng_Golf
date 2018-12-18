@@ -16,7 +16,7 @@ import ch.epfl.sweng.swenggolf.database.LocalDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -27,9 +27,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
+import static ch.epfl.sweng.swenggolf.ListOfferFragmentTest.withRecyclerView;
 
-public class ListOwnOfferActivityTest {
+public class ListOwnOfferFragmentTest {
 
     private final Database database = new FakeDatabase(true);
     private final User user = FilledFakeDatabase.getUser(0);
@@ -53,7 +53,7 @@ public class ListOwnOfferActivityTest {
         Config.setUser(user);
         mActivityRule.launchActivity(new Intent());
         mActivityRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new ListOwnOfferActivity()).commit();
+                .replace(R.id.centralFragment, new ListOwnOfferFragment()).commit();
         LocalDatabase localDb = new LocalDatabase(mActivityRule.getActivity(), null, 1);
         localDb.writeCategories(Arrays.asList(Category.values()));
     }

@@ -38,7 +38,7 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
  */
 class CreateListeners {
 
-    private CreateOfferActivity create;
+    private CreateOfferFragment create;
 
     View.OnClickListener onTakePictureClick = new View.OnClickListener() {
         @Override
@@ -69,8 +69,8 @@ class CreateListeners {
         }
     };
 
-    CreateListeners(CreateOfferActivity createOfferActivity) {
-        this.create = createOfferActivity;
+    CreateListeners(CreateOfferFragment createOfferFragment) {
+        this.create = createOfferFragment;
     }
 
     /**

@@ -43,7 +43,7 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class ProfileActivityTest {
+public class ProfileFragmentTest {
 
     private static final User user = new User("Patrick", "Vetterli", "1234567890", "", "tea");
     @Rule

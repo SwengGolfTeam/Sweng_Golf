@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 /**
  * Fragment which displays the list of preferences.
  */
-public class ListPreferencesActivity extends FragmentConverter {
+public class ListFollowersFragment extends FragmentConverter {
     private static final int SPAN_COUNT = 3;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -32,7 +32,7 @@ public class ListPreferencesActivity extends FragmentConverter {
         mLayoutManager = new GridLayoutManager(this.getContext(), SPAN_COUNT);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ListPreferenceAdapter();
+        mAdapter = new ListFollowersAdapter();
         mRecyclerView.setAdapter(mAdapter);
         return inflated;
     }

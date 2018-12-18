@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.sweng.swenggolf.TestUtility.testToastShow;
 
 @RunWith(AndroidJUnit4.class)
-public class ShowOfferActivityDbNotWorkingTest {
+public class ShowOfferFragmentDbNotWorkingTest {
     private static final FakeDatabase database = new FakeDatabase(true);
     private static final User user = new User("patrick", "0", "email",
             "photo", "preference");

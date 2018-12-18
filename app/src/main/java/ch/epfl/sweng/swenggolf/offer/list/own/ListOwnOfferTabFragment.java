@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
 import ch.epfl.sweng.swenggolf.offer.list.DatabaseOfferConsumer;
-import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static ch.epfl.sweng.swenggolf.profile.User.USER;
@@ -22,7 +22,7 @@ import static ch.epfl.sweng.swenggolf.profile.User.USER;
 /**
  * Fragment which shows user own offers.
  */
-public class ListOwnOfferTabActivity extends ListOfferActivity {
+public class ListOwnOfferTabFragment extends ListOfferFragment {
 
     private User user;
 

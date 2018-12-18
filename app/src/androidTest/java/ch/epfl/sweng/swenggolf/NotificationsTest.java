@@ -21,13 +21,13 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
-import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
+import ch.epfl.sweng.swenggolf.notification.NotificationsFragment;
 import ch.epfl.sweng.swenggolf.notification.NotificationsAdapter;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.Badge;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -70,7 +70,7 @@ public class NotificationsTest {
 
     @Test
     public void refreshActuallyRefreshes() throws InterruptedException {
-        NotificationsActivity notifications = new NotificationsActivity();
+        NotificationsFragment notifications = new NotificationsFragment();
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, notifications).commit();
         Thread.sleep(1000);
@@ -89,7 +89,7 @@ public class NotificationsTest {
         notification.check(matches(isDisplayed()));
         // check that it shows the profile when clicking on it
         notification.perform(click());
-        checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
+        checkThatWeAreAt(ProfileFragment.class.getName(), R.id.name, user1.getUserName());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class NotificationsTest {
         addPointsToUser(Badge.LEVEL_SPACE, user1);
         onView(withText(activityTestRule.getActivity().getString(R.string.notif_level_gained)))
                 .check(matches(isDisplayed())).perform(click());
-        checkThatWeAreAt(ProfileActivity.class.getName(), R.id.name, user1.getUserName());
+        checkThatWeAreAt(ProfileFragment.class.getName(), R.id.name, user1.getUserName());
     }
 
     @Test
@@ -177,7 +177,7 @@ public class NotificationsTest {
 
         // make user1 create an offer
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new CreateOfferActivity())
+                .replace(R.id.centralFragment, new CreateOfferFragment())
                 .commit();
         String offerTitle = "This is an offer";
         onView(withId(R.id.offer_name)).perform(typeText(offerTitle))
@@ -218,7 +218,7 @@ public class NotificationsTest {
     }
 
     private void postFollowNotification() {
-        ProfileActivity user2Profile = FragmentConverter.createShowProfileWithProfile(user2);
+        ProfileFragment user2Profile = FragmentConverter.createShowProfileWithProfile(user2);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment, user2Profile)
                 .commit();
@@ -234,7 +234,7 @@ public class NotificationsTest {
     private void setUserAndGoToNotifications(User otherUser) {
         Config.setUser(otherUser);
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new NotificationsActivity())
+                .replace(R.id.centralFragment, new NotificationsFragment())
                 .commit();
     }
 
@@ -260,7 +260,7 @@ public class NotificationsTest {
         notification.check(matches(isDisplayed()));
         // check that it shows the offer when clicking on it
         notification.perform(click());
-        checkThatWeAreAt(ShowOfferActivity.class.getName(),
+        checkThatWeAreAt(ShowOfferFragment.class.getName(),
                 R.id.show_offer_title, offerTitle);
     }
 

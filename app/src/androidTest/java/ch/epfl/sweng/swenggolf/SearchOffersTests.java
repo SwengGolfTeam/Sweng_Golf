@@ -20,7 +20,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
+import static ch.epfl.sweng.swenggolf.ListOfferFragmentTest.withRecyclerView;
 
 public class SearchOffersTests {
     @Rule

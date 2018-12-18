@@ -51,7 +51,7 @@ import static junit.framework.TestCase.fail;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ListOfferActivityTest {
+public class ListOfferFragmentTest {
 
     public static final String LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             + "Nam ut quam ornare, fringilla nunc eget, facilisis lectus."

@@ -17,7 +17,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-public class StatisticsActivity extends FragmentConverter {
+public class StatisticsFragment extends FragmentConverter {
     private View inflated;
     private User user;
     private StatisticsAdapter statisticsAdapter;

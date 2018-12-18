@@ -19,7 +19,7 @@
         <item
             android:id="@+id/create_offer"
             android:icon="@android:drawable/ic_menu_add"
-            android:onClick="createOfferActivity"
+            android:onClick="createOfferFragment"
             android:title="@string/create_offer" />
         <item
             android:id="@+id/preference_activity"

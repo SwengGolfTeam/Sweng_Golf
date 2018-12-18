@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
-public class ListOwnOfferActivity extends FragmentConverter {
+public class ListOwnOfferFragment extends FragmentConverter {
 
     @Nullable
     @Override
