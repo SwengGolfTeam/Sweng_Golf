@@ -177,7 +177,7 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadLeaderboard(MenuItem item) {
+    public void loadLeaderboardFragment(MenuItem item) {
         replaceCentralFragment(new Leaderboard());
     }
 
@@ -186,7 +186,7 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadPreferenceListActivity(MenuItem item) {
+    public void loadFollowersListFragment(MenuItem item) {
         replaceCentralFragment(new ListFollowersFragment());
     }
 
@@ -195,7 +195,7 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadNotificationsActivity(MenuItem item) {
+    public void loadNotificationsFragment(MenuItem item) {
         replaceCentralFragment(new NotificationsFragment());
     }
 
@@ -204,7 +204,7 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void createOfferActivity(MenuItem item) {
+    public void createOfferFragment(MenuItem item) {
         replaceCentralFragment(new CreateOfferFragment());
     }
 
