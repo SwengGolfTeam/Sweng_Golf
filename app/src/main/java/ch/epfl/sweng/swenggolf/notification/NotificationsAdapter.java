@@ -31,7 +31,7 @@ public class NotificationsAdapter
     private ItemClickListener viewHolderOnClickListener;
 
     /**
-     * Constructs an adapter for the RecyclerView in NotificationsActivity.
+     * Constructs an adapter for the RecyclerView in NotificationsFragment.
      *
      * @param viewHolderOnClickListener a listener indicating what to do when clicking
      *                                  on items of the recycler view

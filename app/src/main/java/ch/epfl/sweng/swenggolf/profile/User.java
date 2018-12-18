@@ -196,7 +196,6 @@ public class User implements Parcelable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    // TODO: check if need Uri for photo in Ugo's part
 
     /**
      * Get the User name.

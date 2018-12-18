@@ -27,7 +27,7 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
 /**
  * Fragment which allows to edit the Profile.
  */
-public class EditProfileActivity extends FragmentConverter {
+public class EditProfileFragment extends FragmentConverter {
     private User user;
     private int fragmentsToSkip;
 
@@ -82,7 +82,7 @@ public class EditProfileActivity extends FragmentConverter {
             displayElement((EditText) inflated.findViewById(R.id.edit_description),
                     user.getDescription());
             ImageView imageView = inflated.findViewById(R.id.ivProfile);
-            ProfileActivity.displayPicture(imageView, user, this.getContext());
+            ProfileFragment.displayPicture(imageView, user, this.getContext());
         }
         inflated.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,8 +174,6 @@ public class EditProfileActivity extends FragmentConverter {
                     user.setPhoto(link);
                     DatabaseUser.addUser(user);
                     updatePicture();
-                } else {
-                    // TODO Handle failures
                 }
             }
         };
@@ -183,6 +181,6 @@ public class EditProfileActivity extends FragmentConverter {
 
     private void updatePicture() {
         ImageView imageView = findViewById(R.id.ivProfile);
-        ProfileActivity.displayPicture(imageView, user, this.getContext());
+        ProfileFragment.displayPicture(imageView, user, this.getContext());
     }
 }

@@ -15,7 +15,7 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -27,13 +27,13 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
+import static ch.epfl.sweng.swenggolf.ListOfferFragmentTest.withRecyclerView;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 
-public class ProfileActivityOtherUserTest {
+public class ProfileFragmentOtherUserTest {
 
     @Rule
     public final IntentsTestRule<MainMenuActivity> mActivityRule =
@@ -41,7 +41,7 @@ public class ProfileActivityOtherUserTest {
     final User user = FilledFakeDatabase.getUser(0);
     final User otherUser = FilledFakeDatabase.getUser(4);
     private FakeDatabase database = (FakeDatabase) FakeDatabase.fakeDatabaseCreator();
-    private ProfileActivity profile;
+    private ProfileFragment profile;
 
     /**
      * Set up a fake database and user.

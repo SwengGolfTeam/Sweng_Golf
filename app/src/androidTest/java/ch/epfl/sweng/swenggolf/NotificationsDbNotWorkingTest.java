@@ -14,7 +14,7 @@ import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.notification.Notification;
 import ch.epfl.sweng.swenggolf.notification.NotificationManager;
 import ch.epfl.sweng.swenggolf.notification.NotificationType;
-import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
+import ch.epfl.sweng.swenggolf.notification.NotificationsFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -61,7 +61,7 @@ public class NotificationsDbNotWorkingTest {
     private void goToNotifications() {
         activityTestRule.launchActivity(new Intent());
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new NotificationsActivity())
+                .replace(R.id.centralFragment, new NotificationsFragment())
                 .commit();
     }
 

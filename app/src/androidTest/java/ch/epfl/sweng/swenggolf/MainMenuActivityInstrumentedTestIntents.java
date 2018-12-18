@@ -19,11 +19,11 @@ import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
-import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferFragment;
+import ch.epfl.sweng.swenggolf.preference.ListFollowersFragment;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -68,27 +68,27 @@ public class MainMenuActivityInstrumentedTestIntents {
 
     @Test
     public void testIntentOfferList() {
-        testReplacement(ListOfferActivity.class, R.id.offers, true);
+        testReplacement(ListOfferFragment.class, R.id.offers, true);
     }
 
     @Test
     public void testIntentPreferenceList() {
-        testReplacement(ListPreferencesActivity.class, R.id.preference_activity, true);
+        testReplacement(ListFollowersFragment.class, R.id.preference_activity, true);
     }
 
     @Test
     public void testIntentCreateOffer() {
-        testReplacement(CreateOfferActivity.class, R.id.create_offer, true);
+        testReplacement(CreateOfferFragment.class, R.id.create_offer, true);
     }
 
     @Test
     public void testIntentProfile() {
-        testReplacement(ProfileActivity.class, R.id.my_account, true);
+        testReplacement(ProfileFragment.class, R.id.my_account, true);
     }
 
     @Test
     public void testIntentListOwnOffer() {
-        testReplacement(ListOwnOfferActivity.class, R.id.my_offers, true);
+        testReplacement(ListOwnOfferFragment.class, R.id.my_offers, true);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class MainMenuActivityInstrumentedTestIntents {
     @Test
     public void testIntentProfileByClickingOnPicture() {
         onView(ViewMatchers.withId(R.id.menu_header)).perform(click());
-        testReplacement(ProfileActivity.class, 0, false);
+        testReplacement(ProfileFragment.class, 0, false);
     }
 
 }

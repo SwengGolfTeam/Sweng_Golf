@@ -43,6 +43,7 @@
             android:layout_toStartOf="@id/send_message_button"
             android:ems="10"
             android:hint="@string/hint_greeting"
+            android:maxLength="1000"
             android:inputType="textMultiLine" />
 
         <ImageButton

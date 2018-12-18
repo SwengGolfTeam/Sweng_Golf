@@ -12,7 +12,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
 
-public class CloseOfferTest extends ShowOfferActivityTest {
+public class CloseOfferTest extends ShowOfferFragmentTest {
 
     @Test
     public void closeButtonNotVisibileWhenClosing() {

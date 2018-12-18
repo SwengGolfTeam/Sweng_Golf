@@ -69,7 +69,7 @@ import static ch.epfl.sweng.swenggolf.location.AppLocation.checkLocationPermissi
 /**
  * Fragment which shows an offer.
  */
-public class ShowOfferActivity extends FragmentConverter {
+public class ShowOfferFragment extends FragmentConverter {
     public static final int DISTANCE_GRANULARITY = 100;
     private static final int KILOMETER_SIZE = 1000;
     private final Answers defaultAnswers = new Answers(new ArrayList<Answer>(), -1);
@@ -313,7 +313,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
                                  @Override
                                  public void onCancelled(DbError error) {
-                                     Toast.makeText(ShowOfferActivity.this.getContext(),
+                                     Toast.makeText(ShowOfferFragment.this.getContext(),
                                              R.string.error_load_user, Toast.LENGTH_LONG).show();
                                  }
                              },
@@ -651,7 +651,7 @@ public class ShowOfferActivity extends FragmentConverter {
 
                     @Override
                     public void onCancelled(DbError error) {
-                        Toast.makeText(ShowOfferActivity.this.getContext(),
+                        Toast.makeText(ShowOfferFragment.this.getContext(),
                                 R.string.error_load_messages, Toast.LENGTH_LONG).show();
                     }
 

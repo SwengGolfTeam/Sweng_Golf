@@ -30,7 +30,7 @@ import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 /**
  * Notification fragment which shows all the User's notification.
  */
-public class NotificationsActivity extends FragmentConverter {
+public class NotificationsFragment extends FragmentConverter {
     private NotificationsAdapter mAdapter;
     private TextView noNotification;
 
@@ -100,7 +100,7 @@ public class NotificationsActivity extends FragmentConverter {
 
             @Override
             public void onCancelled(DbError error) {
-                Toast.makeText(NotificationsActivity.this.getContext(), getResources()
+                Toast.makeText(NotificationsFragment.this.getContext(), getResources()
                         .getString(R.string.notif_error), Toast.LENGTH_SHORT).show();
             }
         };

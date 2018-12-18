@@ -23,15 +23,15 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.DatabaseUser;
 import ch.epfl.sweng.swenggolf.database.DbError;
 import ch.epfl.sweng.swenggolf.database.ValueListener;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.ThreeFieldsViewHolder;
 
 /**
  * Adapter for the Preference RecyclerView.
  */
-public class ListPreferenceAdapter
-        extends RecyclerView.Adapter<ListPreferenceAdapter.PreferenceViewHolder> {
+public class ListFollowersAdapter
+        extends RecyclerView.Adapter<ListFollowersAdapter.PreferenceViewHolder> {
 
     private static final int DEFAULT_PICTURE = R.drawable.common_google_signin_btn_icon_dark;
     private List<User> mDataset = new ArrayList<>();
@@ -40,14 +40,14 @@ public class ListPreferenceAdapter
      * Create a new adapter for the list that fetches information about users.
      * If debug is set to true, a default list of users is used.
      */
-    public ListPreferenceAdapter() {
+    public ListFollowersAdapter() {
         final Database d = Database.getInstance();
 
         final ValueListener<User> userListener = new ValueListener<User>() {
             @Override
             public void onDataChange(User value) {
                 mDataset.add(value);
-                ListPreferenceAdapter.this.notifyDataSetChanged();
+                ListFollowersAdapter.this.notifyDataSetChanged();
             }
 
             @Override
@@ -88,7 +88,7 @@ public class ListPreferenceAdapter
                 User user = mDataset.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("ch.epfl.sweng.swenggolf.user", user);
-                ProfileActivity profile = new ProfileActivity();
+                ProfileFragment profile = new ProfileFragment();
                 profile.setArguments(bundle);
                 ((AppCompatActivity) (parent.getContext()))
                         .getSupportFragmentManager().beginTransaction()

@@ -59,7 +59,7 @@ import static ch.epfl.sweng.swenggolf.storage.Storage.PICK_IMAGE_REQUEST;
  * The fragment used to create offers. Note that the extras
  * must contain a string with key "username".
  */
-public class CreateOfferActivity extends FragmentConverter
+public class CreateOfferFragment extends FragmentConverter
         implements DatePickerDialog.OnDateSetListener {
 
     static final long SEPARATION = 86220000L;
@@ -204,7 +204,6 @@ public class CreateOfferActivity extends FragmentConverter
             Toast.makeText(this.getContext(), "Failed to retrieve picture.",
                     Toast.LENGTH_LONG).show();
             return Config.isTest() ? Uri.parse("drawable://" + R.drawable.img) : null;
-            //TODO find a better way to fix tests with ressource drawable.
         }
         return path;
     }
@@ -314,7 +313,7 @@ public class CreateOfferActivity extends FragmentConverter
         Calendar cal = new GregorianCalendar(year, month, day);
 
         if (cal.before(now)) {
-            Toast.makeText(CreateOfferActivity.this.getContext(),
+            Toast.makeText(CreateOfferFragment.this.getContext(),
                     getString(R.string.valid_date), Toast.LENGTH_LONG).show();
         } else {
             setDate(cal);

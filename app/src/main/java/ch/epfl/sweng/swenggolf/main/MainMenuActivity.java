@@ -19,11 +19,11 @@ import ch.epfl.sweng.swenggolf.R;
 import ch.epfl.sweng.swenggolf.leaderboard.Leaderboard;
 import ch.epfl.sweng.swenggolf.network.Network;
 import ch.epfl.sweng.swenggolf.network.NetworkReceiver;
-import ch.epfl.sweng.swenggolf.notification.NotificationsActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
-import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
+import ch.epfl.sweng.swenggolf.notification.NotificationsFragment;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferFragment;
+import ch.epfl.sweng.swenggolf.preference.ListFollowersFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.UserStats;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
@@ -77,9 +77,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void launchFragment() {
-        Fragment offerList = new ListOfferActivity();
+        Fragment offerList = new ListOfferFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        bundle.putBoolean(ListOfferFragment.DISPLAY_CLOSED_BUNDLE_KEY, false);
         offerList.setArguments(bundle);
         manager = getSupportFragmentManager();
         FragmentTransaction transaction =
@@ -133,7 +133,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the ProfileActivity.
+     * Launches the ProfileFragment.
      *
      * @param item the menu item that triggers the activity
      */
@@ -142,7 +142,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     /**
-     * Launches the StatisticsActivity.
+     * Launches the StatisticsFragment.
      *
      * @param item the menu item that triggers the activity
      */
@@ -156,18 +156,18 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param item the menu item that triggers the activity
      */
     public void loadShowOffersActivity(MenuItem item) {
-        replaceCentralFragment(new ListOfferActivity());
+        replaceCentralFragment(new ListOfferFragment());
     }
 
     /**
-     * Launches the ListOwnOfferActivity.
+     * Launches the ListOwnOfferFragment.
      *
      * @param item the menu item that triggers the activity
      */
     public void loadListOwnOfferActivity(MenuItem item) {
-        ListOwnOfferActivity openOffers = new ListOwnOfferActivity();
+        ListOwnOfferFragment openOffers = new ListOwnOfferFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(ListOfferActivity.DISPLAY_CLOSED_BUNDLE_KEY, false);
+        bundle.putBoolean(ListOfferFragment.DISPLAY_CLOSED_BUNDLE_KEY, false);
         openOffers.setArguments(bundle);
         replaceCentralFragment(openOffers);
     }
@@ -177,7 +177,7 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadLeaderboard(MenuItem item) {
+    public void loadLeaderboardFragment(MenuItem item) {
         replaceCentralFragment(new Leaderboard());
     }
 
@@ -186,17 +186,17 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadPreferenceListActivity(MenuItem item) {
-        replaceCentralFragment(new ListPreferencesActivity());
+    public void loadFollowersListFragment(MenuItem item) {
+        replaceCentralFragment(new ListFollowersFragment());
     }
 
     /**
-     * Launches the NotificationsActivity.
+     * Launches the NotificationsFragment.
      *
      * @param item the menu item that triggers the activity
      */
-    public void loadNotificationsActivity(MenuItem item) {
-        replaceCentralFragment(new NotificationsActivity());
+    public void loadNotificationsFragment(MenuItem item) {
+        replaceCentralFragment(new NotificationsFragment());
     }
 
     /**
@@ -204,8 +204,8 @@ public class MainMenuActivity extends AppCompatActivity {
      *
      * @param item the menu item that triggers the activity
      */
-    public void createOfferActivity(MenuItem item) {
-        replaceCentralFragment(new CreateOfferActivity());
+    public void createOfferFragment(MenuItem item) {
+        replaceCentralFragment(new CreateOfferFragment());
     }
 
     @Override

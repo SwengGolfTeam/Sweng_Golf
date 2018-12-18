@@ -21,7 +21,7 @@ import ch.epfl.sweng.swenggolf.location.AppLocation;
 import ch.epfl.sweng.swenggolf.location.FakeLocation;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.statistics.OfferStats;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
@@ -111,8 +111,8 @@ public class PointGainTest {
     @Test
     public void createOfferYieldsPoints() {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.centralFragment, new CreateOfferActivity()).commit();
-        CreateOfferActivityTest.fillOffer();
+                .replace(R.id.centralFragment, new CreateOfferFragment()).commit();
+        CreateOfferFragmentTest.fillOffer();
         int scoredPoints = FilledFakeDatabase.getUser(0).getPoints()
                 + POST_OFFER.getValue()
                 + ADD_PICTURE.getValue()
@@ -127,7 +127,7 @@ public class PointGainTest {
         activityTestRule.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.centralFragment,
                         FragmentConverter.createOfferActivityWithOffer(offer)).commit();
-        CreateOfferActivityTest.fillOffer();
+        CreateOfferFragmentTest.fillOffer();
         testUserPoints(ADD_PICTURE.getValue() + ADD_LOCALISATION.getValue(),
                 Config.getUser());
     }
@@ -176,9 +176,7 @@ public class PointGainTest {
                 .replace(R.id.centralFragment, FragmentConverter
                         .createShowOfferWithOffer(createFakeOffer()))
                 .commit();
-
-        //TODO: find why the test fail if we have this line
-        // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException | PerformException e) {

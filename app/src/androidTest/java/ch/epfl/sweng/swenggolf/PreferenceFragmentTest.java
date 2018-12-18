@@ -18,9 +18,9 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.preference.ListPreferenceAdapter;
-import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.preference.ListFollowersAdapter;
+import ch.epfl.sweng.swenggolf.preference.ListFollowersFragment;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -36,7 +36,7 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(AndroidJUnit4.class)
-public class PreferenceActivityTest {
+public class PreferenceFragmentTest {
 
     @Rule
     public ActivityTestRule<MainMenuActivity> preferenceRule =
@@ -52,7 +52,7 @@ public class PreferenceActivityTest {
         Config.setUser(FilledFakeDatabase.getUser(0));
         preferenceRule.launchActivity(new Intent());
         preferenceRule.getActivity().getSupportFragmentManager()
-                .beginTransaction().replace(R.id.centralFragment, new ListPreferencesActivity())
+                .beginTransaction().replace(R.id.centralFragment, new ListFollowersFragment())
                 .commit();
     }
 
@@ -64,13 +64,13 @@ public class PreferenceActivityTest {
         int userLength = FilledFakeDatabase.numberUser() - 1;
         ViewAction scrollToLast =
                 RecyclerViewActions
-                        .<ListPreferenceAdapter.PreferenceViewHolder>scrollToPosition(userLength);
+                        .<ListFollowersAdapter.PreferenceViewHolder>scrollToPosition(userLength);
         onView(ViewMatchers.withId(R.id.preference_list)).perform(scrollToLast);
     }
 
     @Test
     public void testListSize() {
-        ListPreferenceAdapter adapter = new ListPreferenceAdapter();
+        ListFollowersAdapter adapter = new ListFollowersAdapter();
         assertThat(adapter.getItemCount(), is(FilledFakeDatabase.numberFollowersOfUserZero()));
     }
 
@@ -81,7 +81,7 @@ public class PreferenceActivityTest {
                 withText(user.getUserName())), click()));
         Fragment fragment = preferenceRule.getActivity()
                 .getSupportFragmentManager().getFragments().get(0);
-        assertThat(fragment.getClass().getName(), is(ProfileActivity.class.getName()));
+        assertThat(fragment.getClass().getName(), is(ProfileFragment.class.getName()));
         assertNotNull(fragment.getArguments().getParcelable("ch.epfl.sweng.swenggolf.user"));
     }
 

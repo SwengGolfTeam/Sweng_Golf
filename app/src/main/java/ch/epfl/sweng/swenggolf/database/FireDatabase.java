@@ -226,7 +226,6 @@ public final class FireDatabase extends Database {
             listener.onDataChange(new ArrayList<Offer>());
         }
         for (int i = 0; i < categories.size(); ++i) {
-            // TODO change the ordering to put the most recent on top?
             Query query = ref.orderByChild("tag").equalTo(categories.get(i).toString());
             readListQuery(listener, query, Offer.class, false);
         }

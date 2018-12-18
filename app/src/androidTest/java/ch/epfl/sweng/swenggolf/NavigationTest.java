@@ -18,12 +18,12 @@ import ch.epfl.sweng.swenggolf.database.Database;
 import ch.epfl.sweng.swenggolf.database.FakeDatabase;
 import ch.epfl.sweng.swenggolf.database.FilledFakeDatabase;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
-import ch.epfl.sweng.swenggolf.offer.ShowOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.ListOfferActivity;
-import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferActivity;
-import ch.epfl.sweng.swenggolf.preference.ListPreferencesActivity;
-import ch.epfl.sweng.swenggolf.profile.ProfileActivity;
+import ch.epfl.sweng.swenggolf.offer.ShowOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.ListOfferFragment;
+import ch.epfl.sweng.swenggolf.offer.list.own.ListOwnOfferFragment;
+import ch.epfl.sweng.swenggolf.preference.ListFollowersFragment;
+import ch.epfl.sweng.swenggolf.profile.ProfileFragment;
 import ch.epfl.sweng.swenggolf.storage.FakeStorage;
 import ch.epfl.sweng.swenggolf.storage.Storage;
 
@@ -36,7 +36,7 @@ import static android.support.test.espresso.contrib.NavigationViewActions.naviga
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.sweng.swenggolf.ListOfferActivityTest.withRecyclerView;
+import static ch.epfl.sweng.swenggolf.ListOfferFragmentTest.withRecyclerView;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -73,10 +73,10 @@ public class NavigationTest {
         closeSoftKeyboard();
         editMultipleTimes(R.id.edit_profile, R.id.saveButton, 4);
 
-        checkFragmentShown(ProfileActivity.class);
+        checkFragmentShown(ProfileFragment.class);
 
         pressBackButton();
-        checkFragmentShown(ListOfferActivity.class);
+        checkFragmentShown(ListOfferFragment.class);
     }
 
     private void editMultipleTimes(int modifyButton, int saveButton, int numberOfIterations) {
@@ -107,47 +107,47 @@ public class NavigationTest {
 
     @Test
     public void goToMyOffersAndBackToMenu() {
-        goToXAndBackToMenu(R.id.my_offers, ListOwnOfferActivity.class);
+        goToXAndBackToMenu(R.id.my_offers, ListOwnOfferFragment.class);
     }
 
     @Test
     public void goToCreateOfferAndBackToMenu() {
-        goToXAndBackToMenu(R.id.create_offer, CreateOfferActivity.class);
+        goToXAndBackToMenu(R.id.create_offer, CreateOfferFragment.class);
     }
 
     @Test
     public void goToCreateOfferAndBackToMenuUsingArrow() {
         clickOnDrawer(R.id.create_offer);
-        checkFragmentShown(CreateOfferActivity.class);
+        checkFragmentShown(CreateOfferFragment.class);
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
-        checkFragmentShown(ListOfferActivity.class);
+        checkFragmentShown(ListOfferFragment.class);
     }
 
     @Test
     public void goToFollowingAndBackToMenu() {
-        goToXAndBackToMenu(R.id.preference_activity, ListPreferencesActivity.class);
+        goToXAndBackToMenu(R.id.preference_activity, ListFollowersFragment.class);
     }
 
     @Test
     public void goToOfferAndBackToMyOffer() {
         goToShowOffer();
         pressBackButton();
-        checkFragmentShown(ListOwnOfferActivity.class);
+        checkFragmentShown(ListOwnOfferFragment.class);
     }
 
     @Test
     public void goToOfferAndBackToMyOfferUsingArrow() {
         goToShowOffer();
-        checkFragmentShown(ShowOfferActivity.class);
+        checkFragmentShown(ShowOfferFragment.class);
         onView(withContentDescription("abc_action_bar_home_description")).perform(click());
-        checkFragmentShown(ListOwnOfferActivity.class);
+        checkFragmentShown(ListOwnOfferFragment.class);
     }
 
     private void goToShowOffer() {
         clickOnDrawer(R.id.my_offers);
         onView(withRecyclerView(R.id.offers_recycler_view).atPosition(0)).perform(click());
         editMultipleTimes(R.id.button_modify_offer, R.id.button_create_offer, 4);
-        checkFragmentShown(ShowOfferActivity.class);
+        checkFragmentShown(ShowOfferFragment.class);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class NavigationTest {
         goToShowOffer();
         onView(withId(R.id.button_delete_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
-        checkFragmentShown(ListOwnOfferActivity.class);
+        checkFragmentShown(ListOwnOfferFragment.class);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class NavigationTest {
         onView(withId(R.id.close_offer_button)).perform(click());
         onView(withId(R.id.button_delete_closed_offer)).perform(click());
         onView(withText(android.R.string.yes)).perform(click());
-        checkFragmentShown(ListOwnOfferActivity.class);
+        checkFragmentShown(ListOwnOfferFragment.class);
     }
 
     @Test
@@ -185,7 +185,7 @@ public class NavigationTest {
 
         pressBackButton();
         frags = fragmentManager.getFragments();
-        assertThat(frags.get(0).getClass().getName(), is(ListOfferActivity.class.getName()));
+        assertThat(frags.get(0).getClass().getName(), is(ListOfferFragment.class.getName()));
     }
 
     private void clickOnDrawer(int menuItemId) {

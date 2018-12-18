@@ -17,7 +17,7 @@ import ch.epfl.sweng.swenggolf.database.ValueListener;
 import ch.epfl.sweng.swenggolf.main.MainMenuActivity;
 import ch.epfl.sweng.swenggolf.offer.Category;
 import ch.epfl.sweng.swenggolf.offer.Offer;
-import ch.epfl.sweng.swenggolf.offer.create.CreateOfferActivity;
+import ch.epfl.sweng.swenggolf.offer.create.CreateOfferFragment;
 import ch.epfl.sweng.swenggolf.profile.User;
 import ch.epfl.sweng.swenggolf.tools.FragmentConverter;
 
@@ -61,7 +61,7 @@ public class OfferPatternTest {
         FragmentConverter fragment = (FragmentConverter)
                 intentsTestRule.getActivity().getSupportFragmentManager()
                         .findFragmentById(R.id.centralFragment);
-        fragment.replaceCentralFragment(new CreateOfferActivity());
+        fragment.replaceCentralFragment(new CreateOfferFragment());
     }
 
     @Test

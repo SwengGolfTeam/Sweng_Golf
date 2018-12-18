@@ -44,7 +44,7 @@ public final class FakeStorage extends Storage {
 
     @Override
     public void remove(String linkPicture) {
-        // TODO implement when necessary
+        // Does nothing
     }
 
     /**
