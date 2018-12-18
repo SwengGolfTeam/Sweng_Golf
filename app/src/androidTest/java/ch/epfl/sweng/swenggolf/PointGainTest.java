@@ -176,9 +176,7 @@ public class PointGainTest {
                 .replace(R.id.centralFragment, FragmentConverter
                         .createShowOfferWithOffer(createFakeOffer()))
                 .commit();
-
-        //TODO: find why the test fail if we have this line
-        // openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        
         try {
             onView(withId(R.id.button_delete_offer)).perform(click());
         } catch (NoMatchingViewException | PerformException e) {

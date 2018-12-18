@@ -168,8 +168,6 @@ class CreateHelper {
                     String link = task.getResult().toString();
                     Offer newOffer = offer.updateLinkToPicture(link);
                     writeOffer(newOffer);
-                } else {
-                    // TODO Handle failures
                 }
             }
         };
@@ -251,7 +249,7 @@ class CreateHelper {
 
         if (checkLocationPermission(create.getActivity())
                 & AppLocation.checkLocationActive(create.getContext())) {
-            create.location = new Location(""); // temporary location to avoid crash
+            create.location = new Location("");
             AppLocation currentLocation = AppLocation.getInstance(create.getActivity());
             currentLocation.getLocation(new OnSuccessListener<Location>() {
                 @Override

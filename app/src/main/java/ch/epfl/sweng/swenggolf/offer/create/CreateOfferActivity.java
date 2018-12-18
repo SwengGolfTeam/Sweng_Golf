@@ -204,7 +204,6 @@ public class CreateOfferActivity extends FragmentConverter
             Toast.makeText(this.getContext(), "Failed to retrieve picture.",
                     Toast.LENGTH_LONG).show();
             return Config.isTest() ? Uri.parse("drawable://" + R.drawable.img) : null;
-            //TODO find a better way to fix tests with ressource drawable.
         }
         return path;
     }

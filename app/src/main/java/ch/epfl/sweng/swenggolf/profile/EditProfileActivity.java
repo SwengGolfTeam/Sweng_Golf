@@ -174,8 +174,6 @@ public class EditProfileActivity extends FragmentConverter {
                     user.setPhoto(link);
                     DatabaseUser.addUser(user);
                     updatePicture();
-                } else {
-                    // TODO Handle failures
                 }
             }
         };
