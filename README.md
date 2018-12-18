@@ -24,6 +24,27 @@ The master branch is protected, you must first create a new branch to add a feat
 
 > "A beautiful piece of code, even if perfect, that lacks test cases will get a minimal score on the correctness and maintainability aspects of the grading rubric, so please test thoroughly."
 
+## What is PolyTroc?
+Welcome to  PolyTroc! The app that allows you to exchange services!
+
+### How to find help? 
+PolyTroc uses a system of offers, create an offer specifying what you need to accomplish or to have and there you go! Everyone can answer to your offer and propose his help!
+- You want to show others on what exactly you need help? Take a picture on the go or choose one from your gallery and add it to your offer!
+- You are living in a remote place and the path to follow his hard to describe? Add your current location!
+- You need an answer in a short amount of time? Set up a deadline!
+
+### What if everyone wants to help me?
+No problem! PolyTroc allows you to set up for the person that has the most interesting proposition. After that you can exchange and discuss with him to organize yourselves!
+
+### Everyone seems so cool! What if I want to recontact them?
+PolyTroc allows you to consult people's profile including their description, picture and preferences! You can then follow them to know which offers they posted and what they post.
+
+### How can I tell others that people are cool?
+Create offers or help others to gain points and rank among the most helpful or helped people! You can then see the level of people by the color of their comment or the frame of their user picture. 
+
+### I didn't open the app for a while, did I miss something?
+PolyTroc has a notification system that allows you to know what your friends did, the level you gained, who answered you and who took part to an offer you candidated for.
+
 ## Team members
 - Ugo Damiano
 - Eric Jollès
